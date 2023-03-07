@@ -1,0 +1,16 @@
+{
+  "name": "siyuan-plugin-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "siyuan": "^0.3.12",
+    "vite": "^4.1.4"
+  }
+}
