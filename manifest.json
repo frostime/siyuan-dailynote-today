@@ -1,6 +1,6 @@
 {
-    "name": "ZYP 测试插件",
-    "description": "这是一个样例插件",
+    "name": "自动打开日记",
+    "description": "启动思源笔记之后，自动开启今天的日记",
     "author": "frostime",
     "url": "",
     "version": "0.0.1"
