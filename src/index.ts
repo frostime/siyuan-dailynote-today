@@ -15,12 +15,14 @@ export default class SiyuanSamplePlugin extends Plugin {
     openDiarySelector: HTMLElement;
     // openDefaultBtn: HTMLElement;
     notebooks: Array<NoteBook>;
+    selectFolded: boolean;
 
     constructor() {
         super();
         console.log(`Diary Start: ${new Date()}`);
         this.openDiary = this.openDiary.bind(this);
         this.notebooks = [];
+        this.selectFolded = true;
     }
 
     async onload() {
@@ -64,13 +66,14 @@ export default class SiyuanSamplePlugin extends Plugin {
         option.innerText = '';
         this.openDiarySelector.appendChild(option);
 
-        this.openDiarySelector.addEventListener('change', (event) => {
-            let index = parseInt((event.target as HTMLSelectElement).value);
-            this.openDiary(index);
-        });
         this.openDiarySelector.addEventListener('click', (event) => {
-            let index = parseInt((event.target as HTMLSelectElement).value);
-            console.log(`click: ${index}`);
+            if (this.selectFolded) {
+                this.selectFolded = false;
+            } else {
+                let index = parseInt((event.target as HTMLSelectElement).value);
+                this.openDiary(index);
+                this.selectFolded = true;
+            }
         });
 
         let end = performance.now();
