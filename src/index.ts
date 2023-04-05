@@ -1,5 +1,4 @@
 import { Plugin, clientApi, serverApi } from 'siyuan';
-import { getFocusedBlockID } from './blocks';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
