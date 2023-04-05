@@ -12,45 +12,90 @@ type NoteBook = {
 }
 
 export default class SiyuanSamplePlugin extends Plugin {
-    el: HTMLElement;
+    openDiarySelector: HTMLElement;
+    // openDefaultBtn: HTMLElement;
     notebooks: Array<NoteBook>;
 
     constructor() {
         super();
+        console.log(`Diary Start: ${new Date()}`);
         this.openDiary = this.openDiary.bind(this);
         this.notebooks = [];
     }
 
-    onload() {
-        this.el = document.createElement('button');
-        this.el.innerText = 'Diary Today';
-        this.el.className = TOOLBAR_ITEMS;
-        this.el.setAttribute('aria-label', '打开今日的日记')
-        clientApi.addToolbarRight(this.el);
-        this.el.addEventListener('click', () => this.openDiary(0));
-        console.log('plugin load');
-        this.openDiaryOnload();
+    async onload() {
+        this.initSelctor();
+        this.onloadTask();
     }
 
-    async openDiaryOnload() {
+    /**
+     * 开启插件后等待 DOM 加载完成，并初始化插件
+     */
+    async onloadTask() {
+        const MAX_RETRY = 5;
+        let retry = 0;
         let start = performance.now();
-        let flag = await this.queryNotebooks();
-        if (flag && this.notebooks.length > 0) {
+        // 等待 notebook 加载完成
+        while (retry < MAX_RETRY) {
+            const success = await this.queryNotebooks();
+            if (success) {  
+                break
+            } else {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            retry++;
+        }
+
+        //打开默认日记
+        if (this.notebooks.length > 0) {
             await this.openDiary(0);
         } else {
             console.log('打开默认日记失败');
         }
+        // 初始化下拉框，并添加事件
+        this.notebooks.forEach((notebook, index) => {
+            let option = document.createElement('option');
+            option.value = index.toString();
+            option.innerText = notebook.name;
+            this.openDiarySelector.appendChild(option);
+        });
+        let option = document.createElement('option');
+        option.value = '-1';
+        option.innerText = '';
+        this.openDiarySelector.appendChild(option);
+
+        this.openDiarySelector.addEventListener('change', (event) => {
+            let index = parseInt((event.target as HTMLSelectElement).value);
+            this.openDiary(index);
+        });
+        this.openDiarySelector.addEventListener('click', (event) => {
+            let index = parseInt((event.target as HTMLSelectElement).value);
+            console.log(`click: ${index}`);
+        });
+
         let end = performance.now();
-        console.log(`尝试打开默认日记，经过了: ${end - start} ms`);
+        console.log(`Diary 启动，经过了: ${end - start} ms`);
+        console.log(`Diary Finished: ${new Date()}`);
     }
+
+    async initSelctor() {
+        this.openDiarySelector = document.createElement('select');
+        this.openDiarySelector.className = TOOLBAR_ITEMS;
+        this.openDiarySelector.setAttribute('aria-label', '打开指定的日记')
+        this.openDiarySelector.innerHTML = '<空>';
+        // this.openDiarySelector.style.border = "0 0.5rem"
+        this.openDiarySelector.style.margin = "0 0.5rem"
+        clientApi.addToolbarRight(this.openDiarySelector);
+    }
+
 
     /**
      * 打开指定的笔记本下今天的日记，如果不存在则创建
-     * @param notebook_sort 笔记本的 sort 字段
+     * @param notebook_index 笔记本的 index
      */
-    async openDiary(notebook_sort: number) {
+    async openDiary(notebook_index: number) {
         if (this.notebooks.length > 0) {
-            let notebook: NoteBook = this.notebooks[notebook_sort];
+            let notebook: NoteBook = this.notebooks[notebook_index];
             let notebookId = notebook.id;
             let todayDiaryPath = getTodayDiaryPath();
             console.log(`${notebookId}: ${notebook.name}${todayDiaryPath}`);
@@ -117,9 +162,4 @@ function getTodayDiaryPath() {
     const day = String(now.getDate()).padStart(2, '0');
     const today = `${year}-${month}-${day}`;
     return `/daily note/${year}/${month}/${today}`;
-}
-
-function onBtnClick() {
-    let blockId = getFocusedBlockID();
-    console.log(`blockId: ${blockId}`);
 }
