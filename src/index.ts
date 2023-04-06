@@ -30,32 +30,17 @@ export default class SiyuanSamplePlugin extends Plugin {
     async onload() {
         let start = performance.now();
         await this.initDom();
-        await this.updateContent();
+        await this.initSelectorOptions();
         let end = performance.now();
         console.log(`[OpenDiary]: onload, 耗时: ${end - start} ms`);
-    }
-
-    /**
-     * 开启插件后等待笔记的 DOM 加载完成，并初始化插件 DOM
-     */
-    async updateContent() {
-        //打开默认日记
-        if (this.notebooks.length > 0) {
-            await this.openDiary(0);
-        } else {
-            console.log('打开默认日记失败');
-        }
-        // 初始化下拉框，并添加事件
-        this.openDiarySelector.innerHTML = '';
-        this.notebooks.forEach((notebook, index) => {
-            let option = document.createElement('option');
-            option.value = index.toString();
-            option.innerText = notebook.name;
-            this.openDiarySelector.appendChild(option);
+        this.registerCommand({
+            command: 'updateAll',
+            shortcut: 'ctrl+alt+u,command+option+u',
+            description: '全局更新',
+            callback: this.updateAll.bind(this),
         });
-
-        await this.updateDiaryStatus();
     }
+
 
     async initDom() {
         this.openDiarySelector = document.createElement('select');
@@ -105,6 +90,34 @@ export default class SiyuanSamplePlugin extends Plugin {
         }
     }
 
+    /**
+     * 开启插件后等待笔记的 DOM 加载完成，并根据 this.notebooks 初始化下拉框
+     */
+    async initSelectorOptions() {
+        console.log('[OpenDiary]: initSelectorOptions');
+        //打开默认日记
+        if (this.notebooks.length > 0) {
+            await this.openDiary(0);
+        } else {
+            console.log('打开默认日记失败');
+        }
+        // 初始化下拉框，并添加事件
+        this.openDiarySelector.innerHTML = '';
+        this.notebooks.forEach((notebook, index) => {
+            let option = document.createElement('option');
+            option.value = index.toString();
+            option.innerText = notebook.name;
+            this.openDiarySelector.appendChild(option);
+        });
+
+        await this.updateDiaryStatus();
+    }
+
+    async updateAll() {
+        await this.queryNotebooks();
+        await this.initSelectorOptions();
+    }
+
 
     /**
      * 打开指定的笔记本下今天的日记，如果不存在则创建
@@ -127,6 +140,26 @@ export default class SiyuanSamplePlugin extends Plugin {
             }
         } else {
             console.log('[OpenDiary]: Can not open diary cause no notebook loaded');
+        }
+    }
+
+    /**
+     * 获取所有笔记本
+     * @returns flag
+     */
+    async queryNotebooks(): Promise<boolean> {
+        try {
+            let result = await serverApi.lsNotebooks("");
+            let all_notebooks: Array<NoteBook> = result.notebooks;
+            //delete notebook with name "思源笔记用户指南"
+            all_notebooks = all_notebooks.filter(notebook => notebook.name !== "思源笔记用户指南");
+            let all_notebook_names = all_notebooks.map(notebook => notebook.name);
+            console.log(`[OpenDiary]: Read all notebooks: ${all_notebook_names}`);
+            this.notebooks = all_notebooks;
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
         }
     }
 
@@ -181,28 +214,9 @@ export default class SiyuanSamplePlugin extends Plugin {
         return doc_id;
     }
 
-    /**
-     * 获取所有笔记本
-     * @returns flag
-     */
-    async queryNotebooks(): Promise<boolean> {
-        try {
-            let result = await serverApi.lsNotebooks("");
-            let all_notebooks: Array<NoteBook> = result.notebooks;
-            //delete notebook with name "思源笔记用户指南"
-            all_notebooks = all_notebooks.filter(notebook => notebook.name !== "思源笔记用户指南");
-            let all_notebook_names = all_notebooks.map(notebook => notebook.name);
-            console.log(`[OpenDiary]: Read all notebooks: ${all_notebook_names}`);
-            this.notebooks = all_notebooks;
-            return true;
-        } catch (error) {
-            console.log(error);
-            return false;
-        }
-    }
-
     onunload() {
         console.log('[OpenDiary]: plugin unload')
+        this.openDiarySelector.remove()
     }
 }
 
