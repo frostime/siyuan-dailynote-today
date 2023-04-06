@@ -18,7 +18,7 @@ export default class SiyuanSamplePlugin extends Plugin {
 
     constructor() {
         super();
-        console.log(`Diary Start: ${new Date()}`);
+        console.log(`[OpenDiary]: Start: ${new Date()}`);
         this.openDiary = this.openDiary.bind(this);
         this.notebooks = [];
         this.selectFolded = true;
@@ -76,8 +76,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         });
 
         let end = performance.now();
-        console.log(`Diary 启动，经过了: ${end - start} ms`);
-        console.log(`Diary Finished: ${new Date()}`);
+        console.log(`[OpenDiary]: 启动完成，耗时: ${end - start} ms`);
     }
 
     async initSelctor() {
@@ -87,6 +86,8 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.openDiarySelector.innerHTML = '<空>';
         // this.openDiarySelector.style.border = "0 0.5rem"
         this.openDiarySelector.style.margin = "0 0.5rem"
+        this.openDiarySelector.style.padding = "0 0.1rem"
+        this.openDiarySelector.style.maxWidth = "7rem"
         clientApi.addToolbarRight(this.openDiarySelector);
     }
 
@@ -97,6 +98,7 @@ export default class SiyuanSamplePlugin extends Plugin {
      */
     async openDiary(notebook_index: number) {
         if (this.notebooks.length > 0) {
+            console.log(`[OpenDiary]: Try to open ${this.notebooks[notebook_index]}`);
             let notebook: NoteBook = this.notebooks[notebook_index];
             let notebookId = notebook.id;
             let todayDiaryPath = getTodayDiaryPath();
@@ -111,7 +113,7 @@ export default class SiyuanSamplePlugin extends Plugin {
                 window.open(`siyuan://blocks/${id}`);
             }
         } else {
-            console.log('no notebook');
+            console.log('[OpenDiary]: Can not open diary cause no notebook loaded');
         }
     }
 
@@ -119,7 +121,6 @@ export default class SiyuanSamplePlugin extends Plugin {
         let sql = `select * from blocks where type='d' and hpath = '${hpath}' and box = '${notebook.id}'`;
         let result: any[] = await serverApi.sql(sql);
         if (result.length > 0) {
-            console.log(result);
             return result[0];
         } else {
             return null;
@@ -127,9 +128,9 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     async createDiary(notebook: NoteBook, todayDiaryHpath: string) {
-        console.log(`createDiary: ${notebook.name} ${todayDiaryHpath}`);
+        console.log(`[OpenDiary]: Try to create: ${notebook.name} ${todayDiaryHpath}`);
         let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
-        console.log(`doc_id: ${doc_id}`);
+        console.log(`[OpenDiary]: Create new diary ${doc_id}`);
         return doc_id;
     }
 
@@ -143,7 +144,7 @@ export default class SiyuanSamplePlugin extends Plugin {
             let all_notebooks: Array<NoteBook> = result.notebooks;
             //delete notebook with name "思源笔记用户指南"
             all_notebooks = all_notebooks.filter(notebook => notebook.name !== "思源笔记用户指南");
-            console.log(all_notebooks);
+            console.log(`[OpenDiary]: Read all notebooks: ${all_notebooks}`);
             this.notebooks = all_notebooks;
             return true;
         } catch (error) {
@@ -153,7 +154,7 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     onunload() {
-        console.log('plugin unload')
+        console.log('[OpenDiary]: plugin unload')
     }
 }
 
