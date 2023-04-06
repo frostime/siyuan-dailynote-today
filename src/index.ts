@@ -115,9 +115,10 @@ export default class SiyuanSamplePlugin extends Plugin {
             let notebook: NoteBook = this.notebooks[notebook_index];
             let todayDiaryPath = getTodayDiaryPath();
             console.log(`[OpenDiary]: Open ${notebook.name}${todayDiaryPath}`);
-            let doc = await this.getDocsByHpath(todayDiaryPath, notebook)[0];
+            let docs = await this.getDocsByHpath(todayDiaryPath, notebook);
 
-            if (doc != null) {
+            if (docs != null && docs.length > 0) {
+                let doc = docs[0];
                 let id = doc.id;
                 window.open(`siyuan://blocks/${id}`);
             } else {
