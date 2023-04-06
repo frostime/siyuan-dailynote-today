@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023 [frostime](https://github.com/frostime). All rights reserved.
+ * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin, clientApi, serverApi } from 'siyuan';
 
