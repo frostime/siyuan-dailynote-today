@@ -2,6 +2,7 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin, clientApi, serverApi } from 'siyuan';
+// import TestSvelte from './Test.svelte'
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
@@ -14,6 +15,7 @@ type NoteBook = {
 }
 
 export default class SiyuanSamplePlugin extends Plugin {
+    div: HTMLElement;
     openDiarySelector: HTMLElement;
     // openDefaultBtn: HTMLElement;
     notebooks: Array<NoteBook>;
@@ -39,6 +41,11 @@ export default class SiyuanSamplePlugin extends Plugin {
             description: '全局更新',
             callback: this.updateAll.bind(this),
         });
+        // const svelte = new TestSvelte({
+        //     target: this.div,
+        // });
+        // clientApi.addToolbarLeft(this.div);
+
     }
 
 
