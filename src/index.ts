@@ -60,12 +60,15 @@ export default class SiyuanSamplePlugin extends Plugin {
             option.innerText = notebook.name;
             this.openDiarySelector.appendChild(option);
         });
-        let option = document.createElement('option');
-        option.value = '-1';
-        option.innerText = '';
-        this.openDiarySelector.appendChild(option);
 
+        /**
+         * 为下拉框添加事件，使得点击下拉框打开对应的日记
+         * 1. change 事件无法捕获到点击事件，因此使用 click 事件
+         * 2. 为了过滤打开下拉框事件，使用 selectFolded 标记
+         * 3. 为了避免打开下拉框后，点击其他地方关闭导致 selectFolded 标记错误，使用 blur 事件
+         */
         this.openDiarySelector.addEventListener('click', (event) => {
+            console.log('[OpenDiary] Event: click')
             if (this.selectFolded) {
                 this.selectFolded = false;
             } else {
@@ -73,6 +76,10 @@ export default class SiyuanSamplePlugin extends Plugin {
                 this.openDiary(index);
                 this.selectFolded = true;
             }
+        });
+        this.openDiarySelector.addEventListener('blur', () => {
+            console.log('[OpenDiary] Event: blur')
+            this.selectFolded = true;
         });
 
         let end = performance.now();
@@ -98,11 +105,10 @@ export default class SiyuanSamplePlugin extends Plugin {
      */
     async openDiary(notebook_index: number) {
         if (this.notebooks.length > 0) {
-            console.log(`[OpenDiary]: Try to open ${this.notebooks[notebook_index]}`);
             let notebook: NoteBook = this.notebooks[notebook_index];
             let notebookId = notebook.id;
             let todayDiaryPath = getTodayDiaryPath();
-            console.log(`${notebookId}: ${notebook.name}${todayDiaryPath}`);
+            console.log(`[OpenDiary]: Open ${notebook.name}${todayDiaryPath}`);
             let doc = await this.getDocByHpath(notebook, todayDiaryPath);
 
             if (doc != null) {
@@ -144,7 +150,8 @@ export default class SiyuanSamplePlugin extends Plugin {
             let all_notebooks: Array<NoteBook> = result.notebooks;
             //delete notebook with name "思源笔记用户指南"
             all_notebooks = all_notebooks.filter(notebook => notebook.name !== "思源笔记用户指南");
-            console.log(`[OpenDiary]: Read all notebooks: ${all_notebooks}`);
+            let all_notebook_names = all_notebooks.map(notebook => notebook.name);
+            console.log(`[OpenDiary]: Read all notebooks: ${all_notebook_names}`);
             this.notebooks = all_notebooks;
             return true;
         } catch (error) {
