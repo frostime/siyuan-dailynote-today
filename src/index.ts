@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2023 [frostime](https://github.com/frostime). All rights reserved.
+ */
 import { Plugin, clientApi, serverApi } from 'siyuan';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
@@ -25,28 +28,17 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     async onload() {
-        this.initSelctor();
-        this.onloadTask();
+        let start = performance.now();
+        await this.initDom();
+        await this.updateContent();
+        let end = performance.now();
+        console.log(`[OpenDiary]: onload, 耗时: ${end - start} ms`);
     }
 
     /**
-     * 开启插件后等待 DOM 加载完成，并初始化插件
+     * 开启插件后等待笔记的 DOM 加载完成，并初始化插件 DOM
      */
-    async onloadTask() {
-        const MAX_RETRY = 5;
-        let retry = 0;
-        let start = performance.now();
-        // 等待 notebook 加载完成
-        while (retry < MAX_RETRY) {
-            const success = await this.queryNotebooks();
-            if (success) {  
-                break
-            } else {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-            retry++;
-        }
-
+    async updateContent() {
         //打开默认日记
         if (this.notebooks.length > 0) {
             await this.openDiary(0);
@@ -54,12 +46,26 @@ export default class SiyuanSamplePlugin extends Plugin {
             console.log('打开默认日记失败');
         }
         // 初始化下拉框，并添加事件
+        this.openDiarySelector.innerHTML = '';
         this.notebooks.forEach((notebook, index) => {
             let option = document.createElement('option');
             option.value = index.toString();
             option.innerText = notebook.name;
             this.openDiarySelector.appendChild(option);
         });
+
+        await this.updateDiaryStatus();
+    }
+
+    async initDom() {
+        this.openDiarySelector = document.createElement('select');
+        this.openDiarySelector.className = TOOLBAR_ITEMS;
+        this.openDiarySelector.setAttribute('aria-label', '打开指定的日记')
+        this.openDiarySelector.innerHTML = '<空>';
+        // this.openDiarySelector.style.border = "0 0.5rem"
+        this.openDiarySelector.style.margin = "0 0.5rem"
+        this.openDiarySelector.style.padding = "0 0.1rem"
+        this.openDiarySelector.style.maxWidth = "7rem"
 
         /**
          * 为下拉框添加事件，使得点击下拉框打开对应的日记
@@ -71,6 +77,7 @@ export default class SiyuanSamplePlugin extends Plugin {
             console.log('[OpenDiary] Event: click')
             if (this.selectFolded) {
                 this.selectFolded = false;
+                this.updateDiaryStatus();
             } else {
                 let index = parseInt((event.target as HTMLSelectElement).value);
                 this.openDiary(index);
@@ -82,20 +89,20 @@ export default class SiyuanSamplePlugin extends Plugin {
             this.selectFolded = true;
         });
 
-        let end = performance.now();
-        console.log(`[OpenDiary]: 启动完成，耗时: ${end - start} ms`);
-    }
-
-    async initSelctor() {
-        this.openDiarySelector = document.createElement('select');
-        this.openDiarySelector.className = TOOLBAR_ITEMS;
-        this.openDiarySelector.setAttribute('aria-label', '打开指定的日记')
-        this.openDiarySelector.innerHTML = '<空>';
-        // this.openDiarySelector.style.border = "0 0.5rem"
-        this.openDiarySelector.style.margin = "0 0.5rem"
-        this.openDiarySelector.style.padding = "0 0.1rem"
-        this.openDiarySelector.style.maxWidth = "7rem"
         clientApi.addToolbarRight(this.openDiarySelector);
+
+        // 等待 notebook 加载完成
+        const MAX_RETRY = 5;
+        let retry = 0;
+        while (retry < MAX_RETRY) {
+            const success = await this.queryNotebooks();
+            if (success) {
+                break
+            } else {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            retry++;
+        }
     }
 
 
@@ -106,10 +113,9 @@ export default class SiyuanSamplePlugin extends Plugin {
     async openDiary(notebook_index: number) {
         if (this.notebooks.length > 0) {
             let notebook: NoteBook = this.notebooks[notebook_index];
-            let notebookId = notebook.id;
             let todayDiaryPath = getTodayDiaryPath();
             console.log(`[OpenDiary]: Open ${notebook.name}${todayDiaryPath}`);
-            let doc = await this.getDocByHpath(notebook, todayDiaryPath);
+            let doc = await this.getDocsByHpath(todayDiaryPath, notebook)[0];
 
             if (doc != null) {
                 let id = doc.id;
@@ -123,11 +129,45 @@ export default class SiyuanSamplePlugin extends Plugin {
         }
     }
 
-    async getDocByHpath(notebook: NoteBook, hpath: string) {
-        let sql = `select * from blocks where type='d' and hpath = '${hpath}' and box = '${notebook.id}'`;
+    /**
+     * 根据思源中已经有 diary 的笔记本，更新下拉框中的笔记本状态
+     * 注意，本函数不会更新 this.notebooks
+     */
+    async updateDiaryStatus() {
+        console.log('[OpenDiary]: updateDiaryStatus');
+        let todayDiary = getTodayDiaryPath();
+        let docs = await this.getDocsByHpath(todayDiary);
+        if (docs != null) {
+            let notebook_with_diary = docs.map(doc => doc.box);
+            let count_diary = notebook_with_diary.length;
+            this.notebooks.forEach((notebook, index) => {
+                if (notebook_with_diary.includes(notebook.id)) {
+                    let option = this.openDiarySelector.children[index] as HTMLOptionElement;
+                    option.innerText = `√ ${notebook.name}`;
+                } else {
+                    let option = this.openDiarySelector.children[index] as HTMLOptionElement;
+                    option.innerText = notebook.name;
+                }
+            });
+            console.log(`'[OpenDiary]: 当前日记共 ${count_diary} 篇`);
+        }
+    }
+
+    /**
+     * getDocsByHpath returns all documents in the database that have a given hpath. 
+     * If a notebook is not null, then it only returns documents in that notebook that have the given hpath.
+     * @param hpath 
+     * @param notebook 
+     * @returns
+     */
+    async getDocsByHpath(hpath: string, notebook: NoteBook | null = null) {
+        let sql = `select * from blocks where type='d' and hpath = '${hpath}'`;
+        if (notebook != null) {
+            sql = `select * from blocks where type='d' and hpath = '${hpath}' and box = '${notebook.id}'`;
+        }
         let result: any[] = await serverApi.sql(sql);
         if (result.length > 0) {
-            return result[0];
+            return result;
         } else {
             return null;
         }
