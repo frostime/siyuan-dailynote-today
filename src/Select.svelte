@@ -12,7 +12,7 @@
         console.log("[OpenDiary] Event: click");
         if (isSelectFolded) {
             isSelectFolded = false;
-            // this.updateDiaryStatus();
+            eventOpenSelector();
         } else {
             let id: string = (event.target as HTMLSelectElement).value;
             eventClickNotebook(id);
@@ -24,10 +24,15 @@
         isSelectFolded = true;
     }
 
+    function eventOpenSelector() {
+        console.log("[OpenDiary] Event: openNotebook");
+        dispatch("openSelector");
+    }
+
     function eventClickNotebook(nid: string) {
         console.log("[OpenDiary] Event: openDiary");
-        console.log("[OpenDiary] [DEBUG]: click", nid);
-        dispatch("openDiary", { notebook: nid });
+        let notebook: Notebook = notebooks.find((notebook) => notebook.id === nid);
+        dispatch("openDiary", { notebook: notebook });
     }
 </script>
 
