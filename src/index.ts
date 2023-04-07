@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { Plugin, clientApi, serverApi } from 'siyuan';
+import { Plugin, clientApi } from 'siyuan';
 import Select from './Select.svelte'
 import { Notebook } from './TypesDef';
 import { getTodayDiaryPath, queryNotebooks, getDocsByHpath, openDiary } from './func';
@@ -9,8 +9,6 @@ import { getTodayDiaryPath, queryNotebooks, getDocsByHpath, openDiary } from './
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
 export default class SiyuanSamplePlugin extends Plugin {
-    openDiarySelector: HTMLElement;
-    // openDefaultBtn: HTMLElement;
     notebooks: Array<Notebook>;
     selectFolded: boolean;
 
@@ -20,7 +18,6 @@ export default class SiyuanSamplePlugin extends Plugin {
     constructor() {
         super();
         console.log(`[OpenDiary]: Start: ${new Date()}`);
-        // this.openDiary = this.openDiary.bind(this);
         this.notebooks = [];
         this.selectFolded = true;
         this.div_select = document.createElement('div');
@@ -39,19 +36,20 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.component_select = new Select({
             target: this.div_select,
             props: {
-                notebooks: this.notebooks
+                notebooks: this.notebooks,
             }
         });
         this.component_select.$on(
             'openSelector', this.updateDiaryStatus_.bind(this)
         )
         this.component_select.$on(
-            'openDiary', this.openDiary.bind(this)
+            'openDiary', (event) => openDiary(event.detail.notebook)
         )
         clientApi.addToolbarRight(this.div_select);
         await this.updateDiaryStatus_();
         if (this.notebooks.length > 0) {
             openDiary(this.notebooks[0]);
+            this.component_select.$set({ selected: this.notebooks[0].id });
         }
         let end = performance.now();
         console.log(`[OpenDiary]: onload, 耗时: ${end - start} ms`);
@@ -81,10 +79,6 @@ export default class SiyuanSamplePlugin extends Plugin {
         await this.updateDiaryStatus_();
     }
 
-    async openDiary(event) {
-        console.log('[OpenDiary]: openDiary', event.detail);
-        openDiary(event.detail.notebook)
-    }
 
     /**
      * 根据思源中已经有 diary 的笔记本，更新下拉框中的笔记本状态
@@ -109,7 +103,6 @@ export default class SiyuanSamplePlugin extends Plugin {
 
     onunload() {
         console.log('[OpenDiary]: plugin unload')
-        this.openDiarySelector.remove()
         this.component_select.$destroy();
         this.div_select.remove();
     }

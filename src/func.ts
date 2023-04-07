@@ -24,6 +24,9 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         all_notebooks = all_notebooks.filter(
             notebook => notebook.name !== "思源笔记用户指南" && notebook.closed === false
         );
+        all_notebooks = all_notebooks.sort((a, b) => {
+            return a.sort - b.sort;
+        });
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
         console.log(`[OpenDiary]: Read all notebooks: ${all_notebook_names}`);
         return all_notebooks;

@@ -6,6 +6,11 @@
 
     export let notebooks: Notebook[] = new Array();
     export let diaryStatus: Map<string, boolean> = new Map();
+
+    export let selected: string = "";
+
+    $: console.log("[OpenDiary] 当前选中", selected);
+
     let isSelectFolded: boolean = true;
 
     function onClick(event: MouseEvent) {
@@ -31,12 +36,19 @@
 
     function eventClickNotebook(nid: string) {
         console.log("[OpenDiary] Event: openDiary");
-        let notebook: Notebook = notebooks.find((notebook) => notebook.id === nid);
+        let notebook: Notebook = notebooks.find(
+            (notebook) => notebook.id === nid
+        );
         dispatch("openDiary", { notebook: notebook });
     }
 </script>
 
-<select class="toolbar__item b3-tooltips b3-tooltips__sw" on:click={onClick} on:blur={onBlur}>
+<select
+    class="toolbar__item b3-tooltips b3-tooltips__sw"
+    on:click={onClick}
+    on:blur={onBlur}
+    bind:value={selected}
+>
     {#each notebooks as notebook}
         {#if !notebook.closed && diaryStatus.get(notebook.id) === true}
             <option value={notebook.id}>√{notebook.name}</option>
