@@ -1,0 +1,51 @@
+<script lang="ts">
+    import { Notebook } from "./TypesDef";
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
+
+    export let notebooks: Notebook[] = new Array();
+    export let diaryStatus: Map<string, boolean> = new Map();
+    let isSelectFolded: boolean = true;
+
+    function onClick(event: MouseEvent) {
+        console.log("[OpenDiary] Event: click");
+        if (isSelectFolded) {
+            isSelectFolded = false;
+            // this.updateDiaryStatus();
+        } else {
+            let index = parseInt((event.target as HTMLSelectElement).value);
+            eventOpenDiary(index);
+            isSelectFolded = true;
+        }
+    }
+    function onBlur() {
+        console.log("[OpenDiary] Event: blur");
+        isSelectFolded = true;
+    }
+
+    function eventOpenDiary(index: number) {
+        console.log("[OpenDiary] Event: openDiary");
+        // this.openDiary(index);
+        let notebook = notebooks[index];
+        dispatch("openDiary", { index: index, notebookId: notebook.id });
+    }
+</script>
+
+<select class="toolbar__item b3-tooltips b3-tooltips__sw" on:click={onClick} on:blur={onBlur}>
+    {#each notebooks as notebook}
+        {#if !notebook.closed && diaryStatus.get(notebook.id) === true}
+            <option value={notebook.id}>√{notebook.name}</option>
+        {:else}
+            <option value={notebook.id}>{notebook.name}</option>
+        {/if}
+    {/each}
+</select>
+
+<style>
+    select {
+        margin: 0 0.5rem;
+        padding: 0 0.1rem;
+        max-width: 7rem;
+    }
+</style>
