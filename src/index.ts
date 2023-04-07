@@ -2,24 +2,19 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin, clientApi, serverApi } from 'siyuan';
-// import TestSvelte from './Test.svelte'
+import Select from './Select.svelte'
+import { Notebook } from './TypesDef';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
-type NoteBook = {
-    id: string;
-    name: string;
-    icon: string;
-    sort: number;
-    closed: boolean;
-}
-
 export default class SiyuanSamplePlugin extends Plugin {
-    div: HTMLElement;
     openDiarySelector: HTMLElement;
     // openDefaultBtn: HTMLElement;
-    notebooks: Array<NoteBook>;
+    notebooks: Array<Notebook>;
     selectFolded: boolean;
+
+    div_select: HTMLElement;
+    component_select: Select;
 
     constructor() {
         super();
@@ -31,25 +26,45 @@ export default class SiyuanSamplePlugin extends Plugin {
 
     async onload() {
         let start = performance.now();
-        await this.initDom();
+        await this.initNotebooks();
+        this.initDom();
         await this.initSelectorOptions();
-        let end = performance.now();
-        console.log(`[OpenDiary]: onload, 耗时: ${end - start} ms`);
         this.registerCommand({
             command: 'updateAll',
             shortcut: 'ctrl+alt+u,command+option+u',
             description: '全局更新',
             callback: this.updateAll.bind(this),
         });
-        // const svelte = new TestSvelte({
-        //     target: this.div,
-        // });
-        // clientApi.addToolbarLeft(this.div);
+        this.div_select = document.createElement('div');
+        this.component_select = new Select({
+            target: this.div_select,
+            props: {
+                notebooks: this.notebooks
+            }
+        });
+        clientApi.addToolbarLeft(this.div_select);
+        let end = performance.now();
+        console.log(`[OpenDiary]: onload, 耗时: ${end - start} ms`);
 
     }
 
+    async initNotebooks() {
+        const MAX_RETRY = 5;
+        let retry = 0;
+        while (retry < MAX_RETRY) {
+            let result = await this.queryNotebooks();
+            if (result != null) {
+                this.notebooks = result;
+                break
+            } else {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            retry++;
+        }
+    }
 
-    async initDom() {
+
+    initDom() {
         this.openDiarySelector = document.createElement('select');
         this.openDiarySelector.className = TOOLBAR_ITEMS;
         this.openDiarySelector.setAttribute('aria-label', '打开指定的日记')
@@ -82,19 +97,6 @@ export default class SiyuanSamplePlugin extends Plugin {
         });
 
         clientApi.addToolbarRight(this.openDiarySelector);
-
-        // 等待 notebook 加载完成
-        const MAX_RETRY = 5;
-        let retry = 0;
-        while (retry < MAX_RETRY) {
-            const success = await this.queryNotebooks();
-            if (success) {
-                break
-            } else {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-            retry++;
-        }
     }
 
     /**
@@ -121,7 +123,7 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     async updateAll() {
-        await this.queryNotebooks();
+        this.notebooks = await this.queryNotebooks()? this.notebooks: [];
         await this.initSelectorOptions();
     }
 
@@ -132,7 +134,7 @@ export default class SiyuanSamplePlugin extends Plugin {
      */
     async openDiary(notebook_index: number) {
         if (this.notebooks.length > 0) {
-            let notebook: NoteBook = this.notebooks[notebook_index];
+            let notebook: Notebook = this.notebooks[notebook_index];
             let todayDiaryPath = getTodayDiaryPath();
             console.log(`[OpenDiary]: Open ${notebook.name}${todayDiaryPath}`);
             let docs = await this.getDocsByHpath(todayDiaryPath, notebook);
@@ -154,21 +156,20 @@ export default class SiyuanSamplePlugin extends Plugin {
      * 获取所有笔记本
      * @returns flag
      */
-    async queryNotebooks(): Promise<boolean> {
+    async queryNotebooks(): Promise<Array<Notebook> | null> {
         try {
             let result = await serverApi.lsNotebooks("");
-            let all_notebooks: Array<NoteBook> = result.notebooks;
+            let all_notebooks: Array<Notebook> = result.notebooks;
             //delete notebook with name "思源笔记用户指南"
             all_notebooks = all_notebooks.filter(
                 notebook => notebook.name !== "思源笔记用户指南" && notebook.closed === false
             );
             let all_notebook_names = all_notebooks.map(notebook => notebook.name);
             console.log(`[OpenDiary]: Read all notebooks: ${all_notebook_names}`);
-            this.notebooks = all_notebooks;
-            return true;
+            return all_notebooks;
         } catch (error) {
             console.log(error);
-            return false;
+            return null;
         }
     }
 
