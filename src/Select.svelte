@@ -51,9 +51,13 @@
 >
     {#each notebooks as notebook}
         {#if !notebook.closed && diaryStatus.get(notebook.id) === true}
-            <option value={notebook.id}>√{notebook.name}</option>
+            <option value={notebook.id} class="b3-menu__item">
+                <span class="b3-menu__label">√{notebook.name}</span>
+            </option>
         {:else}
-            <option value={notebook.id}>{notebook.name}</option>
+            <option value={notebook.id} class="b3-menu__item">
+                <span class="b3-menu__label">{notebook.name}</span>
+            </option>
         {/if}
     {/each}
 </select>
