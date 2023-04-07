@@ -21,6 +21,10 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.notebooks = [];
         this.selectFolded = true;
         this.div_select = document.createElement('div');
+        this.div_select.setAttribute('aria-label', 'Open Today\'s Diary');
+        this.div_select.classList.add(...TOOLBAR_ITEMS.split(/\s/));
+        this.div_select.style.margin = '0 0.5rem';
+        this.div_select.style.padding = '0rem 0rem';
     }
 
     async onload() {
@@ -43,7 +47,7 @@ export default class SiyuanSamplePlugin extends Plugin {
             'openSelector', this.updateDiaryStatus_.bind(this)
         )
         this.component_select.$on(
-            'openDiary', (event) => openDiary(event.detail.notebook)
+            'openDiary', async (event) => { await openDiary(event.detail.notebook); this.updateDiaryStatus_() }
         )
         clientApi.addToolbarRight(this.div_select);
         await this.updateDiaryStatus_();
@@ -74,7 +78,7 @@ export default class SiyuanSamplePlugin extends Plugin {
     async updateAll() {
         console.log('[OpenDiary]: updateAll');
         let result = await queryNotebooks();
-        this.notebooks = result? result: [];
+        this.notebooks = result ? result : [];
         this.component_select.$set({ notebooks: this.notebooks });
         await this.updateDiaryStatus_();
     }

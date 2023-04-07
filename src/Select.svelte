@@ -44,7 +44,7 @@
 </script>
 
 <select
-    class="toolbar__item b3-tooltips b3-tooltips__sw"
+    class="toolbar__item b3-tooltips b3-tooltips__se"
     on:click={onClick}
     on:blur={onBlur}
     bind:value={selected}
@@ -60,8 +60,8 @@
 
 <style>
     select {
-        margin: 0 0.5rem;
-        padding: 0 0.1rem;
-        max-width: 7rem;
+        margin: 0;
+        padding: 0;
+        max-width: 8rem !important;
     }
 </style>
