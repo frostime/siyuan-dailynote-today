@@ -42,6 +42,19 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
     }
 }
 
+
+export async function getDailyNoteSprig(notebook: Notebook): Promise<string> {
+    let conf = await serverApi.getNotebookConf(notebook.id);
+    let sprig: string = conf.conf.dailyNoteSavePath;
+    return sprig;
+}
+
+
+export async function renderDailyNotePath(sprig: string) {
+    //TODO 插件似乎没有实现这个 API
+    return await serverApi.renderSprig(sprig);
+}
+
 /**
  * getDocsByHpath returns all documents in the database that have a given hpath. 
  * If a notebook is not null, then it only returns documents in that notebook that have the given hpath.
