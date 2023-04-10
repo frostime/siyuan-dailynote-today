@@ -2,8 +2,8 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin, clientApi } from 'siyuan';
-import Select from './Select.svelte'
-import { Notebook } from './TypesDef';
+import Select from './select.svelte'
+import { Notebook } from './types';
 import { getTodayDiaryPath, queryNotebooks, getDocsByHpath, openDiary } from './func';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
@@ -14,6 +14,8 @@ export default class SiyuanSamplePlugin extends Plugin {
 
     div_select: HTMLElement;
     component_select: Select;
+
+    logger: any;
 
     constructor() {
         super();

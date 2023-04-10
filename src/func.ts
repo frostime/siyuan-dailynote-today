@@ -1,5 +1,8 @@
+/**
+ * Copyright (c) 2023 frostime all rights reserved.
+ */
 import { serverApi } from 'siyuan';
-import { Notebook, Block } from "./TypesDef";
+import { Notebook, Block } from "./types";
 
 
 export function getTodayDiaryPath() {

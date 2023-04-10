@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Notebook } from "./TypesDef";
+    import { Notebook } from "./types";
     import { createEventDispatcher } from "svelte";
 
     const dispatch = createEventDispatcher();
