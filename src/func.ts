@@ -16,6 +16,8 @@ export function getTodayDiaryPath() {
 }
 
 
+const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
+
 /**
  * 获取所有笔记本
  * @returns flag
@@ -26,7 +28,7 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         let all_notebooks: Array<Notebook> = result.notebooks;
         //delete notebook with name "思源笔记用户指南"
         all_notebooks = all_notebooks.filter(
-            notebook => notebook.name !== "思源笔记用户指南" && notebook.closed === false
+            notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
         );
         all_notebooks = all_notebooks.sort((a, b) => {
             return a.sort - b.sort;
