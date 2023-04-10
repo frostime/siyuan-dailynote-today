@@ -3,6 +3,7 @@
  */
 import { serverApi } from 'siyuan';
 import { Notebook, Block } from "./types";
+import { info, error } from "./utils";
 
 
 export function getTodayDiaryPath() {
@@ -31,10 +32,10 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             return a.sort - b.sort;
         });
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
-        console.log(`[OpenDiary]: Read all notebooks: ${all_notebook_names}`);
+        info(`Read all notebooks: ${all_notebook_names}`);
         return all_notebooks;
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        error(err);
         return null;
     }
 }
@@ -57,9 +58,9 @@ export async function getDocsByHpath(hpath: string, notebook: Notebook | null = 
 
 
 export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
-    console.log(`[OpenDiary]: Try to create: ${notebook.name} ${todayDiaryHpath}`);
+    info(`Try to create: ${notebook.name} ${todayDiaryHpath}`);
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
-    console.log(`[OpenDiary]: Create new diary ${doc_id}`);
+    info(`Create new diary ${doc_id}`);
     return doc_id;
 }
 
@@ -70,7 +71,7 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  */
 export async function openDiary(notebook: Notebook) {
     let todayDiaryPath = getTodayDiaryPath();
-    console.log(`[OpenDiary]: Open ${notebook.name}${todayDiaryPath}`);
+    info(`Open ${notebook.name}${todayDiaryPath}`);
     let docs = await getDocsByHpath(todayDiaryPath, notebook);
 
     if (docs != null && docs.length > 0) {

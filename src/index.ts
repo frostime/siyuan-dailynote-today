@@ -5,6 +5,7 @@ import { Plugin, clientApi } from 'siyuan';
 import Select from './select.svelte'
 import { Notebook } from './types';
 import { getTodayDiaryPath, queryNotebooks, getDocsByHpath, openDiary } from './func';
+import { info, error } from './utils';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
@@ -15,11 +16,10 @@ export default class SiyuanSamplePlugin extends Plugin {
     div_select: HTMLElement;
     component_select: Select;
 
-    logger: any;
 
     constructor() {
         super();
-        console.log(`[OpenDiary]: Start: ${new Date()}`);
+        info(`Start: ${new Date()}`);
         this.notebooks = [];
         this.selectFolded = true;
         this.div_select = document.createElement('div');
@@ -42,7 +42,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.component_select = new Select({
             target: this.div_select,
             props: {
-                notebooks: this.notebooks,
+                notebooks: this.notebooks
             }
         });
         this.component_select.$on(
@@ -58,7 +58,7 @@ export default class SiyuanSamplePlugin extends Plugin {
             this.component_select.$set({ selected: this.notebooks[0].id });
         }
         let end = performance.now();
-        console.log(`[OpenDiary]: onload, 耗时: ${end - start} ms`);
+        info(`Onload, 耗时: ${end - start} ms`);
     }
 
     async initNotebooks() {
@@ -78,7 +78,7 @@ export default class SiyuanSamplePlugin extends Plugin {
 
 
     async updateAll() {
-        console.log('[OpenDiary]: updateAll');
+        info('updateAll');
         let result = await queryNotebooks();
         this.notebooks = result ? result : [];
         this.component_select.$set({ notebooks: this.notebooks });
@@ -91,7 +91,7 @@ export default class SiyuanSamplePlugin extends Plugin {
      * 注意，本函数不会更新 this.notebooks
      */
     async updateDiaryStatus_() {
-        console.log('[OpenDiary]: updateDiaryStatus');
+        info('updateDiaryStatus');
         let todayDiary = getTodayDiaryPath();
         let docs = await getDocsByHpath(todayDiary);
         if (docs.length > 0) {
@@ -101,14 +101,13 @@ export default class SiyuanSamplePlugin extends Plugin {
             notebook_with_diary.forEach((notebook) => {
                 diaryStatus.set(notebook, true);
             });
-            console.log("update", this.component_select)
             this.component_select.$set({ diaryStatus: diaryStatus });
-            console.log(`'[OpenDiary]: 当前日记共 ${count_diary} 篇`);
+            info(`'当前日记共 ${count_diary} 篇`);
         }
     }
 
     onunload() {
-        console.log('[OpenDiary]: plugin unload')
+        info('plugin unload')
         this.component_select.$destroy();
         this.div_select.remove();
     }
