@@ -2,7 +2,11 @@
 
 This plugin is suitable for people who have multiple notebooks, allowing for quick creation of today's note in different notebooks.
 
+[中文](README.md)
+
 ![note options](asset/日记选项.png)
+
+## Introduction
 
 1. When the plugin is launched, today's note is automatically created/opened.
     - Automatically open today's note in the notebook ranked first. If it doesn't exist, create and open it automatically.
@@ -19,5 +23,7 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
 4. When there is an update to a notebook (such as opening/closing/creating/moving a notebook), press the keyboard shortcut "ctrl+alt+u" to update the status.
     - The plugin can automatically track the creation status of the note, but it will not track the status of the notebooks.
     - Therefore, when opening, closing, creating, or moving a notebook, press the keyboard shortcut "ctrl+alt+u" to update the status.
+
+## CHANGELOG
 
 [CHANGELOG](CHANGELOG.md)
