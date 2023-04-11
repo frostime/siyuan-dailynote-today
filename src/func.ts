@@ -43,16 +43,34 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
 }
 
 
-export async function getDailyNoteSprig(notebook: Notebook): Promise<string> {
-    let conf = await serverApi.getNotebookConf(notebook.id);
+/**
+ * 
+ * @param notebook 笔记本对象
+ * @returns 笔记本的 Daily Note 路径模板
+ */
+export async function getDailynoteSprig(notebookId: string): Promise<string> {
+    let conf = await serverApi.getNotebookConf(notebookId);
     let sprig: string = conf.conf.dailyNoteSavePath;
     return sprig;
 }
 
 
-export async function renderDailyNotePath(sprig: string) {
-    //TODO 插件似乎没有实现这个 API
-    return await serverApi.renderSprig(sprig);
+import { request } from './api';
+
+async function renderSprig(sprig: string) {
+    let url = '/api/template/renderSprig';
+    return await request(url, sprig);
+}
+
+
+/**
+ * 要求思源解析模板
+ * @param sprig
+ * @returns 
+ */
+export async function renderDailynotePath(sprig: string) {
+    // return await serverApi.renderSprig(sprig);
+    return await renderSprig(sprig);
 }
 
 /**
