@@ -1,3 +1,8 @@
+## [2023-04-12] v0.3.1
+
+`open-diary-today` 改名 `daily-note-today`
+
+
 ## [2023-04-12] v0.3.0
 
 - 之前硬性默认打开 `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
