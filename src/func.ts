@@ -3,10 +3,14 @@
  */
 import { serverApi } from 'siyuan';
 import { Notebook, Block } from "./types";
-import { info, error } from "./utils";
+import { info, warn, error } from "./utils";
 
 
-export function getTodayDiaryPath() {
+/**
+ * 默认的 Daily Note 路径
+ * @returns today_diary_path `string`
+ */
+function getTodayDiaryPath() {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -19,8 +23,13 @@ export function getTodayDiaryPath() {
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
 /**
- * 获取所有笔记本
- * @returns flag
+ * 获取所有笔记本，并解析今日日记路径
+ * @details
+ *  1. Call serverApi.lsNotebooks to get all notebooks
+ *  2. Filter out Siyuan guide notebook
+ *  3. Sort notebooks by sort
+ *  4. Get all daily note sprig and today's diary path
+ * @returns all_notebooks `Array<Notebook>|null`
  */
 export async function queryNotebooks(): Promise<Array<Notebook> | null> {
     try {
@@ -55,22 +64,13 @@ export async function getDailynoteSprig(notebookId: string): Promise<string> {
 }
 
 
-import { request } from './api';
-
-async function renderSprig(sprig: string) {
-    let url = '/api/template/renderSprig';
-    return await request(url, sprig);
-}
-
-
 /**
  * 要求思源解析模板
  * @param sprig
  * @returns 
  */
 export async function renderDailynotePath(sprig: string) {
-    // return await serverApi.renderSprig(sprig);
-    return await renderSprig(sprig);
+    return await serverApi.renderSprig(sprig);
 }
 
 /**
@@ -103,16 +103,17 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    let todayDiaryPath = getTodayDiaryPath();
-    info(`Open ${notebook.name}${todayDiaryPath}`);
-    let docs = await getDocsByHpath(todayDiaryPath, notebook);
+    let todayDiaryPath = notebook.dailynotePath;
+    info(`Open ${notebook.name}/${todayDiaryPath}`);
+    //queryNotebooks() 保证了 todayDiaryPath 不为 null
+    let docs = await getDocsByHpath(todayDiaryPath!, notebook);
 
     if (docs != null && docs.length > 0) {
         let doc = docs[0];
         let id = doc.id;
         window.open(`siyuan://blocks/${id}`);
     } else {
-        let id = await createDiary(notebook, todayDiaryPath);
+        let id = await createDiary(notebook, todayDiaryPath!);
         window.open(`siyuan://blocks/${id}`);
     }
 }
