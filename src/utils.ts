@@ -10,3 +10,7 @@ export function error(...msg: any[]): void {
     logger.error(...msg);
 }
 
+export function warn(...msg: any[]): void {
+    logger.warn(...msg);
+}
+
