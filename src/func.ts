@@ -64,13 +64,21 @@ export async function getDailynoteSprig(notebookId: string): Promise<string> {
 }
 
 
+import { request } from './api';
+
+async function renderSprig(sprig: string) {
+    let result = await request('/api/template/renderSprig', { template: sprig });
+    return result;
+}
+
 /**
  * 要求思源解析模板
  * @param sprig
  * @returns 
  */
 export async function renderDailynotePath(sprig: string) {
-    return await serverApi.renderSprig(sprig);
+    // return await serverApi.renderSprig(sprig);
+    return await renderSprig(sprig);
 }
 
 /**
