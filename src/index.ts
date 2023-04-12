@@ -4,8 +4,8 @@
 import { Plugin, clientApi } from 'siyuan';
 import Select from './select.svelte'
 import { Notebook } from './types';
-import { getTodayDiaryPath, queryNotebooks, getDocsByHpath, openDiary } from './func';
-import { info, error } from './utils';
+import { queryNotebooks, getDocsByHpath, openDiary } from './func';
+import { info } from './utils';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
@@ -61,6 +61,11 @@ export default class SiyuanSamplePlugin extends Plugin {
         info(`Onload, 耗时: ${end - start} ms`);
     }
 
+    /**
+     * 初始化 notebooks，了防止思源还没有加载完毕，故而需要等待
+     * 只在第一次启动的时候调用
+     * @calledby: this.onload()
+     */
     async initNotebooks() {
         const MAX_RETRY = 5;
         let retry = 0;
@@ -89,21 +94,35 @@ export default class SiyuanSamplePlugin extends Plugin {
     /**
      * 根据思源中已经有 diary 的笔记本，更新下拉框中的笔记本状态
      * 注意，本函数不会更新 this.notebooks
+     * @details
+     * 1. 遍历所有笔记本，找到所有的 daily note 的 hpath
+     * 2. 对每种 hpath，调用 `await getDocsByHpath(todayDNHpath)`，查询是否存在对应的文件
      */
     async updateDiaryStatus_() {
         info('updateDiaryStatus');
-        let todayDiary = getTodayDiaryPath();
-        let docs = await getDocsByHpath(todayDiary);
-        if (docs.length > 0) {
-            let notebook_with_diary = docs.map(doc => doc.box);
-            let count_diary = notebook_with_diary.length;
-            let diaryStatus: Map<string, boolean> = new Map();
-            notebook_with_diary.forEach((notebook) => {
-                diaryStatus.set(notebook, true);
-            });
-            this.component_select.$set({ diaryStatus: diaryStatus });
-            info(`'当前日记共 ${count_diary} 篇`);
+        // let todayDiary = getTodayDiaryPath();
+        //所有 hpath 的配置方案
+        let hpath_set: Set<string> = new Set();
+        this.notebooks.forEach((notebook) => {
+            hpath_set.add(notebook.dailynotePath!);
+        });
+
+        let diaryStatus: Map<string, boolean> = new Map();
+        let count_diary = 0;
+        for (const todayDNHpath of hpath_set) {
+            //对每种 daily note 的方案，看看是否存在对应的路径
+            let docs = await getDocsByHpath(todayDNHpath);
+            if (docs.length > 0) {
+                let notebook_with_diary = docs.map(doc => doc.box);
+                notebook_with_diary.forEach((notebookId: string) => {
+                    diaryStatus.set(notebookId, true);
+                });
+                count_diary += notebook_with_diary.length;
+                info(`${todayDNHpath} 共 ${notebook_with_diary.length} 篇`)
+            }
         }
+        this.component_select.$set({ diaryStatus: diaryStatus });
+        info(`当前日记共 ${count_diary} 篇`);
     }
 
     onunload() {

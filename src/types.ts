@@ -4,6 +4,8 @@ export type Notebook = {
     icon: string;
     sort: number;
     closed: boolean;
+    dailynoteSprig?: string;
+    dailynotePath?: string;
 }
 
 type BlockType = "d" | "s" | "h" | "t" | "i" | "p" | "f" | "audio" | "video" | "other";

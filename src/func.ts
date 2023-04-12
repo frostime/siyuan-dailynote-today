@@ -3,24 +3,20 @@
  */
 import { serverApi } from 'siyuan';
 import { Notebook, Block } from "./types";
-import { info, error } from "./utils";
+import { info, warn, error } from "./utils";
 
 
-export function getTodayDiaryPath() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const today = `${year}-${month}-${day}`;
-    return `/daily note/${year}/${month}/${today}`;
-}
-
-
+const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
 /**
- * 获取所有笔记本
- * @returns flag
+ * 获取所有笔记本，并解析今日日记路径
+ * @details
+ *  1. Call serverApi.lsNotebooks to get all notebooks
+ *  2. Filter out Siyuan guide notebook
+ *  3. Sort notebooks by sort
+ *  4. Get all daily note sprig and today's diary path
+ * @returns all_notebooks `Array<Notebook>|null`
  */
 export async function queryNotebooks(): Promise<Array<Notebook> | null> {
     try {
@@ -34,6 +30,23 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             return a.sort - b.sort;
         });
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
+
+        //Get all daily note sprig
+        for (let notebook of all_notebooks) {
+            let sprig = await getDailynoteSprig(notebook.id);
+            notebook.dailynoteSprig = sprig != "" ? sprig : default_sprig;
+            notebook.dailynotePath = await renderDailynotePath(notebook.dailynoteSprig);
+
+            //防止出现不符合规范的 sprig, 不过根据 debug 情况看似乎不会出现这种情况
+            if (notebook.dailynotePath == "") {
+                warn(`Invalid daily note srpig of ${notebook.name}`);
+                notebook.dailynoteSprig = default_sprig;
+                notebook.dailynotePath = await renderDailynotePath(default_sprig);
+            }
+
+            info(`${notebook.name}: ${notebook.dailynoteSprig} - ${notebook.dailynotePath}`)
+        }
+
         info(`Read all notebooks: ${all_notebook_names}`);
         return all_notebooks;
     } catch (err) {
@@ -43,16 +56,34 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
 }
 
 
-export async function getDailyNoteSprig(notebook: Notebook): Promise<string> {
-    let conf = await serverApi.getNotebookConf(notebook.id);
+/**
+ * 
+ * @param notebook 笔记本对象
+ * @returns 笔记本的 Daily Note 路径模板
+ */
+export async function getDailynoteSprig(notebookId: string): Promise<string> {
+    let conf = await serverApi.getNotebookConf(notebookId);
     let sprig: string = conf.conf.dailyNoteSavePath;
     return sprig;
 }
 
 
-export async function renderDailyNotePath(sprig: string) {
-    //TODO 插件似乎没有实现这个 API
-    return await serverApi.renderSprig(sprig);
+import { request } from './api';
+
+async function renderSprig(sprig: string) {
+    let result = await request('/api/template/renderSprig', { template: sprig });
+    return result;
+}
+
+/**
+ * 要求思源解析模板
+ * @param sprig
+ * @returns 
+ */
+export async function renderDailynotePath(sprig: string) {
+    // return await serverApi.renderSprig(sprig);
+    //TODO: 等待 siyuan 更新之后再使用 serverApi.renderSprig
+    return await renderSprig(sprig);
 }
 
 /**
@@ -85,16 +116,17 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    let todayDiaryPath = getTodayDiaryPath();
-    info(`Open ${notebook.name}${todayDiaryPath}`);
-    let docs = await getDocsByHpath(todayDiaryPath, notebook);
+    let todayDiaryPath = notebook.dailynotePath;
+    info(`Open ${notebook.name}/${todayDiaryPath}`);
+    //queryNotebooks() 保证了 todayDiaryPath 不为 null
+    let docs = await getDocsByHpath(todayDiaryPath!, notebook);
 
     if (docs != null && docs.length > 0) {
         let doc = docs[0];
         let id = doc.id;
         window.open(`siyuan://blocks/${id}`);
     } else {
-        let id = await createDiary(notebook, todayDiaryPath);
+        let id = await createDiary(notebook, todayDiaryPath!);
         window.open(`siyuan://blocks/${id}`);
     }
 }
