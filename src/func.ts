@@ -20,6 +20,7 @@ function getTodayDiaryPath() {
 }
 
 
+const default_sprig = `"/daily note/{{now | date "2006 / 01"}}/{{now | date "2006 - 01 - 02"}}"`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
 /**
@@ -43,6 +44,14 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             return a.sort - b.sort;
         });
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
+
+        //Get all daily note sprig
+        for (let notebook of all_notebooks) {
+            let sprig = await getDailynoteSprig(notebook.id);
+            notebook.dailynoteSprig = sprig != "" ? sprig : default_sprig;
+            notebook.dailynotePath = await renderDailynotePath(sprig);
+        }
+
         info(`Read all notebooks: ${all_notebook_names}`);
         return all_notebooks;
     } catch (err) {
