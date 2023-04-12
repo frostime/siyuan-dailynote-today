@@ -5,7 +5,7 @@ import { Plugin, clientApi } from 'siyuan';
 import Select from './select.svelte'
 import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary } from './func';
-import { info, error } from './utils';
+import { info } from './utils';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
@@ -94,6 +94,9 @@ export default class SiyuanSamplePlugin extends Plugin {
     /**
      * 根据思源中已经有 diary 的笔记本，更新下拉框中的笔记本状态
      * 注意，本函数不会更新 this.notebooks
+     * @details
+     * 1. 遍历所有笔记本，找到所有的 daily note 的 hpath
+     * 2. 对每种 hpath，调用 `await getDocsByHpath(todayDNHpath)`，查询是否存在对应的文件
      */
     async updateDiaryStatus_() {
         info('updateDiaryStatus');
