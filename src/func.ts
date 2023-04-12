@@ -82,6 +82,7 @@ async function renderSprig(sprig: string) {
  */
 export async function renderDailynotePath(sprig: string) {
     // return await serverApi.renderSprig(sprig);
+    //TODO: 等待 siyuan 更新之后再使用 serverApi.renderSprig
     return await renderSprig(sprig);
 }
 
