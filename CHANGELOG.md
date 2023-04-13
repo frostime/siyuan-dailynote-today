@@ -1,3 +1,13 @@
+## [2023-04-13] v0.4.1
+
+Setting 面板中加入了「更新笔记本状态」，用于替代 Ctrl+Alt+U。
+
+
+## [2023-04-13] v0.4.0
+
+增加了 Setting 面板。
+
+
 ## [2023-04-12] v0.3.1
 
 `open-diary-today` 改名 `daily-note-today`

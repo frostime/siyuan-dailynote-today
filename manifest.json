@@ -4,5 +4,5 @@
     "description": "1. 启动思源笔记之后，自动开启今天的笔记\n2. 工具栏提供下拉框，快速查看今天的笔记并打开\n3. 注册了 ctrl+alt+u 用于更新当前打开的笔记本状态",
     "author": "frostime",
     "url": "https://github.com/frostime/siyuan-plugin-open-diary",
-    "version": "0.3.1"
+    "version": "0.4.1"
 }

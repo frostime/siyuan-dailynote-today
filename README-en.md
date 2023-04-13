@@ -24,6 +24,13 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
     - The plugin can automatically track the creation status of the note, but it will not track the status of the notebooks.
     - Therefore, when opening, closing, creating, or moving a notebook, press the keyboard shortcut "ctrl+alt+u" to update the status.
 
+5. Settings panel
+    - You can choose in the settings panel whether to automatically open today's note when the plugin is enabled.
+    - Provides an "Update" button, which functions the same as the "Ctrl + Alt + U" shortcut key.
+    - International support.
+
+    ![](asset/Setting-en.png)
+
 ## CHANGELOG
 
 [CHANGELOG](CHANGELOG.md)
