@@ -5,18 +5,11 @@ import { Plugin, clientApi } from 'siyuan';
 import Select from './select.svelte'
 import Setting from './setting.svelte'
 import { Notebook } from './types';
-import { queryNotebooks, getDocsByHpath, openDiary } from './func';
-import { info, TextContent } from './utils';
+import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
+import { info, StaticText } from './utils';
 import { settings } from './setting';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
-
-const lang: string = window?.['siyuan']?.config?.lang;
-
-let StaticText = TextContent['zh-CN'];
-if (lang === undefined || !lang.startsWith('zh')) {
-    StaticText = TextContent['en-US'];
-}
 
 export default class SiyuanSamplePlugin extends Plugin {
     notebooks: Array<Notebook>;
@@ -126,6 +119,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.notebooks = result ? result : [];
         this.component_select.$set({ notebooks: this.notebooks });
         await this.updateDiaryStatus_();
+        notify(StaticText.UpdateAll, 'info', 2500);
     }
 
 

@@ -1,13 +1,24 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { serverApi } from 'siyuan';
+import { Notification, serverApi } from 'siyuan';
 import { Notebook, Block } from "./types";
-import { info, warn, error } from "./utils";
+import { info, warn, error, StaticText } from "./utils";
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
+
+export async function notify(msg: string, type: 'error' | 'info' = 'info', timeout: number = 1000) {
+    let notification = new Notification(
+        {
+            type: type,
+            message: msg,
+            timeout: timeout,
+        }
+    );
+    notification.show();
+}
 
 /**
  * 获取所有笔记本，并解析今日日记路径
@@ -125,8 +136,10 @@ export async function openDiary(notebook: Notebook) {
         let doc = docs[0];
         let id = doc.id;
         window.open(`siyuan://blocks/${id}`);
+        notify(`${StaticText.Open}： ${notebook.name}`, 'info', 2500);
     } else {
         let id = await createDiary(notebook, todayDiaryPath!);
         window.open(`siyuan://blocks/${id}`);
+        notify(`${StaticText.Create}: ${notebook.name}`, 'info', 2500);
     }
 }

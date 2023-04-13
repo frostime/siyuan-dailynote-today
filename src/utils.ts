@@ -14,7 +14,7 @@ export function warn(...msg: any[]): void {
     logger.warn(...msg);
 }
 
-export const TextContent = {
+const _MultiLangText = {
     'zh-CN': {
         Setting: [
             {
@@ -25,7 +25,10 @@ export const TextContent = {
                 title: "更新笔记本状态",
                 text: "在笔记本配置发生变化的时候更新其状态，也可以使用注册的快捷键 Ctrl+Alt+U"
             }
-        ]
+        ],
+        Open: "打开日记",
+        Create: "创建日记",
+        UpdateAll: "笔记本状态已更新"
     },
     "en-US": {
         Setting: [
@@ -37,6 +40,18 @@ export const TextContent = {
                 title: "Update Notebook Status",
                 text: "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U"
             }
-        ]
+        ],
+        Open: "Open daily note",
+        Create: "Create daily note",
+        UpdateAll: "Notebook status updated"
     }
 }
+
+const lang: string = window?.['siyuan']?.config?.lang;
+
+let LangText = _MultiLangText['zh-CN'];
+if (lang === undefined || !lang.startsWith('zh')) {
+    LangText = _MultiLangText['en-US'];
+}
+
+export const StaticText = LangText;
