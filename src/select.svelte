@@ -44,18 +44,18 @@
 </script>
 
 <select
-    class="toolbar__item b3-tooltips b3-tooltips__se"
+    class="b3-select"
     on:click={onClick}
     on:blur={onBlur}
     bind:value={selected}
 >
     {#each notebooks as notebook}
         {#if !notebook.closed && diaryStatus.get(notebook.id) === true}
-            <option value={notebook.id} class="b3-menu__item">
+            <option value={notebook.id}>
                 <span class="b3-menu__label">√{notebook.name}</span>
             </option>
         {:else}
-            <option value={notebook.id} class="b3-menu__item">
+            <option value={notebook.id}>
                 <span class="b3-menu__label">{notebook.name}</span>
             </option>
         {/if}
@@ -65,7 +65,9 @@
 <style>
     select {
         margin: 0;
-        padding: 0;
-        max-width: 8rem !important;
+        /* padding: 0; */
+        /* width: 9rem; */
+        min-width: 8rem !important;
+        height: 100%;
     }
 </style>
