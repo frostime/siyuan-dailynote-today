@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2023 frostime. All rights reserved.
+ */
 import { clientApi } from 'siyuan';
 
 export const logger = clientApi.createLogger('OpenDiaryToday');

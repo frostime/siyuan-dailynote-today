@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2023 frostime. All rights reserved.
+ */
 import { Plugin } from 'siyuan';
 import { info } from './utils';
 

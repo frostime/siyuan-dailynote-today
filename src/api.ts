@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2023 frostime. All rights reserved.
+ */
 let token = window['siyuan']?.config.api.token
 
 export async function request(url, data) {

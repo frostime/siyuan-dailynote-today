@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2023 frostime. All rights reserved.
+ */
 import { Menu, MenuItem } from "siyuan";
 import { moveBlocksToDailyNote } from "./func";
 import { Notebook } from "./types"

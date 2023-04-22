@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2023 frostime. All rights reserved.
+ */
 export type Notebook = {
     id: string;
     name: string;
