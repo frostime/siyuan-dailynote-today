@@ -1,6 +1,6 @@
 # Today's Note
 
-This plugin is suitable for people who have multiple notebooks, allowing for quick creation of today's note in different notebooks.
+This plugin is suitable for people who have multiple notebooks, allowing for quick creation of today's note in different notebooks and moving blocks among notes.
 
 [中文](README.md)
 
@@ -30,6 +30,12 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
     - International support.
 
     ![](asset/Setting-en.png)
+
+6. Moving Blocks
+    - Select a block and press "Alt + Right Click" to bring up a moving block panel.
+    - Choose a notebook to move the current block to the diary of the corresponding notebook for today.
+
+    ![](asset/MoveBlock.png)
 
 ## CHANGELOG
 

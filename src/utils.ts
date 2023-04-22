@@ -28,7 +28,10 @@ const _MultiLangText = {
         ],
         Open: "打开日记",
         Create: "创建日记",
-        UpdateAll: "笔记本状态已更新"
+        UpdateAll: "笔记本状态已更新",
+        Menu: {
+            Move: '移动到',
+        }
     },
     "en-US": {
         Setting: [
@@ -43,7 +46,10 @@ const _MultiLangText = {
         ],
         Open: "Open daily note",
         Create: "Create daily note",
-        UpdateAll: "Notebook status updated"
+        UpdateAll: "Notebook status updated",
+        Menu: {
+            Move: 'Move to',
+        }
     }
 }
 

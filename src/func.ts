@@ -9,6 +9,63 @@ import { info, warn, error, StaticText } from "./utils";
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
+
+async function queryChildren(parentId: string): Promise<Array<Block>> {
+    let sql = `select * from blocks where parent_id = '${parentId}'`;
+    let result: Array<Block> = await serverApi.sql(sql);
+    return result;
+}
+
+export async function moveBlocksAfter(srcBlock: Block, dstId: string, method: 'parent' | 'previous' = 'parent') {
+
+    let childrens: Array<Block> = new Array<Block>();
+    if (srcBlock.type == 'h') {
+        childrens = await queryChildren(srcBlock.id);
+    }
+
+    let ans;
+
+    if (method == 'parent') {
+        ans = await serverApi.moveBlock(srcBlock.id, null, dstId);
+    } else if (method == 'previous') {
+        ans = await serverApi.moveBlock(srcBlock.id, dstId, null);
+    }
+    console.log("Move ans:", ans);
+
+    let previousID = srcBlock.id;
+    for (let child of childrens) {
+        let id = child.id;
+        if (child.type != 'h') {
+            ans = await serverApi.moveBlock(id, previousID, null);
+            previousID = id;
+        } else {
+            previousID = await moveBlocksAfter(child, previousID, 'previous');
+        }
+    }
+    return previousID;
+}
+
+export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebook) {
+    let block = await serverApi.getBlockByID(srcBlockId);
+
+    if (block == null) {
+        error(`Block ${srcBlockId} not found`);
+        return;
+    }
+
+    let todayDiaryPath = notebook.dailynotePath;
+    let docs = await getDocsByHpath(todayDiaryPath!, notebook);
+    let doc_id;
+    if (docs != null && docs.length > 0) {
+        doc_id = docs[0].id;
+    } else {
+        doc_id = await createDiary(notebook, todayDiaryPath!);
+        notify(`${StaticText.Create}: ${notebook.name}`, 'info', 2500);
+    }
+    moveBlocksAfter(block, doc_id, 'parent');
+}
+
+
 export async function notify(msg: string, type: 'error' | 'info' = 'info', timeout: number = 1000) {
     let notification = new Notification(
         {

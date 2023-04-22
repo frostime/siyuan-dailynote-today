@@ -8,6 +8,7 @@ import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
 import { settings } from './setting';
+import { ContextMenu } from './menu';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
@@ -20,6 +21,8 @@ export default class SiyuanSamplePlugin extends Plugin {
 
     div_setting: HTMLElement;
     component_setting: Setting;
+
+    menu: ContextMenu;
 
 
     constructor() {
@@ -34,6 +37,8 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.div_select.classList.add(...TOOLBAR_ITEMS.split(/\s/));
         this.div_select.style.margin = '0 0.5rem';
         this.div_select.style.padding = '0rem 0rem';
+
+        this.menu = new ContextMenu(this.notebooks);
     }
 
     async onload() {
@@ -48,6 +53,7 @@ export default class SiyuanSamplePlugin extends Plugin {
 
         await settings.load();
         this.initSetting();
+        this.initMenu();
 
         this.component_select = new Select({
             target: this.div_select,
@@ -92,6 +98,12 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.component_setting.$on("updateAll", () => { this.updateAll() })
     }
 
+    initMenu() {
+        this.menu.notebooks = this.notebooks;
+        this.menu.bindMenuOnCurrentTabs();
+        this.menu.addEditorTabObserver();
+    }
+
     /**
      * 初始化 notebooks，了防止思源还没有加载完毕，故而需要等待
      * 只在第一次启动的时候调用
@@ -119,6 +131,8 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.notebooks = result ? result : [];
         this.component_select.$set({ notebooks: this.notebooks });
         await this.updateDiaryStatus_();
+        this.menu.notebooks = this.notebooks;
+        this.menu.bindMenuOnCurrentTabs();
         notify(StaticText.UpdateAll, 'info', 2500);
     }
 
