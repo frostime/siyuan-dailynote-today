@@ -112,6 +112,10 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
                 notebook.dailynotePath = await renderDailynotePath(default_sprig);
             }
 
+            if (notebook.icon == "") {
+                notebook.icon = "1f5c3";
+            }
+
             info(`${notebook.name}: ${notebook.dailynoteSprig} - ${notebook.dailynotePath}`)
         }
 
