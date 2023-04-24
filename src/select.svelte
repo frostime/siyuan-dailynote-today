@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { Notebook } from "./types";
-    import { info } from './utils';
+    import { info } from "./utils";
 
     const dispatch = createEventDispatcher();
 
@@ -12,6 +12,7 @@
     $: info("当前选中", selected);
 
     let isSelectFolded: boolean = true;
+    const hintChar = ["\u2713", "\u00A0\u00A0"];
 
     function onClick(event: MouseEvent) {
         info("Event: click");
@@ -52,11 +53,13 @@
     {#each notebooks as notebook}
         {#if !notebook.closed && diaryStatus.get(notebook.id) === true}
             <option value={notebook.id}>
-                <span class="b3-menu__label">√{notebook.name}</span>
+                <span>{hintChar[0]}</span>
+                <span>{notebook.name}</span>
             </option>
         {:else}
             <option value={notebook.id}>
-                <span class="b3-menu__label">{notebook.name}</span>
+                <span>{hintChar[1]}</span>
+                <span>{notebook.name}</span>
             </option>
         {/if}
     {/each}
