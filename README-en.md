@@ -37,6 +37,11 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
 
     ![](asset/MoveBlock.png)
 
+## Notice
+
+As this plugin registers the interface in the top toolbar, it may not work properly under some themes.Such as Rem Craft.
+
+
 ## CHANGELOG
 
 [CHANGELOG](CHANGELOG.md)
