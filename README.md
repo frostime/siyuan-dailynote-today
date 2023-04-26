@@ -1,6 +1,8 @@
 # 今日笔记
 
-[English](README-en.md)
+- [English README](https://github.com/frostime/siyuan-plugin-open-diary/blob/master/README-en.md)
+- 提交Issue请访问[Github](https://github.com/frostime/siyuan-plugin-open-diary)
+- 国内用户可访问[国内托管](https://gitcode.net/frostime/siyuan-plugin-daily-note)
 
 本插件比较适合笔记本比较多的人，用于快速在不同笔记本创建今日的笔记，并将块在不同笔记中移动。
 
@@ -36,6 +38,11 @@
     - 选择笔记本，可以把当前块移动到对应笔记本今天的日记下
 
     ![](asset/MoveBlock.png)
+
+## 注意事项
+
+本插件由于将界面注册在顶端工具栏内，所以部分主题下可能无法正常使用。目前确认无法在 Rem Craft 下使用。
+
 
 ## CHANGELOG
 
