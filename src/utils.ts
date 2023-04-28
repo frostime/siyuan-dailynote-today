@@ -29,7 +29,7 @@ const _MultiLangText = {
                 text: "在笔记本配置发生变化的时候更新其状态，也可以使用注册的快捷键 Ctrl+Alt+U"
             },
             {
-                title: "下拉框内部排序方案",
+                title: "笔记本排序方案",
                 text: "1. 和当前文档树的显示保持一致 2. 和在自定义排序中的设置保持一致",
                 options: {
                     'doc-tree': '和文档树一致',
@@ -55,7 +55,7 @@ const _MultiLangText = {
                 text: "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U"
             },
             {
-                title: "Sorting Scheme in Drop-down Box",
+                title: "Notebook Sorting Scheme",
                 text: "1. Same what document tree shows 2. Same the order defined in custom sorting mode",
                 options: {
                     'doc-tree': 'Same as document tree',
