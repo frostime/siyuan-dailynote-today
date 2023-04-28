@@ -51,9 +51,9 @@
                 settings.save();
             }}
         >
-            <option value="tree-show">{contents[2].options["tree-show"]}</option
+            <option value="doc-tree">{contents[2].options["doc-tree"]}</option
             >
-            <option value="key-sort">{contents[2].options["key-sort"]}</option>
+            <option value="custom-sort">{contents[2].options["custom-sort"]}</option>
         </select>
     </label>
     <label class="fn__flex b3-label">

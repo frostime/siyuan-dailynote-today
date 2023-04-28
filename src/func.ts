@@ -96,7 +96,7 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
         );
         
-        if (settings.settings.NotebookSort == 'key-sort') {
+        if (settings.settings.NotebookSort == 'custom-sort') {
             all_notebooks = all_notebooks.sort((a, b) => {
                 return a.sort - b.sort;
             });
