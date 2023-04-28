@@ -93,6 +93,12 @@ The plugin automatically selects the notebook that ranks first to generate a dia
 
 Firstly, please make sure that you are clicking on the icon beside the block. If you still cannot bring up the menu, try using the shortcut "Ctrl + Alt + U" to update the global status, and then try again.
 
+### Q: Why is it so slow when moving header blocks?
+
+It's not slow, it's just that there is a process when moving blocks.
+
+In SiYuan, header blocks are not container blocks, so it is not possible to move them all at once. The current algorithm for moving header blocks is implemented by the plugin itself and requires recognition of which blocks belong to the current header, so it takes some time.
+
 
 ## CHANGELOG
 
