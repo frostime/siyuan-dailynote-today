@@ -2,13 +2,16 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin } from 'siyuan';
-import { info } from './utils';
+import { info, error } from './utils';
 
+
+type NotebookSorting = 'doc-tree' | 'custom-sort'
 
 class SettingManager {
     plugin: Plugin;
     settings = {
-        OpenOnStart: true,
+        OpenOnStart: true as boolean,
+        NotebookSort: 'custom-sort' as NotebookSorting,
     };
 
     setPlugin(plugin: Plugin) {
@@ -20,6 +23,11 @@ class SettingManager {
     }
 
     set(key: string, value: any) {
+        if (!(key in this.settings)) {
+            error(`Setting ${key} not found`);
+            return;
+        }
+
         this.settings[key] = value;
     }
 
