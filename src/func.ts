@@ -2,6 +2,7 @@
  * Copyright (c) 2023 frostime all rights reserved.
  */
 import { Notification, serverApi } from 'siyuan';
+import { settings } from './setting';
 import { Notebook, Block } from "./types";
 import { info, warn, error, StaticText } from "./utils";
 
@@ -94,9 +95,13 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         all_notebooks = all_notebooks.filter(
             notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
         );
-        all_notebooks = all_notebooks.sort((a, b) => {
-            return a.sort - b.sort;
-        });
+        
+        if (settings.settings.NotebookSort == 'key-sort') {
+            all_notebooks = all_notebooks.sort((a, b) => {
+                return a.sort - b.sort;
+            });
+        }
+
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
 
         //Get all daily note sprig
