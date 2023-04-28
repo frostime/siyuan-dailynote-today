@@ -11,7 +11,7 @@ class SettingManager {
     plugin: Plugin;
     settings = {
         OpenOnStart: true as boolean,
-        NotebookSort: 'doc-tree' as NotebookSorting,
+        NotebookSort: 'custom-sort' as NotebookSorting,
     };
 
     setPlugin(plugin: Plugin) {
