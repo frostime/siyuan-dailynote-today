@@ -37,9 +37,19 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
 
     ![](asset/MoveBlock.png)
 
-## Notice
+## FAQ
 
-As this plugin registers the interface in the top toolbar, it may not work properly under some themes.Such as Rem Craft.
+> - Q: Are there any limitations to using the plugin?
+> - A: Due to the fact that the interface is registered in the top toolbar, it may not work properly under some themes. Currently, it has been confirmed that it cannot be used under Rem Craft.
+
+> - Q: I don't want to create a diary automatically.
+> - A: Please toggle off "Open Today's Diary Automatically" in the plugin settings.
+
+> - Q: How do I adjust the order of the notebook in the dropdown selector?
+> - A: The sorting rule for the notebook items in selector is consistent with their order in document tree. To adjust the order, you can drag the target notebook to the first item in the document tree, and then update the notebook status using the shortcut "Ctrl + Alt + U".
+
+> - Q: Why can't I bring up the move menu with "Alt + right-click" sometimes?
+> - A: Firstly, please make sure that you are clicking on the icon beside the block. If you still cannot bring up the menu, try using the shortcut "Ctrl + Alt + U" to update the global status, and then try again.
 
 
 ## CHANGELOG
