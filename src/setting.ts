@@ -5,13 +5,13 @@ import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 
 
-type NotebookSorting = 'key-sort' | 'tree-show'
+type NotebookSorting = 'tree-show' | 'key-sort'
 
 class SettingManager {
     plugin: Plugin;
     settings = {
         OpenOnStart: true as boolean,
-        NotebookSort: 'key-sort' as NotebookSorting,
+        NotebookSort: 'tree-show' as NotebookSorting,
     };
 
     setPlugin(plugin: Plugin) {

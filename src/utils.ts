@@ -30,10 +30,10 @@ const _MultiLangText = {
             },
             {
                 title: "下拉框内部排序方案",
-                text: "1: 按照「自定义排序」模式下顺序排列；0: 按照其他模式下顺序排列",
+                text: "1. 和当前文档树的显示保持一致 2. 和在自定义排序中的设置保持一致",
                 options: {
-                    'key-sort': '和自定义排序一致',
-                    'tree-show': '和文档树一致'
+                    'tree-show': '和文档树一致',
+                    'key-sort': '和自定义排序一致'
                 }
             }
         ],
@@ -56,10 +56,10 @@ const _MultiLangText = {
             },
             {
                 title: "Sorting Scheme in Drop-down Box",
-                text: "1: Sort in the order of \"Custom Sorting\" mode; 0: Sort in the order of other modes",
+                text: "1. Same what document tree shows 2. Same the order defined in custom sorting mode",
                 options: {
-                    'key-sort': 'Same as custom sorting',
-                    'tree-show': 'Same as document tree'
+                    'tree-show': 'Same as document tree',
+                    'key-sort': 'Same as custom sorting'
                 }
             }
         ],
