@@ -26,6 +26,7 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
 
 5. Settings panel
     - You can choose in the settings panel whether to automatically open today's note when the plugin is enabled.
+    - Notebook sorting schema.
     - Provides an "Update" button, which functions the same as the "Ctrl + Alt + U" shortcut key.
     - International support.
 
@@ -47,11 +48,46 @@ Due to the fact that the interface is registered in the top toolbar, it may not 
 
 Please toggle off "Open Today's Diary Automatically" in the plugin settings.
 
-### Q: How do I adjust the order of the notebook in the dropdown selector?
+### Q: How is the sorting of notebooks determined? Can it be adjusted?
 
-The sorting rule for the notebook items in selector is consistent with their order in "Custom Soring Mode".
+#### Background Information
 
-To adjust the order, you can drag the target notebook to the first item in the document tree, and then update the notebook status using the shortcut "Ctrl + Alt + U".
+In the Siyuan software, the document tree display sorting scheme can be divided into two categories:
+
+- Custom sorting
+
+    Notebooks can be freely dragged for sorting, and this order will be recorded by Siyuan.
+
+- Other sorting
+
+
+
+#### Plugin Settings
+
+The plugin supports two sorting schemes in total, both of which can be configured in the settings.
+
+![](asset/Sorting-en.png)
+
+- Same as custom sorting
+
+    Under this scheme, the notebook sorting displayed by the plugin will only be consistent with the order in "Custom Sorting" mode, even if other "notebook tree display sorting schemes" are later changed, the order of notebooks displayed by the plugin will not change.
+
+- Same as document tree
+
+    Under this scheme, the notebook sorting displayed by the plugin will be exactly the same as the order of notebooks in the notebook tree.
+
+After changing the Siyuan notebook sorting, press Ctrl + Alt + U to update the status.
+
+### Q: How to change the notebook for automatically generated diary?
+
+The plugin automatically selects the notebook that ranks first to generate a diary. If you want to change it, you need to change the order of notebooks in the plugin.
+
+- For users who use "custom sorting" scheme, please move the default notebook to the top.
+- For users who use other schemes
+    - Switch to "Custom Sorting" and move the notebook to the first place
+    - In the plugin settings page, select the notebook sorting scheme as "Same as custom sorting"
+    - Click the "Update" button below
+    - If you don't want the display of the notebook tree to be sorted by custom sorting, you can change to another sorting scheme after completing the above configuration, which will not affect the order in the plugin.
 
 ### Q: Why can't I bring up the move menu with "Alt + right-click" sometimes?
 
