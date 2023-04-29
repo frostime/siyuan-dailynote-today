@@ -8,7 +8,7 @@ import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
 import { settings } from './setting';
-import { ContextMenu } from './menu';
+import { ContextMenu } from './move-menu';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
