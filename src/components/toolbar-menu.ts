@@ -1,6 +1,6 @@
 import { Menu, MenuItem, clientApi } from "siyuan";
 import { openDiary } from "../func";
-import { settings } from "../setting";
+import { settings } from "../global-setting";
 import { Notebook } from "../types";
 
 import  Select  from "./select.svelte";

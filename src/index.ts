@@ -7,7 +7,7 @@ import { ToolbarSelectItem } from './components/toolbar-menu';
 import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
-import { settings } from './setting';
+import { settings } from './global-setting';
 import { ContextMenu } from './components/move-menu';
 
 
