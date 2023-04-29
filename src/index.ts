@@ -136,6 +136,7 @@ export default class SiyuanSamplePlugin extends Plugin {
     onunload() {
         info('plugin unload')
         this.toolbar_item.release();
+        this.menu.removeEditorTabObserver();
     }
 }
 

@@ -27,7 +27,6 @@
             type="checkbox"
             bind:checked
             on:change={(e) => {
-                console.log("Checked: " + e.target.checked);
                 //设置发生变化的时候，保存设置
                 settings.set("OpenOnStart", e.target.checked);
                 settings.save();
@@ -44,8 +43,6 @@
             class="b3-select fn__flex-center fn__size200"
             id="notebookSort"
             on:change={(e) => {
-                console.log("setting");
-                console.log(e);
                 let value = e.target.value;
                 settings.set("NotebookSort", value);
                 settings.save();

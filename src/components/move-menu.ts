@@ -9,6 +9,8 @@ import notebooks from "../global-notebooks";
 
 export class ContextMenu {
 
+    private observer: MutationObserver | null = null;
+
     constructor() {
     }
 
@@ -22,7 +24,7 @@ export class ContextMenu {
     addEditorTabObserver() {
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;
         let gutterContextMenuEvent = (event) => { this.gutterContextMenuEvent(event) };
-        var observer = new MutationObserver(function (mutationsList) {
+        this.observer = new MutationObserver(function (mutationsList) {
             for (var mutation of mutationsList) {
                 if (mutation.type == 'childList' && mutation.addedNodes.length) {
                     for (let node of mutation.addedNodes) {
@@ -31,7 +33,8 @@ export class ContextMenu {
                             'div.protyle-gutters'
                         );
                         gutter?.addEventListener('contextmenu', gutterContextMenuEvent);
-                        info(`Add Listener: ${protyle}`);
+                        let data_id = protyle.getAttribute('data-id');
+                        info(`Add Listener: protyle-${data_id}`);
                     }
                 }
                 if (mutation.type == 'childList' && mutation.removedNodes.length) {
@@ -42,18 +45,25 @@ export class ContextMenu {
                             'div.protyle-gutters'
                         );
                         gutter?.removeEventListener('contextmenu', gutterContextMenuEvent);
-                        info(`Remove Listener: ${protyle}`);
+                        let data_id = protyle.getAttribute('data-id');
+                        info(`Remove Listener: protyle-${data_id}`);
                     }
                 }
             }
         });
         if (centerLayout) {
-            observer.observe(centerLayout!, {
+            this.observer.observe(centerLayout!, {
                 childList: true,
                 attributes: false,
                 characterData: false,
                 subtree: false
             });
+        }
+    }
+
+    removeEditorTabObserver() {
+        if (this.observer) {
+            this.observer.disconnect();
         }
     }
 
