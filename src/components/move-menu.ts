@@ -2,14 +2,14 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Menu, MenuItem } from "siyuan";
-import { moveBlocksToDailyNote } from "./func";
-import { Notebook } from "./types"
-import { info, StaticText } from "./utils";
+import { moveBlocksToDailyNote } from "../func";
+import { Notebook } from "../types"
+import { info, StaticText } from "../utils";
+import notebooks from "../global-notebooks";
 
 export class ContextMenu {
-    notebooks: Array<Notebook>;
-    constructor(notebooks: Array<Notebook>) {
-        this.notebooks = notebooks;
+
+    constructor() {
     }
 
     async bindMenuOnCurrentTabs() {
@@ -92,7 +92,7 @@ export class ContextMenu {
 
     createMenuItems(data_id: string) {
         let menuItems: any[] = [];
-        for (let notebook of this.notebooks) {
+        for (let notebook of notebooks) {
             let item = {
                 label: notebook.name,
                 icon: `icon-${notebook.icon}`,

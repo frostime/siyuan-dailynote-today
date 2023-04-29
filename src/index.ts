@@ -2,48 +2,35 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin, clientApi } from 'siyuan';
-import Select from './select.svelte'
-import Setting from './setting.svelte'
+import Setting from './components/setting.svelte'
+import { ToolbarSelectItem } from './components/toolbar-select';
 import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
-import { settings } from './setting';
-import { ContextMenu } from './menu';
+import { settings } from './global-setting';
+import notebooks from './global-notebooks';
+import { ContextMenu } from './components/move-menu';
 
-const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
 export default class SiyuanSamplePlugin extends Plugin {
-    notebooks: Array<Notebook>;
-    selectFolded: boolean;
 
-    div_select: HTMLElement;
-    component_select: Select;
+    toolbar_item: ToolbarSelectItem;
 
     div_setting: HTMLElement;
     component_setting: Setting;
 
     menu: ContextMenu;
 
-
     constructor() {
         super();
         info(`Start: ${new Date()}`);
         settings.setPlugin(this);
-
-        this.notebooks = [];
-        this.selectFolded = true;
-        this.div_select = document.createElement('div');
-        this.div_select.setAttribute('aria-label', 'Open Today\'s Diary');
-        this.div_select.classList.add(...TOOLBAR_ITEMS.split(/\s/));
-        this.div_select.style.margin = '0 0.5rem';
-        this.div_select.style.padding = '0rem 0rem';
-
-        this.menu = new ContextMenu(this.notebooks);
     }
 
     async onload() {
         let start = performance.now();
-        await this.initNotebooks();
+        await notebooks.init();
+
         this.registerCommand({
             command: 'updateAll',
             shortcut: 'ctrl+alt+u,command+option+u',
@@ -54,30 +41,12 @@ export default class SiyuanSamplePlugin extends Plugin {
         await settings.load();
         this.initSetting();
         this.initMenu();
+        this.initToolbarItem();
 
-        this.component_select = new Select({
-            target: this.div_select,
-            props: {
-                notebooks: this.notebooks
-            }
-        });
-        this.component_select.$on(
-            'openSelector', this.updateDiaryStatus_.bind(this)
-        )
-        this.component_select.$on(
-            'openDiary', async (event) => { await openDiary(event.detail.notebook); this.updateDiaryStatus_() }
-        )
-        clientApi.addToolbarRight(this.div_select);
         await this.updateDiaryStatus_();
-
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
-        if (this.notebooks.length > 0) {
-            this.component_select.$set({ selected: this.notebooks[0].id });
+        this.toolbar_item.autoOpenDailyNote();
 
-            if (settings.settings.OpenOnStart === true) {
-                openDiary(this.notebooks[0]);
-            }
-        }
         let end = performance.now();
         info(`Onload, 耗时: ${end - start} ms`);
     }
@@ -99,39 +68,32 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     initMenu() {
-        this.menu.notebooks = this.notebooks;
+        this.menu = new ContextMenu();
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
     }
 
-    /**
-     * 初始化 notebooks，了防止思源还没有加载完毕，故而需要等待
-     * 只在第一次启动的时候调用
-     * @calledby: this.onload()
-     */
-    async initNotebooks() {
-        const MAX_RETRY = 5;
-        let retry = 0;
-        while (retry < MAX_RETRY) {
-            let result = await queryNotebooks();
-            if (result != null) {
-                this.notebooks = result;
-                break
-            } else {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+    initToolbarItem() {
+        this.toolbar_item = new ToolbarSelectItem();
+        this.toolbar_item.updateNotebooks();
+        this.toolbar_item.bindEvent(
+            'openSelector', this.updateDiaryStatus_.bind(this)
+        )
+        this.toolbar_item.bindEvent(
+            'openDiary', async (event) => { 
+                await openDiary(event.detail.notebook); this.updateDiaryStatus_()
             }
-            retry++;
-        }
+        )
+        clientApi.addToolbarRight(this.toolbar_item.div_select);
     }
 
 
     async updateAll() {
         info('updateAll');
-        let result = await queryNotebooks();
-        this.notebooks = result ? result : [];
-        this.component_select.$set({ notebooks: this.notebooks });
-        await this.updateDiaryStatus_();
-        this.menu.notebooks = this.notebooks;
+        await notebooks.update(); // 更新笔记本状态
+        this.toolbar_item.updateNotebooks(); //更新下拉框中笔记本显示
+        await this.updateDiaryStatus_(); // 更新下拉框中的日记存在状态
+
         this.menu.bindMenuOnCurrentTabs();
         notify(StaticText.UpdateAll, 'info', 2500);
     }
@@ -149,7 +111,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         // let todayDiary = getTodayDiaryPath();
         //所有 hpath 的配置方案
         let hpath_set: Set<string> = new Set();
-        this.notebooks.forEach((notebook) => {
+        notebooks.notebooks.forEach((notebook) => {
             hpath_set.add(notebook.dailynotePath!);
         });
 
@@ -167,14 +129,13 @@ export default class SiyuanSamplePlugin extends Plugin {
                 info(`${todayDNHpath} 共 ${notebook_with_diary.length} 篇`)
             }
         }
-        this.component_select.$set({ diaryStatus: diaryStatus });
+        this.toolbar_item.updateDailyNoteStatus(diaryStatus);
         info(`当前日记共 ${count_diary} 篇`);
     }
 
     onunload() {
         info('plugin unload')
-        this.component_select.$destroy();
-        this.div_select.remove();
+        this.toolbar_item.release();
     }
 }
 

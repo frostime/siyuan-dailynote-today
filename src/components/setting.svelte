@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
-    import { settings } from "./setting";
+    import { settings } from "../global-setting";
     let checked = settings.get("OpenOnStart");
 
     const dispatch = createEventDispatcher();
