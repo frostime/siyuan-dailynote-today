@@ -25,9 +25,6 @@ export default class SiyuanSamplePlugin extends Plugin {
         super();
         info(`Start: ${new Date()}`);
         settings.setPlugin(this);
-
-        this.toolbar_item = new ToolbarSelectItem();
-        this.menu = new ContextMenu();
     }
 
     async onload() {
@@ -71,11 +68,13 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     initMenu() {
+        this.menu = new ContextMenu();
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
     }
 
     initToolbarItem() {
+        this.toolbar_item = new ToolbarSelectItem();
         this.toolbar_item.updateNotebooks();
         this.toolbar_item.bindEvent(
             'openSelector', this.updateDiaryStatus_.bind(this)
@@ -85,6 +84,7 @@ export default class SiyuanSamplePlugin extends Plugin {
                 await openDiary(event.detail.notebook); this.updateDiaryStatus_()
             }
         )
+        clientApi.addToolbarRight(this.toolbar_item.div_select);
     }
 
 
