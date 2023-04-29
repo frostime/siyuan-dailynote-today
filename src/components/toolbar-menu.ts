@@ -1,4 +1,4 @@
-import { Menu, MenuItem } from "siyuan";
+import { Menu, MenuItem, clientApi } from "siyuan";
 import { openDiary } from "../func";
 import { settings } from "../setting";
 import { Notebook } from "../types";
@@ -27,6 +27,7 @@ export class ToolbarSelectItem {
                 notebooks: notebooks
             }
         });
+        clientApi.addToolbarRight(this.div_select);
     }
 
     release() {
