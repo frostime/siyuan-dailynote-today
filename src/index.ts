@@ -3,7 +3,7 @@
  */
 import { Plugin, clientApi } from 'siyuan';
 import Setting from './components/setting.svelte'
-import { ToolbarSelectItem } from './components/toolbar-menu';
+import { ToolbarSelectItem } from './components/toolbar-select';
 import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
