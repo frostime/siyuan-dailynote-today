@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import { Notebook } from "../types";
     import { info } from "../utils";
 
@@ -8,6 +8,12 @@
     export let notebooks: Notebook[] = new Array();
     export let diaryStatus: Map<string, boolean> = new Map();
     export let selected: string = "";
+
+    onMount(() => {
+        if (notebooks.length > 0) {
+            selected = notebooks[0].id;
+        }
+    });
 
     $: info("当前选中", selected);
 
@@ -51,17 +57,14 @@
     bind:value={selected}
 >
     {#each notebooks as notebook}
-        {#if !notebook.closed && diaryStatus.get(notebook.id) === true}
-            <option value={notebook.id}>
+        <option value={notebook.id}>
+            {#if diaryStatus.get(notebook.id) === true}
                 <span>{hintChar[0]}</span>
-                <span>{notebook.name}</span>
-            </option>
-        {:else}
-            <option value={notebook.id}>
+            {:else}
                 <span>{hintChar[1]}</span>
-                <span>{notebook.name}</span>
-            </option>
-        {/if}
+            {/if}
+            <span>{notebook.name}</span>
+        </option>
     {/each}
 </select>
 
