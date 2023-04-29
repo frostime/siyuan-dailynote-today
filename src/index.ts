@@ -8,11 +8,11 @@ import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
 import { settings } from './global-setting';
+import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
 
 
 export default class SiyuanSamplePlugin extends Plugin {
-    notebooks: Array<Notebook>;
 
     toolbar_item: ToolbarSelectItem;
 
@@ -26,16 +26,14 @@ export default class SiyuanSamplePlugin extends Plugin {
         info(`Start: ${new Date()}`);
         settings.setPlugin(this);
 
-        this.notebooks = [];
-
-        this.toolbar_item = new ToolbarSelectItem(this.notebooks);
-
-        this.menu = new ContextMenu(this.notebooks);
+        this.toolbar_item = new ToolbarSelectItem(notebooks.notebooks);
+        this.menu = new ContextMenu();
     }
 
     async onload() {
         let start = performance.now();
-        await this.initNotebooks();
+        await notebooks.init();
+
         this.registerCommand({
             command: 'updateAll',
             shortcut: 'ctrl+alt+u,command+option+u',
@@ -73,13 +71,12 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     initMenu() {
-        this.menu.notebooks = this.notebooks;
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
     }
 
     initToolbarItem() {
-        this.toolbar_item.updateNotebooks(this.notebooks);
+        this.toolbar_item.updateNotebooks(notebooks.notebooks);
         this.toolbar_item.bindEvent(
             'openSelector', this.updateDiaryStatus_.bind(this)
         )
@@ -90,34 +87,13 @@ export default class SiyuanSamplePlugin extends Plugin {
         )
     }
 
-    /**
-     * 初始化 notebooks，了防止思源还没有加载完毕，故而需要等待
-     * 只在第一次启动的时候调用
-     * @calledby: this.onload()
-     */
-    async initNotebooks() {
-        const MAX_RETRY = 5;
-        let retry = 0;
-        while (retry < MAX_RETRY) {
-            let result = await queryNotebooks();
-            if (result != null) {
-                this.notebooks = result;
-                break
-            } else {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-            retry++;
-        }
-    }
-
 
     async updateAll() {
         info('updateAll');
-        let result = await queryNotebooks();
-        this.notebooks = result ? result : [];
-        this.toolbar_item.updateNotebooks(this.notebooks);
+        notebooks.update();
+        this.toolbar_item.updateNotebooks(notebooks.notebooks);
         await this.updateDiaryStatus_();
-        this.menu.notebooks = this.notebooks;
+
         this.menu.bindMenuOnCurrentTabs();
         notify(StaticText.UpdateAll, 'info', 2500);
     }
@@ -135,7 +111,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         // let todayDiary = getTodayDiaryPath();
         //所有 hpath 的配置方案
         let hpath_set: Set<string> = new Set();
-        this.notebooks.forEach((notebook) => {
+        notebooks.notebooks.forEach((notebook) => {
             hpath_set.add(notebook.dailynotePath!);
         });
 
