@@ -10,11 +10,9 @@ import { info, StaticText } from './utils';
 import { settings } from './setting';
 import { ContextMenu } from './components/move-menu';
 
-const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
 export default class SiyuanSamplePlugin extends Plugin {
     notebooks: Array<Notebook>;
-    selectFolded: boolean;
 
     toolbar_item: ToolbarSelectItem;
 
@@ -23,14 +21,12 @@ export default class SiyuanSamplePlugin extends Plugin {
 
     menu: ContextMenu;
 
-
     constructor() {
         super();
         info(`Start: ${new Date()}`);
         settings.setPlugin(this);
 
         this.notebooks = [];
-        this.selectFolded = true;
 
         this.toolbar_item = new ToolbarSelectItem(this.notebooks);
 
@@ -50,18 +46,12 @@ export default class SiyuanSamplePlugin extends Plugin {
         await settings.load();
         this.initSetting();
         this.initMenu();
+        this.initToolbarItem();
 
-        this.toolbar_item.updateNotebooks(this.notebooks);
-        this.toolbar_item.bindEvent(
-            'openSelector', this.updateDiaryStatus_.bind(this)
-        )
-        this.toolbar_item.bindEvent(
-            'openDiary', async (event) => { await openDiary(event.detail.notebook); this.updateDiaryStatus_() }
-        )
         await this.updateDiaryStatus_();
-
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         this.toolbar_item.autoOpenDailyNote();
+
         let end = performance.now();
         info(`Onload, 耗时: ${end - start} ms`);
     }
@@ -86,6 +76,18 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.menu.notebooks = this.notebooks;
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
+    }
+
+    initToolbarItem() {
+        this.toolbar_item.updateNotebooks(this.notebooks);
+        this.toolbar_item.bindEvent(
+            'openSelector', this.updateDiaryStatus_.bind(this)
+        )
+        this.toolbar_item.bindEvent(
+            'openDiary', async (event) => { 
+                await openDiary(event.detail.notebook); this.updateDiaryStatus_()
+            }
+        )
     }
 
     /**
