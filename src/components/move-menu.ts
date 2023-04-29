@@ -2,9 +2,9 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Menu, MenuItem } from "siyuan";
-import { moveBlocksToDailyNote } from "./func";
-import { Notebook } from "./types"
-import { info, StaticText } from "./utils";
+import { moveBlocksToDailyNote } from "../func";
+import { Notebook } from "../types"
+import { info, StaticText } from "../utils";
 
 export class ContextMenu {
     notebooks: Array<Notebook>;

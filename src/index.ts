@@ -2,13 +2,13 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin, clientApi } from 'siyuan';
-import Select from './select.svelte'
-import Setting from './setting.svelte'
+import Select from './components/select.svelte'
+import Setting from './components/setting.svelte'
 import { Notebook } from './types';
 import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
 import { settings } from './setting';
-import { ContextMenu } from './move-menu';
+import { ContextMenu } from './components/move-menu';
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw'
 
