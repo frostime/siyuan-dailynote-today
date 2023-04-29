@@ -1,7 +1,7 @@
 import { Menu, MenuItem } from "siyuan";
-import { moveBlocksToDailyNote } from "./func";
-import { settings } from "./setting";
-import { Notebook } from "./types"
+import { moveBlocksToDailyNote } from "../func";
+import { settings } from "../setting";
+import { Notebook } from "../types"
 
 export class SelectMenu {
     ele: HTMLElement;
