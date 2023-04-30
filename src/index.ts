@@ -16,7 +16,6 @@ import { ContextMenu } from './components/move-menu';
 export default class SiyuanSamplePlugin extends Plugin {
 
     toolbar_item: ToolbarItem;
-    toolbar_menu: ToolbarMenuItem;
 
     div_setting: HTMLElement;
     component_setting: Setting;
@@ -32,8 +31,6 @@ export default class SiyuanSamplePlugin extends Plugin {
     async onload() {
         let start = performance.now();
         await notebooks.init();
-
-        this.toolbar_menu = new ToolbarMenuItem();
 
         this.registerCommand({
             command: 'updateAll',
@@ -97,7 +94,6 @@ export default class SiyuanSamplePlugin extends Plugin {
     onunload() {
         info('plugin unload')
         this.toolbar_item.release();
-        this.toolbar_menu.release();
         this.menu.removeEditorTabObserver();
     }
 }
