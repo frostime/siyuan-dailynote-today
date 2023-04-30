@@ -5,8 +5,8 @@ import { Plugin, clientApi } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { ToolbarSelectItem } from './components/toolbar-select';
-import { Notebook } from './types';
-import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
+import { ToolbarItem } from './components/interface';
+import { queryNotebooks, getDocsByHpath, openDiary, notify, updateDiaryStatus } from './func';
 import { info, StaticText } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
@@ -15,7 +15,7 @@ import { ContextMenu } from './components/move-menu';
 
 export default class SiyuanSamplePlugin extends Plugin {
 
-    toolbar_item: ToolbarSelectItem;
+    toolbar_item: ToolbarItem;
     toolbar_menu: ToolbarMenuItem;
 
     div_setting: HTMLElement;
@@ -47,7 +47,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.initMenu();
         this.initToolbarItem();
 
-        await this.updateDiaryStatus_();
+        await updateDiaryStatus(this.toolbar_item);
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         this.toolbar_item.autoOpenDailyNote();
 
@@ -81,14 +81,14 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.toolbar_item = new ToolbarSelectItem();
         this.toolbar_item.updateNotebooks();
         this.toolbar_item.bindEvent(
-            'openSelector', this.updateDiaryStatus_.bind(this)
+            'openItem', (event) => { updateDiaryStatus(this.toolbar_item) }
         )
         this.toolbar_item.bindEvent(
             'openDiary', async (event) => { 
-                await openDiary(event.detail.notebook); this.updateDiaryStatus_()
+                await openDiary(event.detail.notebook); updateDiaryStatus(this.toolbar_item)
             }
         )
-        clientApi.addToolbarRight(this.toolbar_item.div_select);
+        clientApi.addToolbarRight(this.toolbar_item.ele);
     }
 
 
@@ -96,45 +96,10 @@ export default class SiyuanSamplePlugin extends Plugin {
         info('updateAll');
         await notebooks.update(); // 更新笔记本状态
         this.toolbar_item.updateNotebooks(); //更新下拉框中笔记本显示
-        await this.updateDiaryStatus_(); // 更新下拉框中的日记存在状态
+        await updateDiaryStatus(this.toolbar_item); // 更新下拉框中的日记存在状态
 
         this.menu.bindMenuOnCurrentTabs();
         notify(StaticText.UpdateAll, 'info', 2500);
-    }
-
-
-    /**
-     * 根据思源中已经有 diary 的笔记本，更新下拉框中的笔记本状态
-     * 注意，本函数不会更新 this.notebooks
-     * @details
-     * 1. 遍历所有笔记本，找到所有的 daily note 的 hpath
-     * 2. 对每种 hpath，调用 `await getDocsByHpath(todayDNHpath)`，查询是否存在对应的文件
-     */
-    async updateDiaryStatus_() {
-        info('updateDiaryStatus');
-        // let todayDiary = getTodayDiaryPath();
-        //所有 hpath 的配置方案
-        let hpath_set: Set<string> = new Set();
-        notebooks.notebooks.forEach((notebook) => {
-            hpath_set.add(notebook.dailynotePath!);
-        });
-
-        let diaryStatus: Map<string, boolean> = new Map();
-        let count_diary = 0;
-        for (const todayDNHpath of hpath_set) {
-            //对每种 daily note 的方案，看看是否存在对应的路径
-            let docs = await getDocsByHpath(todayDNHpath);
-            if (docs.length > 0) {
-                let notebook_with_diary = docs.map(doc => doc.box);
-                notebook_with_diary.forEach((notebookId: string) => {
-                    diaryStatus.set(notebookId, true);
-                });
-                count_diary += notebook_with_diary.length;
-                info(`${todayDNHpath} 共 ${notebook_with_diary.length} 篇`)
-            }
-        }
-        this.toolbar_item.updateDailyNoteStatus(diaryStatus);
-        info(`当前日记共 ${count_diary} 篇`);
     }
 
     onunload() {

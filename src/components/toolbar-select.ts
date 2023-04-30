@@ -5,36 +5,37 @@ import { settings } from "../global-setting";
 
 import  Select  from "./select.svelte";
 import { info } from "../utils";
+import { ToolbarItem } from "./interface";
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 
-export class ToolbarSelectItem {
-    div_select: HTMLElement;
+export class ToolbarSelectItem implements ToolbarItem {
+    ele: HTMLElement;
     component_select: Select;
 
     constructor () {
-        this.div_select = document.createElement('div');
-        this.div_select.setAttribute('aria-label', 'Open Today\'s Diary');
-        this.div_select.classList.add(...TOOLBAR_ITEMS.split(/\s/));
-        this.div_select.style.margin = '0 0.1rem';
-        this.div_select.style.padding = '0rem 0rem';
+        this.ele = document.createElement('div');
+        this.ele.setAttribute('aria-label', 'Open Today\'s Diary');
+        this.ele.classList.add(...TOOLBAR_ITEMS.split(/\s/));
+        this.ele.style.margin = '0 0.1rem';
+        this.ele.style.padding = '0rem 0rem';
 
         this.component_select = new Select({
-            target: this.div_select,
+            target: this.ele,
             props: {
                 notebooks: notebooks.notebooks
             }
         });
-        clientApi.addToolbarRight(this.div_select);
+        clientApi.addToolbarRight(this.ele);
     }
 
     release() {
         this.component_select.$destroy();
-        this.div_select.remove();
+        this.ele.remove();
         info('ToolbarSelectItem released')
     }
 
-    bindEvent(event: 'openSelector' | 'openDiary', callback: any) {
+    bindEvent(event: 'openItem' | 'openDiary', callback: any) {
         this.component_select.$on(event, callback);
     }
 
