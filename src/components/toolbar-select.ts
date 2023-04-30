@@ -1,41 +1,42 @@
 import { Menu, MenuItem, clientApi } from "siyuan";
-import { openDiary } from "../func";
+import { openDiary, currentDiaryStatus } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-setting";
 
 import  Select  from "./select.svelte";
 import { info } from "../utils";
+import { ToolbarItem } from "./interface";
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 
-export class ToolbarSelectItem {
-    div_select: HTMLElement;
+export class ToolbarSelectItem implements ToolbarItem {
+    ele: HTMLElement;
     component_select: Select;
 
     constructor () {
-        this.div_select = document.createElement('div');
-        this.div_select.setAttribute('aria-label', 'Open Today\'s Diary');
-        this.div_select.classList.add(...TOOLBAR_ITEMS.split(/\s/));
-        this.div_select.style.margin = '0 0.1rem';
-        this.div_select.style.padding = '0rem 0rem';
+        this.ele = document.createElement('div');
+        this.ele.setAttribute('aria-label', 'Open Today\'s Diary');
+        this.ele.classList.add(...TOOLBAR_ITEMS.split(/\s/));
+        this.ele.style.margin = '0 0.1rem';
+        this.ele.style.padding = '0rem 0rem';
 
         this.component_select = new Select({
-            target: this.div_select,
+            target: this.ele,
             props: {
                 notebooks: notebooks.notebooks
             }
         });
-        clientApi.addToolbarRight(this.div_select);
+        this.component_select.$on('openSelector', this.updateDailyNoteStatus.bind(this));
+        this.component_select.$on('openDiary', async (event) => { 
+            await openDiary(event.detail.notebook); this.updateDailyNoteStatus();
+        });
+        clientApi.addToolbarRight(this.ele);
     }
 
     release() {
         this.component_select.$destroy();
-        this.div_select.remove();
+        this.ele.remove();
         info('ToolbarSelectItem released')
-    }
-
-    bindEvent(event: 'openSelector' | 'openDiary', callback: any) {
-        this.component_select.$on(event, callback);
     }
 
     /**
@@ -51,12 +52,13 @@ export class ToolbarSelectItem {
         }
     }
 
-    updateNotebooks() {
+    updateNotebookStatus() {
         this.component_select.$set({ notebooks: notebooks.notebooks });
         this.component_select.$set({ selected: notebooks.get(0).id });
     }
 
-    updateDailyNoteStatus(diaryStatus: Map<string, boolean>) {
+    async updateDailyNoteStatus() {
+        let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
         this.component_select.$set({ diaryStatus: diaryStatus });
     }
 }
