@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "siyuan": "^0.7.0",
+    "siyuan": "^0.7.1",
     "vite": "^4.1.4"
   },
   "devDependencies": {

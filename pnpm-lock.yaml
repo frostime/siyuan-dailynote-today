@@ -2,12 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   '@sveltejs/vite-plugin-svelte': ^2.0.3
-  siyuan: ^0.7.0
+  siyuan: ^0.7.1
   svelte: ^3.55.1
   vite: ^4.1.4
 
 dependencies:
-  siyuan: 0.7.0
+  siyuan: 0.7.1
   vite: 4.2.1
 
 devDependencies:
@@ -332,8 +332,8 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /siyuan/0.7.0:
-    resolution: {integrity: sha512-x/67eIdXdyvDBgGeRSgUqfXPBntwkC0vWP6Bx84/KjCIZOoK7RQEqH3lqNSsIzTiDR15vYfAErH+jOv+HVp0rQ==}
+  /siyuan/0.7.1:
+    resolution: {integrity: sha512-Q7OZqpJ8h+axLDkn6afoAdKD6mHPAona/jsoUpf8UgFqHuOscNS6ub8RudhTCPKppDnQzBy5o35xhlecxnrbjQ==}
     dev: false
 
   /source-map-js/1.0.2:
