@@ -79,15 +79,7 @@ export default class SiyuanSamplePlugin extends Plugin {
 
     initToolbarItem() {
         this.toolbar_item = new ToolbarSelectItem();
-        this.toolbar_item.updateNotebooks();
-        this.toolbar_item.bindEvent(
-            'openItem', (event) => { this.toolbar_item.updateDailyNoteStatus(); }
-        )
-        this.toolbar_item.bindEvent(
-            'openDiary', async (event) => { 
-                await openDiary(event.detail.notebook); this.toolbar_item.updateDailyNoteStatus();
-            }
-        )
+        this.toolbar_item.updateNotebookStatus();
         clientApi.addToolbarRight(this.toolbar_item.ele);
     }
 
@@ -95,8 +87,8 @@ export default class SiyuanSamplePlugin extends Plugin {
     async updateAll() {
         info('updateAll');
         await notebooks.update(); // 更新笔记本状态
-        this.toolbar_item.updateNotebooks(); //更新下拉框中笔记本显示
-        await this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
+        this.toolbar_item.updateNotebookStatus(); //更新下拉框中笔记本显示
+        this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
 
         this.menu.bindMenuOnCurrentTabs();
         notify(StaticText.UpdateAll, 'info', 2500);

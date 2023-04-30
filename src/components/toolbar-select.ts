@@ -26,6 +26,10 @@ export class ToolbarSelectItem implements ToolbarItem {
                 notebooks: notebooks.notebooks
             }
         });
+        this.component_select.$on('openSelector', this.updateDailyNoteStatus.bind(this));
+        this.component_select.$on('openDiary', async (event) => { 
+            await openDiary(event.detail.notebook); this.updateDailyNoteStatus();
+        });
         clientApi.addToolbarRight(this.ele);
     }
 
@@ -33,10 +37,6 @@ export class ToolbarSelectItem implements ToolbarItem {
         this.component_select.$destroy();
         this.ele.remove();
         info('ToolbarSelectItem released')
-    }
-
-    bindEvent(event: 'openItem' | 'openDiary', callback: any) {
-        this.component_select.$on(event, callback);
     }
 
     /**
@@ -52,7 +52,7 @@ export class ToolbarSelectItem implements ToolbarItem {
         }
     }
 
-    updateNotebooks() {
+    updateNotebookStatus() {
         this.component_select.$set({ notebooks: notebooks.notebooks });
         this.component_select.$set({ selected: notebooks.get(0).id });
     }

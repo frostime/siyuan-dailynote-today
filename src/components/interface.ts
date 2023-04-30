@@ -1,8 +1,7 @@
 export interface ToolbarItem {
     ele: HTMLElement;
     release(): void;
-    bindEvent(event: 'openItem' | 'openDiary', callback: any): void;
     autoOpenDailyNote(): void;
-    updateNotebooks(): void;
+    updateNotebookStatus(): void;
     updateDailyNoteStatus(): void;
 }
