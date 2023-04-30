@@ -137,12 +137,12 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
 
 /**
  * 根据思源中已经有 diary 的笔记本，更新下拉框中的笔记本状态
- * 注意，本函数不会更新 this.notebooks
+ * 注意，本函数不会更新 notebooks
  * @details
  * 1. 遍历所有笔记本，找到所有的 daily note 的 hpath
  * 2. 对每种 hpath，调用 `await getDocsByHpath(todayDNHpath)`，查询是否存在对应的文件
  */
-export async function updateDiaryStatus(toolbar_item: ToolbarItem) {
+export async function currentDiaryStatus() {
     info('updateDiaryStatus');
     // let todayDiary = getTodayDiaryPath();
     //所有 hpath 的配置方案
@@ -165,8 +165,8 @@ export async function updateDiaryStatus(toolbar_item: ToolbarItem) {
             info(`${todayDNHpath} 共 ${notebook_with_diary.length} 篇`)
         }
     }
-    toolbar_item.updateDailyNoteStatus(diaryStatus);
     info(`当前日记共 ${count_diary} 篇`);
+    return diaryStatus;
 }
 
 

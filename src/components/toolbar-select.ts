@@ -1,5 +1,5 @@
 import { Menu, MenuItem, clientApi } from "siyuan";
-import { openDiary } from "../func";
+import { openDiary, currentDiaryStatus } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-setting";
 
@@ -57,7 +57,8 @@ export class ToolbarSelectItem implements ToolbarItem {
         this.component_select.$set({ selected: notebooks.get(0).id });
     }
 
-    updateDailyNoteStatus(diaryStatus: Map<string, boolean>) {
+    async updateDailyNoteStatus() {
+        let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
         this.component_select.$set({ diaryStatus: diaryStatus });
     }
 }

@@ -6,7 +6,7 @@ import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { ToolbarSelectItem } from './components/toolbar-select';
 import { ToolbarItem } from './components/interface';
-import { queryNotebooks, getDocsByHpath, openDiary, notify, updateDiaryStatus } from './func';
+import { queryNotebooks, getDocsByHpath, openDiary, notify } from './func';
 import { info, StaticText } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
@@ -47,7 +47,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.initMenu();
         this.initToolbarItem();
 
-        await updateDiaryStatus(this.toolbar_item);
+        await this.toolbar_item.updateDailyNoteStatus();
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         this.toolbar_item.autoOpenDailyNote();
 
@@ -81,11 +81,11 @@ export default class SiyuanSamplePlugin extends Plugin {
         this.toolbar_item = new ToolbarSelectItem();
         this.toolbar_item.updateNotebooks();
         this.toolbar_item.bindEvent(
-            'openItem', (event) => { updateDiaryStatus(this.toolbar_item) }
+            'openItem', (event) => { this.toolbar_item.updateDailyNoteStatus(); }
         )
         this.toolbar_item.bindEvent(
             'openDiary', async (event) => { 
-                await openDiary(event.detail.notebook); updateDiaryStatus(this.toolbar_item)
+                await openDiary(event.detail.notebook); this.toolbar_item.updateDailyNoteStatus();
             }
         )
         clientApi.addToolbarRight(this.toolbar_item.ele);
@@ -96,7 +96,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         info('updateAll');
         await notebooks.update(); // 更新笔记本状态
         this.toolbar_item.updateNotebooks(); //更新下拉框中笔记本显示
-        await updateDiaryStatus(this.toolbar_item); // 更新下拉框中的日记存在状态
+        await this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
 
         this.menu.bindMenuOnCurrentTabs();
         notify(StaticText.UpdateAll, 'info', 2500);
