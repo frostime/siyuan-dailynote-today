@@ -239,10 +239,10 @@ export async function openDiary(notebook: Notebook) {
         let doc = docs[0];
         let id = doc.id;
         window.open(`siyuan://blocks/${id}`);
-        notify(`${StaticText.Open}： ${notebook.name}`, 'info', 2500);
+        notify(`${StaticText.Open}： ${notebook.name}`, 'info', 1500);
     } else {
         let id = await createDiary(notebook, todayDiaryPath!);
         window.open(`siyuan://blocks/${id}`);
-        notify(`${StaticText.Create}: ${notebook.name}`, 'info', 2500);
+        notify(`${StaticText.Create}: ${notebook.name}`, 'info', 1500);
     }
 }
