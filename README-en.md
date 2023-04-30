@@ -13,7 +13,7 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
     - Ignore "SiYuan User Guide".
 
 2. The dropdown menu in the upper right corner provides options for quickly creating/opening today's note.
-    - The dropdown menu lists all notebooks in order.
+    - The dropdown menu lists all notebooks in order (See [FAQ](#q-how-is-the-sorting-of-notebooks-determined-can-it-be-adjusted)).
     - "SiYuan User Guide".
     - Click on a notebook to automatically open/create today's note.
 
