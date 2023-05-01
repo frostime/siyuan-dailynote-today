@@ -1,5 +1,5 @@
 import { Menu, MenuItem, clientApi } from "siyuan";
-import { openDiary } from "../func";
+import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { ToolbarItem } from "./interface";
 import { settings } from "../global-setting";
@@ -41,7 +41,7 @@ export class ToolbarMenuItem implements ToolbarItem {
         for (let notebook of notebooks) {
             let item = {
                 label: notebook.name,
-                icon: `icon-${notebook.icon}`,
+                icon: 'icon-select',
                 click: (ele) => {
                     openDiary(notebook);
                 }
@@ -73,8 +73,9 @@ export class ToolbarMenuItem implements ToolbarItem {
         }
     }
 
-    updateDailyNoteStatus(): void {
+    async updateDailyNoteStatus() {
         //TODO
+        let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
     }
 
 }
