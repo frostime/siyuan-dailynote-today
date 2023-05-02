@@ -29,7 +29,7 @@ export class ToolbarMenuItem implements ToolbarItem {
 
     async showMenu(event) {
         info('点击了今日日记按钮');
-        await this.updateDailyNoteStatus();
+        // await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
         let menuItems = this.createMenuItems();
         for (let item of menuItems) {
@@ -37,6 +37,7 @@ export class ToolbarMenuItem implements ToolbarItem {
         }
         menu.showAtMouseEvent(event);
         event.stopPropagation();
+        this.updateDailyNoteStatus();
     }
 
     createMenuItems() {
