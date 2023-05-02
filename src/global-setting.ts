@@ -6,12 +6,14 @@ import { info, error } from './utils';
 
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
+type NotebookView = 'Selector' | 'Menu'
 
 class SettingManager {
     plugin: Plugin;
     settings = {
         OpenOnStart: true as boolean,
         NotebookSort: 'custom-sort' as NotebookSorting,
+        NotebookView: 'Selector' as NotebookView
     };
 
     setPlugin(plugin: Plugin) {
@@ -46,6 +48,14 @@ class SettingManager {
             let openOnStart = loaded?.OpenOnStart;
             if (openOnStart != null) {
                 this.set('OpenOnStart', openOnStart);
+            }
+            let notebookSort = loaded?.NotebookSort;
+            if (notebookSort != null) {
+                this.set('NotebookSort', notebookSort);
+            }
+            let notebookView = loaded?.NotebookView;
+            if (notebookView != null) {
+                this.set('NotebookView', notebookView);
             }
         }
     }

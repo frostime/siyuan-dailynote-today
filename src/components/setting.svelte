@@ -55,6 +55,26 @@
     </label>
     <label class="fn__flex b3-label">
         <div class="fn__flex-1">
+            展示视图
+            <div class="b3-label__text">Select or menu</div>
+        </div>
+        <span class="fn__space" />
+        <select
+            class="b3-select fn__flex-center fn__size200"
+            id="NotebookView"
+            on:change={(e) => {
+                let value = e.target.value;
+                settings.set("NotebookView", value);
+                settings.save();
+            }}
+        >
+            <option value="Selector">Selector</option>
+            <option value="Menu">Menu</option
+            >
+        </select>
+    </label>
+    <label class="fn__flex b3-label">
+        <div class="fn__flex-1">
             {contents[1].title}
             <div class="b3-label__text">
                 {contents[1].text}
