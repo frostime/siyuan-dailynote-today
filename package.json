@@ -1,6 +1,6 @@
 {
   "name": "siyuan-plugin-open-diary",
-  "version": "0.7.0.dev1",
+  "version": "0.7.0.dev2",
   "description": "",
   "main": "index.js",
   "scripts": {

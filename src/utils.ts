@@ -19,6 +19,7 @@ export function warn(...msg: any[]): void {
 
 const _MultiLangText = {
     'zh-CN': {
+        ToolbarAriaLabel: "今日笔记",
         Setting: [
             {
                 title: "自动打开 Daily Note",
@@ -53,6 +54,7 @@ const _MultiLangText = {
         }
     },
     "en-US": {
+        ToolbarAriaLabel: "Daily Note Today",
         Setting: [
             {
                 title: "Open Today's Diary Automatically",
