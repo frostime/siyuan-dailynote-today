@@ -34,6 +34,7 @@ export class ToolbarMenuItem implements ToolbarItem {
             menu.addItem(new MenuItem(item));
         }
         menu.showAtMouseEvent(event);
+        event.stopPropagation();
     }
 
     createMenuItems() {
