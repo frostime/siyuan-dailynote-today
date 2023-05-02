@@ -12,7 +12,7 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
     - Automatically open today's note in the notebook ranked first. If it doesn't exist, create and open it automatically.
     - Ignore "SiYuan User Guide".
 
-2. The dropdown menu in the upper right corner provides options for quickly creating/opening today's note.
+2. The dropdown selector or menu in the upper right corner provides options for quickly creating/opening today's note.
     - The dropdown menu lists all notebooks in order (See [FAQ](#q-how-is-the-sorting-of-notebooks-determined-can-it-be-adjusted)).
     - "SiYuan User Guide".
     - Click on a notebook to automatically open/create today's note.
@@ -27,6 +27,7 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
 5. Settings panel
     - You can choose in the settings panel whether to automatically open today's note when the plugin is enabled.
     - Notebook sorting schema.
+    - Choose toolbar display scheme, selector or menu.
     - Provides an "Update" button, which functions the same as the "Ctrl + Alt + U" shortcut key.
     - International support.
 
@@ -42,7 +43,7 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
 
 ### Q: Are there any limitations to using the plugin?
 
-Due to the fact that the interface is registered in the top toolbar, it may not work properly under some themes. Currently, it has been confirmed that it cannot be used under Rem Craft.
+Drop down selector may not work properly under some themes like Rem Craft.
 
 ### Q: I don't want to create a diary automatically.
 
