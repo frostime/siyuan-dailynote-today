@@ -2,6 +2,8 @@
     import { createEventDispatcher, onDestroy } from "svelte";
     import { settings } from "../global-setting";
     let checked = settings.get("OpenOnStart");
+    let notebookSort = settings.get("NotebookSort");
+    let notebookView = settings.get("NotebookView");
 
     const dispatch = createEventDispatcher();
 
@@ -47,6 +49,7 @@
         <select
             class="b3-select fn__flex-center fn__size200"
             id="notebookSort"
+            bind:value={notebookSort}
             on:change={(e) => {
                 let value = e.target.value;
                 settings.set("NotebookSort", value);
@@ -67,6 +70,7 @@
         <select
             class="b3-select fn__flex-center fn__size200"
             id="NotebookView"
+            bind:value={notebookView}
             on:change={(e) => {
                 let value = e.target.value;
                 settings.set("NotebookView", value);
