@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onDestroy } from "svelte";
     import { settings } from "../global-setting";
     let checked = settings.get("OpenOnStart");
 
@@ -10,6 +10,11 @@
     function onClick() {
         dispatch("updateAll");
     }
+
+    onDestroy(() => {
+        settings.save();
+    });
+
 </script>
 
 <div class="config__tab-container">

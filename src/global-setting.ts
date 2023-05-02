@@ -45,17 +45,11 @@ class SettingManager {
         } else {
             //如果有配置文件，则使用配置文件
             loaded = JSON.parse(loaded);
-            let openOnStart = loaded?.OpenOnStart;
-            if (openOnStart != null) {
-                this.set('OpenOnStart', openOnStart);
-            }
-            let notebookSort = loaded?.NotebookSort;
-            if (notebookSort != null) {
-                this.set('NotebookSort', notebookSort);
-            }
-            let notebookView = loaded?.NotebookView;
-            if (notebookView != null) {
-                this.set('NotebookView', notebookView);
+            for (let key in this.settings) {
+                if (key in loaded) {
+                    info(`Setting ${key} = ${loaded[key]}`)
+                    this.settings[key] = loaded[key];
+                }
             }
         }
     }

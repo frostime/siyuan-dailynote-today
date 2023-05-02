@@ -99,6 +99,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         info('plugin unload')
         this.toolbar_item.release();
         this.menu.removeEditorTabObserver();
+        settings.save();
     }
 }
 
