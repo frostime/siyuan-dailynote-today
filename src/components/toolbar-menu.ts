@@ -1,21 +1,22 @@
 import { Menu, MenuItem, clientApi } from "siyuan";
-import { openDiary } from "../func";
+import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { ToolbarItem } from "./interface";
 import { settings } from "../global-setting";
-import { info } from "../utils";
+import { info, StaticText } from "../utils";
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 
 export class ToolbarMenuItem implements ToolbarItem {
     ele: HTMLElement;
     menu: Menu;
+    icons: Map<string, string> = new Map();
 
     constructor() {
         this.ele = document.createElement('div');
-        this.ele.setAttribute('aria-label', '打开今日的日记');
+        this.ele.setAttribute('aria-label', StaticText.ToolbarAriaLabel);
         this.ele.classList.add(...TOOLBAR_ITEMS.split(/\s/));
-        let svg_icon = `<svg><use xlink:href="#iconEdit"></use></svg>`;
+        let svg_icon = `<svg><use xlink:href="#iconCalendar"></use></svg>`;
         this.ele.innerHTML = svg_icon;
         this.ele.addEventListener('click', this.showMenu.bind(this));
         clientApi.addToolbarRight(this.ele);
@@ -26,14 +27,17 @@ export class ToolbarMenuItem implements ToolbarItem {
         this.ele.remove();
     }
 
-    showMenu(event) {
+    async showMenu(event) {
         info('点击了今日日记按钮');
+        // await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
         let menuItems = this.createMenuItems();
         for (let item of menuItems) {
             menu.addItem(new MenuItem(item));
         }
         menu.showAtMouseEvent(event);
+        event.stopPropagation();
+        this.updateDailyNoteStatus();
     }
 
     createMenuItems() {
@@ -41,7 +45,7 @@ export class ToolbarMenuItem implements ToolbarItem {
         for (let notebook of notebooks) {
             let item = {
                 label: notebook.name,
-                icon: `icon-${notebook.icon}`,
+                icon: this.icons.get(notebook.id),
                 click: (ele) => {
                     openDiary(notebook);
                 }
@@ -73,8 +77,17 @@ export class ToolbarMenuItem implements ToolbarItem {
         }
     }
 
-    updateDailyNoteStatus(): void {
+    async updateDailyNoteStatus() {
         //TODO
+        let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
+        notebooks.notebooks.forEach((notebook) => {
+            let status = diaryStatus.get(notebook.id);
+            if (status) {
+                this.icons.set(notebook.id, 'iconSelect');
+            } else {
+                this.icons.set(notebook.id, '');
+            }
+        });
     }
 
 }

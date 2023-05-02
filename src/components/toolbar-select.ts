@@ -4,7 +4,7 @@ import notebooks from "../global-notebooks";
 import { settings } from "../global-setting";
 
 import  Select  from "./select.svelte";
-import { info } from "../utils";
+import { info, StaticText } from "../utils";
 import { ToolbarItem } from "./interface";
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
@@ -15,7 +15,7 @@ export class ToolbarSelectItem implements ToolbarItem {
 
     constructor () {
         this.ele = document.createElement('div');
-        this.ele.setAttribute('aria-label', 'Open Today\'s Diary');
+        this.ele.setAttribute('aria-label', StaticText.ToolbarAriaLabel);
         this.ele.classList.add(...TOOLBAR_ITEMS.split(/\s/));
         this.ele.style.margin = '0 0.1rem';
         this.ele.style.padding = '0rem 0rem';

@@ -75,7 +75,11 @@ export default class SiyuanSamplePlugin extends Plugin {
     }
 
     initToolbarItem() {
-        this.toolbar_item = new ToolbarSelectItem();
+        if (settings.settings.NotebookView === 'Selector') {
+            this.toolbar_item = new ToolbarSelectItem();
+        } else {
+            this.toolbar_item = new ToolbarMenuItem();
+        }
         this.toolbar_item.updateNotebookStatus();
         clientApi.addToolbarRight(this.toolbar_item.ele);
     }
@@ -95,6 +99,7 @@ export default class SiyuanSamplePlugin extends Plugin {
         info('plugin unload')
         this.toolbar_item.release();
         this.menu.removeEditorTabObserver();
+        settings.save();
     }
 }
 
