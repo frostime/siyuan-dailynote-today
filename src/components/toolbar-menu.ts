@@ -16,7 +16,7 @@ export class ToolbarMenuItem implements ToolbarItem {
         this.ele = document.createElement('div');
         this.ele.setAttribute('aria-label', '打开今日的日记');
         this.ele.classList.add(...TOOLBAR_ITEMS.split(/\s/));
-        let svg_icon = `<svg><use xlink:href="#Calendar"></use></svg>`;
+        let svg_icon = `<svg><use xlink:href="#iconCalendar"></use></svg>`;
         this.ele.innerHTML = svg_icon;
         this.ele.addEventListener('click', this.showMenu.bind(this));
         clientApi.addToolbarRight(this.ele);
