@@ -10,6 +10,7 @@ const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 export class ToolbarMenuItem implements ToolbarItem {
     ele: HTMLElement;
     menu: Menu;
+    icons: Map<string, string> = new Map();
 
     constructor() {
         this.ele = document.createElement('div');
@@ -26,8 +27,9 @@ export class ToolbarMenuItem implements ToolbarItem {
         this.ele.remove();
     }
 
-    showMenu(event) {
+    async showMenu(event) {
         info('点击了今日日记按钮');
+        await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
         let menuItems = this.createMenuItems();
         for (let item of menuItems) {
@@ -42,7 +44,7 @@ export class ToolbarMenuItem implements ToolbarItem {
         for (let notebook of notebooks) {
             let item = {
                 label: notebook.name,
-                icon: 'icon-select',
+                icon: this.icons.get(notebook.id),
                 click: (ele) => {
                     openDiary(notebook);
                 }
@@ -77,6 +79,12 @@ export class ToolbarMenuItem implements ToolbarItem {
     async updateDailyNoteStatus() {
         //TODO
         let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
+        diaryStatus.forEach((value, key) => {
+            let icon = value ? 'iconCheck' : 'iconSelect';
+            this.icons.set(key, icon);
+            console.log(value, key);
+            console.log(this.icons);
+        });
     }
 
 }
