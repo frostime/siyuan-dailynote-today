@@ -16,7 +16,7 @@ export class ToolbarMenuItem implements ToolbarItem {
         this.ele = document.createElement('div');
         this.ele.setAttribute('aria-label', '打开今日的日记');
         this.ele.classList.add(...TOOLBAR_ITEMS.split(/\s/));
-        let svg_icon = `<svg><use xlink:href="#iconEdit"></use></svg>`;
+        let svg_icon = `<svg><use xlink:href="#Calendar"></use></svg>`;
         this.ele.innerHTML = svg_icon;
         this.ele.addEventListener('click', this.showMenu.bind(this));
         clientApi.addToolbarRight(this.ele);
@@ -79,11 +79,13 @@ export class ToolbarMenuItem implements ToolbarItem {
     async updateDailyNoteStatus() {
         //TODO
         let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
-        diaryStatus.forEach((value, key) => {
-            let icon = value ? 'iconCheck' : 'iconSelect';
-            this.icons.set(key, icon);
-            console.log(value, key);
-            console.log(this.icons);
+        notebooks.notebooks.forEach((notebook) => {
+            let status = diaryStatus.get(notebook.id);
+            if (status) {
+                this.icons.set(notebook.id, 'iconSelect');
+            } else {
+                this.icons.set(notebook.id, '');
+            }
         });
     }
 
