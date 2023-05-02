@@ -63,8 +63,8 @@
     </label>
     <label class="fn__flex b3-label">
         <div class="fn__flex-1">
-            展示视图
-            <div class="b3-label__text">Select or menu</div>
+            {contents[3].title}
+            <div class="b3-label__text">{contents[3].text}</div>
         </div>
         <span class="fn__space" />
         <select
@@ -77,8 +77,8 @@
                 settings.save();
             }}
         >
-            <option value="Selector">Selector</option>
-            <option value="Menu">Menu</option
+            <option value="Selector">{contents[3].options["select"]}</option>
+            <option value="Menu">{contents[3].options["menu"]}</option
             >
         </select>
     </label>

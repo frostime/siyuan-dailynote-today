@@ -35,6 +35,14 @@ const _MultiLangText = {
                     'doc-tree': '和文档树一致',
                     'custom-sort': '和自定义排序一致'
                 }
+            },
+            {
+                title: "工具栏展示方案",
+                text: "插件在工具栏上的显示方案，下拉框 or 图标，重启后生效",
+                options: {
+                    "select": "下拉选项框",
+                    "menu": "菜单图标"
+                }
             }
         ],
         Open: "打开日记",
@@ -60,6 +68,14 @@ const _MultiLangText = {
                 options: {
                     'doc-tree': 'Same as document tree',
                     'custom-sort': 'Same as custom sorting'
+                }
+            },
+            {
+                title: "Toolbar Display Scheme",
+                text: "The display scheme of the plugin on the toolbar, drop-down selector or icon, effective after restart",
+                options: {
+                    "select": "Drop-down selector",
+                    "menu": "Menu icon"
                 }
             }
         ],
