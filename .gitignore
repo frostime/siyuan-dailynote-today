@@ -4,3 +4,6 @@ dist/*
 deploy.bat
 deploy.ps1
 .vscode
+package.zip
+index.css
+index.js
