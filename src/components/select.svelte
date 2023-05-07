@@ -1,15 +1,15 @@
-<script lang="ts">
+<script>
     import { createEventDispatcher, onMount } from "svelte";
     import { Notebook } from "../types";
     import { info } from "../utils";
 
     const dispatch = createEventDispatcher();
 
-    export let notebooks: Notebook[] = new Array();
-    export let diaryStatus: Map<string, boolean> = new Map();
-    let selected: string = "";
+    export let notebooks = new Array();
+    export let diaryStatus = new Map();
+    export let selected = "";
 
-    export function setSelected(id: string) {
+    export function setSelected(id) {
         selected = id;
     }
 
@@ -21,16 +21,16 @@
 
     $: info("当前选中", selected);
 
-    let isSelectFolded: boolean = true;
+    let isSelectFolded = true;
     const hintChar = ["\u2713", "\u00A0\u00A0"];
 
-    function onClick(event: MouseEvent) {
+    function onClick(event) {
         info("Event: click");
         if (isSelectFolded) {
             isSelectFolded = false;
             eventOpenSelector();
         } else {
-            let id: string = (event.target as HTMLSelectElement).value;
+            let id = event.target.value;
             eventClickNotebook(id);
             isSelectFolded = true;
         }
@@ -45,9 +45,9 @@
         dispatch("openSelector");
     }
 
-    function eventClickNotebook(nid: string) {
+    function eventClickNotebook(nid) {
         info("Event: openDiary");
-        let notebook: Notebook = notebooks.find(
+        let notebook = notebooks.find(
             (notebook) => notebook.id === nid
         );
         dispatch("openDiary", { notebook: notebook });
