@@ -5,6 +5,7 @@ const {EsbuildPlugin} = require("esbuild-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
+const sveltePreprocess = require("svelte-preprocess");
 
 module.exports = (env, argv) => {
     const isPro = argv.mode === "production";
@@ -31,7 +32,7 @@ module.exports = (env, argv) => {
                 {from: "icon.png", to: "./dist/"},
                 {from: "README*.md", to: "./dist/"},
                 {from: "plugin.json", to: "./dist/"},
-                {from: "src/i18n/", to: "./dist/i18n/"},
+                // {from: "src/i18n/", to: "./dist/i18n/"},
             ],
         }));
         plugins.push(new ZipPlugin({
@@ -66,7 +67,12 @@ module.exports = (env, argv) => {
             ],
         },
         resolve: {
-            extensions: [".ts", ".scss"],
+            alias: {
+                svelte: path.resolve('node_modules', 'svelte')
+            },
+            extensions: [".ts", ".scss", ".svelte"],
+            mainFields: ['svelte', 'browser', 'module', 'main'],
+            conditionNames: ['svelte']
         },
         module: {
             rules: [
@@ -81,6 +87,30 @@ module.exports = (env, argv) => {
                             }
                         },
                     ],
+                },
+                {
+                    test: /\.svelte$/,
+                    // include: [path.resolve(__dirname, "src")],
+                    use: [
+                        {
+                            loader: 'svelte-loader',
+                            options: {
+                                preprocess: sveltePreprocess({
+                                    alias: [['ts', 'typescript']],
+                                    typescript: {
+                                        tsconfigFile: "./tsconfig.json",
+                                    }
+                                })
+                            }
+                        }
+                    ]
+                },
+                {
+                    // required to prevent errors from Svelte on Webpack 5+, omit on Webpack 4
+                    test: /node_modules\/svelte\/.*\.mjs$/,
+                    resolve: {
+                        fullySpecified: false
+                    }
                 },
                 {
                     test: /\.scss$/,

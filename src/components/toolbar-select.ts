@@ -44,7 +44,8 @@ export class ToolbarSelectItem implements ToolbarItem {
      */
     autoOpenDailyNote() {
         if (notebooks.notebooks.length > 0) {
-            this.component_select.$set({ selected: notebooks.get(0).id });
+            // this.component_select.$set({ selected: notebooks.get(0).id });
+            this.component_select.setSelected(notebooks.get(0).id);
 
             if (settings.settings.OpenOnStart === true) {
                 openDiary(notebooks.get(0));
@@ -54,7 +55,8 @@ export class ToolbarSelectItem implements ToolbarItem {
 
     updateNotebookStatus() {
         this.component_select.$set({ notebooks: notebooks.notebooks });
-        this.component_select.$set({ selected: notebooks.get(0).id });
+        // this.component_select.$set({ selected: notebooks.get(0).id });
+        this.component_select.setSelected(notebooks.get(0).id);
     }
 
     async updateDailyNoteStatus() {

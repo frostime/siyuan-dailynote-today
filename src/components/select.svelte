@@ -7,7 +7,11 @@
 
     export let notebooks: Notebook[] = new Array();
     export let diaryStatus: Map<string, boolean> = new Map();
-    export let selected: string = "";
+    let selected: string = "";
+
+    export function setSelected(id: string) {
+        selected = id;
+    }
 
     onMount(() => {
         if (notebooks.length > 0) {
