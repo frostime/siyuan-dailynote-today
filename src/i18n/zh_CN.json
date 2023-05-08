@@ -1,0 +1,35 @@
+{
+    "ToolbarAriaLabel": "今日笔记",
+    "Setting": [
+        {
+            "title": "自动打开 Daily Note",
+            "text": "插件启动后自动打开今日的 Daily Note"
+        },
+        {
+            "title": "更新笔记本状态",
+            "text": "在笔记本配置发生变化的时候更新其状态，也可以使用注册的快捷键 Ctrl+Alt+U"
+        },
+        {
+            "title": "笔记本排序方案",
+            "text": "1. 和当前文档树的显示保持一致 2. 和在自定义排序中的设置保持一致",
+            "options": {
+                "doc-tree": "和文档树一致",
+                "custom-sort": "和自定义排序一致"
+            }
+        },
+        {
+            "title": "工具栏展示方案",
+            "text": "插件在工具栏上的显示方案，下拉框 or 图标，重启后生效",
+            "options": {
+                "select": "下拉选项框",
+                "menu": "菜单图标"
+            }
+        }
+    ],
+    "Open": "打开日记",
+    "Create": "创建日记",
+    "UpdateAll": "笔记本状态已更新",
+    "Menu": {
+        "Move": "移动到"
+    }
+}
