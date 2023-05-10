@@ -1,7 +1,7 @@
 # 今日笔记
 
-- [English README](https://github.com/frostime/siyuan-plugin-open-diary/blob/master/README-en.md)
-- 提交Issue请访问[Github](https://github.com/frostime/siyuan-plugin-open-diary)
+- [English README](README-en.md)
+- 提交Issue请访问[Github](https://github.com/frostime/siyuan-dailynote-today)
 - 国内用户可访问[国内托管](https://gitcode.net/frostime/siyuan-plugin-daily-note)
 
 本插件比较适合笔记本比较多的人，用于快速在不同笔记本创建今日的笔记，并将块在不同笔记中移动。
