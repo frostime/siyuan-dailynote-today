@@ -14,6 +14,11 @@ export function warn(...msg: any[]): void {
     console.log(`[DailyNoteToday][WARN] ${msg}`);
 }
 
+export let i18n: any;
+export function setI18n(i18n_: any) {
+    i18n = i18n_;
+}
+
 const _MultiLangText = {
     'zh-CN': {
         ToolbarAriaLabel: "今日笔记",

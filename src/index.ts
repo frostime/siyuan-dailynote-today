@@ -5,7 +5,7 @@ import { Plugin } from 'siyuan';
 // import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify } from './func';
-import { info, StaticText } from './utils';
+import { info, StaticText, setI18n } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
@@ -30,6 +30,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
     async onload() {
         info('plugin load');
         console.log(this);
+        setI18n(this.i18n); //设置全局 i18n
+
         info(`Start: ${new Date()}`);
         settings.setPlugin(this);
 
