@@ -1,20 +1,17 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { clientApi } from 'siyuan';
-
-export const logger = clientApi.createLogger('OpenDiaryToday');
 
 export function info(...msg: any[]): void {
-    logger.info(...msg);
+    console.log(`[DailyNoteToday][INFO] ${msg}`);
 }
 
 export function error(...msg: any[]): void {
-    logger.error(...msg);
+    console.log(`[DailyNoteToday][ERROR] ${msg}`);
 }
 
 export function warn(...msg: any[]): void {
-    logger.warn(...msg);
+    console.log(`[DailyNoteToday][WARN] ${msg}`);
 }
 
 const _MultiLangText = {

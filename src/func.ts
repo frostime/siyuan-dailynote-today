@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { Notification, serverApi } from 'siyuan';
+import { serverApi, showMessage } from 'siyuan';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ToolbarItem } from './components/interface';
@@ -70,14 +70,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
 
 
 export async function notify(msg: string, type: 'error' | 'info' = 'info', timeout: number = 1000) {
-    let notification = new Notification(
-        {
-            type: type,
-            message: msg,
-            timeout: timeout,
-        }
-    );
-    notification.show();
+    showMessage(msg, timeout = timeout, type = type);
 }
 
 /**
