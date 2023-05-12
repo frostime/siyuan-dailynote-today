@@ -1,13 +1,12 @@
 import { Menu, MenuItem, clientApi } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
-import { ToolbarItem } from "./interface";
 import { settings } from "../global-setting";
 import { info, StaticText } from "../utils";
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 
-export class ToolbarMenuItem implements ToolbarItem {
+export class ToolbarMenuItem {
     ele: HTMLElement;
     menu: Menu;
     icons: Map<string, string> = new Map();

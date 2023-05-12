@@ -5,11 +5,10 @@ import { Plugin } from 'siyuan';
 // import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify } from './func';
-import { info, StaticText, setI18n } from './utils';
+import { info, setI18n } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
-import * as serverApi from './serverApi';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -23,7 +22,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     menu: ContextMenu;
 
     test() {
-        console.log('test');
+        notify('Test', 'info', 1500);
     }
 
     async onload() {
