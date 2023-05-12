@@ -9,6 +9,7 @@ import { info, StaticText } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
+import * as serverApi from './serverApi';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -22,7 +23,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
     menu: ContextMenu;
 
     test() {
-
+        console.log('test');
+        serverApi.test();
     }
 
     async onload() {
@@ -53,6 +55,13 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let end = performance.now();
         info(`Onload, 耗时: ${end - start} ms`);
+
+        this.addTopBar({
+            icon: 'iconCalendar',
+            title: '今日笔记',
+            position: 'left',
+            callback: this.test.bind(this)
+        })
     }
 
     private initSetting() {

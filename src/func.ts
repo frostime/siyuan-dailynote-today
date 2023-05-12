@@ -1,12 +1,13 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { serverApi, showMessage } from 'siyuan';
+import { showMessage } from 'siyuan';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ToolbarItem } from './components/interface';
 import { Notebook, Block } from "./types";
 import { info, warn, error, StaticText } from "./utils";
+import * as serverApi from './serverApi';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -84,7 +85,7 @@ export async function notify(msg: string, type: 'error' | 'info' = 'info', timeo
  */
 export async function queryNotebooks(): Promise<Array<Notebook> | null> {
     try {
-        let result = await serverApi.lsNotebooks("");
+        let result = await serverApi.lsNotebooks();
         let all_notebooks: Array<Notebook> = result.notebooks;
         //delete notebook with name "思源笔记用户指南"
         all_notebooks = all_notebooks.filter(
@@ -175,13 +176,6 @@ export async function getDailynoteSprig(notebookId: string): Promise<string> {
 }
 
 
-import { request } from './api';
-
-async function renderSprig(sprig: string) {
-    let result = await request('/api/template/renderSprig', { template: sprig });
-    return result;
-}
-
 /**
  * 要求思源解析模板
  * @param sprig
@@ -190,7 +184,7 @@ async function renderSprig(sprig: string) {
 export async function renderDailynotePath(sprig: string) {
     // return await serverApi.renderSprig(sprig);
     //TODO: 等待 siyuan 更新之后再使用 serverApi.renderSprig
-    return await renderSprig(sprig);
+    return await serverApi.renderSprig(sprig);
 }
 
 /**
