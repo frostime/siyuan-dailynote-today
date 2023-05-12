@@ -1,5 +1,5 @@
 import { fetchSyncPost, IWebSocketData } from "siyuan";
-import { info } from "./utils";
+import { info, i18n } from "./utils";
 
 
 async function request(url: string, data: any) {
@@ -14,7 +14,7 @@ function parseBody(body: any) {
     return body;
 }
 
-export async function test() {
+async function test() {
     let notebooks = await lsNotebooks();
     console.log(notebooks);
     let notebookId = notebooks?.notebooks[0].id;

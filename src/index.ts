@@ -24,7 +24,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     test() {
         console.log('test');
-        serverApi.test();
     }
 
     async onload() {
@@ -36,7 +35,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         settings.setPlugin(this);
 
         let start = performance.now();
-        // await notebooks.init();
+        await notebooks.init();
 
         //TODO 注册快捷键
         // this.registerCommand({

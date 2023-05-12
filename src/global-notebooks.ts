@@ -29,6 +29,7 @@ class Notebooks {
      * @calledby: this.onload()
      */
     async init(MAX_RETRY: number = 5, RETRY_INTERVAL: number = 1000) {
+        info('Notebooks init');
         let retry = 0;
         while (retry < MAX_RETRY) {
             let result = await queryNotebooks();
