@@ -3,9 +3,9 @@ import { info, i18n } from "./utils";
 
 
 async function request(url: string, data: any) {
-    info(`Request: ${url}; data = ${JSON.stringify(data)}`);
+    // info(`Request: ${url}; data = ${JSON.stringify(data)}`);
     let response: IWebSocketData = await fetchSyncPost(url, data);
-    console.log(response);
+    // console.log(response);
     let res = response.code === 0 ? response.data : null;
     return res;
 }
