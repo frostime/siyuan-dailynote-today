@@ -1,40 +1,41 @@
-import { Menu, MenuItem, clientApi } from "siyuan";
+import { IMenuItemOption, Menu, Plugin } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-setting";
-import { info, StaticText } from "../utils";
+import { info, i18n } from "../utils";
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 
 export class ToolbarMenuItem {
-    ele: HTMLElement;
-    menu: Menu;
-    icons: Map<string, string> = new Map();
+    plugin: Plugin;
+    ele: HTMLDivElement;
+    iconStatus: Map<string, string> = new Map();
 
-    constructor() {
-        this.ele = document.createElement('div');
-        this.ele.setAttribute('aria-label', StaticText.ToolbarAriaLabel);
-        this.ele.classList.add(...TOOLBAR_ITEMS.split(/\s/));
-        let svg_icon = `<svg><use xlink:href="#iconCalendar"></use></svg>`;
-        this.ele.innerHTML = svg_icon;
-        this.ele.addEventListener('click', this.showMenu.bind(this));
-        clientApi.addToolbarRight(this.ele);
+    constructor(plugin: Plugin) {
+        this.plugin = plugin;
+        //TODO 更换 icon
+        this.ele = this.plugin.addTopBar({
+            icon: 'iconCalendar',
+            title: i18n.ToolbarAriaLabel,
+            position: 'left',
+            callback: this.showMenu.bind(this)
+        })
     }
 
-    release() {
-        this.ele.removeEventListener('click', this.showMenu.bind(this));
-        this.ele.remove();
-    }
-
-    async showMenu(event) {
+    async showMenu(event: MouseEvent) {
         info('点击了今日日记按钮');
         // await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
         let menuItems = this.createMenuItems();
         for (let item of menuItems) {
-            menu.addItem(new MenuItem(item));
+            menu.addItem(item);
         }
-        menu.showAtMouseEvent(event);
+        let rect = this.ele.getBoundingClientRect();
+        menu.open({
+            x: rect.right,
+            y: rect.bottom,
+            isLeft: true,
+        });
         event.stopPropagation();
         this.updateDailyNoteStatus();
     }
@@ -42,9 +43,9 @@ export class ToolbarMenuItem {
     createMenuItems() {
         let menuItems: any[] = [];
         for (let notebook of notebooks) {
-            let item = {
+            let item: IMenuItemOption = {
                 label: notebook.name,
-                icon: this.icons.get(notebook.id),
+                icon: this.iconStatus.get(notebook.id),
                 click: (ele) => {
                     openDiary(notebook);
                 }
@@ -65,26 +66,15 @@ export class ToolbarMenuItem {
         }
     }
 
-    /**
-     * 
-     */
-    updateNotebookStatus(): void {
-        this.menu = new Menu("dntoday-menu");
-        let menuItems = this.createMenuItems();
-        for (let item of menuItems) {
-            this.menu.addItem(new MenuItem(item));
-        }
-    }
-
     async updateDailyNoteStatus() {
         //TODO
         let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
         notebooks.notebooks.forEach((notebook) => {
             let status = diaryStatus.get(notebook.id);
             if (status) {
-                this.icons.set(notebook.id, 'iconSelect');
+                this.iconStatus.set(notebook.id, 'iconSelect');
             } else {
-                this.icons.set(notebook.id, '');
+                this.iconStatus.set(notebook.id, '');
             }
         });
     }

@@ -56,12 +56,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let end = performance.now();
         info(`Onload, 耗时: ${end - start} ms`);
 
-        this.addTopBar({
-            icon: 'iconCalendar',
-            title: '今日笔记',
-            position: 'left',
-            callback: this.test.bind(this)
-        })
+        // this.addTopBar({
+        //     icon: 'iconCalendar',
+        //     title: '今日笔记',
+        //     position: 'left',
+        //     callback: this.test.bind(this)
+        // })
     }
 
     private initSetting() {
@@ -88,17 +88,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initToolbarItem() {
-        // this.toolbar_item = new ToolbarMenuItem();
-        // this.toolbar_item.updateNotebookStatus();
-        // // clientApi.addToolbarRight(this.toolbar_item.ele);
-        // this.addTopBar({
-        //     icon: 'iconCalendar',
-        //     title: '今日笔记',
-        //     position: 'right',
-        //     callback: () => {
-        //         this.toolbar_item.showMenu();
-        //     }
-        // })
+        this.toolbar_item = new ToolbarMenuItem(this);
+        this.toolbar_item.updateDailyNoteStatus();
     }
 
 
