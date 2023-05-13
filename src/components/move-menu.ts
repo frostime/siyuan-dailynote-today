@@ -3,8 +3,7 @@
  */
 import { Menu } from "siyuan";
 import { moveBlocksToDailyNote } from "../func";
-import { Notebook } from "../types"
-import { i18n, info, StaticText } from "../utils";
+import { i18n, info } from "../utils";
 import notebooks from "../global-notebooks";
 import { eventBus } from "../event-bus";
 
