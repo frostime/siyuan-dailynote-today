@@ -35,17 +35,17 @@ export async function moveBlocksAfter(srcBlock: Block, dstId: string, method: 'p
     } else if (method == 'previous') {
         ans = await serverApi.moveBlock(srcBlock.id, dstId, null);
     }
-    console.log("移动 Src Block:", ans);
+    info(`移动 Src Block ${srcBlock.id}  --> ${dstId}`);
 
     let previousID = srcBlock.id;
     for (let child of childrens) {
         let id = child.id;
         if (child.type != 'h') {
-            info(`移动普通块 ${id}`);
+            info(`移动普通块 ${id}  --> ${previousID}`);
             ans = await serverApi.moveBlock(id, previousID, null);
             previousID = id;
         } else {
-            info(`移动标题块 ${id}`);
+            info(`移动标题块 ${id}  --> ${previousID}`);
             previousID = await moveBlocksAfter(child, previousID, 'previous');
         }
     }
