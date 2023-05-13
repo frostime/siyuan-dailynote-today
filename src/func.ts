@@ -5,7 +5,7 @@ import { showMessage } from 'siyuan';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
-import { info, warn, error, StaticText } from "./utils";
+import { info, warn, error, StaticText, i18n } from "./utils";
 import * as serverApi from './serverApi';
 
 
@@ -67,7 +67,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         doc_id = docs[0].id;
     } else {
         doc_id = await createDiary(notebook, todayDiaryPath!);
-        notify(`${StaticText.Create}: ${notebook.name}`, 'info', 2500);
+        notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
     moveBlocksAfter(block, doc_id, 'parent');
 }
@@ -227,10 +227,10 @@ export async function openDiary(notebook: Notebook) {
         let doc = docs[0];
         let id = doc.id;
         window.open(`siyuan://blocks/${id}`);
-        notify(`${StaticText.Open}： ${notebook.name}`, 'info', 1500);
+        notify(`${i18n.Open}： ${notebook.name}`, 'info', 1500);
     } else {
         let id = await createDiary(notebook, todayDiaryPath!);
         window.open(`siyuan://blocks/${id}`);
-        notify(`${StaticText.Create}: ${notebook.name}`, 'info', 1500);
+        notify(`${i18n.Create}: ${notebook.name}`, 'info', 1500);
     }
 }
