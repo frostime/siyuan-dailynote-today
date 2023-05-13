@@ -5,7 +5,7 @@ import { showMessage } from 'siyuan';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
-import { info, warn, error, StaticText, i18n } from "./utils";
+import { info, warn, error, i18n } from "./utils";
 import * as serverApi from './serverApi';
 
 
