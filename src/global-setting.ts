@@ -3,11 +3,17 @@
  */
 import { Plugin } from 'siyuan';
 import { info, error } from './utils';
+import { eventBus } from './event-bus';
 
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
 type NotebookView = 'Selector' | 'Menu'
 type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'NotebookView' | 'DefaultNotebook'
+
+interface Item {
+    key: SettingKey,
+    value: any
+}
 
 class SettingManager {
     plugin: Plugin;
@@ -17,6 +23,13 @@ class SettingManager {
         NotebookView: 'Selector' as NotebookView,
         DefaultNotebook: ''
     };
+
+    constructor() {
+        eventBus.subscribe(eventBus.EventSetting, (data: Item) => {
+            this.set(data.key, data.value);
+            this.save();
+        });
+    }
 
     setPlugin(plugin: Plugin) {
         this.plugin = plugin;

@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher, onDestroy } from "svelte";
     import { settings } from "../global-setting";
+    import { eventBus } from "../event-bus";
     import SettingItem from "./setting-item.svelte";
     let checked = settings.get("OpenOnStart");
     let notebookSort = settings.get("NotebookSort");
@@ -27,9 +28,10 @@
             type="checkbox"
             bind:checked
             on:change={(e) => {
-                //设置发生变化的时候，保存设置
-                settings.set("OpenOnStart", e.target.checked);
-                settings.save();
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "OpenOnStart",
+                    value: e.target.checked,
+                });
             }}
         />
     </SettingItem>
@@ -40,9 +42,10 @@
             placeholder="请复制笔记本的 ID"
             bind:value={defaultNotebook}
             on:change={(e) => {
-                console.log(e);
-                settings.set('DefaultNotebook', defaultNotebook);
-                settings.save();
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "DefaultNotebook",
+                    value: defaultNotebook,
+                });
             }}
         />
     </SettingItem>
@@ -53,8 +56,10 @@
             bind:value={notebookSort}
             on:change={(e) => {
                 let value = e.target.value;
-                settings.set("NotebookSort", value);
-                settings.save();
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "NotebookSort",
+                    value: value,
+                });
             }}
         >
             <option value="custom-sort"

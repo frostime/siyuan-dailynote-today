@@ -1,6 +1,8 @@
 
 class EventBus {
     events: {[key: string]: Function[]} = {};
+
+    EventSetting = 'UpdateSetting';
   
     constructor() {}
   

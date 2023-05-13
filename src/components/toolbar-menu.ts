@@ -13,7 +13,6 @@ export class ToolbarMenuItem {
 
     constructor(plugin: Plugin) {
         this.plugin = plugin;
-        //TODO 更换 icon
         this.ele = this.plugin.addTopBar({
             // icon: 'iconCalendar',
             icon: iconDiary.icon1,

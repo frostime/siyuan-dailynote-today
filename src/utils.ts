@@ -7,11 +7,11 @@ export function info(...msg: any[]): void {
 }
 
 export function error(...msg: any[]): void {
-    console.log(`[DailyNoteToday][ERROR] ${msg}`);
+    console.error(`[DailyNoteToday][ERROR] ${msg}`);
 }
 
 export function warn(...msg: any[]): void {
-    console.log(`[DailyNoteToday][WARN] ${msg}`);
+    console.warn(`[DailyNoteToday][WARN] ${msg}`);
 }
 
 export let i18n: any;
