@@ -182,8 +182,6 @@ export async function getDailynoteSprig(notebookId: string): Promise<string> {
  * @returns 
  */
 export async function renderDailynotePath(sprig: string) {
-    // return await serverApi.renderSprig(sprig);
-    //TODO: 等待 siyuan 更新之后再使用 serverApi.renderSprig
     return await serverApi.renderSprig(sprig);
 }
 

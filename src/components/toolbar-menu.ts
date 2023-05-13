@@ -67,7 +67,6 @@ export class ToolbarMenuItem {
     }
 
     async updateDailyNoteStatus() {
-        //TODO
         info('Update daily note status');
         let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
         notebooks.notebooks.forEach((notebook) => {
