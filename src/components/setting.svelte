@@ -37,6 +37,7 @@
         <input
             class="b3-text-field fn__flex-center fn__size200"
             id="defaultNotebook"
+            placeholder="请复制笔记本的 ID"
             bind:value={defaultNotebook}
             on:change={(e) => {
                 console.log(e);

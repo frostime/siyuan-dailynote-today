@@ -109,6 +109,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 },
                 fn: this.tab_setting
             },
+            keepCursor: true
         });
     }
 
