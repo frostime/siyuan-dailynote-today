@@ -59,6 +59,7 @@ export class ToolbarMenuItem {
      * 初始化的时候，加载所有的笔记本
      */
     autoOpenDailyNote() {
+        info('Auto open daily note');
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
                 openDiary(notebooks.get(0));
@@ -68,6 +69,7 @@ export class ToolbarMenuItem {
 
     async updateDailyNoteStatus() {
         //TODO
+        info('Update daily note status');
         let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
         notebooks.notebooks.forEach((notebook) => {
             let status = diaryStatus.get(notebook.id);
