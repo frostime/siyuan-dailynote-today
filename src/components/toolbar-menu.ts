@@ -16,7 +16,7 @@ export class ToolbarMenuItem {
         //TODO 更换 icon
         this.ele = this.plugin.addTopBar({
             // icon: 'iconCalendar',
-            icon: iconDiary,
+            icon: iconDiary.icon1,
             title: i18n.ToolbarAriaLabel,
             position: 'left',
             callback: () => { this.showMenu(); }
