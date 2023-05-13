@@ -9,7 +9,7 @@ const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 export class ToolbarMenuItem {
     plugin: Plugin;
     ele: HTMLDivElement;
-    iconStatus: Map<string, string> = new Map();
+    iconStatus: Map<string, string>;
 
     constructor(plugin: Plugin) {
         this.plugin = plugin;
@@ -18,11 +18,12 @@ export class ToolbarMenuItem {
             icon: 'iconCalendar',
             title: i18n.ToolbarAriaLabel,
             position: 'left',
-            callback: this.showMenu.bind(this)
+            callback: () => { this.showMenu(); }
         })
+        this.iconStatus = new Map();
     }
 
-    async showMenu(event: MouseEvent) {
+    showMenu() {
         info('点击了今日日记按钮');
         // await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
@@ -34,9 +35,7 @@ export class ToolbarMenuItem {
         menu.open({
             x: rect.right,
             y: rect.bottom,
-            isLeft: true,
         });
-        event.stopPropagation();
         this.updateDailyNoteStatus();
     }
 

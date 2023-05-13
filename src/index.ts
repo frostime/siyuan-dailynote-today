@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { Plugin } from 'siyuan';
-// import Setting from './components/setting.svelte'
+import { isMobile, openTab, Plugin } from 'siyuan';
+import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify } from './func';
 import { info, setI18n } from './utils';
@@ -15,11 +15,11 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     toolbar_item: ToolbarMenuItem;
 
-    div_setting: HTMLElement;
-    //TODO 后续添加 setting 面板
-    // component_setting: Setting;
+    component_setting: Setting;
+    tab_setting: any;
 
     menu: ContextMenu;
+
 
     test() {
         notify('Test', 'info', 1500);
@@ -56,30 +56,26 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let end = performance.now();
         info(`Onload, 耗时: ${end - start} ms`);
-
-        // this.addTopBar({
-        //     icon: 'iconCalendar',
-        //     title: '今日笔记',
-        //     position: 'left',
-        //     callback: this.test.bind(this)
-        // })
     }
 
     private initSetting() {
-        //TODO 注册设置面板
-        // this.div_setting = document.createElement('div');
-        // this.component_setting = new Setting({
-        //     target: this.div_setting,
-        //     props: {
-        //         contents: StaticText.Setting
-        //     }
-        // });
+        let div_setting: HTMLDivElement = document.createElement('div');
+        this.component_setting = new Setting({
+            target: div_setting,
+            props: {
+                contents: this.i18n.Setting
+            }
+        });
 
-        // this.registerSettingRender((el) => {
-        //     el.appendChild(this.div_setting);
-        // })
+        this.component_setting.$on("updateAll", () => { this.updateAll() });
 
-        // this.component_setting.$on("updateAll", () => { this.updateAll() })
+        //注册标签页内容
+        this.tab_setting = this.addTab({
+            type: "custom_tab",
+            init() {
+                this.element.appendChild(div_setting);
+            }
+        });
     }
 
     private initContextMenu() {
@@ -96,18 +92,28 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     private async updateAll() {
         info('updateAll');
-        // await notebooks.update(); // 更新笔记本状态
-        // this.toolbar_item.updateNotebookStatus(); //更新下拉框中笔记本显示
-        // this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
+        await notebooks.update(); // 更新笔记本状态
+        this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
 
-        // this.menu.bindMenuOnCurrentTabs();
-        // notify(StaticText.UpdateAll, 'info', 2500);
+        // this.menu.bindMenuOnCurrentTabs(); TODO
+        notify(this.i18n.UpdateAll, 'info', 2500);
+    }
+
+    openSetting(): void {
+        openTab({
+            custom: {
+                icon: "iconSettings",
+                title: "今日笔记 Setting",
+                data: {
+                    text: "This is my custom tab",
+                },
+                fn: this.tab_setting
+            },
+        });
     }
 
     onunload() {
         info('plugin unload')
-        // this.toolbar_item.release();
-        // this.menu.removeEditorTabObserver();
         settings.save();
     }
 }
