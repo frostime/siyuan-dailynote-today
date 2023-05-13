@@ -1,4 +1,4 @@
-import { IMenuItemOption, Menu, Plugin } from "siyuan";
+import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-setting";
@@ -64,7 +64,21 @@ export class ToolbarMenuItem {
         info('Auto open daily note');
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
-                openDiary(notebooks.get(0));
+                let notebookId: string = settings.get('DefaultNotebook');
+                notebookId = notebookId.trim();
+                if (notebookId != '') {
+                    let notebook = notebooks.find(notebookId);
+                    if (notebook) {
+                        openDiary(notebook);
+                    } else {
+                        showMessage(`${notebookId} 并非一个合法的 Notebook ID，请检查设置`, 2500, "error");
+                        // openDiary(notebooks.get(0));
+                        console.log('Error!!!!!!!!!')
+                        
+                    }
+                } else {
+                    openDiary(notebooks.get(0));
+                }
             }
         }
     }

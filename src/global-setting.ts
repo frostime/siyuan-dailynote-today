@@ -7,7 +7,7 @@ import { info, error } from './utils';
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
 type NotebookView = 'Selector' | 'Menu'
-type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'NotebookView'
+type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'NotebookView' | 'DefaultNotebook'
 
 class SettingManager {
     plugin: Plugin;

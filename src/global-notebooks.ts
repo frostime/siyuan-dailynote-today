@@ -19,6 +19,17 @@ class Notebooks {
         this.notebooks[index] = notebook;
     }
 
+    find(id: string): Notebook | null {
+        console.log('find');
+        for (const notebook of this.notebooks) {
+            console.log(notebook.id, id);
+            if (notebook.id === id) {
+                return notebook;
+            }
+        }
+        return null;
+    }
+
     [Symbol.iterator]() {
         return this.notebooks[Symbol.iterator]();
     }
