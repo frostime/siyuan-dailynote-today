@@ -1,15 +1,15 @@
 {
     "ToolbarAriaLabel": "Daily Note Today",
-    "Setting": [
-        {
+    "Setting": {
+        "autoOpen": {
             "title": "Open Today's Diary Automatically",
             "text": "Open Today's Diary automatically when the plugin is loaded"
         },
-        {
+        "update": {
             "title": "Update Notebook Status",
             "text": "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U"
         },
-        {
+        "sorting": {
             "title": "Notebook Sorting Scheme",
             "text": "1. Same what document tree shows 2. Same the order defined in custom sorting mode",
             "options": {
@@ -17,7 +17,7 @@
                 "custom-sort": "Same as custom sorting"
             }
         },
-        {
+        "display": {
             "title": "Toolbar Display Scheme",
             "text": "The display scheme of the plugin on the toolbar, drop-down selector or icon, effective after restart",
             "options": {
@@ -25,7 +25,7 @@
                 "menu": "Menu icon"
             }
         }
-    ],
+    },
     "Open": "Open daily note",
     "Create": "Create daily note",
     "UpdateAll": "Notebook status updated",

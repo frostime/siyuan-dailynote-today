@@ -22,9 +22,9 @@
 <div class="config__tab-container">
     <label class="fn__flex b3-label">
         <div class="fn__flex-1">
-            {contents[0].title}
+            {contents.autoOpen.title}
             <div class="b3-label__text">
-                {contents[0].text}
+                {contents.autoOpen.text}
             </div>
         </div>
         <span class="fn__space" />
@@ -42,8 +42,8 @@
     </label>
     <label class="fn__flex b3-label">
         <div class="fn__flex-1">
-            {contents[2].title}
-            <div class="b3-label__text">{contents[2].text}</div>
+            {contents.sorting.title}
+            <div class="b3-label__text">{contents.sorting.text}</div>
         </div>
         <span class="fn__space" />
         <select
@@ -56,15 +56,15 @@
                 settings.save();
             }}
         >
-            <option value="custom-sort">{contents[2].options["custom-sort"]}</option>
-            <option value="doc-tree">{contents[2].options["doc-tree"]}</option
+            <option value="custom-sort">{contents.sorting.options["custom-sort"]}</option>
+            <option value="doc-tree">{contents.sorting.options["doc-tree"]}</option
             >
         </select>
     </label>
     <label class="fn__flex b3-label">
         <div class="fn__flex-1">
-            {contents[3].title}
-            <div class="b3-label__text">{contents[3].text}</div>
+            {contents.display.title}
+            <div class="b3-label__text">{contents.display.text}</div>
         </div>
         <span class="fn__space" />
         <select
@@ -77,16 +77,16 @@
                 settings.save();
             }}
         >
-            <option value="Selector">{contents[3].options["select"]}</option>
-            <option value="Menu">{contents[3].options["menu"]}</option
+            <option value="Selector">{contents.display.options["select"]}</option>
+            <option value="Menu">{contents.display.options["menu"]}</option
             >
         </select>
     </label>
     <label class="fn__flex b3-label">
         <div class="fn__flex-1">
-            {contents[1].title}
+            {contents.update.title}
             <div class="b3-label__text">
-                {contents[1].text}
+                {contents.update.text}
             </div>
         </div>
         <span class="fn__space" />
