@@ -4,7 +4,7 @@
     import SettingItem from "./setting-item.svelte";
     let checked = settings.get("OpenOnStart");
     let notebookSort = settings.get("NotebookSort");
-    let notebookView = settings.get("NotebookView");
+    let defaultNotebook = settings.get("DefaultNotebook");
 
     const dispatch = createEventDispatcher();
 
@@ -17,7 +17,6 @@
     onDestroy(() => {
         settings.save();
     });
-
 </script>
 
 <div class="config__tab-container">
@@ -34,6 +33,18 @@
             }}
         />
     </SettingItem>
+    <SettingItem content={contents.defaultNotebook}>
+        <input
+            class="b3-text-field fn__flex-center fn__size200"
+            id="defaultNotebook"
+            bind:value={defaultNotebook}
+            on:change={(e) => {
+                console.log(e);
+                settings.set('DefaultNotebook', defaultNotebook);
+                settings.save();
+            }}
+        />
+    </SettingItem>
     <SettingItem content={contents.sorting}>
         <select
             class="b3-select fn__flex-center fn__size200"
@@ -45,8 +56,11 @@
                 settings.save();
             }}
         >
-            <option value="custom-sort">{contents.sorting.options["custom-sort"]}</option>
-            <option value="doc-tree">{contents.sorting.options["doc-tree"]}</option
+            <option value="custom-sort"
+                >{contents.sorting.options["custom-sort"]}</option
+            >
+            <option value="doc-tree"
+                >{contents.sorting.options["doc-tree"]}</option
             >
         </select>
     </SettingItem>

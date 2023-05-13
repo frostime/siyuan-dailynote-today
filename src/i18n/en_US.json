@@ -5,6 +5,10 @@
             "title": "Open Today's Diary Automatically",
             "text": "Open Today's Diary automatically when the plugin is loaded"
         },
+        "defaultNotebook": {
+            "title": "Default Notebook",
+            "text": "The notebook where the daily note is created by default, use the first notebook if blank"
+        },
         "update": {
             "title": "Update Notebook Status",
             "text": "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U",

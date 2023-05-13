@@ -14,7 +14,8 @@ class SettingManager {
     settings: any = {
         OpenOnStart: true as boolean,
         NotebookSort: 'custom-sort' as NotebookSorting,
-        NotebookView: 'Selector' as NotebookView
+        NotebookView: 'Selector' as NotebookView,
+        DefaultNotebook: ''
     };
 
     setPlugin(plugin: Plugin) {
@@ -55,8 +56,8 @@ class SettingManager {
             } catch (error_msg) {
                 error(`Setting load error: ${error_msg}`);
                 console.log(error_msg);
-                this.save();
             }
+            this.save();
         }
     }
 
