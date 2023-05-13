@@ -109,10 +109,10 @@ export class ContextMenu {
             let item = {
                 label: notebook.name,
                 icon: `icon-${notebook.icon}`,
-                click: () => {
+                click: async () => {
                     info(`Move ${data_id} to ${notebook.id}`);
-                    moveBlocksToDailyNote(data_id, notebook);
-                    setTimeout(() => { eventBus.publish('moveBlocks', '') }, 500);
+                    await moveBlocksToDailyNote(data_id, notebook);
+                    eventBus.publish('moveBlocks', '');
                 }
             }
             menuItems.push(item);
