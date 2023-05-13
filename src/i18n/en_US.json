@@ -7,7 +7,8 @@
         },
         "update": {
             "title": "Update Notebook Status",
-            "text": "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U"
+            "text": "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U",
+            "button": "Update"
         },
         "sorting": {
             "title": "Notebook Sorting Scheme",
@@ -15,14 +16,6 @@
             "options": {
                 "doc-tree": "Same as document tree",
                 "custom-sort": "Same as custom sorting"
-            }
-        },
-        "display": {
-            "title": "Toolbar Display Scheme",
-            "text": "The display scheme of the plugin on the toolbar, drop-down selector or icon, effective after restart",
-            "options": {
-                "select": "Drop-down selector",
-                "menu": "Menu icon"
             }
         }
     },
