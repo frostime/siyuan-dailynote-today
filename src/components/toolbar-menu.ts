@@ -3,6 +3,7 @@ import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-setting";
 import { info, i18n } from "../utils";
+import { eventBus } from "../event-bus";
 
 const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
 
@@ -21,6 +22,8 @@ export class ToolbarMenuItem {
             callback: () => { this.showMenu(); }
         })
         this.iconStatus = new Map();
+
+        eventBus.subscribe('moveBlocks', this.updateDailyNoteStatus.bind(this));
     }
 
     showMenu() {

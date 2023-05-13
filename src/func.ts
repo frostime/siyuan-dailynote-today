@@ -4,7 +4,6 @@
 import { showMessage } from 'siyuan';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
-import { ToolbarItem } from './components/interface';
 import { Notebook, Block } from "./types";
 import { info, warn, error, StaticText } from "./utils";
 import * as serverApi from './serverApi';
@@ -21,10 +20,12 @@ async function queryChildren(parentId: string): Promise<Array<Block>> {
 }
 
 export async function moveBlocksAfter(srcBlock: Block, dstId: string, method: 'parent' | 'previous' = 'parent') {
-
+    info(`Call 移动块: ${srcBlock.id} --> ${dstId}; ${method}`)
     let childrens: Array<Block> = new Array<Block>();
     if (srcBlock.type == 'h') {
         childrens = await queryChildren(srcBlock.id);
+        info(`Src Block ${srcBlock.id}, children = `);
+        console.log(childrens);
     }
 
     let ans;
@@ -34,15 +35,17 @@ export async function moveBlocksAfter(srcBlock: Block, dstId: string, method: 'p
     } else if (method == 'previous') {
         ans = await serverApi.moveBlock(srcBlock.id, dstId, null);
     }
-    console.log("Move ans:", ans);
+    console.log("移动 Src Block:", ans);
 
     let previousID = srcBlock.id;
     for (let child of childrens) {
         let id = child.id;
         if (child.type != 'h') {
+            info(`移动普通块 ${id}`);
             ans = await serverApi.moveBlock(id, previousID, null);
             previousID = id;
         } else {
+            info(`移动标题块 ${id}`);
             previousID = await moveBlocksAfter(child, previousID, 'previous');
         }
     }

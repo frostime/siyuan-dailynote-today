@@ -79,9 +79,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initContextMenu() {
-        // this.menu = new ContextMenu();
-        // this.menu.bindMenuOnCurrentTabs();
-        // this.menu.addEditorTabObserver();
+        this.menu = new ContextMenu();
+        this.menu.bindMenuOnCurrentTabs();
+        this.menu.addEditorTabObserver();
     }
 
     private initToolbarItem() {
@@ -95,7 +95,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         await notebooks.update(); // 更新笔记本状态
         this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
 
-        // this.menu.bindMenuOnCurrentTabs(); TODO
+        this.menu.bindMenuOnCurrentTabs(); //TODO
         notify(this.i18n.UpdateAll, 'info', 2500);
     }
 
@@ -114,6 +114,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     onunload() {
         info('plugin unload')
+        this.menu.removeEditorTabObserver();
         settings.save();
     }
 }

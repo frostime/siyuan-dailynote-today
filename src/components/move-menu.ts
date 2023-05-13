@@ -1,11 +1,12 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { Menu, MenuItem } from "siyuan";
+import { Menu } from "siyuan";
 import { moveBlocksToDailyNote } from "../func";
 import { Notebook } from "../types"
-import { info, StaticText } from "../utils";
+import { i18n, info, StaticText } from "../utils";
 import notebooks from "../global-notebooks";
+import { eventBus } from "../event-bus";
 
 export class ContextMenu {
 
@@ -23,7 +24,7 @@ export class ContextMenu {
 
     addEditorTabObserver() {
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;
-        let gutterContextMenuEvent = (event) => { this.gutterContextMenuEvent(event) };
+        let gutterContextMenuEvent = (event: MouseEvent) => { this.gutterContextMenuEvent(event) };
         this.observer = new MutationObserver(function (mutationsList) {
             for (var mutation of mutationsList) {
                 if (mutation.type == 'childList' && mutation.addedNodes.length) {
@@ -87,17 +88,19 @@ export class ContextMenu {
         if (data_id && event.altKey) {
             info(`Contextemnu on: ${data_id}`);
             let menu = new Menu('MoveMenu');
-            menu.addItem(
-                new MenuItem({
-                    label: StaticText.Menu.Move,
-                    type: 'submenu',
-                    icon: 'iconMove',
-                    submenu: this.createMenuItems(data_id),
-                })
-            );
-            menu.showAtMouseEvent(event);
+            menu.addItem({
+                label: i18n.Menu.Move,
+                type: 'submenu',
+                icon: 'iconMove',
+                submenu: this.createMenuItems(data_id),
+            });
+            console.log(event);
+            menu.open({
+                x: event.x,
+                y: event.y
+            })
         }
-        // event.stopPropagation();
+        event.stopPropagation();
     }
 
     createMenuItems(data_id: string) {
@@ -106,9 +109,10 @@ export class ContextMenu {
             let item = {
                 label: notebook.name,
                 icon: `icon-${notebook.icon}`,
-                click: (ele) => {
+                click: () => {
                     info(`Move ${data_id} to ${notebook.id}`);
                     moveBlocksToDailyNote(data_id, notebook);
+                    setTimeout(() => { eventBus.publish('moveBlocks', '') }, 500);
                 }
             }
             menuItems.push(item);
