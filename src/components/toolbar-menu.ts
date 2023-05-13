@@ -17,7 +17,7 @@ export class ToolbarMenuItem {
         this.ele = this.plugin.addTopBar({
             // icon: 'iconCalendar',
             icon: iconDiary.icon1,
-            title: i18n.ToolbarAriaLabel,
+            title: i18n.Name,
             position: 'left',
             callback: () => { this.showMenu(); }
         })

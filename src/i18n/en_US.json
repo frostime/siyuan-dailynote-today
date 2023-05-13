@@ -1,5 +1,5 @@
 {
-    "ToolbarAriaLabel": "Daily Note Today",
+    "Name": "Daily Note Today",
     "Setting": {
         "autoOpen": {
             "title": "Open Today's Diary Automatically",

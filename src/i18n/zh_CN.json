@@ -1,5 +1,5 @@
 {
-    "ToolbarAriaLabel": "今日笔记",
+    "Name": "今日笔记",
     "Setting": {
         "autoOpen": {
             "title": "自动打开 Daily Note",
