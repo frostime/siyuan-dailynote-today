@@ -4,8 +4,7 @@ import notebooks from "../global-notebooks";
 import { settings } from "../global-setting";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
-
-const TOOLBAR_ITEMS = 'toolbar__item b3-tooltips b3-tooltips__sw';
+import { iconDiary } from "./svg";
 
 export class ToolbarMenuItem {
     plugin: Plugin;
@@ -16,7 +15,8 @@ export class ToolbarMenuItem {
         this.plugin = plugin;
         //TODO 更换 icon
         this.ele = this.plugin.addTopBar({
-            icon: 'iconCalendar',
+            // icon: 'iconCalendar',
+            icon: iconDiary,
             title: i18n.ToolbarAriaLabel,
             position: 'left',
             callback: () => { this.showMenu(); }
