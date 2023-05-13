@@ -71,10 +71,8 @@ export class ToolbarMenuItem {
                     if (notebook) {
                         openDiary(notebook);
                     } else {
-                        showMessage(`${notebookId} 并非一个合法的 Notebook ID，请检查设置`, 2500, "error");
+                        showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 2500, "error");
                         // openDiary(notebooks.get(0));
-                        console.log('Error!!!!!!!!!')
-                        
                     }
                 } else {
                     openDiary(notebooks.get(0));

@@ -27,6 +27,7 @@
     "Open": "Open daily note",
     "Create": "Create daily note",
     "UpdateAll": "Notebook status updated",
+    "InvalidDefaultNotebook": "Note a valid notebook ID, please check your setting",
     "Menu": {
         "Move": "Move to"
     }
