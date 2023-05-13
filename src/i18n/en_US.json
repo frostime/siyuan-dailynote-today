@@ -22,6 +22,14 @@
                 "doc-tree": "Same as document tree",
                 "custom-sort": "Same as custom sorting"
             }
+        },
+        "position": {
+            "title": "Icon Position",
+            "text": "",
+            "options": {
+                "Left": "Topbar left",
+                "Right": "Topbar right"
+            }
         }
     },
     "Open": "Open daily note",

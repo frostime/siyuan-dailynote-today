@@ -22,6 +22,14 @@
                 "doc-tree": "和文档树一致",
                 "custom-sort": "和自定义排序一致"
             }
+        },
+        "position": {
+            "title": "图标位置",
+            "text": "",
+            "options": {
+                "Left": "顶栏左侧",
+                "Right": "顶栏右侧"
+            }
         }
     },
     "Open": "打开日记",

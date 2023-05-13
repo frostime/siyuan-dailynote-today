@@ -6,6 +6,7 @@
     let checked = settings.get("OpenOnStart");
     let notebookSort = settings.get("NotebookSort");
     let defaultNotebook = settings.get("DefaultNotebook");
+    let iconPosition = settings.get("IconPosition");
 
     const dispatch = createEventDispatcher();
 
@@ -67,6 +68,27 @@
             >
             <option value="doc-tree"
                 >{contents.sorting.options["doc-tree"]}</option
+            >
+        </select>
+    </SettingItem>
+    <SettingItem content={contents.position}>
+        <select
+            class="b3-select fn__flex-center fn__size200"
+            id="iconPosition"
+            bind:value={iconPosition}
+            on:change={(e) => {
+                let value = e.target.value;
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "IconPosition",
+                    value: value,
+                });
+            }}
+        >
+            <option value="Left"
+                >{contents.position.options["Left"]}</option
+            >
+            <option value="Right"
+                >{contents.position.options["Right"]}</option
             >
         </select>
     </SettingItem>
