@@ -58,7 +58,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
 }
 
 
-export async function notify(msg: string, type: 'error' | 'info' = 'info', timeout: number = 1000) {
+export async function notify(msg: string, type: 'error' | 'info' = 'info', timeout?: number) {
     showMessage(msg, timeout = timeout, type = type);
 }
 
