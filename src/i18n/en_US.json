@@ -1,6 +1,7 @@
 {
     "Name": "Daily Note Today",
     "Setting": {
+        "name": "Setting",
         "autoOpen": {
             "title": "Open Today's Diary Automatically",
             "text": "Open Today's Diary automatically when the plugin is loaded"
@@ -11,7 +12,7 @@
             "placeholder": "Please copy from notebook's ID"
         },
         "update": {
-            "title": "Update Notebook Status",
+            "title": "Update Status",
             "text": "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U",
             "button": "Update"
         },

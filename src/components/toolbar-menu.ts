@@ -31,12 +31,12 @@ export class ToolbarMenuItem {
     contextMenu(event: MouseEvent) {
         let menu = new Menu("dntoday-config");
         menu.addItem({
-            label: '设置',
+            label: i18n.Setting.name,
             icon: 'iconSettings',
             click: () => {eventBus.publish('OpenSetting', '');}
         })
         menu.addItem({
-            label: '更新状态',
+            label: i18n.Setting.update.title,
             icon: 'iconRefresh',
             click: () => {eventBus.publish('UpdateAll', '');}
         })
