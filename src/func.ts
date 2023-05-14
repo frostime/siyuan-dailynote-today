@@ -79,7 +79,7 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         all_notebooks = all_notebooks.filter(
             notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
         );
-        
+
         if (settings.settings.NotebookSort == 'custom-sort') {
             all_notebooks = all_notebooks.sort((a, b) => {
                 return a.sort - b.sort;
@@ -218,4 +218,30 @@ export async function openDiary(notebook: Notebook) {
         window.open(`siyuan://blocks/${id}`);
         notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
+}
+
+export function compareVersion(v1Str: string, v2Str: string) {
+    let v1 = v1Str.split('.')
+    let v2 = v2Str.split('.')
+    const len = Math.max(v1.length, v2.length)
+
+    while (v1.length < len) {
+        v1.push('0')
+    }
+    while (v2.length < len) {
+        v2.push('0')
+    }
+
+    for (let i = 0; i < len; i++) {
+        const num1 = parseInt(v1[i])
+        const num2 = parseInt(v2[i])
+
+        if (num1 > num2) {
+            return 1
+        } else if (num1 < num2) {
+            return -1
+        }
+    }
+
+    return 0
 }

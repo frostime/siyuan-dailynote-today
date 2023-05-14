@@ -38,6 +38,7 @@
     "InvalidDefaultNotebook": "Note a valid notebook ID, please check your setting",
     "Menu": {
         "Move": "Move to",
-        "NotLi": "Only support moving entrie list, instead of signle list item!"
+        "NotLi": "Only support moving entrie list, instead of signle list item!",
+        "VerIssue": "Current version dose not support \"Move Blocks\" function (>2.8.7)"
     }
 }

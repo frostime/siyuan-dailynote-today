@@ -2,24 +2,41 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Menu } from "siyuan";
-import { moveBlocksToDailyNote } from "../func";
+import { moveBlocksToDailyNote, compareVersion } from "../func";
 import { i18n, info } from "../utils";
 import notebooks from "../global-notebooks";
 import { eventBus } from "../event-bus";
+import * as serverApi from '../serverApi';
 
 export class ContextMenu {
 
     private observer: MutationObserver | null = null;
+    private ok: boolean = true;
 
     constructor() {
     }
 
     async bindMenuOnCurrentTabs() {
+        if (!this.ok) {
+            return
+        }
         let gutter: HTMLDivElement | null = document.querySelector(
             'div.protyle-gutters'
         );
         gutter?.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
     }
+
+    /**
+     * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
+     */
+    async checkSysVerForMove() {
+        let version: string = await serverApi.version();
+        info(`当前版本 ${version}`);
+        let cmp = compareVersion(version, '2.8.7');
+        this.ok = cmp >= 0;
+        return this.ok;
+    }
+
 
     addEditorTabObserver() {
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;

@@ -95,3 +95,8 @@ export async function renderSprig(sprig: string) {
     let url = '/api/template/renderSprig';
     return request(url, { template: sprig });
 }
+
+
+export async function version(): Promise<string> {
+    return request('/api/system/version', {});
+}

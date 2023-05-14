@@ -5,7 +5,7 @@ import { isMobile, openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify } from './func';
-import { info, setI18n } from './utils';
+import { info, setI18n, i18n } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
@@ -80,10 +80,15 @@ export default class DailyNoteTodayPlugin extends Plugin {
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
     }
 
-    private initContextMenu() {
+    private async initContextMenu() {
         this.menu = new ContextMenu();
-        this.menu.bindMenuOnCurrentTabs();
-        this.menu.addEditorTabObserver();
+        let ok = await this.menu.checkSysVerForMove();
+        if (ok) {
+            this.menu.bindMenuOnCurrentTabs();
+            this.menu.addEditorTabObserver();
+        } else {
+            notify(i18n.Menu.VerIssue, 'info', 2500);
+        }
     }
 
     private initToolbarItem() {
