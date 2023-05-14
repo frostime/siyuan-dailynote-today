@@ -12,42 +12,22 @@ import * as serverApi from './serverApi';
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
-
-async function queryChildren(parentId: string): Promise<Array<Block>> {
-    let sql = `select * from blocks where parent_id = '${parentId}'`;
-    let result: Array<Block> = await serverApi.sql(sql);
-    return result;
-}
-
-export async function moveBlocksAfter(srcBlock: Block, dstId: string, method: 'parent' | 'previous' = 'parent') {
-    info(`Call 移动块: ${srcBlock.id} --> ${dstId}; ${method}`)
+export async function moveBlocksToDoc(srcBlock: Block, docId: string) {
+    info(`Call 移动块: ${srcBlock.id} --> ${docId}`)
     let childrens: Array<Block> = new Array<Block>();
+
+    //标题块不是容器，所以必须手动检查下属的子块
     if (srcBlock.type == 'h') {
-        childrens = await queryChildren(srcBlock.id);
-        info(`Src Block ${srcBlock.id}, children = `);
-        console.log(childrens);
+        childrens = await serverApi.getChildBlocks(srcBlock.id);
     }
 
-    let ans;
-
-    if (method == 'parent') {
-        ans = await serverApi.moveBlock(srcBlock.id, null, dstId);
-    } else if (method == 'previous') {
-        ans = await serverApi.moveBlock(srcBlock.id, dstId, null);
-    }
-    info(`移动 Src Block ${srcBlock.id}  --> ${dstId}`);
+    await serverApi.moveBlock(srcBlock.id, null, docId);
 
     let previousID = srcBlock.id;
     for (let child of childrens) {
         let id = child.id;
-        if (child.type != 'h') {
-            info(`移动普通块 ${id}  --> ${previousID}`);
-            ans = await serverApi.moveBlock(id, previousID, null);
-            previousID = id;
-        } else {
-            info(`移动标题块 ${id}  --> ${previousID}`);
-            previousID = await moveBlocksAfter(child, previousID, 'previous');
-        }
+        await serverApi.moveBlock(id, previousID, null);
+        previousID = id;
     }
     return previousID;
 }
@@ -69,7 +49,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         doc_id = await createDiary(notebook, todayDiaryPath!);
         notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
-    moveBlocksAfter(block, doc_id, 'parent');
+    moveBlocksToDoc(block, doc_id);
 }
 
 

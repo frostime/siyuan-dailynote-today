@@ -79,6 +79,11 @@ export async function getBlockByID(blockId: string) {
     return data[0];
 }
 
+export async function getChildBlocks(blockId: string) {
+    let data = { id: blockId };
+    let url = '/api/block/getChildBlocks';
+    return request(url, data);
+}
 
 export async function moveBlock(id: string, previousID: string | null = null, parentID: string | null = null) {
     let url = '/api/block/moveBlock';
