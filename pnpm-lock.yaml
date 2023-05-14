@@ -8,6 +8,7 @@ specifiers:
   esbuild-loader: ^3.0.1
   eslint: ^8.39.0
   mini-css-extract-plugin: 2.3.0
+  replace-in-file-webpack-plugin: ^1.0.6
   sass: ^1.62.1
   sass-loader: ^12.6.0
   siyuan: latest
@@ -29,6 +30,7 @@ devDependencies:
   esbuild-loader: 3.0.1_webpack@5.82.0
   eslint: 8.39.0
   mini-css-extract-plugin: 2.3.0_webpack@5.82.0
+  replace-in-file-webpack-plugin: 1.0.6
   sass: 1.62.1
   sass-loader: 12.6.0_sass@1.62.1+webpack@5.82.0
   siyuan: 0.7.1
@@ -1854,6 +1856,10 @@ packages:
   /regexpp/3.2.0:
     resolution: {integrity: sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==}
     engines: {node: '>=8'}
+    dev: true
+
+  /replace-in-file-webpack-plugin/1.0.6:
+    resolution: {integrity: sha512-+KRgNYL2nbc6nza6SeF+wTBNkovuHFTfJF8QIEqZg5MbwkYpU9no0kH2YU354wvY/BK8mAC2UKoJ7q+sJTvciw==}
     dev: true
 
   /require-from-string/2.0.2:

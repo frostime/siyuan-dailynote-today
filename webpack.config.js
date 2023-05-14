@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const ZipPlugin = require("zip-webpack-plugin");
 const sveltePreprocess = require("svelte-preprocess");
+const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 
 module.exports = (env, argv) => {
     const isPro = argv.mode === "production";
@@ -35,6 +36,17 @@ module.exports = (env, argv) => {
                 {from: "src/i18n/", to: "./dist/i18n/"},
             ],
         }));
+        //把图片地址全部替换成国内的托管
+        plugins.push(new ReplaceInFileWebpackPlugin([
+            {
+                dir: 'dist',
+                files: ['README.md'],
+                rules: [{
+                    search: /\.?\/?asset/g,
+                    replace: 'https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset'
+                }]
+            }
+        ]));
         plugins.push(new ZipPlugin({
             filename: "package.zip",
             algorithm: "gzip",
