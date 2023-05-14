@@ -1,9 +1,12 @@
 <script>
     import { createEventDispatcher, onDestroy } from "svelte";
     import { settings } from "../global-setting";
+    import { eventBus } from "../event-bus";
+    import SettingItem from "./setting-item.svelte";
     let checked = settings.get("OpenOnStart");
     let notebookSort = settings.get("NotebookSort");
-    let notebookView = settings.get("NotebookView");
+    let defaultNotebook = settings.get("DefaultNotebook");
+    let iconPosition = settings.get("IconPosition");
 
     const dispatch = createEventDispatcher();
 
@@ -16,86 +19,86 @@
     onDestroy(() => {
         settings.save();
     });
-
 </script>
 
 <div class="config__tab-container">
-    <label class="fn__flex b3-label">
-        <div class="fn__flex-1">
-            {contents[0].title}
-            <div class="b3-label__text">
-                {contents[0].text}
-            </div>
-        </div>
-        <span class="fn__space" />
+    <SettingItem content={contents.autoOpen}>
         <input
             class="b3-switch fn__flex-center"
             id="openDNOnStart"
             type="checkbox"
             bind:checked
             on:change={(e) => {
-                //设置发生变化的时候，保存设置
-                settings.set("OpenOnStart", e.target.checked);
-                settings.save();
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "OpenOnStart",
+                    value: e.target.checked,
+                });
             }}
         />
-    </label>
-    <label class="fn__flex b3-label">
-        <div class="fn__flex-1">
-            {contents[2].title}
-            <div class="b3-label__text">{contents[2].text}</div>
-        </div>
-        <span class="fn__space" />
+    </SettingItem>
+    <SettingItem content={contents.defaultNotebook}>
+        <input
+            class="b3-text-field fn__flex-center fn__size200"
+            id="defaultNotebook"
+            placeholder="请复制笔记本的 ID"
+            bind:value={defaultNotebook}
+            on:change={(e) => {
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "DefaultNotebook",
+                    value: defaultNotebook,
+                });
+            }}
+        />
+    </SettingItem>
+    <SettingItem content={contents.sorting}>
         <select
             class="b3-select fn__flex-center fn__size200"
             id="notebookSort"
             bind:value={notebookSort}
             on:change={(e) => {
                 let value = e.target.value;
-                settings.set("NotebookSort", value);
-                settings.save();
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "NotebookSort",
+                    value: value,
+                });
             }}
         >
-            <option value="custom-sort">{contents[2].options["custom-sort"]}</option>
-            <option value="doc-tree">{contents[2].options["doc-tree"]}</option
+            <option value="custom-sort"
+                >{contents.sorting.options["custom-sort"]}</option
+            >
+            <option value="doc-tree"
+                >{contents.sorting.options["doc-tree"]}</option
             >
         </select>
-    </label>
-    <label class="fn__flex b3-label">
-        <div class="fn__flex-1">
-            {contents[3].title}
-            <div class="b3-label__text">{contents[3].text}</div>
-        </div>
-        <span class="fn__space" />
+    </SettingItem>
+    <SettingItem content={contents.position}>
         <select
             class="b3-select fn__flex-center fn__size200"
-            id="NotebookView"
-            bind:value={notebookView}
+            id="iconPosition"
+            bind:value={iconPosition}
             on:change={(e) => {
                 let value = e.target.value;
-                settings.set("NotebookView", value);
-                settings.save();
+                eventBus.publish(eventBus.EventSetting, {
+                    key: "IconPosition",
+                    value: value,
+                });
             }}
         >
-            <option value="Selector">{contents[3].options["select"]}</option>
-            <option value="Menu">{contents[3].options["menu"]}</option
+            <option value="left"
+                >{contents.position.options["left"]}</option
+            >
+            <option value="right"
+                >{contents.position.options["right"]}</option
             >
         </select>
-    </label>
-    <label class="fn__flex b3-label">
-        <div class="fn__flex-1">
-            {contents[1].title}
-            <div class="b3-label__text">
-                {contents[1].text}
-            </div>
-        </div>
-        <span class="fn__space" />
+    </SettingItem>
+    <SettingItem content={contents.update}>
         <button
             class="b3-button b3-button--outline fn__flex-center fn__size200"
             id="updateNotebookStatus"
             on:click={onClick}
         >
-            Update
+            {contents.update.button}
         </button>
-    </label>
+    </SettingItem>
 </div>

@@ -19,6 +19,17 @@ class Notebooks {
         this.notebooks[index] = notebook;
     }
 
+    find(id: string): Notebook | null {
+        console.log('find');
+        for (const notebook of this.notebooks) {
+            console.log(notebook.id, id);
+            if (notebook.id === id) {
+                return notebook;
+            }
+        }
+        return null;
+    }
+
     [Symbol.iterator]() {
         return this.notebooks[Symbol.iterator]();
     }
@@ -29,6 +40,7 @@ class Notebooks {
      * @calledby: this.onload()
      */
     async init(MAX_RETRY: number = 5, RETRY_INTERVAL: number = 1000) {
+        info('Notebooks init');
         let retry = 0;
         while (retry < MAX_RETRY) {
             let result = await queryNotebooks();

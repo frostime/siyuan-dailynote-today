@@ -1,29 +1,46 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { Menu, MenuItem } from "siyuan";
-import { moveBlocksToDailyNote } from "../func";
-import { Notebook } from "../types"
-import { info, StaticText } from "../utils";
+import { Menu } from "siyuan";
+import { moveBlocksToDailyNote, compareVersion } from "../func";
+import { i18n, info } from "../utils";
 import notebooks from "../global-notebooks";
+import { eventBus } from "../event-bus";
+import * as serverApi from '../serverApi';
 
 export class ContextMenu {
 
     private observer: MutationObserver | null = null;
+    private ok: boolean = true;
 
     constructor() {
     }
 
     async bindMenuOnCurrentTabs() {
+        if (!this.ok) {
+            return
+        }
         let gutter: HTMLDivElement | null = document.querySelector(
             'div.protyle-gutters'
         );
         gutter?.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
     }
 
+    /**
+     * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
+     */
+    async checkSysVerForMove() {
+        let version: string = await serverApi.version();
+        info(`当前版本 ${version}`);
+        let cmp = compareVersion(version, '2.8.7');
+        this.ok = cmp >= 0;
+        return this.ok;
+    }
+
+
     addEditorTabObserver() {
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;
-        let gutterContextMenuEvent = (event) => { this.gutterContextMenuEvent(event) };
+        let gutterContextMenuEvent = (event: MouseEvent) => { this.gutterContextMenuEvent(event) };
         this.observer = new MutationObserver(function (mutationsList) {
             for (var mutation of mutationsList) {
                 if (mutation.type == 'childList' && mutation.addedNodes.length) {
@@ -87,17 +104,19 @@ export class ContextMenu {
         if (data_id && event.altKey) {
             info(`Contextemnu on: ${data_id}`);
             let menu = new Menu('MoveMenu');
-            menu.addItem(
-                new MenuItem({
-                    label: StaticText.Menu.Move,
-                    type: 'submenu',
-                    icon: 'iconMove',
-                    submenu: this.createMenuItems(data_id),
-                })
-            );
-            menu.showAtMouseEvent(event);
+            menu.addItem({
+                label: i18n.MoveMenu.Move,
+                type: 'submenu',
+                icon: 'iconMove',
+                submenu: this.createMenuItems(data_id),
+            });
+            console.log(event);
+            menu.open({
+                x: event.x,
+                y: event.y
+            })
         }
-        // event.stopPropagation();
+        event.stopPropagation();
     }
 
     createMenuItems(data_id: string) {
@@ -106,9 +125,10 @@ export class ContextMenu {
             let item = {
                 label: notebook.name,
                 icon: `icon-${notebook.icon}`,
-                click: (ele) => {
+                click: async () => {
                     info(`Move ${data_id} to ${notebook.id}`);
-                    moveBlocksToDailyNote(data_id, notebook);
+                    await moveBlocksToDailyNote(data_id, notebook);
+                    eventBus.publish('moveBlocks', '');
                 }
             }
             menuItems.push(item);
