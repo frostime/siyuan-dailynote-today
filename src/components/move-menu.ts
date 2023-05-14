@@ -32,7 +32,7 @@ export class ContextMenu {
     async checkSysVerForMove() {
         let version: string = await serverApi.version();
         info(`当前版本 ${version}`);
-        let cmp = compareVersion(version, '2.8.7');
+        let cmp = compareVersion(version, '2.8.8');
         this.ok = cmp >= 0;
         return this.ok;
     }
