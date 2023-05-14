@@ -36,7 +36,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
     let block = await serverApi.getBlockByID(srcBlockId);
 
     if (block.type === 'i') {
-        notify(i18n.NotLi, 'error', 3000);
+        notify(i18n.MoveMenu.NotLi, 'error', 3000);
         return
     }
 

@@ -89,7 +89,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             this.menu.bindMenuOnCurrentTabs();
             this.menu.addEditorTabObserver();
         } else {
-            notify(i18n.Menu.VerIssue, 'info', 2500);
+            notify(i18n.MoveMenu.VerIssue, 'info', 2500);
         }
     }
 

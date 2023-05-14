@@ -105,7 +105,7 @@ export class ContextMenu {
             info(`Contextemnu on: ${data_id}`);
             let menu = new Menu('MoveMenu');
             menu.addItem({
-                label: i18n.Menu.Move,
+                label: i18n.MoveMenu.Move,
                 type: 'submenu',
                 icon: 'iconMove',
                 submenu: this.createMenuItems(data_id),
