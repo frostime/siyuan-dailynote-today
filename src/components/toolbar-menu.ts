@@ -35,6 +35,12 @@ export class ToolbarMenuItem {
             icon: 'iconSettings',
             click: () => {eventBus.publish('OpenSetting', '');}
         })
+        menu.addItem({
+            label: '更新状态',
+            icon: 'iconRefresh',
+            click: () => {eventBus.publish('UpdateAll', '');}
+        })
+
         let rect = this.ele.getBoundingClientRect();
         menu.open({
             x: rect.left,

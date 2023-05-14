@@ -55,6 +55,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         // 等日记创建，完成了状态更新后再读取新的状态
         setTimeout(this.toolbar_item.updateDailyNoteStatus.bind(this), 2000);
 
+        eventBus.subscribe('UpdateAll', () => {this.updateAll()});
+
         let end = performance.now();
         info(`Onload, 耗时: ${end - start} ms`);
     }
