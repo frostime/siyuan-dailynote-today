@@ -2,7 +2,7 @@ name: Create package.zip 3
 on: 
   push: 
     tags:
-      - "*"
+      - "v*"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,23 +26,3 @@ jobs:
           pull-request-header: ':robot: A new release will be created'
           ## A JSON formatted String containing to override the outputted changelog sections
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"refactor","section":"Code Refactoring","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false},{"type":"perf","section":"Performance Improvements","hidden":false}]'
-
-      # Checkout
-      - uses: actions/checkout@master
-      - name: Archive Release
-        uses: thedoctor0/zip-release@0.7.1
-        with:
-          type: 'zip'
-          filename: 'package.zip'
-          exclusions: '*.git* /*node_modules/* .editorconfig'
-
-      - name: Upload Release
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          prerelease: false
-          artifactErrorsFailBuild: true
-          removeArtifacts: false
-          replacesArtifacts: false
-          artifacts: "package.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}
