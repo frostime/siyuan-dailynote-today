@@ -17,7 +17,7 @@ export class ToolbarMenuItem {
             // icon: 'iconCalendar',
             icon: iconDiary.icon1,
             title: i18n.Name,
-            position: 'left',
+            position: settings.get('IconPosition'),
             callback: () => { this.showMenu(); }
         })
         this.iconStatus = new Map();

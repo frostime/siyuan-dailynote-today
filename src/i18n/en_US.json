@@ -25,10 +25,10 @@
         },
         "position": {
             "title": "Icon Position",
-            "text": "",
+            "text": "Take effect after reloading",
             "options": {
-                "Left": "Topbar left",
-                "Right": "Topbar right"
+                "left": "Topbar left",
+                "right": "Topbar right"
             }
         }
     },

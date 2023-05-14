@@ -84,11 +84,11 @@
                 });
             }}
         >
-            <option value="Left"
-                >{contents.position.options["Left"]}</option
+            <option value="left"
+                >{contents.position.options["left"]}</option
             >
-            <option value="Right"
-                >{contents.position.options["Right"]}</option
+            <option value="right"
+                >{contents.position.options["right"]}</option
             >
         </select>
     </SettingItem>

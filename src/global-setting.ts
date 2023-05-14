@@ -8,8 +8,8 @@ import { eventBus } from './event-bus';
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
 type NotebookView = 'Selector' | 'Menu'
-type IconPosition = 'Left' | 'Right';
-type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'NotebookView' | 'DefaultNotebook' | 'SettingKey'
+type IconPosition = 'left' | 'right';
+type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'NotebookView' | 'DefaultNotebook' | 'SettingKey' | 'IconPosition';
 
 interface Item {
     key: SettingKey,
@@ -23,7 +23,7 @@ class SettingManager {
         NotebookSort: 'custom-sort' as NotebookSorting,
         NotebookView: 'Selector' as NotebookView,
         DefaultNotebook: '',
-        IconPosition: 'Left' as IconPosition
+        IconPosition: 'left' as IconPosition
     };
 
     constructor() {

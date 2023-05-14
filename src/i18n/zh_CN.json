@@ -25,10 +25,10 @@
         },
         "position": {
             "title": "图标位置",
-            "text": "",
+            "text": "下次重启后生效",
             "options": {
-                "Left": "顶栏左侧",
-                "Right": "顶栏右侧"
+                "left": "顶栏左侧",
+                "right": "顶栏右侧"
             }
         }
     },
