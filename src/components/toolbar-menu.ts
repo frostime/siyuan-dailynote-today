@@ -22,7 +22,25 @@ export class ToolbarMenuItem {
         })
         this.iconStatus = new Map();
 
+        //右键展开配置菜单
+        this.ele.addEventListener('contextmenu', this.contextMenu.bind(this));
+        //注册事件总线，以防 moveBlocks 完成后新的日记被创建，而状态没有更新
         eventBus.subscribe('moveBlocks', this.updateDailyNoteStatus.bind(this));
+    }
+
+    contextMenu(event: MouseEvent) {
+        let menu = new Menu("dntoday-config");
+        menu.addItem({
+            label: '设置',
+            icon: 'iconSettings',
+            click: () => {eventBus.publish('OpenSetting', '');}
+        })
+        let rect = this.ele.getBoundingClientRect();
+        menu.open({
+            x: rect.left,
+            y: rect.bottom,
+        })
+        event.stopPropagation();
     }
 
     showMenu() {
@@ -35,7 +53,7 @@ export class ToolbarMenuItem {
         }
         let rect = this.ele.getBoundingClientRect();
         menu.open({
-            x: rect.right,
+            x: rect.left,
             y: rect.bottom,
         });
         this.updateDailyNoteStatus();

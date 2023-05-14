@@ -9,6 +9,7 @@ import { info, setI18n } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
+import { eventBus } from './event-bus';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -76,6 +77,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 this.element.appendChild(div_setting);
             }
         });
+        eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
     }
 
     private initContextMenu() {
@@ -108,8 +110,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
                     text: "This is my custom tab",
                 },
                 fn: this.tab_setting
-            },
-            keepCursor: true
+            }
         });
     }
 
