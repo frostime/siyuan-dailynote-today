@@ -37,6 +37,7 @@
     "UpdateAll": "笔记本状态已更新",
     "InvalidDefaultNotebook": "非法的笔记本 ID, 请检查你的设置",
     "Menu": {
-        "Move": "移动到"
+        "Move": "移动到",
+        "NotLi": "不可以移动单独的列表项，请移动整个列表!"
     }
 }
