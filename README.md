@@ -1,5 +1,7 @@
 # 今日笔记
 
+> Beta 预览版，2.8.7 版本不一定能正常使用所有功能
+
 - 提交 Issue 请访问[Github](https://github.com/frostime/siyuan-dailynote-today)
 - 国内用户可访问[国内托管](https://gitcode.net/frostime/siyuan-plugin-daily-note)
 
@@ -43,7 +45,7 @@
 ![](asset/Setting.png)
 
 
-### 5. 移动块到今天的 Daily Note 中
+### 5. 移动块到今天的 Daily Note 中（2.8.7 版本不可用）
 
 ![](asset/MoveBlock.png)
 

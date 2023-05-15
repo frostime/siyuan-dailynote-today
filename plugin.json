@@ -2,8 +2,7 @@
   "name": "siyuan-dailynote-today",
   "author": "frostime",
   "displayName": {
-    "default": "今日笔记",
-    "zh_CN": "今日笔记",
+    "zh_CN": "今日笔记（Beta预览版）",
     "en_US": "Daily Note Today"
   },
   "url": "https://github.com/frostime/siyuan-dailynote-today",
@@ -13,7 +12,6 @@
     "en_US": "1. After starting siyuan-note, automatically open today's notes\n2. The toolbar provides a drop-down box to quickly view today's notes and open them\n3. atrl+right click to select the block, you can move the block to daily note under another notebook"
   },
   "readme": {
-    "default": "README.md",
     "zh_CN": "README.md",
     "en_US": "README-en.md"
   },
