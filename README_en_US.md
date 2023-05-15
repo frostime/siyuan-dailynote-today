@@ -46,7 +46,8 @@ This plugin is suitable for people who have multiple notebooks, allowing for qui
 - Choose a notebook to move the current block to the diary of the corresponding notebook for today.
 - Support moving the whole nested blocks.
 
-
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif)
+<!-- ![](asset/MoveBlocks.gif) -->
 
 
 ## FAQ
