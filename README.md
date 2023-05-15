@@ -1,6 +1,7 @@
 # 今日笔记
 
-> Beta 预览版，2.8.7 版本不一定能正常使用所有功能
+> Beta 预览版，用户开发者测试集市效果
+> 2.8.7 正式版本不能正常使用插件功能，请至少使用 v2.8.7.dev3 预览插件效果
 
 - 提交 Issue 请访问[Github](https://github.com/frostime/siyuan-dailynote-today)
 - 国内用户可访问[国内托管](https://gitcode.net/frostime/siyuan-plugin-daily-note)
@@ -11,7 +12,8 @@
 
 ### 1. 自动创建笔记
 
-![](asset/AutoOpen.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/AutoOpen.png)
+<!-- ![](asset/AutoOpen.png) -->
 
 - 启动插件时，自动创建/打开今天的笔记。
 - 插件的设置面板中可以手动指定默认笔记本的 ID
@@ -24,7 +26,8 @@
 
 ### 2. 左键点击图标，快速创建/打开今天的笔记
 
-![](asset/IconLeftClick.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconLeftClick.png)
+<!-- ![](asset/IconLeftClick.png) -->
 
 - 下拉框中按照笔记本顺序排列（见[FAQ](#q-笔记本的排序是如何确定的可以调整吗)），列出所有的笔记本
 - 点击笔记本，自动打开/创建今日的笔记
@@ -34,7 +37,8 @@
 
 ### 3. 右键点击图标，快速配置插件
 
-![](asset/IconRightClick.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconRightClick.png)
+<!-- ![](asset/IconRightClick.png) -->
 
 
 - 点击进入插件设置面板
@@ -42,12 +46,14 @@
 
 ### 4. 设置面板
 
-![](asset/Setting.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/Setting.png)
+<!-- ![](asset/Setting.png) -->
 
 
-### 5. 移动块到今天的 Daily Note 中（2.8.7 版本不可用）
+### 5. 移动块到今天的 Daily Note 中
 
-![](asset/MoveBlock.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlock.png)
+<!-- ![](asset/MoveBlock.png) -->
 
 - 选中块，「Alt+右键」，可以调出一个移动块的面板
 - 选择笔记本，可以把当前块移动到对应笔记本今天的日记下
@@ -82,7 +88,8 @@
 
     「自定义排序」之外所有的排序都算
 
-![](asset/文档树排序.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/文档树排序.png)
+<!-- ![](asset/文档树排序.png) -->
 
 
 #### 插件设置

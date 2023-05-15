@@ -37,16 +37,16 @@ module.exports = (env, argv) => {
             ],
         }));
         //把图片地址全部替换成国内的托管
-        plugins.push(new ReplaceInFileWebpackPlugin([
-            {
-                dir: 'dist',
-                files: ['README.md'],
-                rules: [{
-                    search: /\.?\/?asset/g,
-                    replace: 'https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset'
-                }]
-            }
-        ]));
+        // plugins.push(new ReplaceInFileWebpackPlugin([
+        //     {
+        //         dir: 'dist',
+        //         files: ['README.md'],
+        //         rules: [{
+        //             search: /\.?\/?asset/g,
+        //             replace: 'https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset'
+        //         }]
+        //     }
+        // ]));
         plugins.push(new ZipPlugin({
             filename: "package.zip",
             algorithm: "gzip",
