@@ -11,30 +11,20 @@ import * as serverApi from '../serverApi';
 export class ContextMenu {
 
     private observer: MutationObserver | null = null;
-    private ok: boolean = true;
+    private enable: boolean = true;
 
-    constructor() {
+    constructor(enable: boolean) {
+        this.enable = enable;
     }
 
     async bindMenuOnCurrentTabs() {
-        if (!this.ok) {
+        if (!this.enable) {
             return
         }
         let gutter: HTMLDivElement | null = document.querySelector(
             'div.protyle-gutters'
         );
         gutter?.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
-    }
-
-    /**
-     * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
-     */
-    async checkSysVerForMove() {
-        let version: string = await serverApi.version();
-        info(`当前版本 ${version}`);
-        let cmp = compareVersion(version, '2.8.8');
-        this.ok = cmp >= 0;
-        return this.ok;
     }
 
 

@@ -4,12 +4,13 @@
 import { isMobile, openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
-import { notify } from './func';
+import { notify, compareVersion } from './func';
 import { info, setI18n, i18n } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
 import { eventBus } from './event-bus';
+import * as serverApi from './serverApi';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -21,6 +22,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     menu: ContextMenu;
 
+    verFlag: boolean; //检查版本， 2.8.8 版本后才能完全解锁所有功能
 
     test() {
         notify('Test', 'info', 1500);
@@ -36,6 +38,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let start = performance.now();
         await notebooks.init();
+        await this.checkSysVer();
 
         //TODO 注册快捷键
         // this.registerCommand({
@@ -61,6 +64,19 @@ export default class DailyNoteTodayPlugin extends Plugin {
         info(`Onload, 耗时: ${end - start} ms`);
     }
 
+    /**
+     * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
+     */
+    private async checkSysVer() {
+        let version: string = await serverApi.version();
+        info(`当前版本 ${version}`);
+        let cmp = compareVersion(version, '2.8.8');
+        this.verFlag = cmp >= 0;
+        if (!this.verFlag) {
+            notify(`注意: 思源版本小于 2.8.8, 插件部分功能可能不可用`, 'info');
+        }
+    }
+
     private initSetting() {
         let div_setting: HTMLDivElement = document.createElement('div');
         this.component_setting = new Setting({
@@ -83,13 +99,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private async initContextMenu() {
-        this.menu = new ContextMenu();
-        let ok = await this.menu.checkSysVerForMove();
-        if (ok) {
+        this.menu = new ContextMenu(this.verFlag);
+        if (this.verFlag) {
             this.menu.bindMenuOnCurrentTabs();
             this.menu.addEditorTabObserver();
         } else {
-            notify(`${i18n.Name}: ${i18n.MoveMenu.VerIssue}`, 'info');
+            notify(`${i18n.MoveMenu.VerIssue}`, 'info');
         }
     }
 
