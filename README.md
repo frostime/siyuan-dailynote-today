@@ -61,6 +61,9 @@
 - 支持移动标题块下方所有内容
 
 
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif)
+<!-- ![](asset/MoveBlocks.gif) -->
+
 ## 常见问题
 
 
