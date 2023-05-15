@@ -94,7 +94,7 @@ export class ToolbarMenuItem {
                     if (notebook) {
                         openDiary(notebook);
                     } else {
-                        showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 2500, "error");
+                        showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
                         // openDiary(notebooks.get(0));
                     }
                 } else {
