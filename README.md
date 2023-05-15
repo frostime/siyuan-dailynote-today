@@ -1,6 +1,6 @@
 # 今日笔记
 
-> Beta 预览版，用户开发者测试集市效果
+> Beta 预览版，用户开发者测试集市效果\
 > 2.8.7 正式版本不能正常使用插件功能，请至少使用 v2.8.7.dev3 预览插件效果
 
 - 提交 Issue 请访问[Github](https://github.com/frostime/siyuan-dailynote-today)
