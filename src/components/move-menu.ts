@@ -11,16 +11,8 @@ import * as serverApi from '../serverApi';
 export class ContextMenu {
 
     private observer: MutationObserver | null = null;
-    private enable: boolean = true;
-
-    constructor(enable: boolean) {
-        this.enable = enable;
-    }
 
     async bindMenuOnCurrentTabs() {
-        if (!this.enable) {
-            return
-        }
         let gutter: HTMLDivElement | null = document.querySelector(
             'div.protyle-gutters'
         );
