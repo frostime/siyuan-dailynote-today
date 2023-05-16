@@ -46,7 +46,8 @@
     - 如果 ID 填写错误，则启动插件的时候会警告
     - 关于如何打开设置面板，请阅读文档后面的内容
 
-![](asset/DefaultNotebook.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/DefaultNotebook.png)
+<!-- ![](asset/DefaultNotebook.png) -->
 
 
 ### 2. 左键点击图标，快速创建/打开今天的笔记
@@ -69,7 +70,8 @@
 - 举个例子，当前我有四个笔记本，如果我点击下拉框中的按钮，会在打开对应笔记本下今天的日记。
 - Life 、 work、 Hobby 这三个笔记本前面有「√」，表示这三个笔记本下已经创建了日记。
 
-![](asset/IconMenu.png)
+![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconMenu.png)
+<!-- ![](asset/IconMenu.png) -->
 
 此时，如果我再点击「Academic Learn」，那么就会在这个笔记本下新创建一个日记，然后你再打开下拉框，就会发现这个笔记本前面也出现了一个「√」符号。
 
