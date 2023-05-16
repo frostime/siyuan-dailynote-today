@@ -8,18 +8,34 @@ import notebooks from "../global-notebooks";
 import { eventBus } from "../event-bus";
 import * as serverApi from '../serverApi';
 
+//右键菜单的监听器
+let gutterContextMenuEvent: EventListenerOrEventListenerObject;
+
 export class ContextMenu {
 
     private observer: MutationObserver | null = null;
 
-    async bindMenuOnCurrentTabs() {
+    constructor() {
+        gutterContextMenuEvent = (event: MouseEvent) => { this.gutterContextMenuEvent(event) }
+    }
+
+    bindMenuOnCurrentTabs() {
         //每个 Tab 标签页都绑定了一个 gutter
         let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
         info(`监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
         for (let g of gutters) {
-            g.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
+            info(`监听 Tab ${g.parentElement?.getAttribute('data-id')}`);
+            g.addEventListener('contextmenu', gutterContextMenuEvent);
         }
-        // gutter?.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
+    }
+
+    releaseMenuOnCurrentTabs() {
+        let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
+        info(`解除监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
+        for (let g of gutters) {
+            info(`解除对 ${g.parentElement?.getAttribute('data-id')} 的监听`);
+            g.removeEventListener('contextmenu', gutterContextMenuEvent);
+        }
     }
 
 
@@ -99,7 +115,7 @@ export class ContextMenu {
                 icon: 'iconMove',
                 submenu: this.createMenuItems(data_id),
             });
-            console.log(event);
+            // console.log(event);
             menu.open({
                 x: event.x,
                 y: event.y

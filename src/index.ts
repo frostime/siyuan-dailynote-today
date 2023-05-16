@@ -134,6 +134,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     onunload() {
         info('plugin unload')
+        this.menu.releaseMenuOnCurrentTabs();
         this.menu.removeEditorTabObserver();
         settings.save();
     }
