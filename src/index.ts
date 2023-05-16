@@ -22,8 +22,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     menu: ContextMenu;
 
-    verFlag: boolean; //检查版本， 2.8.8 版本后才能完全解锁所有功能
-
     test() {
         notify('Test', 'info', 1500);
     }
@@ -70,9 +68,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private async checkSysVer() {
         let version: string = await serverApi.version();
         info(`当前版本 ${version}`);
-        let cmp = compareVersion(version, '2.8.8');
-        this.verFlag = cmp >= 0;
-        if (!this.verFlag) {
+        let cmp = compareVersion(version, '2.8.8'); //检查版本， 2.8.8 版本后才能完全解锁所有功能
+        if (cmp < 0) {
             notify(`注意: 思源版本小于 2.8.8, 插件部分功能可能不可用`, 'info');
         }
     }
@@ -101,13 +98,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     private async initContextMenu() {
         info('initContextMenu');
-        this.menu = new ContextMenu(this.verFlag);
-        if (this.verFlag) {
-            this.menu.bindMenuOnCurrentTabs();
-            this.menu.addEditorTabObserver();
-        } else {
-            notify(`${i18n.MoveMenu.VerIssue}`, 'info');
-        }
+        this.menu = new ContextMenu();
+        this.menu.bindMenuOnCurrentTabs();
+        this.menu.addEditorTabObserver();
     }
 
     private initToolbarItem() {
@@ -141,6 +134,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     onunload() {
         info('plugin unload')
+        this.menu.releaseMenuOnCurrentTabs();
         this.menu.removeEditorTabObserver();
         settings.save();
     }
