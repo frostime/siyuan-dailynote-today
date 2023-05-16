@@ -13,17 +13,23 @@ export class ContextMenu {
     private observer: MutationObserver | null = null;
 
     async bindMenuOnCurrentTabs() {
-        let gutter: HTMLDivElement | null = document.querySelector(
-            'div.protyle-gutters'
-        );
-        gutter?.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
+        //每个 Tab 标签页都绑定了一个 gutter
+        let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
+        info(`监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
+        for (let g of gutters) {
+            g.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
+        }
+        // gutter?.addEventListener('contextmenu', this.gutterContextMenuEvent.bind(this));
     }
 
 
     addEditorTabObserver() {
+        info(`开始对 Tab 标签变化的监听`);
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;
         let gutterContextMenuEvent = (event: MouseEvent) => { this.gutterContextMenuEvent(event) };
         this.observer = new MutationObserver(function (mutationsList) {
+            info(`监听到标签页发生变化:`);
+            console.log(mutationsList);
             for (var mutation of mutationsList) {
                 if (mutation.type == 'childList' && mutation.addedNodes.length) {
                     for (let node of mutation.addedNodes) {
@@ -45,7 +51,7 @@ export class ContextMenu {
                         );
                         gutter?.removeEventListener('contextmenu', gutterContextMenuEvent);
                         let data_id = protyle.getAttribute('data-id');
-                        info(`Remove Listener: protyle-${data_id}`);
+                        info(`Del Listener: protyle-${data_id}`);
                     }
                 }
             }
@@ -61,6 +67,7 @@ export class ContextMenu {
     }
 
     removeEditorTabObserver() {
+        info(`解除对 Tab 标签变化的监听`);
         if (this.observer) {
             this.observer.disconnect();
         }
