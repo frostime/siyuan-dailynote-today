@@ -114,8 +114,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
         info('updateAll');
         await notebooks.update(); // 更新笔记本状态
         this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
-
-        this.menu.bindMenuOnCurrentTabs(); //TODO
+        this.menu.releaseMenuOnCurrentTabs();
+        this.menu.removeEditorTabObserver();
+        this.menu.bindMenuOnCurrentTabs();
+        this.menu.addEditorTabObserver();
         notify(this.i18n.UpdateAll, 'info', 2500);
     }
 
