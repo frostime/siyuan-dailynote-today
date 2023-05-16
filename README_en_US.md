@@ -1,11 +1,9 @@
 # Today's Note
 
-> Beta preview version for developers to test the bazaar effect\
-> 2.8.7 official version can not use this plugin function, please use at least v2.8.7.dev3 preview plugin effect
 
 **This plugin is mainly used for enhancement for daily note workflow in SiYuan.**
 
-> Due to my poor language skills and confusing wording, the words "diary", "notes" and "daily note" may be used interchangeably in the document, so don't worry, they all mean the same thing. \
+> The words "diary", "notes" and "daily note" may be used interchangeably in the document, so don't worry, they all mean the same thing. \
 > If not specified, "notes" means "today's diary".
 
 ## Do I need this plugin?
