@@ -16,6 +16,8 @@ interface Item {
     value: any
 }
 
+const ConfigFile = 'DailyNoteToday.json.txt';
+
 class SettingManager {
     plugin: Plugin;
     settings: any = {
@@ -55,8 +57,9 @@ class SettingManager {
      * 导入的时候，需要先加载设置；如果没有设置，则使用默认设置
      */
     async load() {
-        let loaded = await this?.plugin.loadData('DailyNoteToday.json');
-        info(`Read storage:`)
+        info(`Read storage: `);
+        let loaded = await this.plugin.loadData(ConfigFile);
+        info(`Read storage done: `);
         console.log(loaded);
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
@@ -64,6 +67,9 @@ class SettingManager {
             this.save();
         } else {
             //如果有配置文件，则使用配置文件
+            info(`读入配置文件: DailyNoteToday.json`)
+            loaded = JSON.parse(loaded);
+            console.log(loaded);
             try {
                 for (let key in loaded) {
                     this.set(key, loaded[key]);
@@ -76,10 +82,10 @@ class SettingManager {
         }
     }
 
-    save() {
+    async save() {
         let json = JSON.stringify(this.settings);
         info(`Write storage: ${json}`);
-        this.plugin.saveData('DailyNoteToday.json', json);
+        this.plugin.saveData(ConfigFile, json);
     }
 }
 

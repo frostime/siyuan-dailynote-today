@@ -78,6 +78,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initSetting() {
+        info('initSetting');
         let div_setting: HTMLDivElement = document.createElement('div');
         this.component_setting = new Setting({
             target: div_setting,
@@ -99,6 +100,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private async initContextMenu() {
+        info('initContextMenu');
         this.menu = new ContextMenu(this.verFlag);
         if (this.verFlag) {
             this.menu.bindMenuOnCurrentTabs();
@@ -109,6 +111,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initToolbarItem() {
+        info('initToolbarItem');
         this.toolbar_item = new ToolbarMenuItem(this);
         this.toolbar_item.updateDailyNoteStatus();
     }
