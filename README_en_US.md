@@ -61,6 +61,24 @@ Life, work, and Hobby have a "√" in front of them, which means that they have 
 
 At this point, if I click on "Academic Learn", then a new diary will be created under this notebook, and then you can open the drop-down box again and you will see that a √ symbol also appears in front of this notebook.
 
+#### 2.2 Update with date
+
+By default the plug-in will not automatically update when a new day arrives after 0:00 and the user can manually update the diary to ensure that the new day opens when the drop-down box is clicked.
+
+If this is too much trouble, you can also turn on the automatic update with date function in the settings.
+
+![](asset/SetUpToDate.png)
+
+When switched on, the plugin will automatically chime in with updates every time the clock strikes 0.
+
+![](asset/UpToDate.gif)
+
+> Note: Version 2.8.8 has a listener residual problem due to the inability to automatically release resources when the plugin is disabled, so it is not recommended to enable this feature in a later version. \
+> Of course, closing the software solves all the resource release problems, but it doesn't seem necessary to use this feature if you close the Notes software every night.
+
+[Issue#30](https://github.com/frostime/siyuan-dailynote-today/issues/30)
+
+
 
 ### 3. Right click the icon, quickly configuration.
 

@@ -72,6 +72,23 @@
 
 此时，如果我再点击「Academic Learn」，那么就会在这个笔记本下新创建一个日记，然后你再打开下拉框，就会发现这个笔记本前面也出现了一个「√」符号。
 
+#### 2.2 随日期更新
+
+当过 0 点来到新的一天的时候，默认情况下插件不会自动更新，用户可以自行手动更新保证下拉框点击后打开新一天的日记。
+
+如果嫌麻烦，也可以在设置中打开自动随日期更新的功能。
+
+![](asset/SetUpToDate.png)
+
+打开后，每当 0 点钟的时候，插件会自动报时更新。
+
+![](asset/UpToDate.gif)
+
+> 注意: 2.8.8 版本由于禁用插件的时候无法自动释放资源，存在监听器残留问题，所以不建议在改版本开启这个功能。\
+> 当然，关闭软件可解决一切资源释放的问题，但是如果你每天晚上都关闭笔记软件似乎也没必要用到这个功能。。。
+
+[Issue#30](https://github.com/frostime/siyuan-dailynote-today/issues/30)
+
 ### 3. 右键点击图标，快速配置插件
 
 ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconRightClick.png)
