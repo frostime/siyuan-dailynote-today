@@ -2,21 +2,21 @@
     "Name": "Daily Note Today",
     "Setting": {
         "name": "Setting",
-        "autoOpen": {
+        "OpenOnStart": {
             "title": "Open Today's Diary Automatically",
             "text": "Open Today's Diary automatically when the plugin is loaded"
         },
-        "defaultNotebook": {
+        "DefaultNotebook": {
             "title": "Default Notebook",
             "text": "The notebook where the daily note is created by default, use the first notebook if blank",
             "placeholder": "Please copy from notebook's ID"
         },
         "update": {
             "title": "Update Status",
-            "text": "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U",
+            "text": "Update the status of the notebook when the notebook configuration changes",
             "button": "Update"
         },
-        "sorting": {
+        "NotebookSort": {
             "title": "Notebook Sorting Scheme",
             "text": "1. Same what document tree shows 2. Same the order defined in custom sorting mode",
             "options": {
@@ -24,13 +24,17 @@
                 "custom-sort": "Same as custom sorting"
             }
         },
-        "position": {
+        "IconPosition": {
             "title": "Icon Position",
             "text": "Take effect after reloading",
             "options": {
                 "left": "Topbar left",
                 "right": "Topbar right"
             }
+        },
+        "DiaryUpToDate": {
+            "title": "Auto refresh diary's path as day passed",
+            "text": "When new day comes, the plugin will automatically update the dairy's path, take effect after reloading"
         }
     },
     "Open": "Open daily note",
@@ -41,5 +45,9 @@
         "Move": "Move to",
         "NotLi": "Only support moving entrie list, instead of signle list item!",
         "VerIssue": "Current version dose not support \"Move Blocks\" function (≥ 2.8.8))"
-    }
+    },
+    "NewDay": [
+        "Today is ",
+        "plugin up to date"
+    ]
 }

@@ -22,9 +22,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     menu: ContextMenu;
 
-    test() {
-        notify('Test', 'info', 1500);
-    }
+    upToDate: any = null;
 
     async onload() {
         info('plugin load');
@@ -50,6 +48,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initSetting();
         this.initContextMenu();
         this.initToolbarItem();
+        this.initUpToDate();
 
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         this.toolbar_item.autoOpenDailyNote();
@@ -109,6 +108,13 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.toolbar_item.updateDailyNoteStatus();
     }
 
+    private initUpToDate() {
+        this.upToDate = null;
+        if (settings.get('DiaryUpToDate')) {
+            this.startUpdateOnNextDay();
+        }
+    }
+
 
     private async updateAll() {
         info('updateAll');
@@ -134,11 +140,47 @@ export default class DailyNoteTodayPlugin extends Plugin {
         });
     }
 
+    /**
+     * 只要在运行，就每天 0 点更新一次
+     */
+    startUpdateOnNextDay() {
+
+        //当前时间，到明天 0 点的时间间隔
+        let now = new Date();
+        let tomorrow = new Date();
+        tomorrow.setDate(now.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+
+        //For test
+        // tomorrow.setDate(now.getDate());
+        // tomorrow.setMinutes(now.getMinutes() + 1, 0, 0);
+
+        let millisTill24 = tomorrow.getTime() - now.getTime();
+
+        //等 0 点的时候，就更新状态
+        this.upToDate = setTimeout(this.updateOnNewDay.bind(this), millisTill24);
+        info(`当前时间: ${now}, 下次更新时间: ${tomorrow}, ${millisTill24} ms 后更新`);
+    }
+
+    private async updateOnNewDay() {
+        await notebooks.update();
+        this.toolbar_item.updateDailyNoteStatus();
+        this.startUpdateOnNextDay();
+        let today = new Date();
+        today.toDateString();
+        let msg = `${this.i18n.NewDay[0]} ${today.toLocaleDateString()} ${this.i18n.NewDay[1]}`
+        notify(msg, 'info', 5000);
+    }
+
     onunload() {
         info('plugin unload')
         this.menu.releaseMenuOnCurrentTabs();
         this.menu.removeEditorTabObserver();
         settings.save();
+        if (this.upToDate) {
+            clearTimeout(this.upToDate);
+            this.upToDate = null;
+        }
     }
 }
 
