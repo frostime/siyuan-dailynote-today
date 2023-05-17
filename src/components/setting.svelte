@@ -28,6 +28,12 @@
         settingValue={checked}
     />
     <SettingItem
+        type="checkbox"
+        content={contents.DiaryUpToDate}
+        settingKey="DiaryUpToDate"
+        settingValue={settings.get("DiaryUpToDate")}
+    />
+    <SettingItem
         type="input"
         content={contents.DefaultNotebook}
         settingKey="DefaultNotebook"

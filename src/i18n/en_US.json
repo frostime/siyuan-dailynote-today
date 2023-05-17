@@ -31,6 +31,10 @@
                 "left": "Topbar left",
                 "right": "Topbar right"
             }
+        },
+        "DiaryUpToDate": {
+            "title": "Auto refresh diary's path as day passed",
+            "text": "When new day comes, the plugin will automatically update the dairy's path"
         }
     },
     "Open": "Open daily note",
