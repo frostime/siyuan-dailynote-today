@@ -34,7 +34,7 @@
         },
         "DiaryUpToDate": {
             "title": "Auto refresh diary's path as day passed",
-            "text": "When new day comes, the plugin will automatically update the dairy's path"
+            "text": "When new day comes, the plugin will automatically update the dairy's path, take effect after reloading"
         }
     },
     "Open": "Open daily note",
@@ -45,5 +45,9 @@
         "Move": "Move to",
         "NotLi": "Only support moving entrie list, instead of signle list item!",
         "VerIssue": "Current version dose not support \"Move Blocks\" function (≥ 2.8.8))"
-    }
+    },
+    "NewDay": [
+        "Today is ",
+        "plugin up to date"
+    ]
 }

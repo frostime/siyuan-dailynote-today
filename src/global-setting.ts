@@ -8,7 +8,7 @@ import { eventBus } from './event-bus';
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
 type IconPosition = 'left' | 'right';
-type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition';
+type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition' | 'DiaryUpToDate';
 
 interface Item {
     key: SettingKey,
