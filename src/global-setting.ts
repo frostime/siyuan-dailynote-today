@@ -7,9 +7,8 @@ import { eventBus } from './event-bus';
 
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
-type NotebookView = 'Selector' | 'Menu'
 type IconPosition = 'left' | 'right';
-type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'NotebookView' | 'DefaultNotebook' | 'SettingKey' | 'IconPosition';
+type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition';
 
 interface Item {
     key: SettingKey,
@@ -23,7 +22,6 @@ class SettingManager {
     settings: any = {
         OpenOnStart: true as boolean,
         NotebookSort: 'custom-sort' as NotebookSorting,
-        NotebookView: 'Selector' as NotebookView,
         DefaultNotebook: '',
         IconPosition: 'left' as IconPosition
     };

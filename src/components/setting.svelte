@@ -23,25 +23,25 @@
 <div class="config__tab-container">
     <SettingItem
         type="checkbox"
-        content={contents.autoOpen}
+        content={contents.OpenOnStart}
         settingKey="OpenOnStart"
         settingValue={checked}
     />
     <SettingItem
         type="input"
-        content={contents.defaultNotebook}
+        content={contents.DefaultNotebook}
         settingKey="DefaultNotebook"
         settingValue={defaultNotebook}
     />
     <SettingItem
         type="select"
-        content={contents.sorting}
+        content={contents.NotebookSort}
         settingKey="NotebookSort"
         settingValue={notebookSort}
     />
     <SettingItem
         type="select"
-        content={contents.position}
+        content={contents.IconPosition}
         settingKey="IconPosition"
         settingValue={iconPosition}
     />

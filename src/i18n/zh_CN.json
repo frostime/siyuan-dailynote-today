@@ -2,11 +2,11 @@
     "Name": "今日笔记",
     "Setting": {
         "name": "设置",
-        "autoOpen": {
+        "OpenOnStart": {
             "title": "自动打开 Daily Note",
             "text": "插件启动后自动打开今日的 Daily Note"
         },
-        "defaultNotebook": {
+        "DefaultNotebook": {
             "title": "设置默认笔记本 ID",
             "text": "设置默认的笔记本 ID，留空时表示选择排位第一的笔记本",
             "placeholder": "请复制笔记本 ID"
@@ -16,7 +16,7 @@
             "text": "在笔记本配置发生变化的时候更新其状态",
             "button": "更新"
         },
-        "sorting": {
+        "NotebookSort": {
             "title": "笔记本排序方案",
             "text": "1. 和当前文档树的显示保持一致 2. 和在自定义排序中的设置保持一致",
             "options": {
@@ -24,7 +24,7 @@
                 "custom-sort": "和自定义排序一致"
             }
         },
-        "position": {
+        "IconPosition": {
             "title": "图标位置",
             "text": "下次重启后生效",
             "options": {
