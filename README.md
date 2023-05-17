@@ -25,8 +25,8 @@
 
 ### 1. 启动的时候自动创建笔记
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/AutoOpen.png)
-<!-- ![](asset/AutoOpen.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/AutoOpen.png) -->
+![](asset/AutoOpen.png)
 
 - 启动插件时，自动创建/打开今天的笔记，实现类似 logseq 中的效果
 - 如果你不需要，可以在设置面板中关闭这一功能
@@ -43,14 +43,14 @@
     - 如果 ID 填写错误，则启动插件的时候会警告
     - 关于如何打开设置面板，请阅读文档后面的内容
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/DefaultNotebook.png)
-<!-- ![](asset/DefaultNotebook.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/DefaultNotebook.png) -->
+![](asset/DefaultNotebook.png)
 
 
 ### 2. 左键点击图标，快速创建/打开今天的笔记
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconLeftClick.png)
-<!-- ![](asset/IconLeftClick.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconLeftClick.png) -->
+![](asset/IconLeftClick.png)
 
 - 下拉框中按照笔记本顺序排列（见[常见问题 - 笔记本的排序是如何确定的](#q-笔记本的排序是如何确定的可以调整吗)），列出所有的笔记本
 - 点击笔记本，可以快速打开/创建今日的笔记
@@ -67,8 +67,8 @@
 - 举个例子，当前我有四个笔记本，如果我点击下拉框中的按钮，会在打开对应笔记本下今天的日记。
 - Life 、 work、 Hobby 这三个笔记本前面有「√」，表示这三个笔记本下已经创建了日记。
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconMenu.png)
-<!-- ![](asset/IconMenu.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconMenu.png) -->
+![](asset/IconMenu.png)
 
 此时，如果我再点击「Academic Learn」，那么就会在这个笔记本下新创建一个日记，然后你再打开下拉框，就会发现这个笔记本前面也出现了一个「√」符号。
 
@@ -90,8 +90,8 @@
 
 ### 3. 右键点击图标，快速配置插件
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconRightClick.png)
-<!-- ![](asset/IconRightClick.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconRightClick.png) -->
+![](asset/IconRightClick.png)
 
 
 - 点击进入插件设置面板
@@ -101,14 +101,14 @@
 
 ### 4. 设置面板
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/Setting.png)
-<!-- ![](asset/Setting.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/Setting.png) -->
+![](asset/Setting.png)
 
 
 ### 5. 移动块到今天的 Daily Note 中
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlock.png)
-<!-- ![](asset/MoveBlock.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlock.png) -->
+![](asset/MoveBlock.png)
 
 - 选中块左侧的图标，「Alt+右键」，可以调出一个移动块的面板
 - 选择笔记本，可以把当前块移动到对应笔记本今天的日记下
@@ -122,8 +122,8 @@
 - 把位于 Work 笔记本日记下的文档，移动到 Hobby 笔记本的日记下
 - 由于选择的是标题块，所以下方所有内容也一并移动了过去
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif)
-<!-- ![](asset/MoveBlocks.gif) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif) -->
+![](asset/MoveBlocks.gif)
 
 ## 常见问题
 
@@ -159,8 +159,8 @@
 
     「自定义排序」之外所有的排序都算
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/文档树排序.png)
-<!-- ![](asset/文档树排序.png) -->
+<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/文档树排序.png) -->
+![](asset/文档树排序.png)
 
 
 #### 插件设置
