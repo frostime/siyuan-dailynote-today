@@ -13,7 +13,7 @@
         },
         "update": {
             "title": "Update Status",
-            "text": "Update the status of the notebook when the notebook configuration changes, or use the registered shortcut Ctrl+Alt+U",
+            "text": "Update the status of the notebook when the notebook configuration changes",
             "button": "Update"
         },
         "sorting": {
