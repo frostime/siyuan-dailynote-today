@@ -9,7 +9,15 @@ import { eventBus } from './event-bus';
 type NotebookSorting = 'doc-tree' | 'custom-sort'
 type NotebookView = 'Selector' | 'Menu'
 type IconPosition = 'left' | 'right';
-type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'NotebookView' | 'DefaultNotebook' | 'SettingKey' | 'IconPosition';
+//disable: 不允许移动 listitem
+//item: 直接移动 listitem
+//list: 在文档中先创建一个新的 list，然后移动 listitem
+type MoveListItem= 'disabled' | 'item' | 'list';
+type SettingKey = (
+    'OpenOnStart' | 'NotebookSort' | 'NotebookView' |
+    'DefaultNotebook' | 'SettingKey' | 'IconPosition'|
+    'MoveListItem'
+);
 
 interface Item {
     key: SettingKey,
@@ -25,7 +33,8 @@ class SettingManager {
         NotebookSort: 'custom-sort' as NotebookSorting,
         NotebookView: 'Selector' as NotebookView,
         DefaultNotebook: '',
-        IconPosition: 'left' as IconPosition
+        IconPosition: 'left' as IconPosition,
+        MoveListItem: 'disabled' as MoveListItem
     };
 
     constructor() {
