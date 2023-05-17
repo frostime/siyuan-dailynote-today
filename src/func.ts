@@ -35,16 +35,18 @@ export async function moveBlocksToDoc(srcBlock: Block, docId: string) {
 export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
 
-    if (block.type === 'i') {
-        notify(i18n.MoveMenu.NotLi, 'error', 3000);
-        return
-    }
-
     if (block == null) {
         error(`Block ${srcBlockId} not found`);
         return;
     }
 
+    let moveLi = block.type === 'i';
+
+    // if (moveLi) {
+    //     notify(i18n.MoveMenu.NotLi, 'error', 3000);
+    // }
+
+    //获取目标文档的 id
     let todayDiaryPath = notebook.dailynotePath;
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let doc_id;
@@ -54,7 +56,17 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         doc_id = await createDiary(notebook, todayDiaryPath!);
         notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
-    moveBlocksToDoc(block, doc_id);
+
+    //移动块
+    if (moveLi) {
+        let ans = await serverApi.prependBlock(doc_id, '* \u{200b}', 'markdown');
+        let newListId = ans[0].doOperations[0].id;
+        // console.log(newListId);
+        moveBlocksToDoc(block, newListId);
+    } else {
+        moveBlocksToDoc(block, doc_id);
+    }
+    notify(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 'info', 2500);
 }
 
 
