@@ -50,7 +50,6 @@ export class ToolbarMenuItem {
     }
 
     showMenu() {
-        info('点击了今日日记按钮');
         // await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
         let menuItems = this.createMenuItems();
@@ -84,7 +83,7 @@ export class ToolbarMenuItem {
      * 初始化的时候，加载所有的笔记本
      */
     autoOpenDailyNote() {
-        info('Auto open daily note');
+        info('自动开启日记');
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
@@ -105,7 +104,6 @@ export class ToolbarMenuItem {
     }
 
     async updateDailyNoteStatus() {
-        info('Update daily note status');
         let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
         notebooks.notebooks.forEach((notebook) => {
             let status = diaryStatus.get(notebook.id);

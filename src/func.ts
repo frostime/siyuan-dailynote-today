@@ -104,8 +104,6 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             if (notebook.icon == "") {
                 notebook.icon = "1f5c3";
             }
-
-            info(`${notebook.name}: ${notebook.dailynoteSprig} - ${notebook.dailynotePath}`)
         }
 
         info(`Read all notebooks: ${all_notebook_names}`);
@@ -125,7 +123,6 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
  * 2. 对每种 hpath，调用 `await getDocsByHpath(todayDNHpath)`，查询是否存在对应的文件
  */
 export async function currentDiaryStatus() {
-    info('updateDiaryStatus');
     // let todayDiary = getTodayDiaryPath();
     //所有 hpath 的配置方案
     let hpath_set: Set<string> = new Set();
@@ -144,10 +141,9 @@ export async function currentDiaryStatus() {
                 diaryStatus.set(notebookId, true);
             });
             count_diary += notebook_with_diary.length;
-            info(`${todayDNHpath} 共 ${notebook_with_diary.length} 篇`)
         }
     }
-    info(`当前日记共 ${count_diary} 篇`);
+    info(`更新日记状态: 当前日记共 ${count_diary} 篇`);
     return diaryStatus;
 }
 
@@ -191,9 +187,8 @@ export async function getDocsByHpath(hpath: string, notebook: Notebook | null = 
 
 
 export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
-    info(`Try to create: ${notebook.name} ${todayDiaryHpath}`);
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
-    info(`Create new diary ${doc_id}`);
+    info(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
     return doc_id;
 }
 
@@ -204,7 +199,7 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  */
 export async function openDiary(notebook: Notebook) {
     let todayDiaryPath = notebook.dailynotePath;
-    info(`Open ${notebook.name}/${todayDiaryPath}`);
+    info(`打开日记 ${notebook.name}${todayDiaryPath}`);
     //queryNotebooks() 保证了 todayDiaryPath 不为 null
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
 

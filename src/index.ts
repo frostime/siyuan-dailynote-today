@@ -25,11 +25,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
     upToDate: any = null;
 
     async onload() {
-        info('plugin load');
-        console.log(this);
+        info('Plugin load');
+
         setI18n(this.i18n); //设置全局 i18n
 
-        info(`Start: ${new Date()}`);
         settings.setPlugin(this);
 
         let start = performance.now();
@@ -53,12 +52,14 @@ export default class DailyNoteTodayPlugin extends Plugin {
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         this.toolbar_item.autoOpenDailyNote();
         // 等日记创建，完成了状态更新后再读取新的状态
-        setTimeout(this.toolbar_item.updateDailyNoteStatus.bind(this), 2000);
+        setTimeout(
+            () => this.toolbar_item.updateDailyNoteStatus(), 2000
+        );
 
         eventBus.subscribe('UpdateAll', () => {this.updateAll()});
 
         let end = performance.now();
-        info(`Onload, 耗时: ${end - start} ms`);
+        info(`启动耗时: ${end - start} ms`);
     }
 
     /**
@@ -74,7 +75,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initSetting() {
-        info('initSetting');
         let div_setting: HTMLDivElement = document.createElement('div');
         this.component_setting = new Setting({
             target: div_setting,
@@ -96,14 +96,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private async initContextMenu() {
-        info('initContextMenu');
         this.menu = new ContextMenu();
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
     }
 
     private initToolbarItem() {
-        info('initToolbarItem');
         this.toolbar_item = new ToolbarMenuItem(this);
         this.toolbar_item.updateDailyNoteStatus();
     }
@@ -173,11 +171,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     onunload() {
-        info('plugin unload')
+        info('Plugin unload')
         this.menu.releaseMenuOnCurrentTabs();
         this.menu.removeEditorTabObserver();
         settings.save();
         if (this.upToDate) {
+            info(`清理定时器 ${this.upToDate}`);
             clearTimeout(this.upToDate);
             this.upToDate = null;
         }

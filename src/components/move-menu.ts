@@ -9,14 +9,14 @@ import { eventBus } from "../event-bus";
 import * as serverApi from '../serverApi';
 
 //右键菜单的监听器
-let gutterContextMenuEvent: EventListenerOrEventListenerObject;
+let gutterContextMenuEventObj: EventListenerOrEventListenerObject;
 
 export class ContextMenu {
 
     private observer: MutationObserver | null = null;
 
     constructor() {
-        gutterContextMenuEvent = (event: MouseEvent) => { this.gutterContextMenuEvent(event) }
+        gutterContextMenuEventObj = (event: MouseEvent) => { this.gutterContextMenuEvent(event) }
     }
 
     bindMenuOnCurrentTabs() {
@@ -24,8 +24,8 @@ export class ContextMenu {
         let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
         info(`监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
         for (let g of gutters) {
-            info(`监听 Tab ${g.parentElement?.getAttribute('data-id')}`);
-            g.addEventListener('contextmenu', gutterContextMenuEvent);
+            // info(`监听 Tab ${g.parentElement?.getAttribute('data-id')}`);
+            g.addEventListener('contextmenu', gutterContextMenuEventObj);
         }
     }
 
@@ -33,18 +33,16 @@ export class ContextMenu {
         let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
         info(`解除监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
         for (let g of gutters) {
-            info(`解除对 ${g.parentElement?.getAttribute('data-id')} 的监听`);
-            g.removeEventListener('contextmenu', gutterContextMenuEvent);
+            // info(`解除对 ${g.parentElement?.getAttribute('data-id')} 的监听`);
+            g.removeEventListener('contextmenu', gutterContextMenuEventObj);
         }
     }
 
 
     addEditorTabObserver() {
-        info(`开始对 Tab 标签变化的监听`);
+        // info(`开始对 Tab 标签变化的监听`);
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;
-        let gutterContextMenuEvent = (event: MouseEvent) => { this.gutterContextMenuEvent(event) };
         this.observer = new MutationObserver(function (mutationsList) {
-            info(`监听到标签页发生变化:`);
             console.log(mutationsList);
             for (var mutation of mutationsList) {
                 if (mutation.type == 'childList' && mutation.addedNodes.length) {
@@ -53,9 +51,9 @@ export class ContextMenu {
                         let gutter: HTMLDivElement | null = protyle.querySelector(
                             'div.protyle-gutters'
                         );
-                        gutter?.addEventListener('contextmenu', gutterContextMenuEvent);
+                        gutter?.addEventListener('contextmenu', gutterContextMenuEventObj);
                         let data_id = protyle.getAttribute('data-id');
-                        info(`Add Listener: protyle-${data_id}`);
+                        info(`标签页发生变化, Add Listener to protyle-${data_id}`);
                     }
                 }
                 if (mutation.type == 'childList' && mutation.removedNodes.length) {
@@ -65,9 +63,9 @@ export class ContextMenu {
                         let gutter: HTMLDivElement | null = protyle.querySelector(
                             'div.protyle-gutters'
                         );
-                        gutter?.removeEventListener('contextmenu', gutterContextMenuEvent);
+                        gutter?.removeEventListener('contextmenu', gutterContextMenuEventObj);
                         let data_id = protyle.getAttribute('data-id');
-                        info(`Del Listener: protyle-${data_id}`);
+                        info(`标签页发生变化 Del Listener of protyle-${data_id}`);
                     }
                 }
             }
@@ -83,8 +81,8 @@ export class ContextMenu {
     }
 
     removeEditorTabObserver() {
-        info(`停止对 Tab 标签变化的监听`);
         if (this.observer) {
+            info(`停止对 Tab 标签变化的监听`);
             this.observer.disconnect();
         }
     }
@@ -107,7 +105,7 @@ export class ContextMenu {
         let data_id = src_ele.getAttribute('data-node-id');
 
         if (data_id && event.altKey) {
-            info(`Contextemnu on: ${data_id}`);
+            // info(`Contextemnu on: ${data_id}`);
             let menu = new Menu('MoveMenu');
             menu.addItem({
                 label: i18n.MoveMenu.Move,
