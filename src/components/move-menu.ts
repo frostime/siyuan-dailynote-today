@@ -24,7 +24,7 @@ export class ContextMenu {
         let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
         info(`监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
         for (let g of gutters) {
-            info(`监听 Tab ${g.parentElement?.getAttribute('data-id')}`);
+            // info(`监听 Tab ${g.parentElement?.getAttribute('data-id')}`);
             g.addEventListener('contextmenu', gutterContextMenuEvent);
         }
     }
@@ -33,14 +33,14 @@ export class ContextMenu {
         let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
         info(`解除监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
         for (let g of gutters) {
-            info(`解除对 ${g.parentElement?.getAttribute('data-id')} 的监听`);
+            // info(`解除对 ${g.parentElement?.getAttribute('data-id')} 的监听`);
             g.removeEventListener('contextmenu', gutterContextMenuEvent);
         }
     }
 
 
     addEditorTabObserver() {
-        info(`开始对 Tab 标签变化的监听`);
+        // info(`开始对 Tab 标签变化的监听`);
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;
         let gutterContextMenuEvent = (event: MouseEvent) => { this.gutterContextMenuEvent(event) };
         this.observer = new MutationObserver(function (mutationsList) {
@@ -83,7 +83,7 @@ export class ContextMenu {
     }
 
     removeEditorTabObserver() {
-        info(`停止对 Tab 标签变化的监听`);
+        // info(`停止对 Tab 标签变化的监听`);
         if (this.observer) {
             this.observer.disconnect();
         }
@@ -107,7 +107,7 @@ export class ContextMenu {
         let data_id = src_ele.getAttribute('data-node-id');
 
         if (data_id && event.altKey) {
-            info(`Contextemnu on: ${data_id}`);
+            // info(`Contextemnu on: ${data_id}`);
             let menu = new Menu('MoveMenu');
             menu.addItem({
                 label: i18n.MoveMenu.Move,
