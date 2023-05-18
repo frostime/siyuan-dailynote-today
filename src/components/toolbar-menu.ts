@@ -104,7 +104,6 @@ export class ToolbarMenuItem {
     }
 
     async updateDailyNoteStatus() {
-        info('更新日记状态');
         let diaryStatus: Map<string, boolean> = await currentDiaryStatus();
         notebooks.notebooks.forEach((notebook) => {
             let status = diaryStatus.get(notebook.id);

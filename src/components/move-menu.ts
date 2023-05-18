@@ -83,7 +83,7 @@ export class ContextMenu {
     }
 
     removeEditorTabObserver() {
-        // info(`停止对 Tab 标签变化的监听`);
+        info(`停止对 Tab 标签变化的监听`);
         if (this.observer) {
             this.observer.disconnect();
         }
