@@ -5,7 +5,7 @@ import fs from 'fs';
 
 //Please write the "workspace/data/plugins" directory here
 //请在这里填写你的 "workspace/data/plugins" 目录
-const targetDir = '';
+const targetDir = 'H:\\临时文件夹\\SiYuanDevSpace\\data\\plugins';
 //Like this
 // const targetDir = `H:\\SiYuanDevSpace\\data\\plugins`;
 //********************************************************************************************
