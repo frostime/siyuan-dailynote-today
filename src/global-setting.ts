@@ -22,7 +22,7 @@ class SettingManager {
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
         DiaryUpToDate: false as boolean, //自动更新日记的日期
-        NotebookSort: 'custom-sort' as NotebookSorting, //笔记本排序方式
+        NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition //图标放置位置
     };
