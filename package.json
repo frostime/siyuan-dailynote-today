@@ -10,7 +10,8 @@
   "scripts": {
     "make-link": "node ./scripts/make_dev_link.js",
     "dev": "vite build --watch",
-    "build": "vite build"
+    "build": "vite build",
+    "git prune": "git remote prune origin"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
