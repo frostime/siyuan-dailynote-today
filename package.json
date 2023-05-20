@@ -6,6 +6,7 @@
   "keywords": [],
   "author": "frostime",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "make-link": "node ./scripts/make_dev_link.js",
     "dev": "vite build --watch",
