@@ -8,7 +8,7 @@
         },
         "DefaultNotebook": {
             "title": "设置默认笔记本 ID",
-            "text": "设置默认的笔记本 ID，留空时表示选择排位第一的笔记本",
+            "text": "设置默认的笔记本 ID, 留空时表示选择排位第一的笔记本",
             "placeholder": "请复制笔记本 ID"
         },
         "update": {

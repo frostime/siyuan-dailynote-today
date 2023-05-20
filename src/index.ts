@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { isMobile, openTab, Plugin } from 'siyuan';
+import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify, compareVersion } from './func';
-import { info, setI18n, i18n } from './utils';
+import { info, setI18n } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
