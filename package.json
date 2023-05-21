@@ -11,7 +11,7 @@
     "make-link": "node ./scripts/make_dev_link.js",
     "dev": "vite build --watch",
     "build": "vite build",
-    "git-reset-dev": "git remote prune origin && git branch dev -f master"
+    "git-reset-dev": "git remote prune origin && git branch dev -f main"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
