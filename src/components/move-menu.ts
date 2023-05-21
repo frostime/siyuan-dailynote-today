@@ -2,11 +2,10 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Menu } from "siyuan";
-import { moveBlocksToDailyNote, compareVersion } from "../func";
+import { moveBlocksToDailyNote } from "../func";
 import { i18n, info } from "../utils";
 import notebooks from "../global-notebooks";
 import { eventBus } from "../event-bus";
-import * as serverApi from '../serverApi';
 
 //右键菜单的监听器
 let gutterContextMenuEventObj: EventListenerOrEventListenerObject;
