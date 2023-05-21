@@ -35,7 +35,7 @@ export async function createDocWithMd(notebookId: string, path: string, markdown
 }
 
 export async function createDailyNote(notebookId: string, app: string) {
-    let url = '/api/notebook/createDailyNote';
+    let url = '/api/filetree/createDailyNote';
     return request(url, { notebook: notebookId, app: app });
 }
 

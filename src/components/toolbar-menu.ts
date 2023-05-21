@@ -82,7 +82,7 @@ export class ToolbarMenuItem {
     /**
      * 初始化的时候，加载所有的笔记本
      */
-    autoOpenDailyNote() {
+    async autoOpenDailyNote() {
         info('自动开启日记');
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
