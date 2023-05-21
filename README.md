@@ -4,7 +4,7 @@
 
 - 提交 Issue 请访问[Github](https://github.com/frostime/siyuan-dailynote-today)
 - 上不了 Github 可访问[国内托管](https://gitcode.net/frostime/siyuan-plugin-daily-note)
-- **如果使用的过程中有问题，请先阅读 [常见问题](#常见问题) 一节；本文档写得非常详细；如果还有问题，再来提 Issue**
+- **如果使用的过程中有问题，可以先阅读 [常见问题](#常见问题) 一节；如果还有问题，再到 Github 上提 Issue**
 - 有问题尽量在 Github 或 Gitcode 上提，在群里问我不一定看得见
 
 > 本文措辞混乱，文档中「日记」「笔记」「daily note」几个词可能会交替使用，不用在意，他们都表示一个含义.\
