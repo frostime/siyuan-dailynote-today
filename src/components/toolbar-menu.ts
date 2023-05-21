@@ -5,6 +5,7 @@ import { settings } from "../global-setting";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
+import { Notebook } from "../types";
 
 export class ToolbarMenuItem {
     plugin: Plugin;
@@ -49,8 +50,8 @@ export class ToolbarMenuItem {
         event.stopPropagation();
     }
 
-    showMenu() {
-        // await this.updateDailyNoteStatus();
+    async showMenu() {
+        await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
         let menuItems = this.createMenuItems();
         for (let item of menuItems) {
@@ -61,7 +62,7 @@ export class ToolbarMenuItem {
             x: rect.left,
             y: rect.bottom,
         });
-        this.updateDailyNoteStatus();
+        // this.updateDailyNoteStatus();
     }
 
     createMenuItems() {
@@ -70,9 +71,7 @@ export class ToolbarMenuItem {
             let item: IMenuItemOption = {
                 label: notebook.name,
                 icon: this.iconStatus.get(notebook.id),
-                click: (ele) => {
-                    openDiary(notebook);
-                }
+                click: async (ele) => openDiary(notebook),
             }
             menuItems.push(item);
         }
