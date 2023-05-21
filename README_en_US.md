@@ -24,6 +24,7 @@
 
 - When you start the plugin, it automatically creates/opens today's daily note, achieving a similar effect as in logseq
 - If you don't need it, you can turn off this feature in the settings panel
+- The custom paths and templates set in the notebook settings page are still valid
 
 #### 1.1 I have multiple notebooks, which notebook will be used to create notes by default?
 
@@ -47,6 +48,7 @@
 - Click on a notebook to open/create today's note.
 - If there is a "√" flag before a notebook option, it means that diary has already been created for that notebook.
 - Ignore "SiYuan User Guide" notebook by default.
+- The custom paths and templates set in the notebook settings page are still valid
 
 > - **Note: Don't misunderstand**, this drop-down box is not for selecting the default notebook, but for opening the diary quickly!
 > - You can totally interpret this as moving the "Create Diary" menu that comes with Siyuan to the top level and adding a diary status display.
