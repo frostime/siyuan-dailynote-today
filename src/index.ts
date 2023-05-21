@@ -54,9 +54,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         await this.toolbar_item.autoOpenDailyNote();
-        console.log('autoOpenDailyNote done');
-        await this.toolbar_item.updateDailyNoteStatus();
-        console.log('updateDailyNoteStatus done');
 
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);

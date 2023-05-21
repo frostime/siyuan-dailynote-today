@@ -62,7 +62,7 @@ export class ToolbarMenuItem {
             x: rect.left,
             y: rect.bottom,
         });
-        this.updateDailyNoteStatus(); //这个不能删, 就算只是打开 menu 没有点击也是需要更新一下的
+        // this.updateDailyNoteStatus();
     }
 
     createMenuItems() {
@@ -71,17 +71,11 @@ export class ToolbarMenuItem {
             let item: IMenuItemOption = {
                 label: notebook.name,
                 icon: this.iconStatus.get(notebook.id),
-                click: async (ele) => this.openDiary(notebook),
+                click: async (ele) => openDiary(notebook),
             }
             menuItems.push(item);
         }
         return menuItems;
-    }
-
-    private async openDiary(notebook: Notebook) {
-        await openDiary(notebook);
-        // await this.updateDailyNoteStatus();
-        // console.log('Click & Update');
     }
 
     /**
