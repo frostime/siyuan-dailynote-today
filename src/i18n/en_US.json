@@ -34,7 +34,7 @@
         },
         "DiaryUpToDate": {
             "title": "Auto refresh diary's path as day passed",
-            "text": "When new day comes, the plugin will automatically update the dairy's path, take effect after reloading"
+            "text": "When new day comes, the plugin will automatically update the status"
         }
     },
     "Open": "Open daily note",

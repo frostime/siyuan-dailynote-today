@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { isMobile, openTab, Plugin } from 'siyuan';
+import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify, compareVersion } from './func';
-import { info, setI18n, i18n } from './utils';
+import { info, setI18n } from './utils';
 import { settings } from './global-setting';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
@@ -15,6 +15,7 @@ import * as serverApi from './serverApi';
 
 export default class DailyNoteTodayPlugin extends Plugin {
 
+    app: any;
     toolbar_item: ToolbarMenuItem;
 
     component_setting: Setting;
@@ -49,14 +50,15 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initToolbarItem();
         this.initUpToDate();
 
+        eventBus.subscribe('UpdateAll', () => {this.updateAll()});
+
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
-        this.toolbar_item.autoOpenDailyNote();
+        await this.toolbar_item.autoOpenDailyNote();
         // 等日记创建，完成了状态更新后再读取新的状态
         setTimeout(
-            () => this.toolbar_item.updateDailyNoteStatus(), 2000
+            () => this.toolbar_item.updateDailyNoteStatus(), 1000
         );
 
-        eventBus.subscribe('UpdateAll', () => {this.updateAll()});
 
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);

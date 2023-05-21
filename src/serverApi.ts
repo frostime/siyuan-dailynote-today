@@ -10,39 +10,6 @@ async function request(url: string, data: any) {
     return res;
 }
 
-function parseBody(body: any) {
-    return body;
-}
-
-async function test() {
-    let notebooks = await lsNotebooks();
-    console.log(notebooks);
-    let notebookId = notebooks?.notebooks[0].id;
-    try {
-        let notebookConf = await getNotebookConf('20220305173526-4yjl33h');
-        console.log(notebookConf);
-    } catch (err) {
-        console.log(err);
-    }
-    try {
-        let block = await getBlockByID('20220316145830-u0u6srg');
-        console.log(block);
-    } catch (err) {
-        console.log(err);
-    }
-    try {
-        let block = await renderSprig('/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}');
-        console.log(block);
-    } catch (err) {
-        console.log(err);
-    }
-    // try {
-    //     await moveBlock('20230512192002-q5ekmhh', '20230512192017-eyc4dyb', null);
-    // } catch (err) {
-    //     console.log(err);
-    // }
-
-}
 
 export async function sql(sql: string) {
     let sqldata = {
@@ -65,6 +32,11 @@ export async function createDocWithMd(notebookId: string, path: string, markdown
     };
     let url = '/api/filetree/createDocWithMd';
     return request(url, data);
+}
+
+export async function createDailyNote(notebookId: string, app: string) {
+    let url = '/api/filetree/createDailyNote';
+    return request(url, { notebook: notebookId, app: app });
 }
 
 export async function getNotebookConf(notebookId: string) {

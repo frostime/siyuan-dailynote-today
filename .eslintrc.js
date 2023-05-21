@@ -1,25 +1,38 @@
 module.exports = {
-    root: true,
-    env: {node: true, browser: true, es6: true},
-    parser: "@typescript-eslint/parser",
-    plugins: [
-        "@typescript-eslint",
-    ],
     extends: [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:svelte/recommended",
+      "turbo",
+      "prettier",
     ],
+  
+    parser: "@typescript-eslint/parser",
+  
+    overrides: [
+      {
+        files: ["*.svelte"],
+        parser: "svelte-eslint-parser",
+        // Parse the script in `.svelte` as TypeScript by adding the following configuration.
+        parserOptions: {
+          parser: "@typescript-eslint/parser",
+        },
+      },
+    ],
+  
+    plugins: ["@typescript-eslint", "prettier"],
+  
     rules: {
-        semi: [2, "always"],
-        quotes: [2, "double", {"avoidEscape": true}],
-        "no-async-promise-executor": "off",
-        "no-prototype-builtins": "off",
-        "no-useless-escape": "off",
-        "no-irregular-whitespace": "off",
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-var-requires": "off",
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off",
-        "@typescript-eslint/no-explicit-any": "off",
+      // Note: you must disable the base rule as it can report incorrect errors
+      semi: "off",
+      quotes: "off",
+      "no-undef": "off",
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-this-alias": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "turbo/no-undeclared-env-vars": "off",
+      "prettier/prettier": "error",
     },
-};
+  }

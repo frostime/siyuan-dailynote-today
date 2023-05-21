@@ -55,6 +55,7 @@
         type="button"
         content={contents.update}
         settingKey="Update"
+        settingValue={""}
         on:click={onClick}
     />
 </div>

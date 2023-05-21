@@ -198,21 +198,23 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    let todayDiaryPath = notebook.dailynotePath;
-    info(`打开日记 ${notebook.name}${todayDiaryPath}`);
-    //queryNotebooks() 保证了 todayDiaryPath 不为 null
-    let docs = await getDocsByHpath(todayDiaryPath!, notebook);
+    // let todayDiaryPath = notebook.dailynotePath;
+    // info(`打开日记 ${notebook.name}${todayDiaryPath}`);
+    // let docs = await getDocsByHpath(todayDiaryPath!, notebook);
 
-    if (docs != null && docs.length > 0) {
-        let doc = docs[0];
-        let id = doc.id;
-        window.open(`siyuan://blocks/${id}`);
-        notify(`${i18n.Open}： ${notebook.name}`, 'info', 2500);
-    } else {
-        let id = await createDiary(notebook, todayDiaryPath!);
-        window.open(`siyuan://blocks/${id}`);
-        notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
-    }
+    await serverApi.createDailyNote(notebook.id, "");
+    notify(`${i18n.Open}: ${notebook.name}`, 'info', 2000);
+
+    // if (docs != null && docs.length > 0) {
+    //     let doc = docs[0];
+    //     let id = doc.id;
+    //     window.open(`siyuan://blocks/${id}`);
+    //     notify(`${i18n.Open}： ${notebook.name}`, 'info', 2500);
+    // } else {
+    //     let id = await createDiary(notebook, todayDiaryPath!);
+    //     window.open(`siyuan://blocks/${id}`);
+    //     notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
+    // }
 }
 
 export function compareVersion(v1Str: string, v2Str: string) {
