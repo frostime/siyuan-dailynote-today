@@ -43,7 +43,7 @@ class SettingManager {
     }
 
     set(key: any, value: any) {
-        info(`Setting update: ${key} = ${value}`)
+        // info(`Setting update: ${key} = ${value}`)
         if (!(key in this.settings)) {
             error(`"${key}" is not a setting`);
             return;
