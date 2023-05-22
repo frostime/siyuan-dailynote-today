@@ -72,3 +72,16 @@ export async function renderSprig(sprig: string) {
 export async function version(): Promise<string> {
     return request('/api/system/version', {});
 }
+
+export async function getFile(path: string): Promise<any> {
+    let data = {
+        path: path
+    }
+    let url = '/api/file/getFile';
+    try {
+        let file = await fetchSyncPost(url, data);
+        return file;
+    } catch (error_msg) {
+        return null;
+    }
+}

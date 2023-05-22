@@ -5,8 +5,8 @@ import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify, compareVersion } from './func';
-import { info, setI18n } from './utils';
-import { settings } from './global-setting';
+import { error, info, setI18n } from './utils';
+import { settings } from './global-status';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
 import { eventBus } from './event-bus';
@@ -15,7 +15,6 @@ import * as serverApi from './serverApi';
 
 export default class DailyNoteTodayPlugin extends Plugin {
 
-    app: any;
     toolbar_item: ToolbarMenuItem;
 
     component_setting: Setting;
@@ -45,6 +44,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         // });
 
         await settings.load();
+        this.checkPluginVersion();
+
         this.initSetting();
         this.initContextMenu();
         this.initToolbarItem();
@@ -120,6 +121,25 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
         notify(this.i18n.UpdateAll, 'info', 2500);
+    }
+
+    private async checkPluginVersion() {
+        try {
+            let plugin_file = await serverApi.getFile('/data/plugins/siyuan-dailynote-today/plugin.json');
+            if (plugin_file === null) {
+                return;
+            }
+            let version = plugin_file.version;
+            info(`插件版本: ${version}`);
+
+            if (version !== settings.get('PluginVersion')) {
+                settings.set('PluginVersion', version);
+                notify(`${this.i18n.Name}${this.i18n.NewVer}: v${version}`, 'info', 1500);
+                settings.save();
+            }
+        } catch (error_msg) {
+            error(`Setting load error: ${error_msg}`);
+        }
     }
 
     openSetting(): void {

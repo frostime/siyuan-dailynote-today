@@ -1,7 +1,7 @@
 import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
-import { settings } from "../global-setting";
+import { settings } from "../global-status";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";

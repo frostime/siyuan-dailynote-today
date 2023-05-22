@@ -2,7 +2,7 @@
  * Copyright (c) 2023 frostime all rights reserved.
  */
 import { showMessage } from 'siyuan';
-import { settings } from './global-setting';
+import { settings } from './global-status';
 import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
