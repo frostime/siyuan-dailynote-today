@@ -4,12 +4,14 @@
 import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 import { eventBus } from './event-bus';
-import * as serverApi from './serverApi';
 
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
 type IconPosition = 'left' | 'right';
-type SettingKey = 'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition' | 'DiaryUpToDate';
+type SettingKey = (
+    'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition' |
+    'DiaryUpToDate' | 'PluginVersion'
+);
 
 interface Item {
     key: SettingKey,
@@ -21,7 +23,6 @@ const SettingFile = 'DailyNoteToday.json.txt';
 class SettingManager {
     plugin: Plugin;
 
-    realVersion: string = '';
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
         DiaryUpToDate: false as boolean, //自动更新日记的日期
@@ -60,7 +61,6 @@ class SettingManager {
      * 导入的时候，需要先加载设置；如果没有设置，则使用默认设置
      */
     async load() {
-        this.loadVersion();
         let loaded = await this.plugin.loadData(SettingFile);
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
@@ -79,20 +79,6 @@ class SettingManager {
                 error(`Setting load error: ${error_msg}`);
             }
             this.save();
-        }
-    }
-
-    async loadVersion() {
-        try {
-            let plugin_file = await serverApi.getFile('/data/plugins/siyuan-dailynote-today/plugin.json');
-            if (plugin_file === null) {
-                return;
-            }
-            let version = plugin_file.version;
-            info(`插件版本: ${version}`);
-            this.realVersion = version;
-        } catch (error_msg) {
-            error(`Setting load error: ${error_msg}`);
         }
     }
 

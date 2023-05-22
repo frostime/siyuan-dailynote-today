@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { openTab, Plugin } from 'siyuan';
+import { openTab, Plugin, showMessage } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify, compareVersion } from './func';
-import { info, setI18n } from './utils';
+import { error, info, setI18n } from './utils';
 import { settings } from './global-status';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
@@ -44,6 +44,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         // });
 
         await settings.load();
+        this.checkPluginVersion();
+
         this.initSetting();
         this.initContextMenu();
         this.initToolbarItem();
@@ -119,6 +121,24 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
         notify(this.i18n.UpdateAll, 'info', 2500);
+    }
+
+    private async checkPluginVersion() {
+        try {
+            let plugin_file = await serverApi.getFile('/data/plugins/siyuan-dailynote-today/plugin.json');
+            if (plugin_file === null) {
+                return;
+            }
+            let version = plugin_file.version;
+            info(`插件版本: ${version}`);
+
+            if (version !== settings.get('PluginVersion')) {
+                settings.set('PluginVersion', version);
+                notify(`${this.i18n.Name}: v${version}`, 'info', 1500);
+            }
+        } catch (error_msg) {
+            error(`Setting load error: ${error_msg}`);
+        }
     }
 
     openSetting(): void {
