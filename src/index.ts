@@ -6,7 +6,7 @@ import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify, compareVersion } from './func';
 import { info, setI18n } from './utils';
-import { settings } from './global-setting';
+import { settings } from './global-status';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
 import { eventBus } from './event-bus';

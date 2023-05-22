@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher, onDestroy } from "svelte";
-    import { settings } from "../global-setting";
+    import { settings } from "../global-status";
     import SettingItem from "./setting-item.svelte";
     let checked = settings.get("OpenOnStart");
     let notebookSort = settings.get("NotebookSort");
