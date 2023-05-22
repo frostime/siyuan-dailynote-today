@@ -56,6 +56,7 @@ class SettingManager {
      * 导入的时候，需要先加载设置；如果没有设置，则使用默认设置
      */
     async load() {
+        this.loadVersion();
         let loaded = await this.plugin.loadData(SettingFile);
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
@@ -74,6 +75,14 @@ class SettingManager {
                 error(`Setting load error: ${error_msg}`);
             }
             this.save();
+        }
+    }
+
+    async loadVersion() {
+        try {
+            
+        } catch (error_msg) {
+            error(`Setting load error: ${error_msg}`);
         }
     }
 
