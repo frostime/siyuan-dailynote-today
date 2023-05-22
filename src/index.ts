@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { openTab, Plugin, showMessage } from 'siyuan';
+import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { notify, compareVersion } from './func';
