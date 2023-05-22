@@ -134,7 +134,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
             if (version !== settings.get('PluginVersion')) {
                 settings.set('PluginVersion', version);
-                notify(`${this.i18n.Name}: v${version}`, 'info', 1500);
+                notify(`${this.i18n.Name} ${this.i18n.NewVer}: v${version}`, 'info', 1500);
+                settings.save();
             }
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
