@@ -4,6 +4,7 @@
 import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 import { eventBus } from './event-bus';
+import * as serverApi from './serverApi';
 
 
 type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -19,12 +20,15 @@ const SettingFile = 'DailyNoteToday.json.txt';
 
 class SettingManager {
     plugin: Plugin;
+
+    realVersion: string = '';
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
         DiaryUpToDate: false as boolean, //自动更新日记的日期
         NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
         DefaultNotebook: '', //默认笔记本的 ID
-        IconPosition: 'left' as IconPosition //图标放置位置
+        IconPosition: 'left' as IconPosition, //图标放置位置
+        PluginVersion: ''
     };
 
     constructor() {
@@ -80,7 +84,13 @@ class SettingManager {
 
     async loadVersion() {
         try {
-            
+            let plugin_file = await serverApi.getFile('/data/plugins/siyuan-dailynote-today/plugin.json');
+            if (plugin_file === null) {
+                return;
+            }
+            let version = plugin_file.version;
+            info(`插件版本: ${version}`);
+            this.realVersion = version;
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
         }

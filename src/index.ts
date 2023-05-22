@@ -15,7 +15,6 @@ import * as serverApi from './serverApi';
 
 export default class DailyNoteTodayPlugin extends Plugin {
 
-    app: any;
     toolbar_item: ToolbarMenuItem;
 
     component_setting: Setting;
