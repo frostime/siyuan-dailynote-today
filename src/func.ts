@@ -55,6 +55,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
     moveBlocksToDoc(block, doc_id);
+    notify(`${i18n.MoveMenu.Move}: ${notebook.name}`, 'info', 1500);
 }
 
 

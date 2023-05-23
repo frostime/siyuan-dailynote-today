@@ -4,6 +4,7 @@
 import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
+import { GutterMenu } from './components/gutter-menu';
 import { notify, compareVersion } from './func';
 import { error, info, setI18n } from './utils';
 import { settings } from './global-status';
@@ -23,6 +24,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
     menu: ContextMenu;
 
     upToDate: any = null;
+
+    enableBlockIconClickEvent: boolean = false;
+    gutterMenu: GutterMenu;
 
     async onload() {
         info('Plugin load');
@@ -70,6 +74,11 @@ export default class DailyNoteTodayPlugin extends Plugin {
         if (cmp < 0) {
             notify(`注意: 思源版本小于 2.8.8, 插件部分功能可能不可用`, 'info');
         }
+        cmp = compareVersion(version, '2.8.9');
+        if (cmp >= 0) {
+            //使用 click-blockicon
+            this.initBlockIconClickEvent();
+        }
     }
 
     private initSetting() {
@@ -109,6 +118,11 @@ export default class DailyNoteTodayPlugin extends Plugin {
         if (settings.get('DiaryUpToDate')) {
             this.startUpdateOnNextDay();
         }
+    }
+
+    private initBlockIconClickEvent() {
+        this.enableBlockIconClickEvent = true;
+        this.gutterMenu = new GutterMenu(this.eventBus);
     }
 
 
@@ -196,6 +210,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
             info(`清理定时器 ${this.upToDate}`);
             clearTimeout(this.upToDate);
             this.upToDate = null;
+        }
+        if (this.enableBlockIconClickEvent) {
+            this.gutterMenu.release();
         }
     }
 }
