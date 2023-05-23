@@ -17,6 +17,8 @@ import { showChangeLog } from './changelog';
 
 export default class DailyNoteTodayPlugin extends Plugin {
 
+    version: string;
+
     toolbar_item: ToolbarMenuItem;
 
     component_setting: Setting;
@@ -150,15 +152,15 @@ export default class DailyNoteTodayPlugin extends Plugin {
             if (plugin_file === null) {
                 return;
             }
-            let version = plugin_file.version;
-            info(`插件版本: ${version}`);
+            this.version = plugin_file.version;
+            info(`插件版本: ${this.version}`);
 
             //发现更新到了不同的版本
-            if (version !== settings.get('PluginVersion')) {
-                settings.set('PluginVersion', version);
-                notify(`${this.i18n.Name}${this.i18n.NewVer}: v${version}`, 'info', 1500);
+            if (this.version !== settings.get('PluginVersion')) {
+                settings.set('PluginVersion', this.version);
+                notify(`${this.i18n.Name}${this.i18n.NewVer}: v${this.version}`, 'info', 1500);
                 settings.save();
-                showChangeLog(version);
+                showChangeLog(this.version);
             }
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
