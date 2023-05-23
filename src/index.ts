@@ -38,7 +38,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let start = performance.now();
         await notebooks.init();
-        await this.checkSysVer();
 
         //TODO 注册快捷键
         // this.registerCommand({
@@ -49,6 +48,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         // });
 
         await settings.load();
+        await this.checkSysVer();
         this.checkPluginVersion();
 
         this.initSetting();
@@ -124,7 +124,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initBlockIconClickEvent() {
-        if (settings.get("EnableMove")) {
+        if (settings.get("EnableMove") === true) {
+            console.log(settings.get("EnableMove"));
+            info('添加块菜单项目');
             this.enableBlockIconClickEvent = true;
             this.gutterMenu = new GutterMenu(this.eventBus);
         }
