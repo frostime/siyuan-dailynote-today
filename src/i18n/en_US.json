@@ -50,5 +50,6 @@
     "NewDay": [
         "Today is ",
         "plugin up to date"
-    ]
+    ],
+    "ChangeLog": "ChangeLog"
 }

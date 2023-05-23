@@ -12,6 +12,7 @@ import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
 import { eventBus } from './event-bus';
 import * as serverApi from './serverApi';
+import { showChangeLog } from './changelog';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -148,10 +149,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
             let version = plugin_file.version;
             info(`插件版本: ${version}`);
 
+            //发现更新到了不同的版本
             if (version !== settings.get('PluginVersion')) {
                 settings.set('PluginVersion', version);
                 notify(`${this.i18n.Name}${this.i18n.NewVer}: v${version}`, 'info', 1500);
                 settings.save();
+                showChangeLog(version);
             }
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
