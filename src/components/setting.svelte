@@ -52,6 +52,12 @@
         settingValue={iconPosition}
     />
     <SettingItem
+        type="checkbox"
+        content={contents.EnableMove}
+        settingKey="EnableMove"
+        settingValue={settings.get("EnableMove")}
+    />
+    <SettingItem
         type="button"
         content={contents.update}
         settingKey="Update"

@@ -124,8 +124,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initBlockIconClickEvent() {
-        this.enableBlockIconClickEvent = true;
-        this.gutterMenu = new GutterMenu(this.eventBus);
+        if (settings.get("EnableMove")) {
+            this.enableBlockIconClickEvent = true;
+            this.gutterMenu = new GutterMenu(this.eventBus);
+        }
     }
 
 

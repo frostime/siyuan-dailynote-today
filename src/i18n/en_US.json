@@ -36,6 +36,10 @@
         "DiaryUpToDate": {
             "title": "Auto refresh diary's path as day passed",
             "text": "When new day comes, the plugin will automatically update the status"
+        },
+        "EnableMove": {
+            "title": "Enable \"Move Block\" in menu",
+            "text": "When enabled, the \"Move Block\" item will be added to the menu after clicking on the block icon, take effect after reboot"
         }
     },
     "Open": "Open daily note",

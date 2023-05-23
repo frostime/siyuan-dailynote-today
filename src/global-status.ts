@@ -10,7 +10,7 @@ type NotebookSorting = 'doc-tree' | 'custom-sort'
 type IconPosition = 'left' | 'right';
 type SettingKey = (
     'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition' |
-    'DiaryUpToDate' | 'PluginVersion'
+    'DiaryUpToDate' | 'PluginVersion' | "EnableMove"
 );
 
 interface Item {
@@ -29,7 +29,8 @@ class SettingManager {
         NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
-        PluginVersion: ''
+        PluginVersion: '',
+        EnableMove: true as boolean
     };
 
     constructor() {
