@@ -66,6 +66,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     /**
      * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
+     * TODO 2.9.0 版本后去除掉这些过度性的检查
      */
     private async checkSysVer() {
         let version: string = await serverApi.version();
@@ -77,6 +78,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         cmp = compareVersion(version, '2.8.9');
         if (cmp >= 0) {
             //使用 click-blockicon
+            //TODO 2.9.0 版本后用这个替换掉旧的 move-menu
             this.initBlockIconClickEvent();
         }
     }
