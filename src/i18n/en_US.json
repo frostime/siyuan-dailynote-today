@@ -55,5 +55,8 @@
         "Today is ",
         "plugin up to date"
     ],
-    "ChangeLog": "ChangeLog"
+    "ChangeLog": {
+        "name": "ChangeLog",
+        "file": "CHANGELOG_en_US"
+    }
 }

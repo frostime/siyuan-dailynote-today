@@ -55,5 +55,8 @@
         "今天是",
         "笔记状态已更新"
     ],
-    "ChangeLog": "更新日志"
+    "ChangeLog": {
+        "name": "更新日志",
+        "file": "CHANGELOG_en_US"
+    }
 }
