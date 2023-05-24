@@ -30,7 +30,7 @@ class SettingManager {
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
         PluginVersion: '',
-        EnableMove: true as boolean
+        EnableMove: false as boolean
     };
 
     constructor() {
