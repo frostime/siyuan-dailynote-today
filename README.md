@@ -112,17 +112,19 @@
 <!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlock.png) -->
 ![](asset/MoveBlock.png)
 
-- 选中块左侧的图标，「Alt+右键」，可以调出一个移动块的面板
+- 选中块左侧的图标点击，在「今日笔记」菜单下有一个「移动块」项目
 - 选择笔记本，可以把当前块移动到对应笔记本今天的日记下
 - 支持移动整个嵌套结构
     - 如果移动列表，就会把整个列表结构都移动过去
     - 但是不可以移动单独的列表表项（这会引发思源的一个 bug），我已经在插件层面禁止这么做了
 - 支持移动标题块下方所有内容
+- 这个功能默认关闭，请在设置中打开
 
 #### 5.1 移动块功能演示
 
 - 把位于 Work 笔记本日记下的文档，移动到 Hobby 笔记本的日记下
 - 由于选择的是标题块，所以下方所有内容也一并移动了过去
+- 演示案例使用的是旧版的 Alt + 右键的交互方法，1.0.6 版本后正常点开块菜单即可
 
 <!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif) -->
 ![](asset/MoveBlocks.gif)

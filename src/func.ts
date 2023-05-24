@@ -26,7 +26,10 @@ export async function moveBlocksToDoc(srcBlock: Block, docId: string) {
     let previousID = srcBlock.id;
     for (let child of childrens) {
         let id = child.id;
+        let block = await serverApi.getBlockByID(id);
+        console.log('Child', block.content);
         await serverApi.moveBlock(id, previousID, null);
+        console.log('Move', block.id, 'previousID', previousID);
         previousID = id;
     }
     return previousID;
