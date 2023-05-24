@@ -10,9 +10,14 @@
 * Cross-day updates are now enabled by default
     * The plugin recycling has been improved since 2.8.9, so there is no longer a residual listener problem, so cross-day updates are now enabled by default
     * Related settings will be removed in 2.9
-* Update log
-
-    The plugin won't bother you every time it is updated, but if there is a noteworthy update note, then this dialog will still pop up
+* Removed the option to set the 'Notebook sorting scheme'
+    * The notebook sorting scheme is a legacy design, originally intended to be a roundabout way to customise the default open notebook
+    * With the ability to manually specify a default notebook, this design seemed a little out of place and unnecessarily complex
+    * So in this update, we've removed this setting and made it all the same as the document tree display
+* Changelog dialog
+    * You may notice this dialog a new thing.
+    * Don't worry, this plugin won't bother you every time it is updated.
+    * But if there is a noteworthy update note, then this dialog will still pop up, like this time
 
 ### Note: A new bug has been found
 

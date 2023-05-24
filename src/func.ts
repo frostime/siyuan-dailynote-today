@@ -84,11 +84,12 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
         );
 
-        if (settings.settings.NotebookSort == 'custom-sort') {
-            all_notebooks = all_notebooks.sort((a, b) => {
-                return a.sort - b.sort;
-            });
-        }
+        //没有必要了
+        // if (settings.settings.NotebookSort == 'custom-sort') {
+        //     all_notebooks = all_notebooks.sort((a, b) => {
+        //         return a.sort - b.sort;
+        //     });
+        // }
 
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
 

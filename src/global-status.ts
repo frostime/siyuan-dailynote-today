@@ -6,10 +6,10 @@ import { info, error } from './utils';
 import { eventBus } from './event-bus';
 
 
-type NotebookSorting = 'doc-tree' | 'custom-sort'
+// type NotebookSorting = 'doc-tree' | 'custom-sort'
 type IconPosition = 'left' | 'right';
 type SettingKey = (
-    'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition' |
+    'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
     'DiaryUpToDate' | 'PluginVersion' | "EnableMove"
 );
 
@@ -26,7 +26,7 @@ class SettingManager {
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
         DiaryUpToDate: true as boolean, //自动更新日记的日期
-        NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
+        // NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
         PluginVersion: '',
