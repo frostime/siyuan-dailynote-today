@@ -161,8 +161,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 settings.set('PluginVersion', this.version);
                 notify(`${this.i18n.Name}${this.i18n.NewVer}: v${this.version}`, 'info', 1500);
                 settings.save();
+                showChangeLog(this.version);
             }
-            showChangeLog(this.version);
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
         }
