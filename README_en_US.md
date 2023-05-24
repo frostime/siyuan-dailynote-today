@@ -99,6 +99,9 @@ This feature can be turned off in the settings, but this setting is scheduled to
     - But it is not possible to move individual list items (It's a Siyuan's bug)
 - Support moving all content below the heading block
 
+> You can also use alt + right click, but it will be remove in the future\
+> Also note: <span style="color: #ec6162">**Be sure not to move a collapsed (or has collapsed subheader block internal) header block**</span>, as this will trigger a bug in Siyuan that has not yet been fixed, with very serious consequences.
+
 #### 5.1 Demonstration of the Move Block feature
 
 - Move the document under the diary in the "Work" notebook to the diary in the "Hobby" notebook
@@ -107,6 +110,7 @@ This feature can be turned off in the settings, but this setting is scheduled to
 ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif)
 <!-- ![](asset/MoveBlocks.gif) -->
 
+> Do, not collapse the header!
 
 ## FAQ
 
