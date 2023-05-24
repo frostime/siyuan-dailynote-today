@@ -16,23 +16,24 @@ function showTypoDialog(title: string, typo: string, width?: string) {
     new Dialog({
         title: title,
         content: `<div id="dialog" class="b3-typography" style="margin: 2rem">${typo}</div>`,
-        width: width
+        width: width,
+        height: "50%"
     });
 }
 
 
 export async function showChangeLog(version: string) {
     try {
-        let file = await serverApi.getFile(
-            `/data/plugins/siyuan-dailynote-today/i18n/${i18n.ChangeLog.file}-${version}`
-        );
-        let lute = window.Lute!.New();
-        let content = lute.Md2HTML(file);
-        if (content !== undefined) {
+        const path = `/data/plugins/siyuan-dailynote-today/i18n/${i18n.ChangeLog.file}-${version}.md`;
+        // const path = `/data/plugins/siyuan-dailynote-today/i18n/CHANGELOG_zh_CN-1.0.6.md`;
+        let file = await serverApi.getFile(path);
+        if (file !== null) {
+            let lute = window.Lute!.New();
+            let content = lute.Md2HTML(file);
             showTypoDialog(
                 `${i18n.Name} v${version}`,
                 content,
-                isMobile() ? "92vw" : "520px"
+                isMobile() ? "92vw" : "60%"
             );
         }
     } catch (err) {

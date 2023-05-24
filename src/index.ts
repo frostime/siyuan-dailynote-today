@@ -152,6 +152,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             if (plugin_file === null) {
                 return;
             }
+            plugin_file = JSON.parse(plugin_file);
             this.version = plugin_file.version;
             info(`插件版本: ${this.version}`);
 
@@ -160,8 +161,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 settings.set('PluginVersion', this.version);
                 notify(`${this.i18n.Name}${this.i18n.NewVer}: v${this.version}`, 'info', 1500);
                 settings.save();
-                showChangeLog(this.version);
             }
+            showChangeLog(this.version);
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
         }

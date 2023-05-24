@@ -73,13 +73,25 @@ export async function version(): Promise<string> {
     return request('/api/system/version', {});
 }
 
+async function myFetchSyncPost(url, data) {
+    const init: RequestInit = {
+        method: "POST",
+    };
+    if (data) {
+        init.body = JSON.stringify(data);
+    }
+    const res = await fetch(url, init);
+    const txt = await res.text();
+    return txt;
+}
+
 export async function getFile(path: string): Promise<any> {
     let data = {
         path: path
     }
     let url = '/api/file/getFile';
     try {
-        let file = await fetchSyncPost(url, data);
+        let file = await myFetchSyncPost(url, data);
         return file;
     } catch (error_msg) {
         return null;
