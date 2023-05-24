@@ -29,9 +29,7 @@
 #### 1.1 I have multiple notebooks, which notebook will be used to create notes by default?
 
 
-- By **default**, the plugin will **automatically select the notebook that is sorted first** in the custom order and create today's diary in this notebook
-    - For more information about what this so-called "first in custom order" means, please read the [FAQ](#q-how-is-the-sorting-of-notebooks-determined-can-it-be-adjusted)
-    - **Most users can just ignore** this technical detail and directly follow the next suggestion to manually specify the default notebook
+- By **default**, the plugin will **automatically select the notebook that is sorted first** and create today's diary in this notebook
 - If you are not satisfied with thie default setting, open the plugin in the "Settings Panel" and then **manually specify the default notebook ID**
     - Procedure: Right-click to open the notebook icon, click the "Settings" button, and then click "Copy ID".
     - Note: Only one notebook ID can be filled in as the default.
@@ -44,7 +42,7 @@
 
 ![](asset/IconLeftClick.png)
 
-- The dropdown menu lists all notebooks in order (See [FAQ](#q-how-is-the-sorting-of-notebooks-determined-can-it-be-adjusted)).
+- The dropdown menu lists all notebooks in order.
 - Click on a notebook to open/create today's note.
 - If there is a "√" flag before a notebook option, it means that diary has already been created for that notebook.
 - Ignore "SiYuan User Guide" notebook by default.
@@ -128,40 +126,6 @@ Please toggle off "Open Today's Diary Automatically" in the plugin settings.
 - When there is an update to a notebook (such as opening/closing/creating/moving a notebook), press the keyboard shortcut "ctrl+alt+u" to update the status.
     - The plugin can automatically track the creation status of the note, but it will not track the status of the notebooks.
 - When "Alt + right click" can note bring up moving menu, try updating.
-
-### Q: I noticed that the order of the notebooks in the plugin dropdown box is different from the order of the notebooks in my document tree.
-
-- You may have set the sort of the document tree to an option other than "Custom sorting"
-- In this case, please open the setting panel and change the sorting scheme for document tree display to "Same as document tree"
-- Then update the status.
-
-### Q: How is the sorting of notebooks determined? Can it be adjusted?
-
-#### Background Information
-
-In the Siyuan software, the document tree display sorting scheme can be divided into two categories:
-
-- Custom sorting
-
-    Notebooks can be freely dragged for sorting, and this order will be recorded by Siyuan.
-
-- Other sorting
-
-![](asset/文档树排序.png)
-
-#### Plugin Settings
-
-The plugin supports two sorting schemes in total, both of which can be configured in the settings.
-
-- Same as custom sorting
-
-    Under this scheme, the notebook sorting displayed by the plugin will only be consistent with the order in "Custom Sorting" mode, even if other "notebook tree display sorting schemes" are later changed, the order of notebooks displayed by the plugin will not change.
-
-- Same as document tree
-
-    Under this scheme, the notebook sorting displayed by the plugin will be exactly the same as the order of notebooks in the notebook tree.
-
-After changing the Siyuan notebook sorting, please update the status.
 
 ### Q: Why is it so slow when moving header blocks?
 
