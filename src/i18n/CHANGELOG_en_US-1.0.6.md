@@ -1,22 +1,26 @@
+## Daily Note Today v1.0.6 Update Notes
 
-## 今日笔记 v1.0.6 更新说明
+### Feature updates
 
-### 功能更新
+* Templates set in notebooks now also work for diaries created by plugin
+* Registered block menu item (only available after version 2.8.9)
+    * You can left-click on the block icon and see the "Daily Note Today" menu section below, the original "Move Block" function can now be triggered from this menu
+    * The previous alt + right click trigger method remains, but will be officially removed from the plugin in the future (expected after SiYuan release 2.9)
+    * This function is turned off by default, you can turn it on in the settings if you need it
+* Cross-day updates are now enabled by default
+    * The plugin recycling has been improved since 2.8.9, so there is no longer a residual listener problem, so cross-day updates are now enabled by default
+    * Related settings will be removed in 2.9
+* Update log
 
-* 在笔记本中设置的模板现在对插件创建的日记同样生效
-* 注册了块菜单项目「仅在 2.8.9 版本后可用」
-    * 你可以左键点击块的 icon 然后在下方看到「今日笔记」的菜单栏目，原本的「移动块」功能现在可以在这个菜单中触发
-    * 之前的 alt + 右键的触发方法依然保留，但是会在未来正式从插件中移除（预计在思源发布 2.9 版本后）
-    * 改功能默认关闭，如果有需求，可以在设置中开启
-* 跨日更新功能已经默认开启
-    * 2.8.9 版本后的思源在插件回收上已经完善，所以不会再出现监听器残留的问题，故而跨日更新功能现在默认开启
-    * 相关设置会在 2.9 版本后移除
+    The plugin won't bother you every time it is updated, but if there is a noteworthy update note, then this dialog will still pop up
 
-### 注意: 新发现一个 bug，请避免触发
+### Note: A new bug has been found
 
-* 本版发现了一个移动块功能较为严重的 bug，触发条件如下
-    1. 移动的目标需要是一个标题块
-    2. 目标的标题块或下属的子标题块当中存在折叠
-    3. 此时尝试去移动目标的标题块可能会触发这个 bug
-* 本 bug 触发后最严重可能导致思源本体软件出现异常，甚至块丢失
-* bug 的原因出在思源提供的 API 上，请在官方修复 bug 前注意**不要移动折叠的标题块**
+> This is a critical note, please avoid triggering this issue, but if you don't use the move block function, then you can ignore this note
+
+* A serious bug has been found in this section, the trigger conditions are as follows
+    1. the target of the move needs to be a title block
+    2. there is a collapse in the title block or a sub-block of the target
+    3. trying to move the target's title block may trigger the bug
+* This bug can cause a serious problems in SiYuan, and some blocks may be lost.
+* The reason for the bug is the API provided by Siyuan, I can't do anything about it until the bug is fixed, please be careful **not to move the collapsed title block**.
