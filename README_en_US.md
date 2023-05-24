@@ -63,20 +63,14 @@ At this point, if I click on "Academic Learn", then a new diary will be created 
 
 #### 2.2 Update with date
 
-By default the plug-in will not automatically update when a new day arrives after 0:00 and the user can manually update the diary to ensure that the new day opens when the drop-down box is clicked.
-
-If this is too much trouble, you can also turn on the automatic update with date function in the settings.
-
-![](asset/SetUpToDate.png)
-
-When switched on, the plugin will automatically chime in with updates every time the clock strikes 0.
+At 0 o'clock the plug-in will automatically chime in and update the status of your diary, at which point you can click on the top bar menu to open the diary for the new day. However, it does not automatically create a diary for you.
 
 ![](asset/UpToDate.gif)
 
-> Note: Version 2.8.8 has a listener residual problem due to the inability to automatically release resources when the plugin is disabled, so it is not recommended to enable this feature in a later version. \
-> Of course, closing the software solves all the resource release problems, but it doesn't seem necessary to use this feature if you close the Notes software every night.
+This feature can be turned off in the settings, but this setting is scheduled to be removed with the SiS update version 2.9.
 
-[Issue#30](https://github.com/frostime/siyuan-dailynote-today/issues/30)
+![](asset/SetUpToDate.png)
+
 
 
 
