@@ -19,14 +19,6 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         return;
     }
 
-    //列表项需要额外特殊处理
-    let moveLi = block.type === 'i';
-
-    if (moveLi && settings.get('MoveListItem') === 'disabled') {
-        notify(i18n.MoveMenu.NotLi, 'error', 3000);
-        return
-    }
-
     //获取目标文档的 id
     let todayDiaryPath = notebook.dailynotePath;
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
@@ -40,10 +32,13 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
 
     info(`Call 移动块: ${block.id} --> ${doc_id}`)
 
+    //列表项需要额外特殊处理
+    let moveLi = block.type === 'i';
+
     //移动块
-    if (moveLi && settings.get('MoveListItem') === 'list') {
+    if (moveLi) {
         //如果是列表项，需要先新建一个列表块，然后把列表项插入到列表块中
-        let ans = await serverApi.prependBlock(doc_id, '* \u{200b}', 'markdown');
+        let ans = await serverApi.prependBlock(doc_id, '* ', 'markdown');
         let newListId = ans[0].doOperations[0].id;
         await serverApi.moveBlock(block.id, null, newListId);
     } else {
