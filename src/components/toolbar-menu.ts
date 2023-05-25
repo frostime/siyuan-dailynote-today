@@ -30,6 +30,8 @@ export class ToolbarMenuItem {
     }
 
     contextMenu(event: MouseEvent) {
+        //阻止浏览器上弹出右键菜单
+        event.preventDefault();
         let menu = new Menu("dntoday-config");
         menu.addItem({
             label: i18n.Setting.name,
