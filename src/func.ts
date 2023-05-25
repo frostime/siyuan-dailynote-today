@@ -2,7 +2,6 @@
  * Copyright (c) 2023 frostime all rights reserved.
  */
 import { showMessage } from 'siyuan';
-import { settings } from './global-status';
 import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
@@ -11,29 +10,6 @@ import * as serverApi from './serverApi';
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
-
-export async function moveBlocksToDoc(srcBlock: Block, docId: string) {
-    info(`Call 移动块: ${srcBlock.id} --> ${docId}`)
-    let childrens: Array<Block> = new Array<Block>();
-
-    //标题块不是容器，所以必须手动检查下属的子块
-    if (srcBlock.type == 'h') {
-        childrens = await serverApi.getChildBlocks(srcBlock.id);
-    }
-
-    await serverApi.moveBlock(srcBlock.id, null, docId);
-
-    let previousID = srcBlock.id;
-    for (let child of childrens) {
-        let id = child.id;
-        let block = await serverApi.getBlockByID(id);
-        console.log('Child', block.content);
-        await serverApi.moveBlock(id, previousID, null);
-        console.log('Move', block.id, 'previousID', previousID);
-        previousID = id;
-    }
-    return previousID;
-}
 
 export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
@@ -57,7 +33,9 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         doc_id = await createDiary(notebook, todayDiaryPath!);
         notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
-    moveBlocksToDoc(block, doc_id);
+
+    info(`Call 移动块: ${block.id} --> ${doc_id}`)
+    await serverApi.moveBlock(block.id, null, doc_id);
     notify(`${i18n.MoveMenu.Move}: ${notebook.name}`, 'info', 1500);
 }
 
