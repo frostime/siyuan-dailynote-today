@@ -85,6 +85,11 @@ async function myFetchSyncPost(url, data) {
     return txt;
 }
 
+/**
+ * 使用了自定义的 fetchSyncPost
+ * @param path
+ * @returns 返回原始的文本 txt
+ */
 export async function getFile(path: string): Promise<any> {
     let data = {
         path: path

@@ -71,7 +71,9 @@ class SettingManager {
             //如果有配置文件，则使用配置文件
             info(`读入配置文件: ${SettingFile}`)
             console.log(loaded);
-            loaded = JSON.parse(loaded);
+            if (typeof loaded === 'string') {
+                loaded = JSON.parse(loaded);
+            }
             try {
                 for (let key in loaded) {
                     this.set(key, loaded[key]);
