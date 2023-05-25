@@ -71,6 +71,8 @@ class SettingManager {
             //如果有配置文件，则使用配置文件
             info(`读入配置文件: ${SettingFile}`)
             console.log(loaded);
+            //Docker 和  Windows 不知为何行为不一致, 一个读入字符串，一个读入对象
+            //为了兼容，这里做一下判断
             if (typeof loaded === 'string') {
                 loaded = JSON.parse(loaded);
             }
