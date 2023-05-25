@@ -82,6 +82,12 @@ export async function prependBlock(parentId: string, content: string, dataType: 
     return request(url, data);
 }
 
+// /api/block/deleteBlock
+export async function deleteBlock(blockId: string) {
+    let url = '/api/block/deleteBlock';
+    return request(url, { id: blockId });
+}
+
 export async function renderSprig(sprig: string) {
     let url = '/api/template/renderSprig';
     return request(url, { template: sprig });

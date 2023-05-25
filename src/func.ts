@@ -41,6 +41,11 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         let ans = await serverApi.prependBlock(doc_id, '* ', 'markdown');
         let newListId = ans[0].doOperations[0].id;
         await serverApi.moveBlock(block.id, null, newListId);
+        console.log(`移动列表项 ${block.id} --> ${newListId}`);
+        //获取新的列表的子项
+        let allChild = await serverApi.getChildBlocks(newListId);
+        let blankItem = allChild[1]; // 上述行为会导致出现一个额外的多余列表项
+        await serverApi.deleteBlock(blankItem.id);
     } else {
         await serverApi.moveBlock(block.id, null, doc_id);
     }
