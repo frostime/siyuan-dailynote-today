@@ -12,8 +12,7 @@
 4. Cross-day updates are now enabled by default, related settings will be removed in 2.9
 5. Removed the option to set the 'Notebook sorting scheme', made it all the same as the document tree display
 6. Changelog dialog (won't bother you every time it is updated)
-
-Sure, here's the translation:
+7. Fixed an issue where the plugin previously couldn't be used in other environments such as Docker.
 
 ### Additional Remarks on Block Movement
 
