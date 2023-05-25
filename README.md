@@ -44,7 +44,6 @@
 
 ### 2. 左键点击图标，快速创建/打开今天的笔记
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconLeftClick.png) -->
 ![](asset/IconLeftClick.png)
 
 - 下拉框中按照笔记本顺序排列，列出所有的笔记本
