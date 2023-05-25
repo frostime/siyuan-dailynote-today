@@ -62,6 +62,25 @@ export async function moveBlock(id: string, previousID: string | null = null, pa
     return request(url, { id: id, previousID: previousID, parentID: parentID });
 }
 
+export async function insertBlock(nextID: string, content: string, dataType: 'markdown' | 'dom') {
+    let url = '/api/block/insertBlock';
+    let data = {
+        data: content,
+        nextID: nextID,
+        dataType: dataType,
+    }
+    return request(url, data);
+}
+
+export async function prependBlock(parentId: string, content: string, dataType: 'markdown' | 'dom') {
+    let url = '/api/block/prependBlock';
+    let data = {
+        data: content,
+        parentID: parentId,
+        dataType: dataType,
+    }
+    return request(url, data);
+}
 
 export async function renderSprig(sprig: string) {
     let url = '/api/template/renderSprig';

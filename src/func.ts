@@ -2,7 +2,6 @@
  * Copyright (c) 2023 frostime all rights reserved.
  */
 import { showMessage } from 'siyuan';
-import { settings } from './global-status';
 import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
@@ -12,42 +11,15 @@ import * as serverApi from './serverApi';
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
-export async function moveBlocksToDoc(srcBlock: Block, docId: string) {
-    info(`Call 移动块: ${srcBlock.id} --> ${docId}`)
-    let childrens: Array<Block> = new Array<Block>();
-
-    //标题块不是容器，所以必须手动检查下属的子块
-    if (srcBlock.type == 'h') {
-        childrens = await serverApi.getChildBlocks(srcBlock.id);
-    }
-
-    await serverApi.moveBlock(srcBlock.id, null, docId);
-
-    let previousID = srcBlock.id;
-    for (let child of childrens) {
-        let id = child.id;
-        let block = await serverApi.getBlockByID(id);
-        console.log('Child', block.content);
-        await serverApi.moveBlock(id, previousID, null);
-        console.log('Move', block.id, 'previousID', previousID);
-        previousID = id;
-    }
-    return previousID;
-}
-
 export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
-
-    if (block.type === 'i') {
-        notify(i18n.MoveMenu.NotLi, 'error', 3000);
-        return
-    }
 
     if (block == null) {
         error(`Block ${srcBlockId} not found`);
         return;
     }
 
+    //获取目标文档的 id
     let todayDiaryPath = notebook.dailynotePath;
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let doc_id;
@@ -57,8 +29,22 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         doc_id = await createDiary(notebook, todayDiaryPath!);
         notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
-    moveBlocksToDoc(block, doc_id);
-    notify(`${i18n.MoveMenu.Move}: ${notebook.name}`, 'info', 1500);
+
+    info(`Call 移动块: ${block.id} --> ${doc_id}`)
+
+    //列表项需要额外特殊处理
+    let moveLi = block.type === 'i';
+
+    //移动块
+    if (moveLi) {
+        //如果是列表项，需要先新建一个列表块，然后把列表项插入到列表块中
+        let ans = await serverApi.prependBlock(doc_id, '* ', 'markdown');
+        let newListId = ans[0].doOperations[0].id;
+        await serverApi.moveBlock(block.id, null, newListId);
+    } else {
+        await serverApi.moveBlock(block.id, null, doc_id);
+    }
+    notify(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 'info', 2500);
 }
 
 
