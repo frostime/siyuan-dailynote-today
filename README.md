@@ -137,3 +137,8 @@
 
 [CHANGELOG](CHANGELOG.md)
 
+## 计划中...
+
+- [ ] 日记预约提醒功能 [#44](https://github.com/frostime/siyuan-dailynote-today/issues/44)
+- [ ] 移动块后在原地留下块的引用或者链接 [#25](https://github.com/frostime/siyuan-dailynote-today/issues/25)
+- [ ] 移动文档快 [#11](https://github.com/frostime/siyuan-dailynote-today/issues/11)
