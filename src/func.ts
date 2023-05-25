@@ -14,16 +14,20 @@ const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan
 export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
 
-    if (block.type === 'i') {
-        notify(i18n.MoveMenu.NotLi, 'error', 3000);
-        return
-    }
-
     if (block == null) {
         error(`Block ${srcBlockId} not found`);
         return;
     }
 
+    //列表项需要额外特殊处理
+    let moveLi = block.type === 'i';
+
+    if (moveLi && settings.get('MoveListItem') === 'disabled') {
+        notify(i18n.MoveMenu.NotLi, 'error', 3000);
+        return
+    }
+
+    //获取目标文档的 id
     let todayDiaryPath = notebook.dailynotePath;
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let doc_id;
@@ -35,8 +39,17 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
     }
 
     info(`Call 移动块: ${block.id} --> ${doc_id}`)
-    await serverApi.moveBlock(block.id, null, doc_id);
-    notify(`${i18n.MoveMenu.Move}: ${notebook.name}`, 'info', 1500);
+
+    //移动块
+    if (moveLi && settings.get('MoveListItem') === 'list') {
+        //如果是列表项，需要先新建一个列表块，然后把列表项插入到列表块中
+        let ans = await serverApi.prependBlock(doc_id, '* \u{200b}', 'markdown');
+        let newListId = ans[0].doOperations[0].id;
+        await serverApi.moveBlock(block.id, null, newListId);
+    } else {
+        await serverApi.moveBlock(block.id, null, doc_id);
+    }
+    notify(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 'info', 2500);
 }
 
 
