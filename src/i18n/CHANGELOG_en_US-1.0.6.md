@@ -7,6 +7,7 @@
     * You can left-click on the block icon and see the "Daily Note Today" menu section below, the original "Move Block" function can now be triggered from this menu
     * The previous alt + right click trigger method remains, but will be officially removed from the plugin in the future (expected after SiYuan release 2.9)
     * This function is turned off by default, you can turn it on in the settings if you need it
+    * The plugin-provided menu item may cause the disappreance of some theme-provided menu item.
 * Cross-day updates are now enabled by default
     * The plugin recycling has been improved since 2.8.9, so there is no longer a residual listener problem, so cross-day updates are now enabled by default
     * Related settings will be removed in 2.9
