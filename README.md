@@ -7,8 +7,7 @@
 - **如果使用的过程中有问题，可以先阅读 [常见问题](#常见问题) 一节；如果还有问题，再到 Github 上提 Issue**
 - 有问题尽量在 Github 或 Gitcode 上提，在群里问我不一定看得见
 
-> 本文措辞混乱，文档中「日记」「笔记」「daily note」几个词可能会交替使用，不用在意，他们都表示一个含义.\
-> 如果没有特别说明，「笔记」就是指「今天的日记」的意思.
+> 文档中「日记」「笔记」「daily note」几个词可能会交替使用，不用在意，他们都表示一个含义.
 
 ## 我需要这个插件吗？
 
@@ -24,7 +23,6 @@
 
 ### 1. 启动的时候自动创建笔记
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/AutoOpen.png) -->
 ![](asset/AutoOpen.png)
 
 - 启动插件时，自动创建/打开今天的笔记，实现类似 logseq 中的效果
@@ -41,7 +39,6 @@
     - 如果 ID 填写错误，则启动插件的时候会警告
     - 关于如何打开设置面板，请阅读文档后面的内容
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/DefaultNotebook.png) -->
 ![](asset/DefaultNotebook.png)
 
 
@@ -66,7 +63,6 @@
 - 举个例子，当前我有四个笔记本，如果我点击下拉框中的按钮，会在打开对应笔记本下今天的日记。
 - Life 、 work、 Hobby 这三个笔记本前面有「√」，表示这三个笔记本下已经创建了日记。
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconMenu.png) -->
 ![](asset/IconMenu.png)
 
 此时，如果我再点击「Academic Learn」，那么就会在这个笔记本下新创建一个日记，然后你再打开下拉框，就会发现这个笔记本前面也出现了一个「√」符号。
@@ -84,7 +80,6 @@
 
 ### 3. 右键点击图标，快速配置插件
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/IconRightClick.png) -->
 ![](asset/IconRightClick.png)
 
 
@@ -95,25 +90,21 @@
 
 ### 4. 设置面板
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/Setting.png) -->
 ![](asset/Setting.png)
 
 
 ### 5. 移动块到今天的 Daily Note 中
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlock.png) -->
 ![](asset/MoveBlock.png)
 
-- 选中块左侧的图标点击，在「今日笔记」菜单下有一个「移动块」项目
-- 选择笔记本，可以把当前块移动到对应笔记本今天的日记下
-- 支持移动整个嵌套结构
-    - 如果移动列表，就会把整个列表结构都移动过去
-    - 但是不可以移动单独的列表表项（这会引发思源的一个 bug），我已经在插件层面禁止这么做了
-- 支持移动标题块下方所有内容
+- 选中块左侧的图标点击，在「今日笔记」菜单下有一个「移动块」项目; 选择笔记本，可以把**当前块**移动到对应笔记本今天的日记下
+- 可以移动单个块
+- 可以移动列表块
+- 把标题块折叠后，可以移动整个标题块
 - 这个功能默认关闭，请在设置中打开
 
-> 当前版本还可以使用旧版的 Alt + 右键方法，但是这个交互会在未来删除\
-> 另外注意：<span style="color: #ec6162">**一定不要去移动一个折叠 (或内部含有折叠的子标题块) 的标题块**</span>, 这会触发思源当前还未修复的一个 bug, 后果非常严重.
+> - 当前版本还可以使用旧版的 Alt + 右键方法，但是这个交互会在未来删除
+> - 如果发现移动的目标文档里没有移动过来的块, 不要惊慌，按「F5」刷新一下页面
 
 #### 5.1 移动块功能演示
 
@@ -121,10 +112,8 @@
 - 由于选择的是标题块，所以下方所有内容也一并移动了过去
 - 演示案例使用的是旧版的 Alt + 右键的交互方法，1.0.6 版本后正常点开块菜单即可
 
-<!-- ![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif) -->
 ![](asset/MoveBlocks.gif)
 
-> 当前版本下, **千万不要**把这里面任何一个标题块折叠后再移动!
 
 ## 常见问题
 

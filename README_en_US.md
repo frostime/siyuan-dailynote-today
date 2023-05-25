@@ -3,8 +3,7 @@
 
 **This plugin is mainly used for enhancement for daily note workflow in SiYuan.**
 
-> The words "diary", "notes" and "daily note" may be used interchangeably in the document, so don't worry, they all mean the same thing. \
-> If not specified, "notes" means "today's diary".
+> The words "diary", "notes" and "daily note" may be used interchangeably in the document, so don't worry, they all mean the same thing.
 
 ## Do I need this plugin?
 
@@ -92,25 +91,23 @@ This feature can be turned off in the settings, but this setting is scheduled to
 
 ![](asset/MoveBlock.png)
 
-- Select the icon leftside of a block and press "Alt + Right Click" to bring up a moving block panel.
-- Choose a notebook to move the current block to the diary of the corresponding notebook for today.
-- Supports moving the entire nested structure
-    - If you move a list block, it will move the entire list structure over
-    - But it is not possible to move individual list items (It's a Siyuan's bug)
-- Support moving all content below the heading block
+- Select the icon leftside of a block and press "Alt + Right Click" to bring up a moving block panel. Choose a notebook to move the current block to the diary of the corresponding notebook for today.
+- Support moving single block
+- Support moving a list item
+- Fold the header block, you can move the entire header and it's children blocks
+- Disabled by default, you can enable it in the setting panel
 
-> You can also use alt + right click, but it will be remove in the future\
-> Also note: <span style="color: #ec6162">**Be sure not to move a collapsed (or has collapsed subheader block internal) header block**</span>, as this will trigger a bug in Siyuan that has not yet been fixed, with very serious consequences.
+> - You can also use alt + right click, but it will be remove in the future
+> 
 
 #### 5.1 Demonstration of the Move Block feature
 
 - Move the document under the diary in the "Work" notebook to the diary in the "Hobby" notebook
 - Since the heading block is selected, all the content underneath is also moved over
 
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif)
-<!-- ![](asset/MoveBlocks.gif) -->
 
-> Do, not collapse the header!
+![](asset/MoveBlocks.gif)
+
 
 ## FAQ
 
