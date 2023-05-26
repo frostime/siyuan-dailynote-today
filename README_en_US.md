@@ -98,13 +98,7 @@ This feature can be turned off in the settings, but this setting is scheduled to
 - Disabled by default, you can enable it in the setting panel
 
 > - You can also use alt + right click, but it will be remove in the future
-> 
-
-#### 5.1 Demonstration of the Move Block feature
-
-- Move the document under the diary in the "Work" notebook to the diary in the "Hobby" notebook
-- Since the heading block is selected, all the content underneath is also moved over
-
+> If you find that there are no blocks in the target document, don't panic, press 'F5' to refresh the page.
 
 ![](asset/MoveBlocks.gif)
 
