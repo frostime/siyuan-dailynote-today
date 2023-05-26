@@ -2,8 +2,9 @@ import notebooks from "../global-notebooks";
 import { moveBlocksToDailyNote } from "../func";
 import { i18n, info } from "../utils";
 import { eventBus } from "../event-bus";
-import { Menu } from "siyuan";
+import { Menu, showMessage } from "siyuan";
 import { iconDiary } from "./svg";
+import * as serverApi from "../serverApi";
 
 function createMenuItems(data_id: string) {
     let menuItems: any[] = [];
@@ -23,6 +24,11 @@ function createMenuItems(data_id: string) {
 }
 
 let clickEvent: any;
+
+const DatePattern = [
+    //xxxx年xx月xx日, xxxx-xx-xx, xxxx/xx/xx
+    /(?:(?<year>\d{4})[ ]?[-年/])?(?:[ ]?(?<month>\d{1,2})[ ]?[-月/])[ ]?(?<day>\d{1,2})[ ]?[日号]?/
+]
 
 //后面会用来替代原来的菜单组件
 export class GutterMenu {
@@ -61,8 +67,47 @@ export class GutterMenu {
                     type: 'submenu',
                     icon: 'iconMove',
                     submenu: items,
+                },
+                {
+                    label: i18n.ReserveMenu.name,
+                    icon: 'iconHistory',
+                    click: () => this.reserveBlock(blockId)
                 }
             ]
         });
+    }
+
+    async reserveBlock(blockId) {
+        let block = await serverApi.getBlockByID(blockId);
+        let content: string = block.content;
+        console.log(content);
+        let match = null
+        //匹配日期正则表达式
+        for (let pattern of DatePattern) {
+            //find
+            match = content.match(pattern);
+            if (match) {
+                break;
+            }
+        }
+        if (!match) {
+            showMessage(i18n.ReserveMenu.Date404, 3000, 'error');
+            return;
+        }
+        let year = match.groups.year;
+        let month = match.groups.month;
+        let day = match.groups.day;
+        if (!year) {
+            let today = new Date();
+            year = today.getFullYear().toString();
+        }
+        console.log(year, month, day);
+        //检查是否是有效日期
+        let date = new Date(`${year}-${month}-${day}`);
+        if (date.toString() === 'Invalid Date') {
+            return;
+        }
+
+        
     }
 }
