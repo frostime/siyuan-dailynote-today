@@ -1,8 +1,8 @@
 import notebooks from "../global-notebooks";
 import { moveBlocksToDailyNote } from "../func";
-import { i18n, info } from "../utils";
+import { i18n, info, lute } from "../utils";
 import { eventBus } from "../event-bus";
-import { Menu, showMessage, confirm } from "siyuan";
+import { Menu, showMessage, confirm, Dialog } from "siyuan";
 import { iconDiary } from "./svg";
 import * as serverApi from "../serverApi";
 import { Block } from "../types";
@@ -120,6 +120,17 @@ export class GutterMenu {
     }
 }
 
-function ShowReserveDialog(block: Block, date: Date) {
-
+async function ShowReserveDialog(block: Block, date: Date) {
+    let kram = await serverApi.getBlockKramdown(block.id);
+    let kramdown: string = kram.kramdown;
+    kramdown = kramdown.replace(/{: (?:\w+=".+")+}/g, '');
+    // console.log(kramdown);
+    let html = lute.Md2HTML(kramdown);
+    console.log(html);
+    html = `<div id="dialog" class="b3-typography" style="margin: 1.5rem">${html}</div>`;
+    new Dialog({
+        title: i18n.ReserveMenu.name,
+        content: html,
+        width: '50%',
+    })
 }

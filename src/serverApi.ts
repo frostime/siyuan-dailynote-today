@@ -94,6 +94,13 @@ export async function renderSprig(sprig: string) {
 }
 
 
+// /api/block/getBlockKramdown
+export async function getBlockKramdown(blockId: string) {
+    let url = '/api/block/getBlockKramdown';
+    return request(url, { id: blockId });
+}
+
+
 export async function version(): Promise<string> {
     return request('/api/system/version', {});
 }

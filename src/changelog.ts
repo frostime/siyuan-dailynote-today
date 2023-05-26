@@ -1,9 +1,7 @@
 import { Dialog, isMobile } from "siyuan";
-import { i18n } from "./utils";
+import { i18n, lute } from "./utils";
 import * as serverApi from "./serverApi";
 
-
-export const lute = window.Lute!.New();
 
 function showTypoDialog(title: string, typo: string, width?: string) {
     new Dialog({
@@ -21,6 +19,7 @@ export async function showChangeLog(version: string) {
         // const path = `/data/plugins/siyuan-dailynote-today/i18n/CHANGELOG_zh_CN-1.0.6.md`;
         let file = await serverApi.getFile(path);
         if (file !== null) {
+            //TODO 检查还能不能正常运行
             let content = lute.Md2HTML(file);
             showTypoDialog(
                 `${i18n.Name} v${version}`,
