@@ -6,11 +6,11 @@ import { info, error } from './utils';
 import { eventBus } from './event-bus';
 
 
-type NotebookSorting = 'doc-tree' | 'custom-sort'
+// type NotebookSorting = 'doc-tree' | 'custom-sort'
 type IconPosition = 'left' | 'right';
 type SettingKey = (
-    'OpenOnStart' | 'NotebookSort' | 'DefaultNotebook' | 'IconPosition' |
-    'DiaryUpToDate' | 'PluginVersion'
+    'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
+    'DiaryUpToDate' | 'PluginVersion' | "EnableMove"
 );
 
 interface Item {
@@ -25,11 +25,12 @@ class SettingManager {
 
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
-        DiaryUpToDate: false as boolean, //自动更新日记的日期
-        NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
+        DiaryUpToDate: true as boolean, //自动更新日记的日期
+        // NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
-        PluginVersion: ''
+        PluginVersion: '',
+        EnableMove: false as boolean
     };
 
     constructor() {
@@ -70,7 +71,11 @@ class SettingManager {
             //如果有配置文件，则使用配置文件
             info(`读入配置文件: ${SettingFile}`)
             console.log(loaded);
-            loaded = JSON.parse(loaded);
+            //Docker 和  Windows 不知为何行为不一致, 一个读入字符串，一个读入对象
+            //为了兼容，这里做一下判断
+            if (typeof loaded === 'string') {
+                loaded = JSON.parse(loaded);
+            }
             try {
                 for (let key in loaded) {
                     this.set(key, loaded[key]);

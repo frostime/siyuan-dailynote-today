@@ -3,8 +3,7 @@
 
 **This plugin is mainly used for enhancement for daily note workflow in SiYuan.**
 
-> The words "diary", "notes" and "daily note" may be used interchangeably in the document, so don't worry, they all mean the same thing. \
-> If not specified, "notes" means "today's diary".
+> The words "diary", "notes" and "daily note" may be used interchangeably in the document, so don't worry, they all mean the same thing.
 
 ## Do I need this plugin?
 
@@ -29,9 +28,7 @@
 #### 1.1 I have multiple notebooks, which notebook will be used to create notes by default?
 
 
-- By **default**, the plugin will **automatically select the notebook that is sorted first** in the custom order and create today's diary in this notebook
-    - For more information about what this so-called "first in custom order" means, please read the [FAQ](#q-how-is-the-sorting-of-notebooks-determined-can-it-be-adjusted)
-    - **Most users can just ignore** this technical detail and directly follow the next suggestion to manually specify the default notebook
+- By **default**, the plugin will **automatically select the notebook that is sorted first** and create today's diary in this notebook
 - If you are not satisfied with thie default setting, open the plugin in the "Settings Panel" and then **manually specify the default notebook ID**
     - Procedure: Right-click to open the notebook icon, click the "Settings" button, and then click "Copy ID".
     - Note: Only one notebook ID can be filled in as the default.
@@ -44,7 +41,7 @@
 
 ![](asset/IconLeftClick.png)
 
-- The dropdown menu lists all notebooks in order (See [FAQ](#q-how-is-the-sorting-of-notebooks-determined-can-it-be-adjusted)).
+- The dropdown menu lists all notebooks in order.
 - Click on a notebook to open/create today's note.
 - If there is a "√" flag before a notebook option, it means that diary has already been created for that notebook.
 - Ignore "SiYuan User Guide" notebook by default.
@@ -65,20 +62,14 @@ At this point, if I click on "Academic Learn", then a new diary will be created 
 
 #### 2.2 Update with date
 
-By default the plug-in will not automatically update when a new day arrives after 0:00 and the user can manually update the diary to ensure that the new day opens when the drop-down box is clicked.
-
-If this is too much trouble, you can also turn on the automatic update with date function in the settings.
-
-![](asset/SetUpToDate.png)
-
-When switched on, the plugin will automatically chime in with updates every time the clock strikes 0.
+At 0 o'clock the plug-in will automatically chime in and update the status of your diary, at which point you can click on the top bar menu to open the diary for the new day. However, it does not automatically create a diary for you.
 
 ![](asset/UpToDate.gif)
 
-> Note: Version 2.8.8 has a listener residual problem due to the inability to automatically release resources when the plugin is disabled, so it is not recommended to enable this feature in a later version. \
-> Of course, closing the software solves all the resource release problems, but it doesn't seem necessary to use this feature if you close the Notes software every night.
+This feature can be turned off in the settings, but this setting is scheduled to be removed with the SiS update version 2.9.
 
-[Issue#30](https://github.com/frostime/siyuan-dailynote-today/issues/30)
+![](asset/SetUpToDate.png)
+
 
 
 
@@ -100,20 +91,16 @@ When switched on, the plugin will automatically chime in with updates every time
 
 ![](asset/MoveBlock.png)
 
-- Select the icon leftside of a block and press "Alt + Right Click" to bring up a moving block panel.
-- Choose a notebook to move the current block to the diary of the corresponding notebook for today.
-- Supports moving the entire nested structure
-    - If you move a list block, it will move the entire list structure over
-    - But it is not possible to move individual list items (It's a Siyuan's bug)
-- Support moving all content below the heading block
+- Select the icon leftside of a block and press "Alt + Right Click" to bring up a moving block panel. Choose a notebook to move the current block to the diary of the corresponding notebook for today.
+- Support moving single block
+- Support moving a list item
+- Fold the header block, you can move the entire header and it's children blocks
+- Disabled by default, you can enable it in the setting panel
 
-#### 5.1 Demonstration of the Move Block feature
+> - You can also use alt + right click, but it will be remove in the future
+> If you find that there are no blocks in the target document, don't panic, press 'F5' to refresh the page.
 
-- Move the document under the diary in the "Work" notebook to the diary in the "Hobby" notebook
-- Since the heading block is selected, all the content underneath is also moved over
-
-![](https://gitcode.net/frostime/siyuan-plugin-daily-note/-/raw/main/asset/MoveBlocks.gif)
-<!-- ![](asset/MoveBlocks.gif) -->
+![](asset/MoveBlocks.gif)
 
 
 ## FAQ
@@ -128,40 +115,6 @@ Please toggle off "Open Today's Diary Automatically" in the plugin settings.
 - When there is an update to a notebook (such as opening/closing/creating/moving a notebook), press the keyboard shortcut "ctrl+alt+u" to update the status.
     - The plugin can automatically track the creation status of the note, but it will not track the status of the notebooks.
 - When "Alt + right click" can note bring up moving menu, try updating.
-
-### Q: I noticed that the order of the notebooks in the plugin dropdown box is different from the order of the notebooks in my document tree.
-
-- You may have set the sort of the document tree to an option other than "Custom sorting"
-- In this case, please open the setting panel and change the sorting scheme for document tree display to "Same as document tree"
-- Then update the status.
-
-### Q: How is the sorting of notebooks determined? Can it be adjusted?
-
-#### Background Information
-
-In the Siyuan software, the document tree display sorting scheme can be divided into two categories:
-
-- Custom sorting
-
-    Notebooks can be freely dragged for sorting, and this order will be recorded by Siyuan.
-
-- Other sorting
-
-![](asset/文档树排序.png)
-
-#### Plugin Settings
-
-The plugin supports two sorting schemes in total, both of which can be configured in the settings.
-
-- Same as custom sorting
-
-    Under this scheme, the notebook sorting displayed by the plugin will only be consistent with the order in "Custom Sorting" mode, even if other "notebook tree display sorting schemes" are later changed, the order of notebooks displayed by the plugin will not change.
-
-- Same as document tree
-
-    Under this scheme, the notebook sorting displayed by the plugin will be exactly the same as the order of notebooks in the notebook tree.
-
-After changing the Siyuan notebook sorting, please update the status.
 
 ### Q: Why is it so slow when moving header blocks?
 

@@ -62,6 +62,31 @@ export async function moveBlock(id: string, previousID: string | null = null, pa
     return request(url, { id: id, previousID: previousID, parentID: parentID });
 }
 
+export async function insertBlock(nextID: string, content: string, dataType: 'markdown' | 'dom') {
+    let url = '/api/block/insertBlock';
+    let data = {
+        data: content,
+        nextID: nextID,
+        dataType: dataType,
+    }
+    return request(url, data);
+}
+
+export async function prependBlock(parentId: string, content: string, dataType: 'markdown' | 'dom') {
+    let url = '/api/block/prependBlock';
+    let data = {
+        data: content,
+        parentID: parentId,
+        dataType: dataType,
+    }
+    return request(url, data);
+}
+
+// /api/block/deleteBlock
+export async function deleteBlock(blockId: string) {
+    let url = '/api/block/deleteBlock';
+    return request(url, { id: blockId });
+}
 
 export async function renderSprig(sprig: string) {
     let url = '/api/template/renderSprig';
@@ -73,13 +98,30 @@ export async function version(): Promise<string> {
     return request('/api/system/version', {});
 }
 
+async function myFetchSyncPost(url, data) {
+    const init: RequestInit = {
+        method: "POST",
+    };
+    if (data) {
+        init.body = JSON.stringify(data);
+    }
+    const res = await fetch(url, init);
+    const txt = await res.text();
+    return txt;
+}
+
+/**
+ * 使用了自定义的 fetchSyncPost
+ * @param path
+ * @returns 返回原始的文本 txt
+ */
 export async function getFile(path: string): Promise<any> {
     let data = {
         path: path
     }
     let url = '/api/file/getFile';
     try {
-        let file = await fetchSyncPost(url, data);
+        let file = await myFetchSyncPost(url, data);
         return file;
     } catch (error_msg) {
         return null;

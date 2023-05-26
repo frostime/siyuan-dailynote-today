@@ -4,6 +4,7 @@
 import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
+import { GutterMenu } from './components/gutter-menu';
 import { notify, compareVersion } from './func';
 import { error, info, setI18n } from './utils';
 import { settings } from './global-status';
@@ -11,9 +12,12 @@ import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
 import { eventBus } from './event-bus';
 import * as serverApi from './serverApi';
+import { showChangeLog } from './changelog';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
+
+    version: string;
 
     toolbar_item: ToolbarMenuItem;
 
@@ -24,6 +28,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     upToDate: any = null;
 
+    enableBlockIconClickEvent: boolean = false;
+    gutterMenu: GutterMenu;
+
     async onload() {
         info('Plugin load');
 
@@ -33,7 +40,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let start = performance.now();
         await notebooks.init();
-        await this.checkSysVer();
 
         //TODO 注册快捷键
         // this.registerCommand({
@@ -44,6 +50,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         // });
 
         await settings.load();
+        await this.checkSysVer();
         this.checkPluginVersion();
 
         this.initSetting();
@@ -62,6 +69,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     /**
      * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
+     * TODO 2.9.0 版本后去除掉这些过度性的检查
      */
     private async checkSysVer() {
         let version: string = await serverApi.version();
@@ -69,6 +77,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let cmp = compareVersion(version, '2.8.8'); //检查版本， 2.8.8 版本后才能完全解锁所有功能
         if (cmp < 0) {
             notify(`注意: 思源版本小于 2.8.8, 插件部分功能可能不可用`, 'info');
+        }
+        cmp = compareVersion(version, '2.8.9');
+        if (cmp >= 0) {
+            //使用 click-blockicon
+            //TODO 2.9.0 版本后用这个替换掉旧的 move-menu
+            this.initBlockIconClickEvent();
         }
     }
 
@@ -111,6 +125,15 @@ export default class DailyNoteTodayPlugin extends Plugin {
         }
     }
 
+    private initBlockIconClickEvent() {
+        if (settings.get("EnableMove") === true) {
+            // console.log(settings.get("EnableMove"));
+            info('添加块菜单项目');
+            this.enableBlockIconClickEvent = true;
+            this.gutterMenu = new GutterMenu(this.eventBus);
+        }
+    }
+
 
     private async updateAll() {
         info('updateAll');
@@ -129,13 +152,16 @@ export default class DailyNoteTodayPlugin extends Plugin {
             if (plugin_file === null) {
                 return;
             }
-            let version = plugin_file.version;
-            info(`插件版本: ${version}`);
+            plugin_file = JSON.parse(plugin_file);
+            this.version = plugin_file.version;
+            info(`插件版本: ${this.version}`);
 
-            if (version !== settings.get('PluginVersion')) {
-                settings.set('PluginVersion', version);
-                notify(`${this.i18n.Name}${this.i18n.NewVer}: v${version}`, 'info', 1500);
+            //发现更新到了不同的版本
+            if (this.version !== settings.get('PluginVersion')) {
+                settings.set('PluginVersion', this.version);
+                notify(`${this.i18n.Name}${this.i18n.NewVer}: v${this.version}`, 'info', 1500);
                 settings.save();
+                showChangeLog(this.version);
             }
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
@@ -196,6 +222,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
             info(`清理定时器 ${this.upToDate}`);
             clearTimeout(this.upToDate);
             this.upToDate = null;
+        }
+        if (this.enableBlockIconClickEvent) {
+            this.gutterMenu.release();
         }
     }
 }

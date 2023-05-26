@@ -3,7 +3,6 @@
     import { settings } from "../global-status";
     import SettingItem from "./setting-item.svelte";
     let checked = settings.get("OpenOnStart");
-    let notebookSort = settings.get("NotebookSort");
     let defaultNotebook = settings.get("DefaultNotebook");
     let iconPosition = settings.get("IconPosition");
 
@@ -41,15 +40,15 @@
     />
     <SettingItem
         type="select"
-        content={contents.NotebookSort}
-        settingKey="NotebookSort"
-        settingValue={notebookSort}
-    />
-    <SettingItem
-        type="select"
         content={contents.IconPosition}
         settingKey="IconPosition"
         settingValue={iconPosition}
+    />
+    <SettingItem
+        type="checkbox"
+        content={contents.EnableMove}
+        settingKey="EnableMove"
+        settingValue={settings.get("EnableMove")}
     />
     <SettingItem
         type="button"

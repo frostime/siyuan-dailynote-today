@@ -42,7 +42,7 @@ export class ContextMenu {
         // info(`开始对 Tab 标签变化的监听`);
         let centerLayout = document.querySelector('#layouts div.layout__center div.layout-tab-container') as HTMLElement;
         this.observer = new MutationObserver(function (mutationsList) {
-            console.log(mutationsList);
+            // console.log(mutationsList);
             for (var mutation of mutationsList) {
                 if (mutation.type == 'childList' && mutation.addedNodes.length) {
                     for (let node of mutation.addedNodes) {
