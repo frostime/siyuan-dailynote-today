@@ -53,7 +53,9 @@
     },
     "ReserveMenu": {
         "name": "Reserve this block",
-        "Date404": "No date time found for reserving"
+        "Date404": "No date time found for reserving!",
+        "DateInvalid": "is not a valid date!",
+        "DatePast": "Can not reserve for past time!"
     },
     "NewDay": [
         "Today is ",

@@ -2,9 +2,10 @@ import notebooks from "../global-notebooks";
 import { moveBlocksToDailyNote } from "../func";
 import { i18n, info } from "../utils";
 import { eventBus } from "../event-bus";
-import { Menu, showMessage } from "siyuan";
+import { Menu, showMessage, confirm } from "siyuan";
 import { iconDiary } from "./svg";
 import * as serverApi from "../serverApi";
+import { Block } from "../types";
 
 function createMenuItems(data_id: string) {
     let menuItems: any[] = [];
@@ -46,7 +47,7 @@ export class GutterMenu {
     }
 
     onGutterClicked({detail}: any) {
-        console.log(detail);
+        // console.log(detail);
 
         //一次只移动一个块
         if (detail.blockElements.length > 1) {
@@ -80,7 +81,7 @@ export class GutterMenu {
     async reserveBlock(blockId) {
         let block = await serverApi.getBlockByID(blockId);
         let content: string = block.content;
-        console.log(content);
+        // console.log(content);
         let match = null
         //匹配日期正则表达式
         for (let pattern of DatePattern) {
@@ -105,9 +106,20 @@ export class GutterMenu {
         //检查是否是有效日期
         let date = new Date(`${year}-${month}-${day}`);
         if (date.toString() === 'Invalid Date') {
+            confirm('Error', `${year}-${month}-${day}: ${i18n.ReserveMenu.DateInvalid}`);
+            return;
+        }
+        //检查是不是过去
+        let today = new Date();
+        if (date < today) {
+            confirm('Error', `${year}-${month}-${day}: ${i18n.ReserveMenu.DatePast}`);
             return;
         }
 
-        
+        ShowReserveDialog(block, date);
     }
+}
+
+function ShowReserveDialog(block: Block, date: Date) {
+
 }
