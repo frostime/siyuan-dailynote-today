@@ -53,6 +53,7 @@
     },
     "ReserveMenu": {
         "name": "预约此块",
+        "Title": "确认将目标块预约到",
         "Date404": "没有找到可用于预约的日期!",
         "DateInvalid": "不是一个合法的日期!",
         "DatePast": "预约日期只能是未来!"

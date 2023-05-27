@@ -46,7 +46,7 @@ export class GutterMenu {
         this.eventBus.off("click-blockicon", clickEvent);
     }
 
-    onGutterClicked({detail}: any) {
+    onGutterClicked({ detail }: any) {
         // console.log(detail);
 
         //一次只移动一个块
@@ -82,7 +82,7 @@ export class GutterMenu {
         let block = await serverApi.getBlockByID(blockId);
         let kram = await serverApi.getBlockKramdown(block.id);
         let kramdown: string = kram.kramdown;
-        console.log(kramdown);
+        // console.log(kramdown);
         kramdown = kramdown.replace(/{: (?:\w+=".+")+}/g, '');
         // console.log(content);
         let match = null
@@ -120,12 +120,18 @@ export class GutterMenu {
             return;
         }
 
-        ShowReserveDialog(kramdown, date, match);
+        let html = createConfirmDialog(kramdown, match);
+        confirm(`${i18n.ReserveMenu.Title}: ${date.toLocaleDateString()}?`, html
+            , () => this.doReserveBlock(blockId, date)
+        );
+    }
+
+    doReserveBlock(blockId, date: Date) {
+        console.log(blockId, date);
     }
 }
 
-async function ShowReserveDialog(srcKramdown: string, dstDate: Date, match?) {
-    // console.log(kramdown);
+function createConfirmDialog(srcKramdown: string, match): string {
 
     function hightLightStr(text: string, beg: number, len: number) {
         let before = text.substring(0, beg);
@@ -135,13 +141,13 @@ async function ShowReserveDialog(srcKramdown: string, dstDate: Date, match?) {
     }
     srcKramdown = hightLightStr(srcKramdown, match.index, match[0].length);
     let html = lute.Md2HTML(srcKramdown);
-    console.log(html);
+    // console.log(html);
     html = `
     <p>关键词: ${match[0]}</p>
-    <div class="b3-typography mini-typofont"
+    <div class="b3-typography typofont-1rem"
         style="margin: 0.5rem; box-shadow: 0px 0px 5px var(--b3-theme-on-background);"
     >
         ${html}
     </div>`;
-    confirm(`${i18n.ReserveMenu.name}: ${dstDate.toLocaleDateString()}`, html);
+    return html;
 }
