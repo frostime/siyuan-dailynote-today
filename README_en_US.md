@@ -103,6 +103,8 @@ You can think of the reservation block as a simple schedule management or task r
     - The year can be left out, so that the same year is assumed by default: for example, on a day in the year 23, the date `09/08` will be assumed to be `2023-09-08`.
     - It is not possible to write in the past
     - If there are multiple dates in the compound specification, then only the first one will be matched
+4. This feature is **disabled by default** and should be turned on manually in the settings.
+
 
 
 > It's a pity that this version does not support English date mode very well, while it will be improved in later versions.
