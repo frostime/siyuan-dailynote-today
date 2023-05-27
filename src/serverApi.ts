@@ -100,6 +100,18 @@ export async function getBlockKramdown(blockId: string) {
     return request(url, { id: blockId });
 }
 
+// /api/attr/setBlockAttrs
+export async function setBlockAttrs(blockId: string, attrs: any) {
+    let url = '/api/attr/setBlockAttrs';
+    return request(url, { id: blockId, attrs: attrs });
+}
+
+// /api/attr/getBlockAttrs
+export async function getBlockAttrs(blockId: string) {
+    let url = '/api/attr/getBlockAttrs';
+    return request(url, { id: blockId });
+}
+
 
 export async function version(): Promise<string> {
     return request('/api/system/version', {});

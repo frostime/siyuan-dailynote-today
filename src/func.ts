@@ -6,6 +6,7 @@ import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
 import * as serverApi from './serverApi';
+import { reservation } from './global-status';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -213,6 +214,29 @@ export async function openDiary(notebook: Notebook) {
     //     window.open(`siyuan://blocks/${id}`);
     //     notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     // }
+}
+
+export async function insertTodayReservation(docId: string) {
+    let blockIDs = reservation.getTodayReservations();
+    if (blockIDs.length == 0) {
+        return;
+    }
+    let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
+    let blocks = await serverApi.sql(sql);
+    console.log(blocks);
+    if (blocks.length > 0) {
+        console.log(`今日已经插入过预约了`);
+        // let res = await serverApi.getBlockAttrs(blocks[0].id);
+        // console.log(res);
+        return;
+    }
+
+    blockIDs = blockIDs.map((id) => `"${id}"`);
+    let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
+    let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+    console.log(data);
+    let blockId = data[0].doOperations[0].id;
+    serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
 }
 
 export function compareVersion(v1Str: string, v2Str: string) {

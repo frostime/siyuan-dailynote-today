@@ -1,5 +1,5 @@
 import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
-import { currentDiaryStatus, openDiary } from "../func";
+import { currentDiaryStatus, insertTodayReservation, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { info, i18n } from "../utils";
@@ -105,12 +105,7 @@ export class ToolbarMenuItem {
                 }
                 if (dairyId) {
                     console.log(`open diary: ${dairyId}`);
-                    let blockIDs = reservation.getTodayReservations();
-                    if (blockIDs.length > 0) {
-                        blockIDs = blockIDs.map((id) => `"${id}"`);
-                        let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
-                        serverApi.prependBlock(dairyId, sqlBlock, 'markdown');
-                    }
+                    insertTodayReservation(dairyId);
                 }
             }
         }
