@@ -13,6 +13,7 @@ import { ContextMenu } from './components/move-menu';
 import { eventBus } from './event-bus';
 import * as serverApi from './serverApi';
 import { showChangeLog } from './changelog';
+import "./index.scss";
 
 
 export default class DailyNoteTodayPlugin extends Plugin {

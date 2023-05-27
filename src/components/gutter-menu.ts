@@ -80,13 +80,16 @@ export class GutterMenu {
 
     async reserveBlock(blockId) {
         let block = await serverApi.getBlockByID(blockId);
-        let content: string = block.content;
+        let kram = await serverApi.getBlockKramdown(block.id);
+        let kramdown: string = kram.kramdown;
+        console.log(kramdown);
+        kramdown = kramdown.replace(/{: (?:\w+=".+")+}/g, '');
         // console.log(content);
         let match = null
         //匹配日期正则表达式
         for (let pattern of DatePattern) {
             //find
-            match = content.match(pattern);
+            match = kramdown.match(pattern);
             if (match) {
                 break;
             }
@@ -95,6 +98,7 @@ export class GutterMenu {
             showMessage(i18n.ReserveMenu.Date404, 3000, 'error');
             return;
         }
+        console.log(match);
         let year = match.groups.year;
         let month = match.groups.month;
         let day = match.groups.day;
@@ -116,21 +120,28 @@ export class GutterMenu {
             return;
         }
 
-        ShowReserveDialog(block, date);
+        ShowReserveDialog(kramdown, date, match);
     }
 }
 
-async function ShowReserveDialog(block: Block, date: Date) {
-    let kram = await serverApi.getBlockKramdown(block.id);
-    let kramdown: string = kram.kramdown;
-    kramdown = kramdown.replace(/{: (?:\w+=".+")+}/g, '');
+async function ShowReserveDialog(srcKramdown: string, dstDate: Date, match?) {
     // console.log(kramdown);
-    let html = lute.Md2HTML(kramdown);
+
+    function hightLightStr(text: string, beg: number, len: number) {
+        let before = text.substring(0, beg);
+        let middle = text.substring(beg, beg + len);
+        let after = text.substring(beg + len);
+        return `${before}<span data-type="mark">${middle}</span>${after}`;
+    }
+    srcKramdown = hightLightStr(srcKramdown, match.index, match[0].length);
+    let html = lute.Md2HTML(srcKramdown);
     console.log(html);
-    html = `<div id="dialog" class="b3-typography" style="margin: 1.5rem">${html}</div>`;
-    new Dialog({
-        title: i18n.ReserveMenu.name,
-        content: html,
-        width: '50%',
-    })
+    html = `
+    <p>关键词: ${match[0]}</p>
+    <div class="b3-typography mini-typofont"
+        style="margin: 0.5rem; box-shadow: 0px 0px 5px var(--b3-theme-on-background);"
+    >
+        ${html}
+    </div>`;
+    confirm(`${i18n.ReserveMenu.name}: ${dstDate.toLocaleDateString()}`, html);
 }
