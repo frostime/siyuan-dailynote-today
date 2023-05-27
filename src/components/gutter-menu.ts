@@ -151,7 +151,7 @@ function createConfirmDialog(srcKramdown: string, match: RegExpMatchArray): stri
     let html = lute.Md2HTML(srcKramdown);
     // console.log(html);
     html = `
-    <p>关键词: ${match[0]}</p>
+    <p>${i18n.ReserveMenu.Match}: ${match[0]}</p>
     <div class="b3-typography typofont-1rem"
         style="margin: 0.5rem; box-shadow: 0px 0px 5px var(--b3-theme-on-background);"
     >

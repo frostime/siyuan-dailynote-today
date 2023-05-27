@@ -53,6 +53,7 @@
     },
     "ReserveMenu": {
         "name": "Reserve this block",
+        "Match": "Matched date",
         "Title": "Reserve this block to",
         "Date404": "No date time found for reserving!",
         "DateInvalid": "is not a valid date!",
