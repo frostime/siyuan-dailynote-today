@@ -199,6 +199,7 @@ export async function openDiary(notebook: Notebook) {
     await serverApi.createDailyNote(notebook.id, "");
     notify(`${i18n.Open}: ${notebook.name}`, 'info', 2000);
     let todayDiaryPath = notebook.dailynotePath;
+    //BUG 初次创建的时候可能会拿不到
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let docId = docs[0].id;
     info(`打开日记 ${notebook.name}${todayDiaryPath}; ID: ${docId}`);

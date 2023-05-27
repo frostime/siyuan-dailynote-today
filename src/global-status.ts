@@ -101,7 +101,7 @@ const ReserveFile = 'Reservation.json';
 class ReservationManger {
     plugin: Plugin;
 
-    reservations: { [date: string]: string[]} = {};
+    reservations: { "OnDate": {[date: string]: string[]} } = { "OnDate": {}};
 
     private dateTemplate(date: Date) {
         //确保日期格式为 YYYYMMDD
@@ -150,11 +150,11 @@ class ReservationManger {
         // YYYYMMDD
         console.log(`预约: ${blockId} 到 ${date}`);
         let date_str = this.dateTemplate(date);
-        if (!(date_str in this.reservations)) {
-            this.reservations[date_str] = [];
+        if (!(date_str in this.reservations.OnDate)) {
+            this.reservations.OnDate[date_str] = [];
         }
-        if (this.reservations[date_str].indexOf(blockId) < 0) {
-            this.reservations[date_str].push(blockId);
+        if (this.reservations.OnDate[date_str].indexOf(blockId) < 0) {
+            this.reservations.OnDate[date_str].push(blockId);
         }
     }
 
@@ -162,16 +162,16 @@ class ReservationManger {
     getTodayReservations(): string[] {
         let date = new Date();
         let date_str = this.dateTemplate(date);
-        return this.reservations[date_str] || [];
+        return this.reservations.OnDate[date_str] || [];
     }
 
     //清理已经过期的预约
     doPurgeExpired() {
         let date = new Date();
         let date_str = this.dateTemplate(date);
-        for (let key in this.reservations) {
+        for (let key in this.reservations.OnDate) {
             if (key < date_str) {
-                delete this.reservations[key];
+                delete this.reservations.OnDate[key];
             }
         }
     }

@@ -107,6 +107,14 @@
 
 ![](asset/MoveBlocks.gif)
 
+### 6. 预约块
+
+![](asset/Reserve1.png)
+
+![](asset/Reserve2.png)
+
+![](asset/Reserve3.png)
+
 ## 常见问题
 
 ### Q: 我不想每次打开笔记的时候就创建日记。
