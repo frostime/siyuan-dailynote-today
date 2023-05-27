@@ -211,15 +211,15 @@ export async function openDiary(notebook: Notebook) {
     // }
 }
 
-export async function updateTodayReservation(notebook: Notebook) {
+export async function updateTodayReservation(notebook: Notebook, refresh: boolean = false) {
     let todayDiaryPath = notebook.dailynotePath;
     //BUG 初次创建的时候可能会拿不到
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let docId = docs[0].id;
-    insertTodayReservation(docId);
+    updateDocReservation(docId, refresh);
 }
 
-export async function insertTodayReservation(docId: string) {
+export async function updateDocReservation(docId: string, refresh: boolean = false) {
     let blockIDs = reservation.getTodayReservations();
     if (blockIDs.length == 0) {
         return;
@@ -228,17 +228,22 @@ export async function insertTodayReservation(docId: string) {
     let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
     let blocks = await serverApi.sql(sql);
     if (blocks.length > 0) {
-        console.log(`今日已经插入过预约了`);
-        // let res = await serverApi.getBlockAttrs(blocks[0].id);
-        // console.log(res);
-        return;
+        if (!refresh) {
+            console.log(`今日已经插入过预约了`);
+            return;
+        } else {
+            blockIDs = blockIDs.map((id) => `"${id}"`);
+            let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
+            serverApi.updateBlock(blocks[0].id, sqlBlock, 'markdown');
+        }
+    } else {
+        //插入嵌入块
+        blockIDs = blockIDs.map((id) => `"${id}"`);
+        let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
+        let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+        let blockId = data[0].doOperations[0].id;
+        serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
     }
-    //插入嵌入块
-    blockIDs = blockIDs.map((id) => `"${id}"`);
-    let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
-    let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
-    let blockId = data[0].doOperations[0].id;
-    serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
 }
 
 export function compareVersion(v1Str: string, v2Str: string) {

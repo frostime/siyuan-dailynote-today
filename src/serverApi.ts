@@ -88,6 +88,12 @@ export async function deleteBlock(blockId: string) {
     return request(url, { id: blockId });
 }
 
+// /api/block/updateBlock
+export async function updateBlock(blockId: string, content: string, dataType: 'markdown' | 'dom') {
+    let url = '/api/block/updateBlock';
+    return request(url, { id: blockId, data: content, dataType: dataType });
+}
+
 export async function renderSprig(sprig: string) {
     let url = '/api/template/renderSprig';
     return request(url, { template: sprig });

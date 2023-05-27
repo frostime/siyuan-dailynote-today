@@ -1,5 +1,5 @@
 import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
-import { currentDiaryStatus, insertTodayReservation, openDiary, updateTodayReservation } from "../func";
+import { currentDiaryStatus, updateDocReservation, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { info, i18n } from "../utils";
