@@ -1,4 +1,4 @@
-import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
+import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-status";
@@ -94,7 +94,8 @@ export class ToolbarMenuItem {
                     if (notebook) {
                         openDiary(notebook);
                     } else {
-                        showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
+                        // showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
+                        confirm(i18n.Name, `${notebookId}: ${i18n.InvalidDefaultNotebook}`)
                         // openDiary(notebooks.get(0));
                     }
                 } else {

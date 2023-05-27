@@ -45,7 +45,7 @@
     "Open": "打开日记",
     "Create": "创建日记",
     "UpdateAll": "笔记本状态已更新",
-    "InvalidDefaultNotebook": "非法的笔记本 ID, 请检查你的设置",
+    "InvalidDefaultNotebook": "<p>很抱歉, 插件没有找对应这个 ID 的笔记本; 可能这是一个不合法的 ID, 或对应的笔记本被你关闭了。</p><p>建议你仔细检查插件的设置。</p>",
     "MoveMenu": {
         "Move": "移动到",
         "NotLi": "不可以移动单独的列表项，请移动整个列表!",
