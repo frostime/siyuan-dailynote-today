@@ -95,3 +95,87 @@ class SettingManager {
 }
 
 export const settings: SettingManager = new SettingManager();
+
+const ReserveFile = 'Reservation.json';
+
+class ReservationManger {
+    plugin: Plugin;
+
+    reservations: { "OnDate": {[date: string]: string[]} } = { "OnDate": {}};
+
+    private dateTemplate(date: Date) {
+        //确保日期格式为 YYYYMMDD
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
+    }
+
+    setPlugin(plugin: Plugin) {
+        this.plugin = plugin;
+    }
+
+    async load() {
+        let loaded = await this.plugin.loadData(ReserveFile);
+        if (loaded == null || loaded == undefined || loaded == '') {
+            //如果没有配置文件，则使用默认配置，并保存
+            info(`没有预约文件，使用默认配置`)
+            this.save();
+        } else {
+            //如果有配置文件，则使用配置文件
+            info(`读入预约文件: ${ReserveFile}`)
+            console.log(loaded);
+            if (typeof loaded === 'string') {
+                loaded = JSON.parse(loaded);
+            }
+            try {
+                for (let key in loaded) {
+                    this.reservations[key] = loaded[key];
+                }
+            } catch (error_msg) {
+                error(`Setting load error: ${error_msg}`);
+            }
+            this.save();
+        }
+    }
+
+    save() {
+        let json = JSON.stringify(this.reservations);
+        info(`写入预约文件: ${json}`);
+        this.plugin.saveData(ReserveFile, json);
+    }
+
+    //添加预约
+    doReserve(date: Date, blockId: string) {
+        // YYYYMMDD
+        console.log(`预约: ${blockId} 到 ${date}`);
+        let date_str = this.dateTemplate(date);
+        if (!(date_str in this.reservations.OnDate)) {
+            this.reservations.OnDate[date_str] = [];
+        }
+        if (this.reservations.OnDate[date_str].indexOf(blockId) < 0) {
+            this.reservations.OnDate[date_str].push(blockId);
+        }
+    }
+
+    //获取今天的预约
+    getTodayReservations(): string[] {
+        let date = new Date();
+        let date_str = this.dateTemplate(date);
+        return this.reservations.OnDate[date_str] || [];
+    }
+
+    //清理已经过期的预约
+    doPurgeExpired() {
+        let date = new Date();
+        let date_str = this.dateTemplate(date);
+        for (let key in this.reservations.OnDate) {
+            if (key < date_str) {
+                delete this.reservations.OnDate[key];
+            }
+        }
+    }
+}
+
+export const reservation: ReservationManger = new ReservationManger();
+

@@ -88,9 +88,34 @@ export async function deleteBlock(blockId: string) {
     return request(url, { id: blockId });
 }
 
+// /api/block/updateBlock
+export async function updateBlock(blockId: string, content: string, dataType: 'markdown' | 'dom') {
+    let url = '/api/block/updateBlock';
+    return request(url, { id: blockId, data: content, dataType: dataType });
+}
+
 export async function renderSprig(sprig: string) {
     let url = '/api/template/renderSprig';
     return request(url, { template: sprig });
+}
+
+
+// /api/block/getBlockKramdown
+export async function getBlockKramdown(blockId: string) {
+    let url = '/api/block/getBlockKramdown';
+    return request(url, { id: blockId });
+}
+
+// /api/attr/setBlockAttrs
+export async function setBlockAttrs(blockId: string, attrs: any) {
+    let url = '/api/attr/setBlockAttrs';
+    return request(url, { id: blockId, attrs: attrs });
+}
+
+// /api/attr/getBlockAttrs
+export async function getBlockAttrs(blockId: string) {
+    let url = '/api/attr/getBlockAttrs';
+    return request(url, { id: blockId });
 }
 
 

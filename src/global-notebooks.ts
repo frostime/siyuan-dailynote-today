@@ -1,10 +1,12 @@
 import { getDocsByHpath, queryNotebooks } from './func';
+import { settings } from './global-status';
 import { Notebook } from './types';
 import { info } from './utils';
 
 
 class Notebooks {
     notebooks: Array<Notebook>;
+    default: Notebook;
     [key: number]: Notebook;
 
     constructor() {
@@ -49,11 +51,23 @@ class Notebooks {
             }
             retry++;
         }
+        this.updateDefault();
     }
 
     async update() {
         let result = await queryNotebooks();
         this.notebooks = result ? result : [];
+        this.updateDefault();
+    }
+
+    updateDefault() {
+        let notebookId: string = settings.get('DefaultNotebook');
+        notebookId = notebookId.trim();
+        if (notebookId != '') {
+            this.default = this.find(notebookId);
+        } else {
+            this.default = this.get(0);
+        }
     }
 
 }

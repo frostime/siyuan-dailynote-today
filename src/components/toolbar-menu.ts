@@ -1,10 +1,11 @@
-import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
-import { currentDiaryStatus, openDiary } from "../func";
+import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
+import { currentDiaryStatus, updateDocReservation, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
-import { settings } from "../global-status";
+import { reservation, settings } from "../global-status";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
+import * as serverApi from '../serverApi';
 import { Notebook } from "../types";
 
 export class ToolbarMenuItem {
@@ -89,16 +90,25 @@ export class ToolbarMenuItem {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
                 notebookId = notebookId.trim();
+                let notebook: Notebook;
                 if (notebookId != '') {
-                    let notebook = notebooks.find(notebookId);
+                    notebook = notebooks.find(notebookId);
                     if (notebook) {
-                        openDiary(notebook);
+                        await openDiary(notebook);
                     } else {
-                        showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
+                        // showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
+                        confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
                         // openDiary(notebooks.get(0));
+                        return
                     }
                 } else {
-                    openDiary(notebooks.get(0));
+                    await openDiary(notebooks.get(0));
+                    notebook = notebooks.get(0);
+                }
+                if (notebook) {
+                    console.log(`open diary: ${notebook.name}`);
+                    //不等一会的话, 会拿不到新创建的日记的 ID
+                    setTimeout(() => updateTodayReservation(notebook), 2000);
                 }
             }
         }

@@ -47,20 +47,9 @@
 - Ignore "SiYuan User Guide" notebook by default.
 - The custom paths and templates set in the notebook settings page are still valid
 
-> - **Note: Don't misunderstand**, this drop-down box is not for selecting the default notebook, but for opening the diary quickly!
-> - You can totally interpret this as moving the "Create Diary" menu that comes with Siyuan to the top level and adding a diary status display.
-> - To specify the default notebook, please go to Settings Panel.
+> - **Note: Don't misunderstand**, this drop-down box is not for selecting the default notebook, but for opening the diary quickly! For more details, see [FAQ-Q: Is the dropdown box used...](#q-is-the-dropdown-box-is-used-for-selecting-the-default-notebook)
 
-#### 2.1 Example
-
-For example, I currently have four notebooks. If I click the button in the drop-down box, it will open the diary for today in the corresponding notebook.
-Life, work, and Hobby have a "√" in front of them, which means that they have already created diaries.
-
-![](asset/IconMenu.png)
-
-At this point, if I click on "Academic Learn", then a new diary will be created under this notebook, and then you can open the drop-down box again and you will see that a √ symbol also appears in front of this notebook.
-
-#### 2.2 Update with date
+#### 2.1 Update with date
 
 At 0 o'clock the plug-in will automatically chime in and update the status of your diary, at which point you can click on the top bar menu to open the diary for the new day. However, it does not automatically create a diary for you.
 
@@ -83,9 +72,40 @@ This feature can be turned off in the settings, but this setting is scheduled to
 - Click "Update" to update the global status
     - Read[FAQ](#q-when-do-i-need-to-update-status) for details
 
-### 4. Setting pannel
+### 4. Reserve a block
 
-![](asset/Setting.png)
+You can think of the reservation block as a simple schedule management or task reminder tool. We often encounter such requirements: we need to complete a specific task on a future date. In this case, you can use the reservation block feature:
+
+1. Click the block and select "Reserve this block".
+
+    ![](asset/Reserve1.png)
+2. The plugin will automatically match the date and time in the block content, and after confirmation, the plugin will help you record the reservation.
+
+    The matched time will be highlighted in the confirmation dialog;. As you can see below, the plug-in matches `6月01号` and resolves to `2023-06-01`.
+
+    > `6月01号` is the date representative in chinese.
+
+    ![](asset/Reserve2.png)
+4. When the day arrives, the plugin will automatically insert the related reservations as embedded blocks into the diary entry.
+
+    ![](asset/Reserve3.png)
+
+
+### Notice
+
+1. The current version (1.1.0) will only insert automatically when the diary is created/opened automatically by the plugin
+2. You can use the 'Update' button to manually insert appointment blocks into the diary
+3. The date matching rules currently supported are limited to.
+    - Standard date: `2020-04-01`, `2020/04/01`
+    - --Chinese year, month and day: `2020年5月2号`, `2020年5月2日`--
+    - There can be spaces between dates: `2020-02-01` and `2020 - 02 - 01` are both possible
+    - The month and the date can be added with 0: `6-01`, `6-01`, `06-01` are all possible
+    - The year can be left out, so that the same year is assumed by default: for example, on a day in the year 23, the date `09/08` will be assumed to be `2023-09-08`.
+    - It is not possible to write in the past
+    - If there are multiple dates in the compound specification, then only the first one will be matched
+
+
+> It's a pity that this version does not support English date mode very well, while it will be improved in later versions.
 
 ### 5. Move blocks into today's daily note
 
@@ -102,6 +122,10 @@ This feature can be turned off in the settings, but this setting is scheduled to
 
 ![](asset/MoveBlocks.gif)
 
+### 6. Setting pannel
+
+![](asset/Setting.png)
+
 
 ## FAQ
 
@@ -109,6 +133,20 @@ This feature can be turned off in the settings, but this setting is scheduled to
 ### Q: I don't want to create a diary automatically.
 
 Please toggle off "Open Today's Diary Automatically" in the plugin settings.
+
+### Q: Is the dropdown box used for selecting the default notebook?
+
+> - **Note: Don't misunderstand**, this drop-down box is not for selecting the default notebook, but for opening the diary quickly!
+> - You can totally interpret this as moving the "Create Diary" menu that comes with Siyuan to the top level and adding a diary status display.
+> - To specify the default notebook, please go to Settings Panel.
+
+
+For example, I currently have four notebooks. If I click the button in the drop-down box, it will open the diary for today in the corresponding notebook.
+Life, work, and Hobby have a "√" in front of them, which means that they have already created diaries.
+
+![](asset/IconMenu.png)
+
+At this point, if I click on "Academic Learn", then a new diary will be created under this notebook, and then you can open the drop-down box again and you will see that a √ symbol also appears in front of this notebook.
 
 ### Q: When do I need to "Update" status
 

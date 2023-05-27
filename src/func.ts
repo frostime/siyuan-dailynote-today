@@ -6,6 +6,7 @@ import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
 import * as serverApi from './serverApi';
+import { reservation } from './global-status';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -194,9 +195,6 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    // let todayDiaryPath = notebook.dailynotePath;
-    // info(`打开日记 ${notebook.name}${todayDiaryPath}`);
-    // let docs = await getDocsByHpath(todayDiaryPath!, notebook);
 
     await serverApi.createDailyNote(notebook.id, "");
     notify(`${i18n.Open}: ${notebook.name}`, 'info', 2000);
@@ -211,6 +209,42 @@ export async function openDiary(notebook: Notebook) {
     //     window.open(`siyuan://blocks/${id}`);
     //     notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     // }
+}
+
+export async function updateTodayReservation(notebook: Notebook, refresh: boolean = false) {
+    let todayDiaryPath = notebook.dailynotePath;
+    //BUG 初次创建的时候可能会拿不到
+    let docs = await getDocsByHpath(todayDiaryPath!, notebook);
+    let docId = docs[0].id;
+    updateDocReservation(docId, refresh);
+}
+
+export async function updateDocReservation(docId: string, refresh: boolean = false) {
+    let blockIDs = reservation.getTodayReservations();
+    if (blockIDs.length == 0) {
+        return;
+    }
+    //检查是否已经插入过
+    let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
+    let blocks = await serverApi.sql(sql);
+    if (blocks.length > 0) {
+        if (!refresh) {
+            console.log(`今日已经插入过预约了`);
+            return;
+        } else {
+            blockIDs = blockIDs.map((id) => `"${id}"`);
+            let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
+            serverApi.updateBlock(blocks[0].id, sqlBlock, 'markdown');
+            serverApi.setBlockAttrs(blocks[0].id, { name: 'Reservation', breadcrumb: "true"});
+        }
+    } else {
+        //插入嵌入块
+        blockIDs = blockIDs.map((id) => `"${id}"`);
+        let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
+        let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+        let blockId = data[0].doOperations[0].id;
+        serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
+    }
 }
 
 export function compareVersion(v1Str: string, v2Str: string) {
