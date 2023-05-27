@@ -1,11 +1,11 @@
 import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
-import { currentDiaryStatus, openDiary } from "../func";
+import { currentDiaryStatus, insertTodayReservation, openDiary } from "../func";
 import notebooks from "../global-notebooks";
-import { settings } from "../global-status";
+import { reservation, settings } from "../global-status";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
-import { Notebook } from "../types";
+import * as serverApi from '../serverApi';
 
 export class ToolbarMenuItem {
     plugin: Plugin;
@@ -89,17 +89,23 @@ export class ToolbarMenuItem {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
                 notebookId = notebookId.trim();
+                let dairyId: string;
                 if (notebookId != '') {
                     let notebook = notebooks.find(notebookId);
                     if (notebook) {
-                        openDiary(notebook);
+                        dairyId = await openDiary(notebook);
                     } else {
                         // showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
-                        confirm(i18n.Name, `${notebookId}: ${i18n.InvalidDefaultNotebook}`)
+                        confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
                         // openDiary(notebooks.get(0));
+                        return
                     }
                 } else {
-                    openDiary(notebooks.get(0));
+                    dairyId = await openDiary(notebooks.get(0));
+                }
+                if (dairyId) {
+                    console.log(`open diary: ${dairyId}`);
+                    insertTodayReservation(dairyId);
                 }
             }
         }
