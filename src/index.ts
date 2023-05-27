@@ -5,7 +5,7 @@ import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import { notify, compareVersion } from './func';
+import { notify, compareVersion, updateTodayReservation } from './func';
 import { error, info, setI18n } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
@@ -146,6 +146,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.menu.removeEditorTabObserver();
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
+        updateTodayReservation(notebooks.default);
         notify(this.i18n.UpdateAll, 'info', 2500);
     }
 
