@@ -26,9 +26,22 @@ function createMenuItems(data_id: string) {
 
 let clickEvent: any;
 
-const DatePattern = [
-    //xxxx年xx月xx日, xxxx-xx-xx, xxxx/xx/xx
-    /(?:(?<year>\d{4})[ ]?[-年/])?(?:[ ]?(?<month>\d{1,2})[ ]?[-月/])[ ]?(?<day>\d{1,2})[ ]?[日号]?/
+const DatePatternRules = [
+    {
+        pattern: /(?:(?<year>\d{4})[ ]?[-年/])?(?:[ ]?(?<month>\d{1,2})[ ]?[-月/])[ ]?(?<day>\d{1,2})[ ]?[日号]?/,
+        parse(match: RegExpMatchArray) {
+            console.log(match);
+            let year = match.groups.year;
+            let month = match.groups.month;
+            let day = match.groups.day;
+            if (!year) {
+                let today = new Date();
+                year = today.getFullYear().toString();
+            }
+            console.log(year, month, day);
+            return [year, month, day];
+        }
+    }
 ]
 
 //后面会用来替代原来的菜单组件
@@ -85,12 +98,14 @@ export class GutterMenu {
         // console.log(kramdown);
         kramdown = kramdown.replace(/{: (?:\w+=".+")+}/g, '');
         // console.log(content);
-        let match = null
+        let match = null;
+        let year: string, month: string, day: string = null;
         //匹配日期正则表达式
-        for (let pattern of DatePattern) {
+        for (let rule of DatePatternRules) {
             //find
-            match = kramdown.match(pattern);
+            match = kramdown.match(rule.pattern);
             if (match) {
+                [year, month, day] = rule.parse(match);
                 break;
             }
         }
@@ -98,16 +113,7 @@ export class GutterMenu {
             showMessage(i18n.ReserveMenu.Date404, 3000, 'error');
             return;
         }
-        console.log(match);
-        let year = match.groups.year;
-        let month = match.groups.month;
-        let day = match.groups.day;
-        if (!year) {
-            let today = new Date();
-            year = today.getFullYear().toString();
-        }
-        console.log(year, month, day);
-        //检查是否是有效日期
+
         let date = new Date(`${year}-${month}-${day}`);
         if (date.toString() === 'Invalid Date') {
             confirm('Error', `${year}-${month}-${day}: ${i18n.ReserveMenu.DateInvalid}`);
@@ -131,7 +137,7 @@ export class GutterMenu {
     }
 }
 
-function createConfirmDialog(srcKramdown: string, match): string {
+function createConfirmDialog(srcKramdown: string, match: RegExpMatchArray): string {
 
     function hightLightStr(text: string, beg: number, len: number) {
         let before = text.substring(0, beg);
