@@ -10,7 +10,8 @@ import { eventBus } from './event-bus';
 type IconPosition = 'left' | 'right';
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
-    'DiaryUpToDate' | 'PluginVersion' | "EnableMove"
+    'DiaryUpToDate' | 'PluginVersion' | "EnableMove" |
+    'EnableReserve'
 );
 
 interface Item {
@@ -30,7 +31,9 @@ class SettingManager {
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
         PluginVersion: '',
-        EnableMove: false as boolean
+        EnableMove: false as boolean,
+        EnableReserve: false as boolean
+
     };
 
     constructor() {

@@ -103,6 +103,8 @@ You can think of the reservation block as a simple schedule management or task r
     - The year can be left out, so that the same year is assumed by default: for example, on a day in the year 23, the date `09/08` will be assumed to be `2023-09-08`.
     - It is not possible to write in the past
     - If there are multiple dates in the compound specification, then only the first one will be matched
+4. This feature is **disabled by default** and should be turned on manually in the settings.
+
 
 
 > It's a pity that this version does not support English date mode very well, while it will be improved in later versions.
@@ -153,12 +155,15 @@ At this point, if I click on "Academic Learn", then a new diary will be created 
 - When there is an update to a notebook (such as opening/closing/creating/moving a notebook), press the keyboard shortcut "ctrl+alt+u" to update the status.
     - The plugin can automatically track the creation status of the note, but it will not track the status of the notebooks.
 - When "Alt + right click" can note bring up moving menu, try updating.
+- Manual update of the day's reservation block
 
-### Q: Why is it so slow when moving header blocks?
+### Q: Why did you design the 'moving blocks' feature for the daily note workflow?
 
-It's not slow, it's just that there is a process when moving blocks.
+Siyuan is different from Logseq, it has the concept of notebooks. The way to use 'move block' is to write in the main notebook and then assign it to the corresponding notebook with one click through the move block function. This is done with the following considerations in mind:
 
-In SiYuan, header blocks are not container blocks, so it is not possible to move them all at once. It requires recognition of which blocks belong to the current header, so it takes some time.
+1. logically, it allows the content of a specific notebook's topic to stay entirely in its own notebook, rather than having all the content in the main notebook with only topic nodes under the topic notebook
+2. data management-wise, spreading the blocks within other notebooks helps optimise performance; so that when you may not need the notebook in the future, you can close it without any worries.
+    Whereas if all notes are stacked in the same notebook, even if you close other notebooks, it won't help much to alleviate performance problems - because the content blocks are all in the main notebook.
 
 
 ## CHANGELOG

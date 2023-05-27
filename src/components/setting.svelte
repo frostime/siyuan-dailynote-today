@@ -51,6 +51,12 @@
         settingValue={settings.get("EnableMove")}
     />
     <SettingItem
+        type="checkbox"
+        content={contents.EnableReserve}
+        settingKey="EnableReserve"
+        settingValue={settings.get("EnableReserve")}
+    />
+    <SettingItem
         type="button"
         content={contents.update}
         settingKey="Update"
