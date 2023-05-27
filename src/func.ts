@@ -227,7 +227,6 @@ export async function insertTodayReservation(docId: string) {
     //检查是否已经插入过
     let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
     let blocks = await serverApi.sql(sql);
-    console.log(blocks);
     if (blocks.length > 0) {
         console.log(`今日已经插入过预约了`);
         // let res = await serverApi.getBlockAttrs(blocks[0].id);
@@ -238,7 +237,6 @@ export async function insertTodayReservation(docId: string) {
     blockIDs = blockIDs.map((id) => `"${id}"`);
     let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
     let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
-    console.log(data);
     let blockId = data[0].doOperations[0].id;
     serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
 }

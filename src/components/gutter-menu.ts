@@ -121,6 +121,7 @@ export class GutterMenu {
         }
         //检查是不是过去
         let today = new Date();
+        today.setHours(0, 0, 0, 0); //TODO 测试用, 用完删除
         if (date < today) {
             confirm('Error', `${year}-${month}-${day}: ${i18n.ReserveMenu.DatePast}`);
             return;
