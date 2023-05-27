@@ -1,11 +1,12 @@
 import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
-import { currentDiaryStatus, insertTodayReservation, openDiary } from "../func";
+import { currentDiaryStatus, insertTodayReservation, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
 import * as serverApi from '../serverApi';
+import { Notebook } from "../types";
 
 export class ToolbarMenuItem {
     plugin: Plugin;
@@ -89,11 +90,11 @@ export class ToolbarMenuItem {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
                 notebookId = notebookId.trim();
-                let dairyId: string;
+                let notebook: Notebook;
                 if (notebookId != '') {
-                    let notebook = notebooks.find(notebookId);
+                    notebook = notebooks.find(notebookId);
                     if (notebook) {
-                        dairyId = await openDiary(notebook);
+                        await openDiary(notebook);
                     } else {
                         // showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
                         confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
@@ -101,11 +102,12 @@ export class ToolbarMenuItem {
                         return
                     }
                 } else {
-                    dairyId = await openDiary(notebooks.get(0));
+                    await openDiary(notebooks.get(0));
+                    notebook = notebooks.get(0);
                 }
-                if (dairyId) {
-                    console.log(`open diary: ${dairyId}`);
-                    insertTodayReservation(dairyId);
+                if (notebook) {
+                    console.log(`open diary: ${notebook}`);
+                    updateTodayReservation(notebook);
                 }
             }
         }
