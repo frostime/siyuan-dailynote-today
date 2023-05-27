@@ -105,8 +105,10 @@ class ReservationManger {
 
     private dateTemplate(date: Date) {
         //确保日期格式为 YYYYMMDD
-        // return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
-        return date.toISOString().slice(0, 10).replace(/-/g, "");
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
     }
 
     setPlugin(plugin: Plugin) {
