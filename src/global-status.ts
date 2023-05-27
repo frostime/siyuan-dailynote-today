@@ -95,3 +95,56 @@ class SettingManager {
 }
 
 export const settings: SettingManager = new SettingManager();
+
+const ReserveFile = 'Reservation.json';
+
+class ReservationManger {
+    plugin: Plugin;
+
+    reservations: { [date: string]: string[]} = {};
+
+    private dateTemplate(date: Date) {
+        return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
+    }
+
+    setPlugin(plugin: Plugin) {
+        this.plugin = plugin;
+    }
+
+    save() {
+        let json = JSON.stringify(this.reservations);
+        info(`写入预约文件: ${json}`);
+        this.plugin.saveData(ReserveFile, json);
+    }
+
+    //添加预约
+    doReserve(date: Date, blockId: string) {
+        // YYYYMMDD
+        let date_str = this.dateTemplate(date);
+        if (!(date_str in this.reservations)) {
+            this.reservations[date_str] = [];
+        }
+        this.reservations[date_str].push(blockId);
+    }
+
+    //获取今天的预约
+    getTodayReservations(): string[] {
+        let date = new Date();
+        let date_str = this.dateTemplate(date);
+        return this.reservations[date_str] || [];
+    }
+
+    //清理已经过期的预约
+    doPurgeExpired() {
+        let date = new Date();
+        let date_str = this.dateTemplate(date);
+        for (let key in this.reservations) {
+            if (key < date_str) {
+                delete this.reservations[key];
+            }
+        }
+    }
+}
+
+export const reservation: ReservationManger = new ReservationManger();
+
