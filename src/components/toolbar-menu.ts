@@ -1,5 +1,5 @@
 import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
-import { currentDiaryStatus, updateDocReservation, openDiary, updateTodayReservation } from "../func";
+import { currentDiaryStatus, updateDocReservation, openDiary, updateTodayReservation, initTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { info, i18n } from "../utils";
@@ -106,9 +106,7 @@ export class ToolbarMenuItem {
                     notebook = notebooks.get(0);
                 }
                 if (notebook) {
-                    console.log(`open diary: ${notebook.name}`);
-                    //不等一会的话, 会拿不到新创建的日记的 ID
-                    setTimeout(() => updateTodayReservation(notebook), 2000);
+                    initTodayReservation(notebook);
                 }
             }
         }
