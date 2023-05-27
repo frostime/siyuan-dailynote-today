@@ -51,6 +51,13 @@
         "NotLi": "Only support moving entrie list, instead of signle list item!",
         "VerIssue": "Current version dose not support \"Move Blocks\" function (≥ 2.8.8))"
     },
+    "ReserveMenu": {
+        "name": "Reserve this block",
+        "Title": "Reserve this block to",
+        "Date404": "No date time found for reserving!",
+        "DateInvalid": "is not a valid date!",
+        "DatePast": "Can not reserve for past time!"
+    },
     "NewDay": [
         "Today is ",
         "plugin up to date"
