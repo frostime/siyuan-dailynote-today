@@ -7,7 +7,7 @@ import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { notify, compareVersion } from './func';
 import { error, info, setI18n } from './utils';
-import { settings } from './global-status';
+import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/move-menu';
 import { eventBus } from './event-bus';
@@ -38,6 +38,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         setI18n(this.i18n); //设置全局 i18n
 
         settings.setPlugin(this);
+        reservation.setPlugin(this);
 
         let start = performance.now();
         await notebooks.init();
@@ -50,6 +51,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         //     callback: this.updateAll.bind(this),
         // });
 
+        reservation.load();
         await settings.load();
         await this.checkSysVer();
         this.checkPluginVersion();

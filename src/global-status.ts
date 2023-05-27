@@ -104,11 +104,37 @@ class ReservationManger {
     reservations: { [date: string]: string[]} = {};
 
     private dateTemplate(date: Date) {
-        return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
+        //确保日期格式为 YYYYMMDD
+        // return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
+        return date.toISOString().slice(0, 10).replace(/-/g, "");
     }
 
     setPlugin(plugin: Plugin) {
         this.plugin = plugin;
+    }
+
+    async load() {
+        let loaded = await this.plugin.loadData(ReserveFile);
+        if (loaded == null || loaded == undefined || loaded == '') {
+            //如果没有配置文件，则使用默认配置，并保存
+            info(`没有预约文件，使用默认配置`)
+            this.save();
+        } else {
+            //如果有配置文件，则使用配置文件
+            info(`读入预约文件: ${ReserveFile}`)
+            console.log(loaded);
+            if (typeof loaded === 'string') {
+                loaded = JSON.parse(loaded);
+            }
+            try {
+                for (let key in loaded) {
+                    this.reservations[key] = loaded[key];
+                }
+            } catch (error_msg) {
+                error(`Setting load error: ${error_msg}`);
+            }
+            this.save();
+        }
     }
 
     save() {
@@ -120,11 +146,14 @@ class ReservationManger {
     //添加预约
     doReserve(date: Date, blockId: string) {
         // YYYYMMDD
+        console.log(`预约: ${blockId} 到 ${date}`);
         let date_str = this.dateTemplate(date);
         if (!(date_str in this.reservations)) {
             this.reservations[date_str] = [];
         }
-        this.reservations[date_str].push(blockId);
+        if (this.reservations[date_str].indexOf(blockId) < 0) {
+            this.reservations[date_str].push(blockId);
+        }
     }
 
     //获取今天的预约

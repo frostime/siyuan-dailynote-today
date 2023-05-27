@@ -5,7 +5,7 @@ import { eventBus } from "../event-bus";
 import { Menu, showMessage, confirm, Dialog } from "siyuan";
 import { iconDiary } from "./svg";
 import * as serverApi from "../serverApi";
-import { Block } from "../types";
+import { reservation } from "../global-status";
 
 function createMenuItems(data_id: string) {
     let menuItems: any[] = [];
@@ -134,6 +134,8 @@ export class GutterMenu {
 
     doReserveBlock(blockId, date: Date) {
         console.log(blockId, date);
+        reservation.doReserve(date, blockId);
+        reservation.save();
     }
 }
 
