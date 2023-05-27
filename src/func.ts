@@ -194,12 +194,14 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    // let todayDiaryPath = notebook.dailynotePath;
-    // info(`打开日记 ${notebook.name}${todayDiaryPath}`);
-    // let docs = await getDocsByHpath(todayDiaryPath!, notebook);
 
     await serverApi.createDailyNote(notebook.id, "");
     notify(`${i18n.Open}: ${notebook.name}`, 'info', 2000);
+    let todayDiaryPath = notebook.dailynotePath;
+    let docs = await getDocsByHpath(todayDiaryPath!, notebook);
+    let docId = docs[0].id;
+    info(`打开日记 ${notebook.name}${todayDiaryPath}; ID: ${docId}`);
+    return docId;
 
     // if (docs != null && docs.length > 0) {
     //     let doc = docs[0];
