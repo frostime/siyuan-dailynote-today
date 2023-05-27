@@ -5,7 +5,7 @@ import { eventBus } from "../event-bus";
 import { Menu, showMessage, confirm } from "siyuan";
 import { iconDiary } from "./svg";
 import * as serverApi from "../serverApi";
-import { reservation } from "../global-status";
+import { reservation, settings } from "../global-status";
 
 function createMenuItems(data_id: string) {
     let menuItems: any[] = [];
@@ -70,24 +70,32 @@ export class GutterMenu {
         // detail.menu.addSeparator(0);
         let menu: Menu = detail.menu;
         let blockId = detail.blockElements[0].getAttribute('data-node-id');
-        let items = createMenuItems(blockId);
+
+        let menuList = [];
+        if (settings.get("EnableMove") === true) {
+            let items = createMenuItems(blockId);
+            menuList.push({
+                label: i18n.MoveMenu.Move,
+                type: 'submenu',
+                icon: 'iconMove',
+                submenu: items,
+            });
+        }
+
+        if (settings.get("EnableReserve") === true) {
+            menuList.push({
+                label: i18n.ReserveMenu.name,
+                icon: 'iconHistory',
+                click: () => this.reserveBlock(blockId)
+            });
+        }
+
+
         menu.addItem({
             iconHTML: iconDiary.icon16,
             label: i18n.Name,
             type: 'submenu',
-            submenu: [
-                {
-                    label: i18n.MoveMenu.Move,
-                    type: 'submenu',
-                    icon: 'iconMove',
-                    submenu: items,
-                },
-                {
-                    label: i18n.ReserveMenu.name,
-                    icon: 'iconHistory',
-                    click: () => this.reserveBlock(blockId)
-                }
-            ]
+            submenu: menuList
         });
     }
 

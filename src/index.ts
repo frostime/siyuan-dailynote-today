@@ -129,7 +129,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initBlockIconClickEvent() {
-        if (settings.get("EnableMove") === true) {
+        if (settings.get("EnableMove") === true || settings.get("EnableReserve") === true) {
             // console.log(settings.get("EnableMove"));
             info('添加块菜单项目');
             this.enableBlockIconClickEvent = true;
