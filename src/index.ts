@@ -146,7 +146,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.menu.removeEditorTabObserver();
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
-        updateTodayReservation(notebooks.default);
+        updateTodayReservation(notebooks.default, true);
         notify(this.i18n.UpdateAll, 'info', 2500);
     }
 

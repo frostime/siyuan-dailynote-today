@@ -235,6 +235,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
             blockIDs = blockIDs.map((id) => `"${id}"`);
             let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
             serverApi.updateBlock(blocks[0].id, sqlBlock, 'markdown');
+            serverApi.setBlockAttrs(blocks[0].id, { name: 'Reservation', breadcrumb: "true"});
         }
     } else {
         //插入嵌入块
