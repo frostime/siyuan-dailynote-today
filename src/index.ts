@@ -52,7 +52,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         this.initSetting();
         this.initContextMenu(); //不依赖 settings.load();
-        // this.initToolbarItem();
         this.initUpToDate();  //依赖 settings.load();
 
         eventBus.subscribe('UpdateAll', () => {this.updateAll()});
