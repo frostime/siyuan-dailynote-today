@@ -86,9 +86,11 @@ You can think of the reservation block as a simple schedule management or task r
     > `6月01号` is the date representative in chinese.
 
     ![](asset/Reserve2.png)
-4. When the day arrives, the plugin will automatically insert the related reservations as embedded blocks into the diary entry.
+3. When the day arrives, the plugin will automatically insert the related reservations as embedded blocks into the diary entry.
 
     ![](asset/Reserve3.png)
+
+4. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
 
 
 ### Notice
