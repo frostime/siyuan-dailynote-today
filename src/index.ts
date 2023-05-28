@@ -42,7 +42,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         reservation.setPlugin(this);
 
         //初始化 UI
-        this.toolbarItem = new ToolbarMenuItem(this);
+        this.initPluginUI();
 
         //初始化数据
         reservation.load();
@@ -52,7 +52,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.checkPluginVersion(); //依赖 settings.load();
         this.initBlockIconClickEvent();  //依赖 settings.load();
 
-        this.initSetting();
         this.initContextMenu(); //不依赖 settings.load();
         this.initUpToDate();  //依赖 settings.load();
 
@@ -65,9 +64,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
         info(`启动耗时: ${end - start} ms`);
     }
 
-    private initSetting() {
+    private initPluginUI() {
+        this.toolbarItem = new ToolbarMenuItem(this);
 
-        //注册标签页内容
         this.tab_setting = this.addTab({
             type: "custom_tab",
             init() {
