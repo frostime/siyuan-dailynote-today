@@ -29,7 +29,7 @@ let clickEvent: any;
 const DatePatternRules = [
     {
         pattern: /(?:(?<year>\d{4})[ ]?[-年/])?(?:[ ]?(?<month>\d{1,2})[ ]?[-月/])[ ]?(?<day>\d{1,2})[ ]?[日号]?/,
-        parse(match: RegExpMatchArray) {
+        parse(match: RegExpMatchArray): [string, string, string] {
             console.log(match);
             let year = match.groups.year;
             let month = match.groups.month;
@@ -38,10 +38,29 @@ const DatePatternRules = [
                 let today = new Date();
                 year = today.getFullYear().toString();
             }
-            console.log(year, month, day);
+            return [year, month, day];
+        }
+    },
+    {
+        pattern: /(?<prefix>明|大?后)天/,
+        parse(match: RegExpMatchArray): [string, string, string] {
+            console.log(match);
+            let today = new Date();
+            if (match.groups.prefix === '明') {
+                today.setDate(today.getDate() + 1);
+            } else if (match.groups.prefix === '后') {
+                today.setDate(today.getDate() + 2);
+            } else if (match.groups.prefix === '大后') {
+                today.setDate(today.getDate() + 3);
+            }
+            let year = today.getFullYear().toString();
+            let month = (today.getMonth() + 1).toString();
+            let day = today.getDate().toString();
             return [year, month, day];
         }
     }
+    // /(?<next>下个?)?(?:周|星期)(?<day>[一二三四五六七日])/
+    // /(?<month>[一二三四五六七八九]|十[一二])\s*月\s*(?<day>[一二三四五六七八九十]|二?十[一二三四五六七八九]|三十一?)\s*[日号]/
 ]
 
 //后面会用来替代原来的菜单组件

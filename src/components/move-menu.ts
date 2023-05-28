@@ -21,7 +21,7 @@ export class ContextMenu {
     bindMenuOnCurrentTabs() {
         //每个 Tab 标签页都绑定了一个 gutter
         let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
-        info(`监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
+        // info(`监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
         for (let g of gutters) {
             // info(`监听 Tab ${g.parentElement?.getAttribute('data-id')}`);
             g.addEventListener('contextmenu', gutterContextMenuEventObj);
@@ -30,7 +30,7 @@ export class ContextMenu {
 
     releaseMenuOnCurrentTabs() {
         let gutters: NodeListOf<Element> = document.querySelectorAll('div.protyle-gutters');
-        info(`解除监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
+        // info(`解除监听当前的 ${gutters.length} 个 Tab 标签上的 gutter`);
         for (let g of gutters) {
             // info(`解除对 ${g.parentElement?.getAttribute('data-id')} 的监听`);
             g.removeEventListener('contextmenu', gutterContextMenuEventObj);
@@ -52,7 +52,7 @@ export class ContextMenu {
                         );
                         gutter?.addEventListener('contextmenu', gutterContextMenuEventObj);
                         let data_id = protyle.getAttribute('data-id');
-                        info(`标签页发生变化, Add Listener to protyle-${data_id}`);
+                        // info(`标签页发生变化, Add Listener to protyle-${data_id}`);
                     }
                 }
                 if (mutation.type == 'childList' && mutation.removedNodes.length) {
@@ -64,7 +64,7 @@ export class ContextMenu {
                         );
                         gutter?.removeEventListener('contextmenu', gutterContextMenuEventObj);
                         let data_id = protyle.getAttribute('data-id');
-                        info(`标签页发生变化 Del Listener of protyle-${data_id}`);
+                        // info(`标签页发生变化 Del Listener of protyle-${data_id}`);
                     }
                 }
             }
@@ -81,7 +81,7 @@ export class ContextMenu {
 
     removeEditorTabObserver() {
         if (this.observer) {
-            info(`停止对 Tab 标签变化的监听`);
+            // info(`停止对 Tab 标签变化的监听`);
             this.observer.disconnect();
         }
     }
