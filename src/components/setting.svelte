@@ -1,20 +1,25 @@
 <script>
-    import { createEventDispatcher, onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
+    import { i18n } from "../utils";
+    import {eventBus} from "../event-bus";
     import SettingItem from "./setting-item.svelte";
     let checked = settings.get("OpenOnStart");
     let defaultNotebook = settings.get("DefaultNotebook");
     let iconPosition = settings.get("IconPosition");
 
-    const dispatch = createEventDispatcher();
-
-    export let contents;
+    let contents = i18n.Setting;
 
     function onClick() {
-        dispatch("updateAll");
+        eventBus.publish("UpdateAll");
     }
 
+    onMount(() => {
+        console.log("Setting Svelte Mounted");
+    });
+
     onDestroy(() => {
+        console.log("Setting Svelte Destroyed");
         settings.save();
     });
 </script>
