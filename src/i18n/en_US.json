@@ -61,7 +61,8 @@
         "Title": "Reserve this block to",
         "Date404": "No date time found for reserving!",
         "DateInvalid": "is not a valid date!",
-        "DatePast": "Can not reserve for past time!"
+        "DatePast": "Can not reserve for past time!",
+        "Success": "Reservation success!"
     },
     "NewDay": [
         "Today is ",

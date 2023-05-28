@@ -145,6 +145,7 @@ export class GutterMenu {
         console.log(blockId, date);
         reservation.doReserve(date, blockId);
         reservation.save();
+        showMessage(`${i18n.ReserveMenu.Success} ${date.toLocaleDateString()}`, 3000, 'info');
     }
 }
 
