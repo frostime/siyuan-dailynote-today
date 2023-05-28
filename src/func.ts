@@ -211,6 +211,30 @@ export async function openDiary(notebook: Notebook) {
     // }
 }
 
+export async function initTodayReservation(notebook: Notebook) {
+    let todayDiaryPath = notebook.dailynotePath;
+    let docId;
+    let retry = 0;
+    const MAX_RETRY = 5;
+    const INTERVAL = 1000;
+    while (retry < MAX_RETRY) {
+        //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
+        let docs = await getDocsByHpath(todayDiaryPath!, notebook);
+        console.log(`In initResrv, retry: ${retry}, docs:`, docs);
+        if (docs[0]?.id !== undefined) {
+            docId = docs[0].id;
+            break;
+        }
+        await new Promise(resolve => setTimeout(resolve, INTERVAL));
+        retry++;
+    }
+    if (docId === undefined) {
+        error(`无法获取今日日记的 docId`);
+        return;
+    }
+    updateDocReservation(docId, false);
+}
+
 export async function updateTodayReservation(notebook: Notebook, refresh: boolean = false) {
     let todayDiaryPath = notebook.dailynotePath;
     //BUG 初次创建的时候可能会拿不到

@@ -1,13 +1,15 @@
-import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
-import { currentDiaryStatus, updateDocReservation, openDiary, updateTodayReservation } from "../func";
+import { IMenuItemOption, Menu, Plugin, confirm } from "siyuan";
+import { currentDiaryStatus, openDiary, initTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
-import { reservation, settings } from "../global-status";
+import { settings } from "../global-status";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
-import * as serverApi from '../serverApi';
 import { Notebook } from "../types";
 
+
+let ContextMenuListener: EventListener;
+let UpdateDailyNoteStatusListener: EventListener;
 export class ToolbarMenuItem {
     plugin: Plugin;
     ele: HTMLDivElement;
@@ -15,19 +17,46 @@ export class ToolbarMenuItem {
 
     constructor(plugin: Plugin) {
         this.plugin = plugin;
+        ContextMenuListener = (event: MouseEvent) => this.contextMenu(event);
+        UpdateDailyNoteStatusListener = () => this.updateDailyNoteStatus();
+        this.iconStatus = new Map();
+        //注册事件总线，以防 moveBlocks 完成后新的日记被创建，而状态没有更新
+        eventBus.subscribe('moveBlocks', UpdateDailyNoteStatusListener);
+
+        //1. 由于 SiYuan 要求 topbar 必须在 await 前, 所以这里姑且放一个 dummy icon
+        //实测发现不需要提前创建, 也可以
+        // this.ele = this.plugin.addTopBar({
+        //     icon: iconDiary.icon32,
+        //     title: i18n.Name,
+        //     position: 'left',
+        //     callback: () => { }
+        // });
+        // this.ele.style.display = 'none'; // FW icon, 不显示
+
+        // setting 异步加载完成后, 发送 event bus
+        eventBus.subscribe(eventBus.EventSettingLoaded, () => { this.addTopBarIcon(); });
+    }
+
+    release() {
+        this.ele.removeEventListener('contextmenu', ContextMenuListener);
+        eventBus.unSubscribe('moveBlocks', UpdateDailyNoteStatusListener);
+        this.ele.remove();
+        this.ele = null;
+        info('TopBarIcon released');
+    }
+
+    //等到设置加载完毕后, 重新更新图标位置
+    addTopBarIcon() {
+        console.log('addTopBarIcon');
+        // this.ele.remove();
         this.ele = this.plugin.addTopBar({
-            // icon: 'iconCalendar',
             icon: iconDiary.icon32,
             title: i18n.Name,
             position: settings.get('IconPosition'),
             callback: () => { this.showMenu(); }
-        })
-        this.iconStatus = new Map();
-
-        //右键展开配置菜单
-        this.ele.addEventListener('contextmenu', this.contextMenu.bind(this));
-        //注册事件总线，以防 moveBlocks 完成后新的日记被创建，而状态没有更新
-        eventBus.subscribe('moveBlocks', this.updateDailyNoteStatus.bind(this));
+        });
+        this.ele.addEventListener('contextmenu', ContextMenuListener);
+        this.updateDailyNoteStatus();
     }
 
     contextMenu(event: MouseEvent) {
@@ -42,7 +71,7 @@ export class ToolbarMenuItem {
         menu.addItem({
             label: i18n.Setting.update.title,
             icon: 'iconRefresh',
-            click: () => {eventBus.publish('UpdateAll', '');}
+            click: () => {eventBus.publish(eventBus.EventUpdateAll, '');}
         })
 
         let rect = this.ele.getBoundingClientRect();
@@ -89,26 +118,13 @@ export class ToolbarMenuItem {
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
-                notebookId = notebookId.trim();
-                let notebook: Notebook;
-                if (notebookId != '') {
-                    notebook = notebooks.find(notebookId);
-                    if (notebook) {
-                        await openDiary(notebook);
-                    } else {
-                        // showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
-                        confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
-                        // openDiary(notebooks.get(0));
-                        return
-                    }
-                } else {
-                    await openDiary(notebooks.get(0));
-                    notebook = notebooks.get(0);
-                }
+                let notebook: Notebook = notebooks.default;
                 if (notebook) {
-                    console.log(`open diary: ${notebook.name}`);
-                    //不等一会的话, 会拿不到新创建的日记的 ID
-                    setTimeout(() => updateTodayReservation(notebook), 2000);
+                    await openDiary(notebook);
+                    initTodayReservation(notebook);
+                } else {
+                    confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
+                    return
                 }
             }
         }

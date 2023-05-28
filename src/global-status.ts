@@ -88,6 +88,7 @@ class SettingManager {
             }
             this.save();
         }
+        eventBus.publish(eventBus.EventSettingLoaded, {});
     }
 
     async save() {

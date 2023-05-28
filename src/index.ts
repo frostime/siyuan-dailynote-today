@@ -20,7 +20,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     version: string;
 
-    toolbar_item: ToolbarMenuItem;
+    toolbarItem: ToolbarMenuItem;
 
     component_setting: Setting;
     tab_setting: any;
@@ -34,91 +34,62 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     async onload() {
         info('Plugin load');
+        let start = performance.now();
 
         setI18n(this.i18n); //设置全局 i18n
 
         settings.setPlugin(this);
         reservation.setPlugin(this);
 
-        let start = performance.now();
-        await notebooks.init();
+        //初始化 UI
+        this.initPluginUI();
 
-        //TODO 注册快捷键
-        // this.registerCommand({
-        //     command: 'updateAll',
-        //     shortcut: 'ctrl+alt+u,command+option+u',
-        //     description: '全局更新',
-        //     callback: this.updateAll.bind(this),
-        // });
-
+        //初始化数据
         reservation.load();
         await settings.load();
-        await this.checkSysVer();
-        this.checkPluginVersion();
+        await notebooks.init();  //依赖 settings.load();
 
-        this.initSetting();
-        this.initContextMenu();
-        this.initToolbarItem();
-        this.initUpToDate();
+        this.checkPluginVersion(); //依赖 settings.load();
+        this.initBlockIconClickEvent();  //依赖 settings.load();
 
-        eventBus.subscribe('UpdateAll', () => {this.updateAll()});
+        this.initContextMenu(); //不依赖 settings.load();
+        this.initUpToDate();  //依赖 settings.load();
+
+        eventBus.subscribe(eventBus.EventUpdateAll, () => {this.updateAll()});
 
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
-        await this.toolbar_item.autoOpenDailyNote();
+        await this.toolbarItem.autoOpenDailyNote();
 
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);
     }
 
-    /**
-     * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
-     * TODO 2.9.0 版本后去除掉这些过度性的检查
-     */
-    private async checkSysVer() {
-        let version: string = await serverApi.version();
-        info(`当前版本 ${version}`);
-        let cmp = compareVersion(version, '2.8.8'); //检查版本， 2.8.8 版本后才能完全解锁所有功能
-        if (cmp < 0) {
-            notify(`注意: 思源版本小于 2.8.8, 插件部分功能可能不可用`, 'info');
-        }
-        cmp = compareVersion(version, '2.8.9');
-        if (cmp >= 0) {
-            //使用 click-blockicon
-            //TODO 2.9.0 版本后用这个替换掉旧的 move-menu
-            this.initBlockIconClickEvent();
-        }
-    }
+    private initPluginUI() {
+        this.toolbarItem = new ToolbarMenuItem(this);
 
-    private initSetting() {
-        let div_setting: HTMLDivElement = document.createElement('div');
-        this.component_setting = new Setting({
-            target: div_setting,
-            props: {
-                contents: this.i18n.Setting
-            }
-        });
-
-        this.component_setting.$on("updateAll", () => { this.updateAll() });
-
-        //注册标签页内容
         this.tab_setting = this.addTab({
             type: "custom_tab",
             init() {
-                this.element.appendChild(div_setting);
+                let div: HTMLDivElement = document.createElement('div');
+                this.setting = new Setting({
+                    target: div
+                });
+                this.element.appendChild(div);
+            },
+            destroy() {
+                this.setting.$destroy();
             }
         });
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
     }
 
+    /**
+     * @deprecated 2.9.0 版本后将不再使用
+     */
     private async initContextMenu() {
         this.menu = new ContextMenu();
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
-    }
-
-    private initToolbarItem() {
-        this.toolbar_item = new ToolbarMenuItem(this);
-        this.toolbar_item.updateDailyNoteStatus();
     }
 
     private initUpToDate() {
@@ -141,7 +112,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private async updateAll() {
         info('updateAll');
         await notebooks.update(); // 更新笔记本状态
-        this.toolbar_item.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
+        this.toolbarItem.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
         this.menu.releaseMenuOnCurrentTabs();
         this.menu.removeEditorTabObserver();
         this.menu.bindMenuOnCurrentTabs();
@@ -209,7 +180,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     private async updateOnNewDay() {
         await notebooks.update();
-        this.toolbar_item.updateDailyNoteStatus();
+        this.toolbarItem.updateDailyNoteStatus();
         this.startUpdateOnNextDay();
         let today = new Date();
         today.toDateString();
@@ -219,6 +190,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     onunload() {
         info('Plugin unload')
+        this.toolbarItem.release();
         this.menu.releaseMenuOnCurrentTabs();
         this.menu.removeEditorTabObserver();
         settings.save();

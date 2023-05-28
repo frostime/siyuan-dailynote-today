@@ -1,7 +1,8 @@
 import { getDocsByHpath, queryNotebooks } from './func';
 import { settings } from './global-status';
 import { Notebook } from './types';
-import { info } from './utils';
+import { i18n } from './utils';
+import { confirm } from 'siyuan';
 
 
 class Notebooks {
@@ -64,7 +65,13 @@ class Notebooks {
         let notebookId: string = settings.get('DefaultNotebook');
         notebookId = notebookId.trim();
         if (notebookId != '') {
-            this.default = this.find(notebookId);
+            let notebook = this.find(notebookId);
+            if (notebook) {
+                this.default = notebook;
+            } else {
+                // confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`);
+                this.default = undefined;
+            }
         } else {
             this.default = this.get(0);
         }
