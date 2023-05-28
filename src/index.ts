@@ -41,7 +41,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
         reservation.setPlugin(this);
 
         let start = performance.now();
-        await notebooks.init();
+        reservation.load();
+        await settings.load();
+        await notebooks.init();  //必须在导入 setting 后执行
 
         //TODO 注册快捷键
         // this.registerCommand({
@@ -51,8 +53,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         //     callback: this.updateAll.bind(this),
         // });
 
-        reservation.load();
-        await settings.load();
         await this.checkSysVer();
         this.checkPluginVersion();
 

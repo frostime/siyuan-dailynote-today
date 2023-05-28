@@ -89,24 +89,13 @@ export class ToolbarMenuItem {
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
-                notebookId = notebookId.trim();
-                let notebook: Notebook;
-                if (notebookId != '') {
-                    notebook = notebooks.find(notebookId);
-                    if (notebook) {
-                        await openDiary(notebook);
-                    } else {
-                        // showMessage(`${notebookId}: ${i18n.InvalidDefaultNotebook}`, 5000, "error");
-                        confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
-                        // openDiary(notebooks.get(0));
-                        return
-                    }
-                } else {
-                    await openDiary(notebooks.get(0));
-                    notebook = notebooks.get(0);
-                }
+                let notebook: Notebook = notebooks.default;
                 if (notebook) {
+                    await openDiary(notebook);
                     initTodayReservation(notebook);
+                } else {
+                    confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
+                    return
                 }
             }
         }
