@@ -232,7 +232,7 @@ export async function initTodayReservation(notebook: Notebook) {
         error(`无法获取今日日记的 docId`);
         return;
     }
-    updateDocReservation(docId, true);
+    updateDocReservation(docId, false);
 }
 
 export async function updateTodayReservation(notebook: Notebook, refresh: boolean = false) {
