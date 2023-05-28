@@ -13,6 +13,15 @@ class EventBus {
         this.events[eventName] = [callback];
       }
     }
+
+    unSubscribe(eventName: string, callback: Function) {
+        if (eventName in this.events) {
+            let index = this.events[eventName].indexOf(callback);
+            if (index >= 0) {
+                this.events[eventName].splice(index, 1);
+            }
+        }
+    }
   
     publish(eventName: string, data: any) {
       if (!this.events[eventName]) {
