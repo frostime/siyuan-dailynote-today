@@ -78,17 +78,22 @@ You can think of the reservation block as a simple schedule management or task r
 
 1. Click the block and select "Reserve this block".
 
-    ![](asset/Reserve1.png)
+    <!-- ![](asset/Reserve1.png) -->
+    ![](https://s3.bmp.ovh/imgs/2023/05/28/69479868c4da8344.png)
+
 2. The plugin will automatically match the date and time in the block content, and after confirmation, the plugin will help you record the reservation.
 
     The matched time will be highlighted in the confirmation dialog;. As you can see below, the plug-in matches `6月01号` and resolves to `2023-06-01`.
 
     > `6月01号` is the date representative in chinese.
 
-    ![](asset/Reserve2.png)
+    <!-- ![](asset/Reserve2.png) -->
+    ![](https://s3.bmp.ovh/imgs/2023/05/28/2a30bad068dc534f.png)
+
 3. When the day arrives, the plugin will automatically insert the related reservations as embedded blocks into the diary entry.
 
-    ![](asset/Reserve3.png)
+    <!-- ![](asset/Reserve3.png) -->
+    ![](https://s3.bmp.ovh/imgs/2023/05/28/f10c726b06042635.png)
 
 4. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
 

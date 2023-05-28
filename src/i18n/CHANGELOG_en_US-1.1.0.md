@@ -6,11 +6,13 @@ Introducing the new feature in this version: the ability to reserve blocks. You 
 
 - Reserve This Block: Select a block and click on "Reserve" menu. If the block's content includes future dates, the block will be added to the reserve list.
 
-    ![](asset/Reserve2.png)
+    <!-- ![](asset/Reserve2.png) -->
+    ![](https://s3.bmp.ovh/imgs/2023/05/28/69479868c4da8344.png)
 
 - Automatic Insertion: On the day corresponding to the reserved date, the plug-in will automatically embed all reserved blocks for that day into the diary when creating today's notes.
 
-    ![](asset/Reserve3.png)
+    <!-- ![](asset/Reserve3.png) -->
+    ![](https://s3.bmp.ovh/imgs/2023/05/28/f10c726b06042635.png)
 
 Read the latest plugin documentation (README) for details of how to use it, which is still being worked on. This feature is disabled by default and should be turned on manually in the settings.
 
