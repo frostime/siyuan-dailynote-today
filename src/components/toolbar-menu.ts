@@ -70,7 +70,7 @@ export class ToolbarMenuItem {
         menu.addItem({
             label: i18n.Setting.update.title,
             icon: 'iconRefresh',
-            click: () => {eventBus.publish('UpdateAll', '');}
+            click: () => {eventBus.publish(eventBus.EventUpdateAll, '');}
         })
 
         let rect = this.ele.getBoundingClientRect();

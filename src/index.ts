@@ -55,7 +55,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initContextMenu(); //不依赖 settings.load();
         this.initUpToDate();  //依赖 settings.load();
 
-        eventBus.subscribe('UpdateAll', () => {this.updateAll()});
+        eventBus.subscribe(eventBus.EventUpdateAll, () => {this.updateAll()});
 
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         await this.toolbarItem.autoOpenDailyNote();
