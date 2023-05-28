@@ -41,6 +41,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         settings.setPlugin(this);
         reservation.setPlugin(this);
 
+        this.toolbar_item = new ToolbarMenuItem(this);
+
         reservation.load();
         await settings.load();
         await notebooks.init();  //依赖 settings.load();
@@ -50,7 +52,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         this.initSetting();
         this.initContextMenu(); //不依赖 settings.load();
-        this.initToolbarItem();
+        // this.initToolbarItem();
         this.initUpToDate();  //依赖 settings.load();
 
         eventBus.subscribe('UpdateAll', () => {this.updateAll()});
@@ -87,11 +89,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.menu = new ContextMenu();
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
-    }
-
-    private initToolbarItem() {
-        this.toolbar_item = new ToolbarMenuItem(this);
-        this.toolbar_item.updateDailyNoteStatus();
     }
 
     private initUpToDate() {

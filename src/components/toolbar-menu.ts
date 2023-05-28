@@ -19,20 +19,21 @@ export class ToolbarMenuItem {
         this.plugin = plugin;
         ContextMenuListener = (event: MouseEvent) => this.contextMenu(event);
         UpdateDailyNoteStatusListener = () => this.updateDailyNoteStatus();
-
-        this.ele = this.plugin.addTopBar({
-            // icon: 'iconCalendar',
-            icon: iconDiary.icon32,
-            title: i18n.Name,
-            position: settings.get('IconPosition'),
-            callback: () => { this.showMenu(); }
-        })
         this.iconStatus = new Map();
-
-        //右键展开配置菜单
-        this.ele.addEventListener('contextmenu', ContextMenuListener);
         //注册事件总线，以防 moveBlocks 完成后新的日记被创建，而状态没有更新
         eventBus.subscribe('moveBlocks', UpdateDailyNoteStatusListener);
+
+        //1. 由于 SiYuan 要求 topbar 必须在 await 前, 所以这里姑且放一个 dummy icon
+        this.ele = this.plugin.addTopBar({
+            icon: iconDiary.icon32,
+            title: i18n.Name,
+            position: 'left',
+            callback: () => { }
+        });
+        this.ele.style.display = 'none'; // FW icon, 不显示
+
+        //2. setting 异步加载完成后, 发送 event bus
+        eventBus.subscribe(eventBus.EventSettingLoaded, () => { this.addTopBarIcon(); });
     }
 
     release() {
@@ -43,15 +44,18 @@ export class ToolbarMenuItem {
         info('TopBarIcon released');
     }
 
-    resetTopBarIcon() {
+    //3. 等到设置加载完毕后, 重新更新图标位置
+    addTopBarIcon() {
+        console.log('addTopBarIcon');
         this.ele.remove();
         this.ele = this.plugin.addTopBar({
             icon: iconDiary.icon32,
             title: i18n.Name,
             position: settings.get('IconPosition'),
             callback: () => { this.showMenu(); }
-        })
-
+        });
+        this.ele.addEventListener('contextmenu', ContextMenuListener);
+        this.updateDailyNoteStatus();
     }
 
     contextMenu(event: MouseEvent) {
