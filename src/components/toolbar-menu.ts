@@ -24,13 +24,13 @@ export class ToolbarMenuItem {
         eventBus.subscribe('moveBlocks', UpdateDailyNoteStatusListener);
 
         //1. 由于 SiYuan 要求 topbar 必须在 await 前, 所以这里姑且放一个 dummy icon
-        this.ele = this.plugin.addTopBar({
-            icon: iconDiary.icon32,
-            title: i18n.Name,
-            position: 'left',
-            callback: () => { }
-        });
-        this.ele.style.display = 'none'; // FW icon, 不显示
+        // this.ele = this.plugin.addTopBar({
+        //     icon: iconDiary.icon32,
+        //     title: i18n.Name,
+        //     position: 'left',
+        //     callback: () => { }
+        // });
+        // this.ele.style.display = 'none'; // FW icon, 不显示
 
         //2. setting 异步加载完成后, 发送 event bus
         eventBus.subscribe(eventBus.EventSettingLoaded, () => { this.addTopBarIcon(); });
@@ -47,7 +47,7 @@ export class ToolbarMenuItem {
     //3. 等到设置加载完毕后, 重新更新图标位置
     addTopBarIcon() {
         console.log('addTopBarIcon');
-        this.ele.remove();
+        // this.ele.remove();
         this.ele = this.plugin.addTopBar({
             icon: iconDiary.icon32,
             title: i18n.Name,
