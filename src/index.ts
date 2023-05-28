@@ -34,32 +34,24 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     async onload() {
         info('Plugin load');
+        let start = performance.now();
 
         setI18n(this.i18n); //设置全局 i18n
 
         settings.setPlugin(this);
         reservation.setPlugin(this);
 
-        let start = performance.now();
         reservation.load();
         await settings.load();
-        await notebooks.init();  //必须在导入 setting 后执行
+        await notebooks.init();  //依赖 settings.load();
 
-        //TODO 注册快捷键
-        // this.registerCommand({
-        //     command: 'updateAll',
-        //     shortcut: 'ctrl+alt+u,command+option+u',
-        //     description: '全局更新',
-        //     callback: this.updateAll.bind(this),
-        // });
-
-        await this.checkSysVer();
-        this.checkPluginVersion();
+        this.checkPluginVersion(); //依赖 settings.load();
+        this.initBlockIconClickEvent();  //依赖 settings.load();
 
         this.initSetting();
-        this.initContextMenu();
+        this.initContextMenu(); //不依赖 settings.load();
         this.initToolbarItem();
-        this.initUpToDate();
+        this.initUpToDate();  //依赖 settings.load();
 
         eventBus.subscribe('UpdateAll', () => {this.updateAll()});
 
@@ -68,25 +60,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);
-    }
-
-    /**
-     * Move 功能依赖的 API 只在 2.8.8 版本以上提供，所以要开机检查
-     * TODO 2.9.0 版本后去除掉这些过度性的检查
-     */
-    private async checkSysVer() {
-        let version: string = await serverApi.version();
-        info(`当前版本 ${version}`);
-        let cmp = compareVersion(version, '2.8.8'); //检查版本， 2.8.8 版本后才能完全解锁所有功能
-        if (cmp < 0) {
-            notify(`注意: 思源版本小于 2.8.8, 插件部分功能可能不可用`, 'info');
-        }
-        cmp = compareVersion(version, '2.8.9');
-        if (cmp >= 0) {
-            //使用 click-blockicon
-            //TODO 2.9.0 版本后用这个替换掉旧的 move-menu
-            this.initBlockIconClickEvent();
-        }
     }
 
     private initSetting() {
