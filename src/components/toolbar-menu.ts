@@ -1,13 +1,15 @@
-import { IMenuItemOption, Menu, Plugin, showMessage, confirm } from "siyuan";
-import { currentDiaryStatus, updateDocReservation, openDiary, updateTodayReservation, initTodayReservation } from "../func";
+import { IMenuItemOption, Menu, Plugin, confirm } from "siyuan";
+import { currentDiaryStatus, openDiary, initTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
-import { reservation, settings } from "../global-status";
+import { settings } from "../global-status";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
-import * as serverApi from '../serverApi';
 import { Notebook } from "../types";
 
+
+let ContextMenuListener: EventListener;
+let UpdateDailyNoteStatusListener: EventListener;
 export class ToolbarMenuItem {
     plugin: Plugin;
     ele: HTMLDivElement;
@@ -15,6 +17,9 @@ export class ToolbarMenuItem {
 
     constructor(plugin: Plugin) {
         this.plugin = plugin;
+        ContextMenuListener = (event: MouseEvent) => this.contextMenu(event);
+        UpdateDailyNoteStatusListener = () => this.updateDailyNoteStatus();
+
         this.ele = this.plugin.addTopBar({
             // icon: 'iconCalendar',
             icon: iconDiary.icon32,
@@ -25,9 +30,28 @@ export class ToolbarMenuItem {
         this.iconStatus = new Map();
 
         //右键展开配置菜单
-        this.ele.addEventListener('contextmenu', this.contextMenu.bind(this));
+        this.ele.addEventListener('contextmenu', ContextMenuListener);
         //注册事件总线，以防 moveBlocks 完成后新的日记被创建，而状态没有更新
-        eventBus.subscribe('moveBlocks', this.updateDailyNoteStatus.bind(this));
+        eventBus.subscribe('moveBlocks', UpdateDailyNoteStatusListener);
+    }
+
+    release() {
+        this.ele.removeEventListener('contextmenu', ContextMenuListener);
+        eventBus.unSubscribe('moveBlocks', UpdateDailyNoteStatusListener);
+        this.ele.remove();
+        this.ele = null;
+        info('TopBarIcon released');
+    }
+
+    resetTopBarIcon() {
+        this.ele.remove();
+        this.ele = this.plugin.addTopBar({
+            icon: iconDiary.icon32,
+            title: i18n.Name,
+            position: settings.get('IconPosition'),
+            callback: () => { this.showMenu(); }
+        })
+
     }
 
     contextMenu(event: MouseEvent) {
