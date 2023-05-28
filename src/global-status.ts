@@ -152,7 +152,7 @@ class ReservationManger {
     //添加预约
     doReserve(date: Date, blockId: string) {
         // YYYYMMDD
-        console.log(`预约: ${blockId} 到 ${date}`);
+        info(`预约: ${blockId} 到 ${date}`);
         let date_str = this.dateTemplate(date);
         if (!(date_str in this.reservations.OnDate)) {
             this.reservations.OnDate[date_str] = [];

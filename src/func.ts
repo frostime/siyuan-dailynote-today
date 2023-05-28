@@ -42,7 +42,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
         let ans = await serverApi.prependBlock(doc_id, '* ', 'markdown');
         let newListId = ans[0].doOperations[0].id;
         await serverApi.moveBlock(block.id, null, newListId);
-        console.log(`移动列表项 ${block.id} --> ${newListId}`);
+        info(`移动列表项 ${block.id} --> ${newListId}`);
         //获取新的列表的子项
         let allChild = await serverApi.getChildBlocks(newListId);
         let blankItem = allChild[1]; // 上述行为会导致出现一个额外的多余列表项
@@ -220,7 +220,7 @@ export async function initTodayReservation(notebook: Notebook) {
     while (retry < MAX_RETRY) {
         //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
         let docs = await getDocsByHpath(todayDiaryPath!, notebook);
-        console.log(`In initResrv, retry: ${retry}, docs:`, docs);
+        info(`In initResrv, retry: ${retry}`);
         if (docs[0]?.id !== undefined) {
             docId = docs[0].id;
             break;
@@ -253,7 +253,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     let blocks = await serverApi.sql(sql);
     if (blocks.length > 0) {
         if (!refresh) {
-            console.log(`今日已经插入过预约了`);
+            info(`今日已经插入过预约了`);
             return;
         } else {
             blockIDs = blockIDs.map((id) => `"${id}"`);
