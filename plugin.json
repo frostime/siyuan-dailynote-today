@@ -9,8 +9,8 @@
   "version": "1.1.0",
   "minAppVersion": "2.8.9",
   "description": {
-    "zh_CN": "1. 启动思源笔记之后，自动开启今天的笔记\n2. 工具栏提供下拉框，快速查看今天的笔记并打开\n3. 点开块菜单, 可以将块移动到别的笔记文档下",
-    "en_US": "1. After starting siyuan-note, automatically open today's notes\n2. The toolbar provides a drop-down box to quickly view today's notes and open them\n3. Click to open the block menu, you can move the block to daily note under another notebook"
+    "zh_CN": "自动创建日记 + 快速打开日记 + 今日 TODO 管理 + 移动块功能",
+    "en_US": "Automatically open today's notes + Quickly open today's notes + TODO mangagement for today + Move blocks"
   },
   "readme": {
     "zh_CN": "README.md",
