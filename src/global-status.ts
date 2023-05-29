@@ -198,6 +198,7 @@ class ReservationManger {
             OnDate[date] = OnDate[date].filter(blockId => existsBlockIds.has(blockId));
             console.log(`Filter ${date}: [${before}] --> [${OnDate[date]}]`)
         }
+        this.save();
     }
 }
 
