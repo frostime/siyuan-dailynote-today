@@ -50,6 +50,9 @@
     "Create": "Create daily note",
     "UpdateAll": "Notebook status updated",
     "InvalidDefaultNotebook": "<p>Sorry, but the plugin can not find a notebook that corresponds to this ID; perhaps it is an illegitimate ID, or the corresponding notebook has been closed by yourself. </p><p>We suggest that you double-check the plugin's settings. </p",
+    "ContextMenu": {
+        "PruneResv": "Prune bad reservation"
+    },
     "MoveMenu": {
         "Move": "Move to",
         "NotLi": "Only support moving entrie list, instead of signle list item!",
@@ -71,5 +74,8 @@
     "ChangeLog": {
         "name": "ChangeLog",
         "file": "CHANGELOG_en_US"
+    },
+    "Msg": {
+        "PruneResv": "Pruned"
     }
 }

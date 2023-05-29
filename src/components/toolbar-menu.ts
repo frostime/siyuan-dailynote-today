@@ -69,9 +69,9 @@ export class ToolbarMenuItem {
             click: () => {eventBus.publish('OpenSetting', '');}
         });
         menu.addItem({
-            label: '清理无用预约',
+            label: i18n.ContextMenu.PruneResv,
             icon: 'iconTrashcan',
-            click: async () => {await reservation.doPrune(); showMessage('清理完成');}
+            click: async () => {await reservation.doPrune(); showMessage(i18n.Msg.PruneResv);}
         });
         menu.addItem({
             label: i18n.Setting.update.title,
