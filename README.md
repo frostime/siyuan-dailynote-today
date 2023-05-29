@@ -82,20 +82,20 @@
 
 1. 点击块，选择「预约此块」
 
-    <!-- ![](asset/Reserve1.png) -->
-    ![](https://s3.bmp.ovh/imgs/2023/05/28/69479868c4da8344.png)
+    ![](asset/Reserve1.png)
+    <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/69479868c4da8344.png) -->
 
 2. 插件会自动匹配块内容中的日期时间，确定后，插件会帮你把这份预约记录下来
 
     被匹配到的时间会在确认对话框中高亮显示;。如下图所示, 插件匹配到了 `6月01号`, 并解析为 `2023-06-01`。
 
-    <!-- ![](asset/Reserve2.png) -->
-    ![](https://s3.bmp.ovh/imgs/2023/05/28/2a30bad068dc534f.png)
+    ![](asset/Reserve2.png)
+    <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/2a30bad068dc534f.png) -->
 
 3. 等到当天的时候，插件在自动创建完日记后，会帮你把相关的预约以嵌入块的形式插入日记中
 
-    <!-- ![](asset/Reserve3.png) -->
-    ![](https://s3.bmp.ovh/imgs/2023/05/28/f10c726b06042635.png)
+    ![](asset/Reserve3.png)
+    <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/f10c726b06042635.png) -->
 
 4. 如果你发现预约的嵌入块没有自动插入，可以点击图标菜单中的「更新」按钮更新文档
 
