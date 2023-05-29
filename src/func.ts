@@ -244,46 +244,39 @@ export async function updateTodayReservation(notebook: Notebook, refresh: boolea
 }
 
 export async function updateDocReservation(docId: string, refresh: boolean = false) {
-    let blockIDs = reservation.getTodayReservations();
-    if (blockIDs.length == 0) {
+    let resvBlockIds = reservation.getTodayReservations();
+    if (resvBlockIds.length == 0) {
         return;
     }
     //检查是否已经插入过
     let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
-    let blocks = await serverApi.sql(sql);
-    if (blocks.length > 0) {
-        if (!refresh) {
-            info(`今日已经插入过预约了`);
-            return;
-        } else {
-            blockIDs = blockIDs.map((id) => `"${id}"`);
-            sql = `select * from blocks where id in (${blockIDs.join(',')})`;
-
-            let blocks: Block[] = await serverApi.sql(sql);
-            if (blocks.length === 0) {
-                confirm('今日笔记', '<h3>咦!??</h3><p>本来今天是有预约的, 但是我们发现预约块都不见了</p><p>可能是被删除了或者对应的笔记本已经关闭</p>');
-                return;
-            }
-
-            let sqlBlock = `{{${sql}}}`;
-            serverApi.updateBlock(blocks[0].id, sqlBlock, 'markdown');
-            serverApi.setBlockAttrs(blocks[0].id, { name: 'Reservation', breadcrumb: "true"});
-        }
+    let embedBlock = await serverApi.sql(sql);
+    const hasInserted = embedBlock.length > 0;
+    if (hasInserted && !refresh) {
+        info(`今日已经插入过预约了`);
+        return;
     } else {
-        //插入嵌入块
-        blockIDs = blockIDs.map((id) => `"${id}"`);
-        sql = `select * from blocks where id in (${blockIDs.join(',')})`;
-
-        let blocks: Block[] = await serverApi.sql(sql);
-        if (blocks.length === 0) {
+        resvBlockIds = resvBlockIds.map((id) => `"${id}"`);
+        sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
+        console.log(resvBlockIds);
+        //1. 先检查预约块是否存在
+        let resvBlocks: Block[] = await serverApi.sql(sql);
+        if (resvBlocks.length === 0) {
             confirm('今日笔记', '<h3>咦!??</h3><p>本来今天是有预约的, 但是我们发现预约块都不见了</p><p>可能是被删除了或者对应的笔记本已经关闭</p>');
             return;
         }
-
-        let sqlBlock = `{{${sql}}}`;
-        let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
-        let blockId = data[0].doOperations[0].id;
-        serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
+        //如果是初次创建, 则插入到日记的最前面
+        if (hasInserted) {
+            let sqlBlock = `{{${sql}}}`;
+            serverApi.updateBlock(embedBlock[0].id, sqlBlock, 'markdown');
+            serverApi.setBlockAttrs(embedBlock[0].id, { name: 'Reservation', breadcrumb: "true" });
+        } else {
+            //否则, 就更新
+            let sqlBlock = `{{${sql}}}`;
+            let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+            let blockId = data[0].doOperations[0].id;
+            serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
+        }
     }
 }
 
