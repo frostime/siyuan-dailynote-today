@@ -13,6 +13,7 @@
     - Note: you can only open today's diary (after all, it's called "Daily Note Today")
     - If you need to quickly open the diary of any notebook at any time, please use the calendar plugin (not yet available, but will in future)
 - If you have the need to take notes in more than one notebook, and feel that it is troublesome to frequently open multiple diaries, you can use the **Move Blocks** feature provided by this plugin to quickly move the blocks in a document to the diary in the specified notebook, avoiding frequent manual switching of notebooks
+- You can also use this plugin as a simple **schedule management** tool. This plugin provides the function of "reservation block", hich can be used as a tool to manage today's errands
 
 
 ## What can this plugin to
@@ -98,17 +99,35 @@ You can think of the reservation block as a simple schedule management or task r
 4. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
 
 
+### Currently supported date templates
+
+- Standard year, month and day
+    - `2020-04-01`, `2020/04/01`
+    - `2020年5月2号`, `2020年5月2日` in Chinese
+    - Dates can have spaces between them: `2020-04-01` and `2020 - 04 - 01` are both ok
+    - Month and date can be added with 0: `04-01`, `04-1`, `4-1` are possible
+    - You can leave out the year, so that it will be considered the same year by default: for example, on a day in the year 23, the `09-08` will be considered as `2023-09-08`.
+- Chinese month and day
+    - `九月十二号`
+    - `三月六日`
+- Week Timer
+    - `周二`
+    - `星期三`
+    - `礼拜日`，`礼拜天`
+    - `下周六`
+    - **Only chinese supported yet, English support will be comming soon**
+- Relative time
+    - N days later, e.g. `10 days later`; Arabic numerals only
+
+Translated with www.DeepL.com/Translator (free version)
+
+
 ### Notice
 
 1. The current version (1.1.0) will only insert automatically when the diary is created/opened automatically by the plugin
 2. You can use the 'Update' button to manually insert appointment blocks into the diary
-3. The date matching rules currently supported are limited to.
-    - Standard date: `2020-04-01`, `2020/04/01`
-    - --Chinese year, month and day: `2020年5月2号`, `2020年5月2日`--
-    - There can be spaces between dates: `2020-02-01` and `2020 - 02 - 01` are both possible
-    - The month and the date can be added with 0: `6-01`, `6-01`, `06-01` are all possible
-    - The year can be left out, so that the same year is assumed by default: for example, on a day in the year 23, the date `09/08` will be assumed to be `2023-09-08`.
-    - It is not possible to write in the past
+3. The date matching rules currently
+    - It is not allowed to write in the past
     - If there are multiple dates in the compound specification, then only the first one will be matched
 4. This feature is **disabled by default** and should be turned on manually in the settings.
 
