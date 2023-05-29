@@ -28,9 +28,9 @@ let clickEvent: any;
 
 const DatePatternRules = [
     {
-        pattern: /(?:(?<year>\d{4})[ ]?[-年/])?(?:[ ]?(?<month>\d{1,2})[ ]?[-月/])[ ]?(?<day>\d{1,2})[ ]?[日号]?/,
+        pattern: /(?<!\d)(?:(?<year>(?:20)?\d{2})\s?[-年/]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月/]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])\s?[日号]?/,
         parse(match: RegExpMatchArray): [string, string, string] {
-            console.log(match);
+            // console.log(match);
             let year = match.groups.year;
             let month = match.groups.month;
             let day = match.groups.day;
@@ -44,7 +44,7 @@ const DatePatternRules = [
     {
         pattern: /(?<prefix>明|大?后)天/,
         parse(match: RegExpMatchArray): [string, string, string] {
-            console.log(match);
+            // console.log(match);
             let today = new Date();
             if (match.groups.prefix === '明') {
                 today.setDate(today.getDate() + 1);
@@ -131,9 +131,14 @@ export class GutterMenu {
         for (let rule of DatePatternRules) {
             //find
             match = kramdown.match(rule.pattern);
+            console.log(rule.pattern, match);
             if (match) {
                 [year, month, day] = rule.parse(match);
-                break;
+                console.log(year, month, day);
+                //防止出现匹配到的日期是无效的情况
+                if (new Date(`${year}-${month}-${day}`).toString() !== 'Invalid Date') {
+                    break;
+                }
             }
         }
         if (!match) {
