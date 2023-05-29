@@ -28,7 +28,7 @@ let clickEvent: any;
 
 const DatePatternRules = [
     {
-        pattern: /(?<!\d)(?:(?<year>(?:20)?\d{2})\s?[-年/]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月/]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])\s?[日号]?/,
+        pattern: /(?<!\d)(?:(?<year>(?:20)?\d{2})\s?[-年\./]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月\./]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])\s?[日号]?/,
         parse(match: RegExpMatchArray): [string, string, string] {
             // console.log(match);
             let year = match.groups.year;
@@ -53,6 +53,18 @@ const DatePatternRules = [
             } else if (match.groups.prefix === '大后') {
                 today.setDate(today.getDate() + 3);
             }
+            let year = today.getFullYear().toString();
+            let month = (today.getMonth() + 1).toString();
+            let day = today.getDate().toString();
+            return [year, month, day];
+        }
+    },
+    {
+        pattern: /(?<diff>\d+)\s*(?:天[之以]?后|days? later)/,
+        parse(match: RegExpMatchArray): [string, string, string] {
+            let today = new Date();
+            let diff = parseInt(match.groups.diff);
+            today.setDate(today.getDate() + diff);
             let year = today.getFullYear().toString();
             let month = (today.getMonth() + 1).toString();
             let day = today.getDate().toString();
