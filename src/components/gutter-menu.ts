@@ -58,6 +58,29 @@ const DatePatternRules = [
             let day = today.getDate().toString();
             return [year, month, day];
         }
+    },
+    {
+        pattern: /(?<next>下个?)?(?:周|星期|礼拜)(?<day>[一二三四五六日天])/,
+        dayMap: {
+            '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '日': 7, '天': 7
+        },
+        parse(match: RegExpMatchArray): [string, string, string] {
+            let today = new Date();
+            let nextWeek: boolean = match.groups.next !== undefined;
+            let dayOfWeekDst: number = this.dayMap[match.groups.day];
+            let dayOfWeekNow = today.getDay();
+            dayOfWeekNow = dayOfWeekNow === 0 ? 7 : dayOfWeekNow; //周日是0，转换成7
+
+            let dateDelta = (nextWeek === true? 7 : 0) + dayOfWeekDst - dayOfWeekNow;
+            if (dateDelta < 0) {
+                dateDelta += 7;
+            }
+            today.setDate(today.getDate() + dateDelta);
+            let year = today.getFullYear().toString();
+            let month = (today.getMonth() + 1).toString();
+            let day = today.getDate().toString();
+            return [year, month, day];
+        }
     }
     // /(?<next>下个?)?(?:周|星期)(?<day>[一二三四五六七日])/
     // /(?<month>[一二三四五六七八九]|十[一二])\s*月\s*(?<day>[一二三四五六七八九十]|二?十[一二三四五六七八九]|三十一?)\s*[日号]/
