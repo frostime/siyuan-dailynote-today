@@ -189,6 +189,9 @@ class ReservationManger {
                 allBlockId.add(blockId);
             }
         }
+        if (allBlockId.size == 0) {
+            return;
+        }
         let allBlockIdArray = Array.from(allBlockId);
         let existsBlockIds: Set<string> = await filterExistsBlocks(allBlockIdArray);
         // console.log(allBlockIdArray, existsBlockIds);
