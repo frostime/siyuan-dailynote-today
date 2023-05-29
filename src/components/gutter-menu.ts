@@ -60,6 +60,18 @@ const DatePatternRules = [
         }
     },
     {
+        pattern: /(?<diff>\d+)\s*(?:天[之以]?后|days? later)/,
+        parse(match: RegExpMatchArray): [string, string, string] {
+            let today = new Date();
+            let diff = parseInt(match.groups.diff);
+            today.setDate(today.getDate() + diff);
+            let year = today.getFullYear().toString();
+            let month = (today.getMonth() + 1).toString();
+            let day = today.getDate().toString();
+            return [year, month, day];
+        }
+    },
+    {
         pattern: /(?<next>下个?)?(?:周|星期|礼拜)(?<day>[一二三四五六日天])/,
         dayMap: {
             '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '日': 7, '天': 7
