@@ -1,7 +1,7 @@
-import { IMenuItemOption, Menu, Plugin, confirm } from "siyuan";
+import { IMenuItemOption, Menu, Plugin, confirm, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary, initTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
-import { settings } from "../global-status";
+import { reservation, settings } from "../global-status";
 import { info, i18n } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
@@ -67,12 +67,17 @@ export class ToolbarMenuItem {
             label: i18n.Setting.name,
             icon: 'iconSettings',
             click: () => {eventBus.publish('OpenSetting', '');}
-        })
+        });
+        menu.addItem({
+            label: '清理无用预约',
+            icon: 'iconTrashcan',
+            click: async () => {await reservation.doPrune(); showMessage('清理完成');}
+        });
         menu.addItem({
             label: i18n.Setting.update.title,
             icon: 'iconRefresh',
             click: () => {eventBus.publish(eventBus.EventUpdateAll, '');}
-        })
+        });
 
         let rect = this.ele.getBoundingClientRect();
         menu.open({

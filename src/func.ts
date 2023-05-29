@@ -211,6 +211,17 @@ export async function openDiary(notebook: Notebook) {
     // }
 }
 
+export async function filterExistsBlocks(blockIds: string[]): Promise<Set<string>> {
+    let idStr = blockIds.map(id => `'${id}'`).join(",");
+    const sql = `select distinct id from blocks where id in (${idStr})`;
+    let blocks: Array<Block> = await serverApi.sql(sql);
+    let idSet: Set<string> = new Set();
+    blocks.forEach(block => {
+        idSet.add(block.id);
+    });
+    return idSet;
+}
+
 export async function initTodayReservation(notebook: Notebook) {
     let todayDiaryPath = notebook.dailynotePath;
     let docId;
