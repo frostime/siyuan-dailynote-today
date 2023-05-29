@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { showMessage } from 'siyuan';
+import { showMessage, confirm } from 'siyuan';
 import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
@@ -211,6 +211,17 @@ export async function openDiary(notebook: Notebook) {
     // }
 }
 
+export async function filterExistsBlocks(blockIds: string[]): Promise<Set<string>> {
+    let idStr = blockIds.map(id => `'${id}'`).join(",");
+    const sql = `select distinct id from blocks where id in (${idStr})`;
+    let blocks: Array<Block> = await serverApi.sql(sql);
+    let idSet: Set<string> = new Set();
+    blocks.forEach(block => {
+        idSet.add(block.id);
+    });
+    return idSet;
+}
+
 export async function initTodayReservation(notebook: Notebook) {
     let todayDiaryPath = notebook.dailynotePath;
     let docId;
@@ -244,30 +255,39 @@ export async function updateTodayReservation(notebook: Notebook, refresh: boolea
 }
 
 export async function updateDocReservation(docId: string, refresh: boolean = false) {
-    let blockIDs = reservation.getTodayReservations();
-    if (blockIDs.length == 0) {
+    let resvBlockIds = reservation.getTodayReservations();
+    if (resvBlockIds.length == 0) {
         return;
     }
     //检查是否已经插入过
     let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
-    let blocks = await serverApi.sql(sql);
-    if (blocks.length > 0) {
-        if (!refresh) {
-            info(`今日已经插入过预约了`);
-            return;
-        } else {
-            blockIDs = blockIDs.map((id) => `"${id}"`);
-            let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
-            serverApi.updateBlock(blocks[0].id, sqlBlock, 'markdown');
-            serverApi.setBlockAttrs(blocks[0].id, { name: 'Reservation', breadcrumb: "true"});
-        }
+    let embedBlock = await serverApi.sql(sql);
+    const hasInserted = embedBlock.length > 0;
+    if (hasInserted && !refresh) {
+        info(`今日已经插入过预约了`);
+        return;
     } else {
-        //插入嵌入块
-        blockIDs = blockIDs.map((id) => `"${id}"`);
-        let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
-        let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
-        let blockId = data[0].doOperations[0].id;
-        serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
+        resvBlockIds = resvBlockIds.map((id) => `"${id}"`);
+        sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
+        console.log(resvBlockIds);
+        //1. 先检查预约块是否存在
+        let resvBlocks: Block[] = await serverApi.sql(sql);
+        if (resvBlocks.length === 0) {
+            confirm(i18n.Name, i18n.Msg.Resv404);
+            return;
+        }
+        //如果是初次创建, 则插入到日记的最前面
+        if (hasInserted) {
+            let sqlBlock = `{{${sql}}}`;
+            serverApi.updateBlock(embedBlock[0].id, sqlBlock, 'markdown');
+            serverApi.setBlockAttrs(embedBlock[0].id, { name: 'Reservation', breadcrumb: "true" });
+        } else {
+            //否则, 就更新
+            let sqlBlock = `{{${sql}}}`;
+            let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+            let blockId = data[0].doOperations[0].id;
+            serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
+        }
     }
 }
 

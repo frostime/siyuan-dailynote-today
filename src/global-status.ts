@@ -4,6 +4,7 @@
 import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 import { eventBus } from './event-bus';
+import { filterExistsBlocks } from './func';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -178,6 +179,26 @@ class ReservationManger {
                 delete this.reservations.OnDate[key];
             }
         }
+    }
+
+    //删除所有空掉的块
+    async doPrune() {
+        let allBlockId: Set<string> = new Set();
+        for (const date of Object.keys(this.reservations.OnDate)) {
+            for (const blockId of this.reservations.OnDate[date]) {
+                allBlockId.add(blockId);
+            }
+        }
+        let allBlockIdArray = Array.from(allBlockId);
+        let existsBlockIds: Set<string> = await filterExistsBlocks(allBlockIdArray);
+        // console.log(allBlockIdArray, existsBlockIds);
+        const OnDate = this.reservations.OnDate;
+        for (const date of Object.keys(OnDate)) {
+            const before = OnDate[date];
+            OnDate[date] = OnDate[date].filter(blockId => existsBlockIds.has(blockId));
+            console.log(`Filter ${date}: [${before}] --> [${OnDate[date]}]`)
+        }
+        this.save();
     }
 }
 

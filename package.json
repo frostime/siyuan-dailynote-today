@@ -9,6 +9,7 @@
   "type": "module",
   "scripts": {
     "make-link": "node ./scripts/make_dev_link.js",
+    "replace-dist": "node ./scripts/replace_dist_link.js",
     "dev": "vite build --watch",
     "build": "vite build",
     "git-reset-dev": "git remote prune origin && git branch dev -f main"
