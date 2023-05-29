@@ -273,7 +273,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
         //1. 先检查预约块是否存在
         let resvBlocks: Block[] = await serverApi.sql(sql);
         if (resvBlocks.length === 0) {
-            confirm('今日笔记', '<h3>咦!??</h3><p>本来今天是有预约的, 但是我们发现预约块都不见了</p><p>可能是被删除了或者对应的笔记本已经关闭</p>');
+            confirm(i18n.Name, i18n.Msg.Resv404);
             return;
         }
         //如果是初次创建, 则插入到日记的最前面

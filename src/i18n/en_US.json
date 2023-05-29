@@ -76,6 +76,7 @@
         "file": "CHANGELOG_en_US"
     },
     "Msg": {
-        "PruneResv": "Pruned"
+        "PruneResv": "Pruned",
+        "Resv404": "<h3>Ooops!??</h3><p>It should have been reservation blocks here, but the blocks are not found</p><p>Maybe they were deleted or the notebook is closed</p>"
     }
 }
