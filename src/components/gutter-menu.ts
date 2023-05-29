@@ -28,7 +28,7 @@ let clickEvent: any;
 
 const DatePatternRules = [
     {
-        pattern: /(?<!\d)(?:(?<year>(?:20)?\d{2})\s?[-年/]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月/]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])\s?[日号]?/,
+        pattern: /(?<!\d)(?:(?<year>(?:20)?\d{2})\s?[-年\./]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月\./]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])\s?[日号]?/,
         parse(match: RegExpMatchArray): [string, string, string] {
             // console.log(match);
             let year = match.groups.year;
