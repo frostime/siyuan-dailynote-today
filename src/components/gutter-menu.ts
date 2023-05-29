@@ -25,6 +25,11 @@ function createMenuItems(data_id: string) {
 }
 
 let clickEvent: any;
+const Zh1to9 = '一二三四五六七八九';
+const Zh1to10 = '一二三四五六七八九十';
+const ZhDigitMap = {
+    '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9, '十': 10
+}
 
 const DatePatternRules = [
     {
@@ -83,7 +88,7 @@ const DatePatternRules = [
             let dayOfWeekNow = today.getDay();
             dayOfWeekNow = dayOfWeekNow === 0 ? 7 : dayOfWeekNow; //周日是0，转换成7
 
-            let dateDelta = (nextWeek === true? 7 : 0) + dayOfWeekDst - dayOfWeekNow;
+            let dateDelta = (nextWeek === true ? 7 : 0) + dayOfWeekDst - dayOfWeekNow;
             if (dateDelta < 0) {
                 dateDelta += 7;
             }
@@ -91,6 +96,40 @@ const DatePatternRules = [
             let year = today.getFullYear().toString();
             let month = (today.getMonth() + 1).toString();
             let day = today.getDate().toString();
+            return [year, month, day];
+        }
+    },
+    {
+        pattern: new RegExp(
+            `(?<!\\d)(?:(?<year>(?:20)?\\d{2})\\s?年?\\s?)?` +
+            `(?<month>[${Zh1to9}]|十[一二]?)\\s*月\\s*` +
+            `(?<day>三十一?|二?十[${Zh1to9}]?|[${Zh1to10}])\\s*[日号]?`
+        ),
+        zn2num(zh: string): number {
+            if (zh.length === 1) {
+                return ZhDigitMap[zh];
+            } else if (zh.length === 2) {
+                if (zh[0] === '十') {
+                    return 10 + ZhDigitMap[zh[1]];
+                } else {
+                    return 10 * ZhDigitMap[zh[0]];
+                }
+            } else if (zh.length === 3) {
+                return 10 * ZhDigitMap[zh[0]] + ZhDigitMap[zh[2]];
+            }
+        },
+        parse(match: RegExpMatchArray): [string, string, string] {
+            let year = match.groups.year;
+            let month = match.groups.month;
+            let day = match.groups.day;
+            if (!year) {
+                let today = new Date();
+                year = today.getFullYear().toString();
+            }
+
+            month = this.zn2num(month).toString();
+            day = this.zn2num(day).toString();
+
             return [year, month, day];
         }
     }
