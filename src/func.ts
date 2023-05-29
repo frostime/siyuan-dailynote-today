@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { showMessage } from 'siyuan';
+import { showMessage, confirm } from 'siyuan';
 import notebooks from './global-notebooks';
 import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
@@ -257,14 +257,30 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
             return;
         } else {
             blockIDs = blockIDs.map((id) => `"${id}"`);
-            let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
+            sql = `select * from blocks where id in (${blockIDs.join(',')})`;
+
+            let blocks: Block[] = await serverApi.sql(sql);
+            if (blocks.length === 0) {
+                confirm('今日笔记', '<h3>咦!??</h3><p>本来今天是有预约的, 但是我们发现预约块都不见了</p><p>可能是被删除了或者对应的笔记本已经关闭</p>');
+                return;
+            }
+
+            let sqlBlock = `{{${sql}}}`;
             serverApi.updateBlock(blocks[0].id, sqlBlock, 'markdown');
             serverApi.setBlockAttrs(blocks[0].id, { name: 'Reservation', breadcrumb: "true"});
         }
     } else {
         //插入嵌入块
         blockIDs = blockIDs.map((id) => `"${id}"`);
-        let sqlBlock = `{{select * from blocks where id in (${blockIDs.join(',')})}}`;
+        sql = `select * from blocks where id in (${blockIDs.join(',')})`;
+
+        let blocks: Block[] = await serverApi.sql(sql);
+        if (blocks.length === 0) {
+            confirm('今日笔记', '<h3>咦!??</h3><p>本来今天是有预约的, 但是我们发现预约块都不见了</p><p>可能是被删除了或者对应的笔记本已经关闭</p>');
+            return;
+        }
+
+        let sqlBlock = `{{${sql}}}`;
         let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
         let blockId = data[0].doOperations[0].id;
         serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true"});
