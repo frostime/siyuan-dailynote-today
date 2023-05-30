@@ -98,6 +98,11 @@ You can think of the reservation block as a simple schedule management or task r
 
 4. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
 
+5. After completing the reservation block, a custom attribute `custom-reservation` will be automatically added to the block and memo will be filled in, making it easier for users to identify which blocks have been booked.
+
+    ![](asset/R-memo.png)
+
+    ![](asset/R-attr.png)
 
 ### Currently supported date templates
 
