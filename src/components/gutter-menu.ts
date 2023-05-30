@@ -33,7 +33,7 @@ const ZhDigitMap = {
 
 const DatePatternRules = [
     {
-        pattern: /(?<!\d)(?:(?<year>(?:20)?\d{2})\s?[-年\./]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月\./]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])\s?[日号]?/,
+        pattern: /(?<![\d\.\-/])(?:(?<year>2\d{3})\s?[\-年\./]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[\-月\./]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])(?:\s?[日号]|[^\d\.\-/])/,
         parse(match: RegExpMatchArray): [string, string, string] {
             // console.log(match);
             let year = match.groups.year;
@@ -199,22 +199,34 @@ export class GutterMenu {
         // console.log(kramdown);
         kramdown = kramdown.replace(/{: (?:\w+=".+")+}/g, '');
         // console.log(content);
-        let match = null;
+
         let year: string, month: string, day: string = null;
+        let matchedList: RegExpMatchArray[] = [];
         //匹配日期正则表达式
         for (let rule of DatePatternRules) {
             //find
-            match = kramdown.match(rule.pattern);
-            console.log(rule.pattern, match);
+            let match = kramdown.match(rule.pattern);
+            // console.log(rule.pattern, match);
             if (match) {
                 [year, month, day] = rule.parse(match);
-                console.log(year, month, day);
+                // console.log(year, month, day);
                 //防止出现匹配到的日期是无效的情况
                 if (new Date(`${year}-${month}-${day}`).toString() !== 'Invalid Date') {
-                    break;
+                    matchedList.push(match);
                 }
             }
         }
+        let match = null;
+        //多个匹配中选择 match 位置最靠前的
+        if (matchedList.length > 0) {
+            match = matchedList[0];
+            for (let m of matchedList) {
+                if (m.index < match.index) {
+                    match = m;
+                }
+            }
+        }
+
         if (!match) {
             showMessage(i18n.ReserveMenu.Date404, 3000, 'error');
             return;
