@@ -1,3 +1,10 @@
+## v1.1.1.patch
+
+这是一个针对 v1.1.1 的补丁更新，主要是为了适应思源 2.8.10 版在 API 上的变动。
+
+
+This is a temporary patch update, to satisfy the API change in SiYuan 2.8.10
+
 ## Daily Note Todahy v1.1.1 Update
 
 
