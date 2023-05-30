@@ -1,7 +1,7 @@
 import zh_Hans from "./i18n/zh_CN.json";
 import en_US from "./i18n/en_US.json";
-import { showMessage } from "siyuan";
 
+//@ts-ignore
 export const lute = window.Lute!.New();
 export type I18N = typeof zh_Hans;
 
