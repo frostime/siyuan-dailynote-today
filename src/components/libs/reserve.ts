@@ -125,54 +125,43 @@ export async function reserveBlock(blockId) {
     kramdown = kramdown.replace(/{: (?:\w+=".+")+}/g, '');
     // console.log(content);
 
-    let year: string, month: string, day: string = null;
-    let matchedList: RegExpMatchArray[] = [];
+    // let year: string, month: string, day: string = null;
+    let resMatch: RegExpMatchArray = null;
+    let resDate: Date = null;
+    let resIndex: number = Infinity;
     //匹配日期正则表达式
     for (let rule of DatePatternRules) {
         //find
         let match = kramdown.match(rule.pattern);
         // console.log(rule.pattern, match);
-        if (match) {
-            [year, month, day] = rule.parse(match);
-            // console.log(year, month, day);
+        if (match && match.index < resIndex) {
+            let [year, month, day] = rule.parse(match);
             //防止出现匹配到的日期是无效的情况
-            if (new Date(`${year}-${month}-${day}`).toString() !== 'Invalid Date') {
-                matchedList.push(match);
-            }
-        }
-    }
-    let match = null;
-    //多个匹配中选择 match 位置最靠前的
-    if (matchedList.length > 0) {
-        match = matchedList[0];
-        for (let m of matchedList) {
-            if (m.index < match.index) {
-                match = m;
+            let date = new Date(`${year}-${month}-${day}`);
+            if (date.toString() !== 'Invalid Date') {
+                resIndex = match.index;
+                resDate = date;
+                resMatch = match;
             }
         }
     }
 
-    if (!match) {
+    if (!resDate) {
         showMessage(i18n.ReserveMenu.Date404, 3000, 'error');
         return;
     }
-
-    let date = new Date(`${year}-${month}-${day}`);
-    if (date.toString() === 'Invalid Date') {
-        confirm('Error', `${year}-${month}-${day}: ${i18n.ReserveMenu.DateInvalid}`);
-        return;
-    }
+    let [year, month, day] = [resDate.getFullYear(), resDate.getMonth() + 1, resDate.getDate()]
     //检查是不是过去
     let today = new Date();
-    today.setHours(0, 0, 0, 0); //TODO 测试用, 用完删除
-    if (date < today) {
+    today.setHours(0, 0, 0, 0); //为了方便测试，今天也是可以预约的
+    if (resDate < today) {
         confirm('Error', `${year}-${month}-${day}: ${i18n.ReserveMenu.DatePast}`);
         return;
     }
 
-    let html = createConfirmDialog(kramdown, match);
-    confirm(`${i18n.ReserveMenu.Title}: ${date.toLocaleDateString()}?`, html
-        , () => doReserveBlock(blockId, date)
+    let html = createConfirmDialog(kramdown, resMatch);
+    confirm(`${i18n.ReserveMenu.Title}: ${resDate.toLocaleDateString()}?`, html
+        , () => doReserveBlock(blockId, resDate)
     );
 }
 
