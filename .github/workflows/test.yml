@@ -17,7 +17,7 @@ jobs:
               id: regex-match
               with:
                 text: ${{ github.ref_name }}
-                regex: '^v\d+.\d+.\d+(-dev\d+|.\w+)'
+                regex: '^V\d+.\d+.\d+(-dev\d+|.\w+)'
 
             - run: echo ${{ steps.regex-match.outputs }}
 
