@@ -1,4 +1,4 @@
-name: Create Release on Tag Push
+name: Test for action
 
 on:
     push:
@@ -18,6 +18,8 @@ jobs:
               with:
                 text: ${{ github.ref_name }}
                 regex: '^v\d+.\d+.\d+(-dev\d+|.\w+)'
+
+            - run: echo ${{ steps.regex-match.outputs }}
 
             - name: RegRes
               if: ${{ steps.regex-match.outputs.match != '' }}
