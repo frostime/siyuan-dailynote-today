@@ -38,3 +38,9 @@ export let i18n: I18N;
 export function setI18n(i18n_: any) {
     i18n = i18n_;
 }
+
+export let isMobile: boolean;
+export function setIsMobile(isMobile_: boolean) {
+    isMobile = isMobile_;
+}
+

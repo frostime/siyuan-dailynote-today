@@ -145,6 +145,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     openSetting(): void {
         openTab({
+            app: this.app,
             custom: {
                 icon: "iconSettings",
                 title: "今日笔记 Setting",
