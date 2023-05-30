@@ -28,10 +28,10 @@ export async function showChangeLog(version: string) {
         showTypoDialog(
             `${i18n.Name} v${version}`,
             content,
-            isMobile() ? "92vw" : "60%"
+            "60%"
         );
     } catch (err) {
-        
+        console.log('showChangeLog error:', err);
     }
     
 }
