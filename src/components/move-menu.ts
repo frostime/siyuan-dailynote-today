@@ -6,6 +6,7 @@ import { moveBlocksToDailyNote } from "../func";
 import { i18n, info } from "../utils";
 import notebooks from "../global-notebooks";
 import { eventBus } from "../event-bus";
+import { reserveBlock } from "./libs/reserve";
 
 //右键菜单的监听器
 let gutterContextMenuEventObj: EventListenerOrEventListenerObject;
@@ -111,6 +112,11 @@ export class ContextMenu {
                 type: 'submenu',
                 icon: 'iconMove',
                 submenu: this.createMenuItems(data_id),
+            });
+            menu.addItem({
+                label: i18n.ReserveMenu.name,
+                icon: 'iconHistory',
+                click: () => reserveBlock(data_id)
             });
             // console.log(event);
             menu.open({
