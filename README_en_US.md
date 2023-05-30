@@ -155,6 +155,17 @@ Translated with www.DeepL.com/Translator (free version)
 
 ![](asset/Setting.png)
 
+### 7. Alt + Right-click: a compatible function menu
+
+Due to technical reasons, the block menu provided by the plugin conflicts with the menu of some themes. Specifically, after enabling the plugin, the built-in block menu items of the theme are hidden.
+
+Currently, this problem cannot be solved, so we have provided a compromise solution:
+
+- Disable the "Move Block" and "Reserve Block" buttons in the settings and then restart. The plugin's custom menu items will disappear, and the theme's built-in menu will be displayed.
+- You can use Alt + Right-click to bring up a custom menu provided by the plugin, which also includes the "Move Block" and "Reserve Block" buttons.
+
+Please note that the Alt + Right-click menu has some unstable bugs, such as the inability to bring up the menu properly after closing all tabs and opening a new one. In this case, just click "Update Status" to fix it.
+
 
 ## FAQ
 
