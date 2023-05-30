@@ -5,7 +5,6 @@ dev/*
 deploy.bat
 deploy.ps1
 .vscode
-pnpm-lock.yaml
 package.zip
 index.css
 index.js
