@@ -169,6 +169,10 @@ function doReserveBlock(blockId, date: Date) {
     console.log(blockId, date);
     reservation.doReserve(date, blockId);
     reservation.save();
+    let dateStr = reservation.dateTemplate(date);
+    serverApi.setBlockAttrs(blockId, { 
+        'custom-reservation': dateStr, 'memo': `${i18n.ReserveMenu.name} ${dateStr}` 
+    });
     showMessage(`${i18n.ReserveMenu.Success} ${date.toLocaleDateString()}`, 3000, 'info');
 }
 

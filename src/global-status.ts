@@ -108,7 +108,7 @@ class ReservationManger {
 
     reservations: { "OnDate": {[date: string]: string[]} } = { "OnDate": {}};
 
-    private dateTemplate(date: Date) {
+    dateTemplate(date: Date) {
         //确保日期格式为 YYYYMMDD
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
