@@ -104,6 +104,18 @@ You can think of the reservation block as a simple schedule management or task r
 
     ![](asset/R-attr.png)
 
+
+You can customize the CSS styles to display these reservation blocks. Here is an example that you can add to your code snippet:
+
+```css
+.protyle-wysiwyg div[custom-reservation] {
+    border-style: dashed;
+    border-width: 1.5px;
+    border-radius: 0.5rem;
+    border-color: var(--b3-theme-primary);
+}
+```
+
 ### Currently supported date templates
 
 - Standard year, month and day

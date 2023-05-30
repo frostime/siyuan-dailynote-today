@@ -106,6 +106,17 @@
 
     ![](asset/R-attr.png)
 
+你可以自定义 css 样式来展示这些预约块，下面是一个例子，你可以把它加入到代码片段中。
+
+```css
+.protyle-wysiwyg div[custom-reservation] {
+    border-style: dashed;
+    border-width: 1.5px;
+    border-radius: 0.5rem;
+    border-color: var(--b3-theme-primary);
+}
+```
+
 ### 目前支持的日期模板
 
 - 标准年月日
