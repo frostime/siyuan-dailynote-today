@@ -9,7 +9,6 @@ specifiers:
   minimist: ^1.2.8
   rollup-plugin-livereload: ^2.0.5
   sass: ^1.62.1
-  siyuan: ^0.7.1
   svelte: ^3.57.0
   ts-node: ^10.9.1
   typescript: ^5.0.4
@@ -26,7 +25,6 @@ devDependencies:
   minimist: 1.2.8
   rollup-plugin-livereload: 2.0.5
   sass: 1.62.1
-  siyuan: 0.7.1
   svelte: 3.58.0
   ts-node: 10.9.1_swwgrzuo53dutirdgvlshcj6ra
   typescript: 5.0.4
@@ -764,10 +762,6 @@ packages:
 
   /setimmediate/1.0.5:
     resolution: {integrity: sha512-MATJdZp8sLqDl/68LfQmbP8zKPLQNV6BIZoIgrscFDQ+RsvK/BxeDQOgyxKKoh0y/8h3BqVFnCqQ/gd+reiIXA==}
-    dev: true
-
-  /siyuan/0.7.1:
-    resolution: {integrity: sha512-Q7OZqpJ8h+axLDkn6afoAdKD6mHPAona/jsoUpf8UgFqHuOscNS6ub8RudhTCPKppDnQzBy5o35xhlecxnrbjQ==}
     dev: true
 
   /source-map-js/1.0.2:

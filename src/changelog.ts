@@ -1,4 +1,4 @@
-import { Dialog, isMobile } from "siyuan";
+import { Dialog } from "siyuan";
 import { i18n, lute } from "./utils";
 import * as serverApi from "./serverApi";
 
@@ -15,8 +15,10 @@ function showTypoDialog(title: string, typo: string, width?: string) {
 
 export async function showChangeLog(version: string) {
     try {
-        const path = `/data/plugins/siyuan-dailynote-today/i18n/${i18n.ChangeLog.file}-${version}.md`;
-        // const path = `/data/plugins/siyuan-dailynote-today/i18n/CHANGELOG_zh_CN-1.0.6.md`;
+        //从 version 版本号中提取主要版本号 mainVersion，比如 1.1.1-beta 或 1.1.1.patch 等，都提取出 1.1.1
+        let mainVersion = version.match(/\d+\.\d+\.\d+/g)[0];
+        const path = `/data/plugins/siyuan-dailynote-today/i18n/${i18n.ChangeLog.file}-${mainVersion}.md`;
+
         let file: string = await serverApi.getFile(path);
         let code404 = file.match(/"code":404/g);
         if (code404 !== null) {
