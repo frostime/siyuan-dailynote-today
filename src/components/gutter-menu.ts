@@ -206,10 +206,10 @@ export class GutterMenu {
         for (let rule of DatePatternRules) {
             //find
             let match = kramdown.match(rule.pattern);
-            console.log(rule.pattern, match);
+            // console.log(rule.pattern, match);
             if (match) {
                 [year, month, day] = rule.parse(match);
-                console.log(year, month, day);
+                // console.log(year, month, day);
                 //防止出现匹配到的日期是无效的情况
                 if (new Date(`${year}-${month}-${day}`).toString() !== 'Invalid Date') {
                     matchedList.push(match);
