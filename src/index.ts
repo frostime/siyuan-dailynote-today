@@ -5,11 +5,11 @@ import { openTab, Plugin } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import { notify, compareVersion, updateTodayReservation } from './func';
+import { notify, updateTodayReservation } from './func';
 import { error, info, setI18n } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
-import { ContextMenu } from './components/move-menu';
+import { ContextMenu } from './components/legacy-menu';
 import { eventBus } from './event-bus';
 import * as serverApi from './serverApi';
 import { showChangeLog } from './changelog';
