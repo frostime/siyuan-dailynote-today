@@ -102,11 +102,12 @@ You can think of the reservation block as a simple schedule management or task r
 ### Currently supported date templates
 
 - Standard year, month and day
-    - `2020-04-01`, `2020/04/01`
+    - `2020-04-01`, `2020/04/01`, `2020.04.01`
     - `2020年5月2号`, `2020年5月2日` in Chinese
     - Dates can have spaces between them: `2020-04-01` and `2020 - 04 - 01` are both ok
     - Month and date can be added with 0: `04-01`, `04-1`, `4-1` are possible
     - You can leave out the year, so that it will be considered the same year by default: for example, on a day in the year 23, the `09-08` will be considered as `2023-09-08`.
+    - > Unfortunately, this plugin does not plan to provide support for users who can live beyond the year 3000, so you can only use years before 2999.
 - Chinese month and day
     - `九月十二号`
     - `三月六日`
@@ -124,7 +125,7 @@ Translated with www.DeepL.com/Translator (free version)
 
 ### Notice
 
-1. The current version (1.1.0) will only insert automatically when the diary is created/opened automatically by the plugin
+1. The embeded block for reservations will be insert automatically only when the diary is created/opened automatically by the plugin
 2. You can use the 'Update' button to manually insert appointment blocks into the diary
 3. The date matching rules currently
     - It is not allowed to write in the past
