@@ -33,7 +33,7 @@ const ZhDigitMap = {
 
 const DatePatternRules = [
     {
-        pattern: /(?<!\d)(?:(?<year>2\d{3})\s?[-年\./]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月\./]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])(?:\s?[日号]|[^\d])/,
+        pattern: /(?<!\d)(?:(?<year>2\d{3})\s?[-年\./]\s?)?(?:(?<month>0?[1-9]|1[0-2])\s?[-月\./]\s?)(?<day>[1-2][0-9]|3[0-1]|0?[1-9])(?:\s?[日号]|[^\d\.\-/])/,
         parse(match: RegExpMatchArray): [string, string, string] {
             // console.log(match);
             let year = match.groups.year;
