@@ -116,6 +116,8 @@ You can customize the CSS styles to display these reservation blocks. Here is an
 }
 ```
 
+With custom attributes, you can use SQL to query all reservation blocks. For more information, see FAQs.
+
 ### Currently supported date templates
 
 - Standard year, month and day
@@ -204,6 +206,44 @@ Life, work, and Hobby have a "√" in front of them, which means that they have 
 ![](asset/IconMenu.png)
 
 At this point, if I click on "Academic Learn", then a new diary will be created under this notebook, and then you can open the drop-down box again and you will see that a √ symbol also appears in front of this notebook.
+
+### Q: How to view all reservation blocks?
+
+If the plugin version is 1.1.1 or higher, all inserted blocks will have the `custom-reservation` attribute set, so you can use SQL to query them. Here is the template:
+
+```sql
+select B.*
+from blocks as B
+inner join attributes as A
+on(
+  A.block_id = B.id and 
+  A.name = 'custom-reservation'
+  and A.value >= strftime('%Y%m%d', datetime('now')) 
+) order by A.value;
+```
+
+Note that the `and A.value >= strftime('%Y%m%d', datetime('now'))` filters out all expired reservations. If you want to view past reservations regardless, you can remove this part.
+
+If you have installed the Query widget, you can use this SQL:
+
+```sql
+select
+A.value||'000000' as __10____date__ReservationDate,
+'['
+||substr(B.created,1,4)
+|| '-' || substr(B.created,5,2)
+|| '-' || substr(B.created,7,2)
+|| '](siyuan://blocks/' || B.id|| ')' as __11____pre__Created,
+substr(B.content,1,30) as __22____pre__Content
+from blocks as B
+inner join attributes as A
+on(
+  A.block_id = B.id and 
+  A.name = 'custom-reservation'
+  and A.value >= strftime('%Y%m%d', datetime('now')) 
+) order by A.value;
+```
+
 
 ### Q: When do I need to "Update" status
 

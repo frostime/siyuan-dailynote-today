@@ -117,6 +117,8 @@
 }
 ```
 
+有了自定义属性，你可以使用 SQL 来查询所有的预约块，详情见[常见问题](#q-如何查看所有的预约)。
+
 ### 目前支持的日期模板
 
 - 标准年月日
@@ -211,6 +213,43 @@
 ![](asset/IconMenu.png)
 
 此时，如果我再点击「Academic Learn」，那么就会在这个笔记本下新创建一个日记，然后你再打开下拉框，就会发现这个笔记本前面也出现了一个「√」符号。
+
+### Q: 如何查看所有的预约？
+
+如果插件版本在 1.1.1 以上，那么所有插入块都会设置 `custom-reservation` 属性，所以可以使用 SQL 来查询，这里给出模板。
+
+```sql
+select B.*
+from blocks as B
+inner join attributes as A
+on(
+  A.block_id = B.id and 
+  A.name = 'custom-reservation'
+  and A.value >= strftime('%Y%m%d', datetime('now')) 
+) order by A.value;
+```
+
+注意 `and A.value >= strftime('%Y%m%d', datetime('now'))` 这一段过滤了所以已经过期的预约，如果您无论如何都想查看已经过去的预约，可以把这一段删除。
+
+如果你安装了 Query 挂件，这里还提供了一个表格版 SQL:
+
+```sql
+select
+A.value||'000000' as __10____date__预约日期,
+'['
+||substr(B.created,1,4)
+|| '-' || substr(B.created,5,2)
+|| '-' || substr(B.created,7,2)
+|| '](siyuan://blocks/' || B.id|| ')' as __11____pre__创建时间,
+substr(B.content,1,30) as __22____pre__内容
+from blocks as B
+inner join attributes as A
+on(
+  A.block_id = B.id and 
+  A.name = 'custom-reservation'
+  and A.value >= strftime('%Y%m%d', datetime('now')) 
+) order by A.value;
+```
 
 ### Q: 什么情况下我需要更新状态？
 
