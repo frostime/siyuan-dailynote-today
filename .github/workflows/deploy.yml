@@ -1,62 +1,85 @@
 name: Create Release on Tag Push
 
 on:
-    push:
-        tags:
-            - "v*"
+  push:
+    tags:
+      - "v*"
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            # Checkout
-            - name: Checkout
-              uses: actions/checkout@v3
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
 
-            # Install Node.js
-            - name: Install Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18
-                  registry-url: "https://registry.npmjs.org"
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: ${{ github.ref_name }}
+          regex: '^v\d+\.\d+\.\d+(-\w+)?'
 
-              # Install pnpm
-            - name: Install pnpm
-              uses: pnpm/action-setup@v2
-              id: pnpm-install
-              with:
-                  version: 8
-                  run_install: false
+      # Install Node.js
+      - name: Install Node.js
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: "https://registry.npmjs.org"
 
-            # Get pnpm store directory
-            - name: Get pnpm store directory
-              id: pnpm-cache
-              shell: bash
-              run: |
-                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+        # Install pnpm
+      - name: Install pnpm
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
 
-            # Setup pnpm cache
-            - name: Setup pnpm cache
-              uses: actions/cache@v3
-              with:
-                  path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-pnpm-store-
+      # Get pnpm store directory
+      - name: Get pnpm store directory
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-            # Install dependencies
-            - name: Install dependencies
-              run: pnpm install --no-frozen-lockfile
+      # Setup pnpm cache
+      - name: Setup pnpm cache
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-            # Build for production, 这一步会生成一个 package.zip
-            - name: Build for production
-              run: pnpm build
+      # Install dependencies
+      - name: Install dependencies
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        run: pnpm install --no-frozen-lockfile
 
-            - name: Release
-              uses: ncipollo/release-action@v1
-              with:
-                  allowUpdates: true
-                  artifactErrorsFailBuild: true
-                  artifacts: 'package.zip'
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  prerelease: false
+      # Build for production, 这一步会生成一个 package.zip
+      - name: Build for production
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        run: pnpm build
+
+      - name: Release
+        if: ${{ steps.regex-match.outputs.match != '' && steps.regex-match.outputs.group1 == '' }}
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          artifacts: "package.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+
+      - name: Prerelease
+        if: ${{ steps.regex-match.outputs.match != '' && steps.regex-match.outputs.group1 != '' }}
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          artifacts: "package.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true
