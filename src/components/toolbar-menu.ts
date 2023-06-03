@@ -11,7 +11,7 @@ let ContextMenuListener: EventListener;
 let UpdateDailyNoteStatusListener: EventListener;
 export class ToolbarMenuItem {
     plugin: Plugin;
-    ele: HTMLDivElement;
+    ele: HTMLElement;
     iconStatus: Map<string, string>;
 
     constructor(plugin: Plugin) {
