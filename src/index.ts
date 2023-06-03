@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { openTab, Plugin } from 'siyuan';
+import { openTab, Plugin, getFrontend } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { notify, updateTodayReservation } from './func';
-import { error, info, setI18n } from './utils';
+import { error, info, setI18n, setIsMobile } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 import { ContextMenu } from './components/legacy-menu';
@@ -19,6 +19,9 @@ import "./index.scss";
 export default class DailyNoteTodayPlugin extends Plugin {
 
     version: string;
+    upToDate: any = null;
+    enableBlockIconClickEvent: boolean = false;
+    isMobile: boolean = false;
 
     toolbarItem: ToolbarMenuItem;
 
@@ -26,15 +29,15 @@ export default class DailyNoteTodayPlugin extends Plugin {
     tab_setting: any;
 
     menu: ContextMenu;
-
-    upToDate: any = null;
-
-    enableBlockIconClickEvent: boolean = false;
     gutterMenu: GutterMenu;
 
     async onload() {
         info('Plugin load');
         let start = performance.now();
+
+        const frontEnd = getFrontend();
+        this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
+        setIsMobile(this.isMobile);
 
         setI18n(this.i18n); //设置全局 i18n
 
