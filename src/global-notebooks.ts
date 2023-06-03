@@ -1,8 +1,5 @@
-import { getDocsByHpath, queryNotebooks } from './func';
+import { queryNotebooks } from './func';
 import { settings } from './global-status';
-import { Notebook } from './types';
-import { i18n } from './utils';
-import { confirm } from 'siyuan';
 
 
 class Notebooks {
