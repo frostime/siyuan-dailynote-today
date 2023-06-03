@@ -4,7 +4,7 @@
 import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 import { eventBus } from './event-bus';
-import { filterExistsBlocks } from './func';
+import { filterExistsBlocks, notify } from './func';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -105,8 +105,44 @@ const ReserveFile = 'Reservation.json';
 
 class ReservationManger {
     plugin: Plugin;
-
+    reserved: Map<string, string>;
     reservations: { "OnDate": {[date: string]: string[]} } = { "OnDate": {}};
+
+    constructor() {
+        this.reserved = new Map<string, string>();
+    }
+
+    /**
+     * 更新预约信息, 更新预约的块对应的日期的缓存
+     */
+    private updateReserved() {
+        for (let date in this.reservations.OnDate) {
+            for (let blockId of this.reservations.OnDate[date]) {
+                this.reserved.set(blockId, date);
+            }
+        }
+    }
+
+    /**
+     * 检查块是否已经被预约, 以避免出现重复预约的情况
+     * @param blockId 预约块的 ID
+     * @returns 返回预约的日期，如果没有预约，则返回 undefined
+     */
+    private findReserved(blockId: string): string|undefined {
+        return this.reserved.get(blockId);
+    }
+
+    /**
+     * 删除某个已经被预约的块
+     * @param date 预约块预约到的日期
+     * @param blockId 预约块的 ID 
+     */
+    private removeReservation(date: string, blockId: string) {
+        let index = this.reservations.OnDate[date].indexOf(blockId);
+        if (index >= 0) {
+            this.reservations.OnDate[date].splice(index, 1);
+        }
+    }
 
     dateTemplate(date: Date) {
         //确保日期格式为 YYYYMMDD
@@ -142,6 +178,7 @@ class ReservationManger {
             }
             this.save();
         }
+        this.updateReserved();
     }
 
     save() {
@@ -154,13 +191,21 @@ class ReservationManger {
     doReserve(date: Date, blockId: string) {
         // YYYYMMDD
         info(`预约: ${blockId} 到 ${date}`);
+
+        let reserved = this.findReserved(blockId);
+        if (reserved) {
+            this.removeReservation(reserved, blockId);
+            info(`已经预约到 ${reserved} 的 ${blockId} , 现在删除原来的预约`);
+        }
         let date_str = this.dateTemplate(date);
+        //如果没有这个日期的预约，则创建
         if (!(date_str in this.reservations.OnDate)) {
             this.reservations.OnDate[date_str] = [];
         }
         if (this.reservations.OnDate[date_str].indexOf(blockId) < 0) {
             this.reservations.OnDate[date_str].push(blockId);
         }
+        this.reserved.set(blockId, date_str);
     }
 
     //获取今天的预约
