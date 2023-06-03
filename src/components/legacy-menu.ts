@@ -2,11 +2,9 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Menu } from "siyuan";
-import { moveBlocksToDailyNote } from "../func";
-import { i18n, info } from "../utils";
-import notebooks from "../global-notebooks";
-import { eventBus } from "../event-bus";
+import { i18n } from "../utils";
 import { reserveBlock } from "./libs/reserve";
+import { createMenuItems } from "./libs/move";
 
 //右键菜单的监听器
 let gutterContextMenuEventObj: EventListenerOrEventListenerObject;
@@ -111,7 +109,7 @@ export class ContextMenu {
                 label: i18n.MoveMenu.Move,
                 type: 'submenu',
                 icon: 'iconMove',
-                submenu: this.createMenuItems(data_id),
+                submenu: createMenuItems(data_id),
             });
             menu.addItem({
                 label: i18n.ReserveMenu.name,
@@ -125,22 +123,5 @@ export class ContextMenu {
             })
         }
         event.stopPropagation();
-    }
-
-    createMenuItems(data_id: string) {
-        let menuItems: any[] = [];
-        for (let notebook of notebooks) {
-            let item = {
-                label: notebook.name,
-                icon: `icon-${notebook.icon}`,
-                click: async () => {
-                    info(`Move ${data_id} to ${notebook.id}`);
-                    await moveBlocksToDailyNote(data_id, notebook);
-                    eventBus.publish('moveBlocks', '');
-                }
-            }
-            menuItems.push(item);
-        }
-        return menuItems;
     }
 }

@@ -1,28 +1,9 @@
-import notebooks from "../global-notebooks";
-import { moveBlocksToDailyNote } from "../func";
-import { i18n, info } from "../utils";
-import { eventBus } from "../event-bus";
+import { i18n } from "../utils";
 import { Menu } from "siyuan";
 import { iconDiary } from "./svg";
 import { settings } from "../global-status";
 import { reserveBlock } from "./libs/reserve";
-
-function createMenuItems(data_id: string) {
-    let menuItems: any[] = [];
-    for (let notebook of notebooks) {
-        let item = {
-            label: notebook.name,
-            icon: `icon-${notebook.icon}`,
-            click: async () => {
-                info(`Move ${data_id} to ${notebook.id} [${notebook.name}]`);
-                await moveBlocksToDailyNote(data_id, notebook);
-                eventBus.publish('moveBlocks', '');
-            }
-        }
-        menuItems.push(item);
-    }
-    return menuItems;
-}
+import { createMenuItems } from "./libs/move";
 
 let clickEvent: any;
 
