@@ -178,6 +178,7 @@ class ReservationManger {
             }
             this.save();
         }
+        this.doPurgeExpired();
         this.updateReserved();
     }
 

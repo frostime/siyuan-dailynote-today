@@ -198,6 +198,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.menu.releaseMenuOnCurrentTabs();
         this.menu.removeEditorTabObserver();
         settings.save();
+        reservation.save();
         if (this.upToDate) {
             info(`清理定时器 ${this.upToDate}`);
             clearTimeout(this.upToDate);
