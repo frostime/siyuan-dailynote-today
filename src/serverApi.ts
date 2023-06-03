@@ -1,5 +1,4 @@
 import { fetchSyncPost, IWebSocketData } from "siyuan";
-import { info, i18n } from "./utils";
 
 
 async function request(url: string, data: any) {
@@ -24,7 +23,7 @@ export async function lsNotebooks() {
     return request(url, '');
 }
 
-export async function createDocWithMd(notebookId: string, path: string, markdown: string) {
+export async function createDocWithMd(notebookId: NotebookId, path: string, markdown: string) {
     let data = {
         notebook: notebookId,
         path: path,
@@ -34,35 +33,35 @@ export async function createDocWithMd(notebookId: string, path: string, markdown
     return request(url, data);
 }
 
-export async function createDailyNote(notebookId: string, app: string) {
+export async function createDailyNote(notebookId: NotebookId, app: string) {
     let url = '/api/filetree/createDailyNote';
     return request(url, { notebook: notebookId, app: app });
 }
 
-export async function getNotebookConf(notebookId: string) {
+export async function getNotebookConf(notebookId: NotebookId) {
     let data = { notebook: notebookId };
     let url = '/api/notebook/getNotebookConf';
     return request(url, data);
 }
 
-export async function getBlockByID(blockId: string) {
+export async function getBlockByID(blockId: BlockId) {
     let sqlScript = `select * from blocks where id ='${blockId}'`;
     let data = await sql(sqlScript);
     return data[0];
 }
 
-export async function getChildBlocks(blockId: string) {
+export async function getChildBlocks(blockId: BlockId) {
     let data = { id: blockId };
     let url = '/api/block/getChildBlocks';
     return request(url, data);
 }
 
-export async function moveBlock(id: string, previousID: string | null = null, parentID: string | null = null) {
+export async function moveBlock(id: BlockId, previousID: PreviousID = null, parentID: ParentID = null) {
     let url = '/api/block/moveBlock';
     return request(url, { id: id, previousID: previousID, parentID: parentID });
 }
 
-export async function insertBlock(nextID: string, content: string, dataType: 'markdown' | 'dom') {
+export async function insertBlock(nextID: BlockId, content: string, dataType: 'markdown' | 'dom') {
     let url = '/api/block/insertBlock';
     let data = {
         data: content,
@@ -72,7 +71,7 @@ export async function insertBlock(nextID: string, content: string, dataType: 'ma
     return request(url, data);
 }
 
-export async function prependBlock(parentId: string, content: string, dataType: 'markdown' | 'dom') {
+export async function prependBlock(parentId: ParentID, content: string, dataType: 'markdown' | 'dom') {
     let url = '/api/block/prependBlock';
     let data = {
         data: content,
@@ -83,13 +82,13 @@ export async function prependBlock(parentId: string, content: string, dataType: 
 }
 
 // /api/block/deleteBlock
-export async function deleteBlock(blockId: string) {
+export async function deleteBlock(blockId: BlockId) {
     let url = '/api/block/deleteBlock';
     return request(url, { id: blockId });
 }
 
 // /api/block/updateBlock
-export async function updateBlock(blockId: string, content: string, dataType: 'markdown' | 'dom') {
+export async function updateBlock(blockId: BlockId, content: string, dataType: 'markdown' | 'dom') {
     let url = '/api/block/updateBlock';
     return request(url, { id: blockId, data: content, dataType: dataType });
 }
@@ -101,19 +100,19 @@ export async function renderSprig(sprig: string) {
 
 
 // /api/block/getBlockKramdown
-export async function getBlockKramdown(blockId: string) {
+export async function getBlockKramdown(blockId: BlockId) {
     let url = '/api/block/getBlockKramdown';
     return request(url, { id: blockId });
 }
 
 // /api/attr/setBlockAttrs
-export async function setBlockAttrs(blockId: string, attrs: any) {
+export async function setBlockAttrs(blockId: BlockId, attrs: any) {
     let url = '/api/attr/setBlockAttrs';
     return request(url, { id: blockId, attrs: attrs });
 }
 
 // /api/attr/getBlockAttrs
-export async function getBlockAttrs(blockId: string) {
+export async function getBlockAttrs(blockId: BlockId) {
     let url = '/api/attr/getBlockAttrs';
     return request(url, { id: blockId });
 }
