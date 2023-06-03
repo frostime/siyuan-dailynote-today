@@ -2,7 +2,7 @@ import { IMenuItemOption, Menu, Plugin, confirm, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary, initTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
-import { info, i18n } from "../utils";
+import { info, i18n, isMobile } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
 import { Notebook } from "../types";
@@ -95,10 +95,19 @@ export class ToolbarMenuItem {
             menu.addItem(item);
         }
         let rect = this.ele.getBoundingClientRect();
-        menu.open({
-            x: rect.left,
-            y: rect.bottom,
-        });
+        // Plugin sample
+        if (rect.width === 0) {
+            rect = document.querySelector("#barMore").getBoundingClientRect();
+        }
+        if (isMobile) {
+            menu.fullscreen();
+        } else {
+            menu.open({
+                x: rect.right,
+                y: rect.bottom,
+                isLeft: true,
+            });
+        }
         // this.updateDailyNoteStatus();
     }
 
