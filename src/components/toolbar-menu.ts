@@ -5,7 +5,6 @@ import { reservation, settings } from "../global-status";
 import { info, i18n, isMobile } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
-import { Notebook } from "../types";
 
 
 let ContextMenuListener: EventListener;

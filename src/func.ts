@@ -3,7 +3,6 @@
  */
 import { showMessage, confirm } from 'siyuan';
 import notebooks from './global-notebooks';
-import { Notebook, Block } from "./types";
 import { info, warn, error, i18n } from "./utils";
 import * as serverApi from './serverApi';
 import { reservation } from './global-status';

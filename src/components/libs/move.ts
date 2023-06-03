@@ -1,6 +1,5 @@
 import notebooks from "@/global-notebooks";
 import { eventBus } from "@/event-bus";
-import { Notebook } from "@/types";
 import { info, error, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDocsByHpath, createDiary, notify } from "@/func";
