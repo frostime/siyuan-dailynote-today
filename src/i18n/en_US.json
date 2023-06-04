@@ -39,11 +39,11 @@
         },
         "EnableMove": {
             "title": "Enable \"Move Block\" in menu",
-            "text": "When enabled, the \"Move Block\" item will be added to the menu after clicking on the block icon, take effect after reboot; only usable after SiYuan 2.8.9"
+            "text": "When enabled, the \"Move Block\" item will be added to the menu after clicking on the block icon"
         },
         "EnableReserve": {
             "title": "Enable \"Reserve Block\" in menu",
-            "text": "When enabled, the \"Reserve Block\" item will be added to the menu after clicking on the block icon, take effect after reboot; only usable after SiYuan 2.8.9"
+            "text": "When enabled, the \"Reserve Block\" item will be added to the menu after clicking on the block icon"
         },
         "ExpandGutterMenu": {
             "title": "Expand all block menu items",
