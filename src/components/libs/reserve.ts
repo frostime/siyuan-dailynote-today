@@ -165,6 +165,10 @@ export async function reserveBlock(blockId) {
     );
 }
 
+export async function dereserveBlock(blockId: BlockId) {
+
+}
+
 function doReserveBlock(blockId, date: Date) {
     console.log(blockId, date);
     reservation.doReserve(date, blockId);

@@ -71,6 +71,10 @@
         "DatePast": "预约日期只能是未来!",
         "Success": "预约成功!"
     },
+    "DeReserveMenu": {
+        "name": "取消预约",
+        "Success": "成功取消预约!"
+    },
     "NewDay": [
         "今天是",
         "笔记状态已更新"

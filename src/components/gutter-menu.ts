@@ -2,7 +2,7 @@ import { i18n } from "../utils";
 import { Menu } from "siyuan";
 import { iconDiary } from "./svg";
 import { settings } from "../global-status";
-import { reserveBlock } from "./libs/reserve";
+import { reserveBlock, dereserveBlock } from "./libs/reserve";
 import { createMenuItems } from "./libs/move";
 
 let clickEvent: any;
@@ -32,9 +32,30 @@ export class GutterMenu {
 
         // detail.menu.addSeparator(0);
         let menu: Menu = detail.menu;
-        let blockId = detail.blockElements[0].getAttribute('data-node-id');
-
+        let protype: HTMLElement = detail.blockElements[0];
+        let blockId = protype.getAttribute('data-node-id');
+        let reservation: Attr = protype.attributes.getNamedItem('custom-reservation');
         let menuList = [];
+
+        console.log(detail)
+
+        if (settings.get("EnableReserve") === true) {
+            //存在预约, 可以用于取消
+            if (reservation) {
+                menuList.push({
+                    label: i18n.DeReserveMenu.name,
+                    icon: 'iconClose',
+                    click: () => dereserveBlock(blockId)
+                });
+            } else {
+                menuList.push({
+                    label: i18n.ReserveMenu.name,
+                    icon: 'iconHistory',
+                    click: () => reserveBlock(blockId)
+                });
+            }
+        }
+
         if (settings.get("EnableMove") === true) {
             let items = createMenuItems(blockId);
             menuList.push({
@@ -42,14 +63,6 @@ export class GutterMenu {
                 type: 'submenu',
                 icon: 'iconMove',
                 submenu: items,
-            });
-        }
-
-        if (settings.get("EnableReserve") === true) {
-            menuList.push({
-                label: i18n.ReserveMenu.name,
-                icon: 'iconHistory',
-                click: () => reserveBlock(blockId)
             });
         }
 
