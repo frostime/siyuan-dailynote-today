@@ -1,7 +1,7 @@
 import { i18n, lute } from "../../utils";
 import { showMessage, confirm } from "siyuan";
 import * as serverApi from "../../serverApi";
-import { reservation } from "../../global-status";
+import { reservation, settings } from "../../global-status";
 
 
 const Zh1to9 = '一二三四五六七八九';
@@ -159,10 +159,14 @@ export async function reserveBlock(blockId) {
         return;
     }
 
-    let html = createConfirmDialog(kramdown, resMatch);
-    confirm(`${i18n.ReserveMenu.Title}: ${resDate.toLocaleDateString()}?`, html
-        , () => doReserveBlock(blockId, resDate)
-    );
+    if (settings.get('PopupReserveDialog')) {
+        let html = createConfirmDialog(kramdown, resMatch);
+        confirm(`${i18n.ReserveMenu.Title}: ${resDate.toLocaleDateString()}?`, html
+            , () => doReserveBlock(blockId, resDate)
+        );
+    } else {
+        doReserveBlock(blockId, resDate);
+    }
 }
 
 /**
