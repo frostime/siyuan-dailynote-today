@@ -2,17 +2,12 @@
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
     import { i18n } from "../utils";
-    import {eventBus} from "../event-bus";
     import SettingItem from "./setting-item.svelte";
     let checked = settings.get("OpenOnStart");
     let defaultNotebook = settings.get("DefaultNotebook");
     let iconPosition = settings.get("IconPosition");
 
     let contents = i18n.Setting;
-
-    function onClick() {
-        eventBus.publish("UpdateAll");
-    }
 
     onMount(() => {
         console.log("Setting Svelte Mounted");
@@ -68,10 +63,9 @@
         settingValue={settings.get("ExpandGutterMenu")}
     />
     <SettingItem
-        type="button"
-        content={contents.update}
-        settingKey="Update"
-        settingValue={""}
-        on:click={onClick}
+        type="checkbox"
+        content={contents.PopupReserveDialog}
+        settingKey="PopupReserveDialog"
+        settingValue={settings.get("PopupReserveDialog")}
     />
 </div>

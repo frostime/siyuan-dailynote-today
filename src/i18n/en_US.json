@@ -48,6 +48,10 @@
         "ExpandGutterMenu": {
             "title": "Expand all block menu items",
             "text": "When enabled, the plugin's block menu items are expanded to appear as a separate secondary menu under the plugin menu"
+        },
+        "PopupReserveDialog": {
+            "title": "Popup Confirmation Window When Reserving a Block",
+            "text": "Automatically displays a confirmation window when reserving a block to ensure the date is correct."
         }
     },
     "Open": "Open daily note",
