@@ -5,7 +5,7 @@ import { openTab, Plugin, getFrontend } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import { notify, updateTodayReservation } from './func';
+import { checkDuplicateDiary, notify, updateTodayReservation } from './func';
 import { error, info, setI18n, setIsMobile } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
@@ -25,7 +25,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
     upToDate: any = null;
     enableBlockIconClickEvent: boolean = false;
     isMobile: boolean = false;
-    isStartUpJustNow = true; //是否刚刚启动, 用于判断同步
 
     toolbarItem: ToolbarMenuItem;
 
@@ -160,10 +159,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private onWsMain({ detail }) {
-        console.log(detail);
         let cmd = detail.cmd;
         if (cmd === 'syncing') {
-            //
+            console.log('检查同步文件');
+            checkDuplicateDiary();
         }
     }
 

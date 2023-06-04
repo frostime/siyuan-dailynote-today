@@ -5,7 +5,8 @@ import { showMessage, confirm } from 'siyuan';
 import notebooks from './global-notebooks';
 import { info, warn, error, i18n } from "./utils";
 import * as serverApi from './serverApi';
-import { reservation } from './global-status';
+import { reservation, settings } from './global-status';
+import { showTypoDialog } from './changelog';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -140,6 +141,37 @@ export async function getDocsByHpath(hpath: string, notebook: Notebook | null = 
 }
 
 
+/**
+ * 由于同步的问题，默认的笔记本中可能出现重复的日记，这里检查下是否有重复的日记
+ * @param notebook 
+ * @param todayDiaryHpath 
+ */
+export async function checkDuplicateDiary() {
+    let notebook: Notebook = notebooks.default;
+    let hpath = notebook.dailynotePath!;
+    let docks = await getDocsByHpath(hpath, notebook);
+    if (docks.length > 1) {
+        console.warn(`检测到重复的日记: ${notebook.name} ${hpath}`);
+        let content: string = `
+        ## 注意: 检测到重复的日记
+
+        | 文档 ID | 标题 | 创建时间 |
+        | --- | --- | --- |
+        |||
+
+        - 为什么会出现这种情况?
+
+            由于同步的问题，可能出现在一端创建日记后，另一端不知情然后重复创建了日记.
+
+        - 应该如何处处理?
+
+            请自行合并删除多余的日记
+        `;
+        showTypoDialog("今日笔记", content, "50%");
+    }
+}
+
+
 export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
     info(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
@@ -205,7 +237,6 @@ export async function initTodayReservation(notebook: Notebook) {
 
 export async function updateTodayReservation(notebook: Notebook, refresh: boolean = false) {
     let todayDiaryPath = notebook.dailynotePath;
-    //BUG 初次创建的时候可能会拿不到
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let docId = docs[0].id;
     updateDocReservation(docId, refresh);
