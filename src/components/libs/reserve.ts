@@ -165,8 +165,20 @@ export async function reserveBlock(blockId) {
     );
 }
 
+/**
+ * 取消预约
+ * @param blockId 块ID
+ */
 export async function dereserveBlock(blockId: BlockId) {
-
+    let date = reservation.findReserved(blockId);
+    if (date) {
+        reservation.removeReservation(date, blockId);
+    }
+    reservation.save();
+    serverApi.setBlockAttrs(blockId, { 
+        'custom-reservation': null, 'memo': null 
+    });
+    showMessage(i18n.DeReserveMenu.Success, 3000, 'info');
 }
 
 function doReserveBlock(blockId, date: Date) {

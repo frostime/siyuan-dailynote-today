@@ -129,7 +129,7 @@ class ReservationManger {
      * @param blockId 预约块的 ID
      * @returns 返回预约的日期，如果没有预约，则返回 undefined
      */
-    private findReserved(blockId: string): string|undefined {
+    findReserved(blockId: string): string|undefined {
         return this.reserved.get(blockId);
     }
 
@@ -138,7 +138,7 @@ class ReservationManger {
      * @param date 预约块预约到的日期
      * @param blockId 预约块的 ID 
      */
-    private removeReservation(date: string, blockId: string) {
+    removeReservation(date: string, blockId: string) {
         let index = this.reservations.OnDate[date].indexOf(blockId);
         if (index >= 0) {
             this.reservations.OnDate[date].splice(index, 1);
