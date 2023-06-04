@@ -12,7 +12,7 @@ type IconPosition = 'left' | 'right';
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
     'DiaryUpToDate' | 'PluginVersion' | "EnableMove" |
-    'EnableReserve'
+    'EnableReserve' | "ExpandGutterMenu"
 );
 
 interface Item {
@@ -33,7 +33,8 @@ class SettingManager {
         IconPosition: 'left' as IconPosition, //图标放置位置
         PluginVersion: '',
         EnableMove: false as boolean,
-        EnableReserve: false as boolean
+        EnableReserve: false as boolean,
+        ExpandGutterMenu: true as boolean //是否将菜单项目展开
 
     };
 

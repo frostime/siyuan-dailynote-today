@@ -44,6 +44,10 @@
         "EnableReserve": {
             "title": "Enable \"Reserve Block\" in menu",
             "text": "When enabled, the \"Reserve Block\" item will be added to the menu after clicking on the block icon, take effect after reboot; only usable after SiYuan 2.8.9"
+        },
+        "ExpandGutterMenu": {
+            "title": "Expand all block menu items",
+            "text": "When enabled, the plugin's block menu items are expanded to appear as a separate secondary menu under the plugin menu"
         }
     },
     "Open": "Open daily note",

@@ -54,12 +54,19 @@ export class GutterMenu {
         }
 
         if (menuList.length > 0) {
-            menu.addItem({
-                iconHTML: iconDiary.icon16,
-                label: i18n.Name,
-                type: 'submenu',
-                submenu: menuList
-            });
+            let expand = settings.get("ExpandGutterMenu");
+            if (expand === true) {
+                menuList.forEach(item => {
+                    menu.addItem(item);
+                });
+            } else {
+                menu.addItem({
+                    iconHTML: iconDiary.icon16,
+                    label: i18n.Name,
+                    type: 'submenu',
+                    submenu: menuList
+                });
+            }
         }
     }
 }
