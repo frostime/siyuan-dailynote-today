@@ -160,12 +160,14 @@ export default class DailyNoteTodayPlugin extends Plugin {
         }
     }
 
-    private onWsMain({ detail }) {
+    private async onWsMain({ detail }) {
         let cmd = detail.cmd;
         if (cmd === 'syncing' && !this.isSyncChecked) {
             console.log('检查同步文件');
-            this.isSyncChecked = true;
-            checkDuplicateDiary();
+            let hasDuplicate = await checkDuplicateDiary();
+            if (hasDuplicate) {
+                this.isSyncChecked = true;
+            }
         }
     }
 

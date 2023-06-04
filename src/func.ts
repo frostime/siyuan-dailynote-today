@@ -146,42 +146,46 @@ export async function getDocsByHpath(hpath: string, notebook: Notebook | null = 
  * @param notebook 
  * @param todayDiaryHpath 
  */
-export async function checkDuplicateDiary() {
+export async function checkDuplicateDiary(): Promise<boolean> {
     let notebook: Notebook = notebooks.default;
     let hpath = notebook.dailynotePath!;
     let docks = await getDocsByHpath(hpath, notebook);
-    if (docks.length > 1) {
-        console.warn(`检测到重复的日记: ${notebook.name} ${hpath}`);
 
-        let confilctTable = [];
-        for (let doc of docks) {
-            let id = doc.id;
-            let created = doc.created;
-            created = `${created.slice(0, 4)}-${created.slice(4, 6)}-${created.slice(6, 8)} ${created.slice(8, 10)}:${created.slice(10, 12)}:${created.slice(12, 14)}`
-            let updated = doc.updated;
-            updated = `${updated.slice(0, 4)}-${updated.slice(4, 6)}-${updated.slice(6, 8)} ${updated.slice(8, 10)}:${updated.slice(10, 12)}:${updated.slice(12, 14)}`
-            let row = `| ${id} | ${doc.content} | ${created} | ${updated} | ${notebook.name} |\n`;
-            confilctTable.push(row);
-        }
+    if (docks.length <= 1) {
+        return false;
+    }
 
-        let content: string = i18n.ConflictDiary.part1.join("\n") + "\n";
-        for (let row of confilctTable) {
-            content += row;
-        }
-        content += "\n" + i18n.ConflictDiary.part2.join("\n");
-        content = lute.Md2HTML(content);
-        let html = `
+    console.warn(`检测到重复的日记: ${notebook.name} ${hpath}`);
+
+    let confilctTable = [];
+    for (let doc of docks) {
+        let id = doc.id;
+        let created = doc.created;
+        created = `${created.slice(0, 4)}-${created.slice(4, 6)}-${created.slice(6, 8)} ${created.slice(8, 10)}:${created.slice(10, 12)}:${created.slice(12, 14)}`
+        let updated = doc.updated;
+        updated = `${updated.slice(0, 4)}-${updated.slice(4, 6)}-${updated.slice(6, 8)} ${updated.slice(8, 10)}:${updated.slice(10, 12)}:${updated.slice(12, 14)}`
+        let row = `| ${id} | ${doc.content} | ${created} | ${updated} | ${notebook.name} |\n`;
+        confilctTable.push(row);
+    }
+
+    let content: string = i18n.ConflictDiary.part1.join("\n") + "\n";
+    for (let row of confilctTable) {
+        content += row;
+    }
+    content += "\n" + i18n.ConflictDiary.part2.join("\n");
+    content = lute.Md2HTML(content);
+    let html = `
         <div class="b3-typography typofont-1rem"
             style="margin: 0.5rem;"
         >
             ${content}
         </div>`;
-        new Dialog({
-            title: i18n.Name,
-            content: html,
-            width: "50%"
-        });
-    }
+    new Dialog({
+        title: i18n.Name,
+        content: html,
+        width: "50%"
+    });
+    return true;
 }
 
 
