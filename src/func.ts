@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { showMessage, confirm } from 'siyuan';
+import { showMessage, confirm, Dialog } from 'siyuan';
 import notebooks from './global-notebooks';
-import { info, warn, error, i18n } from "./utils";
+import { info, warn, error, i18n, lute } from "./utils";
 import * as serverApi from './serverApi';
 import { reservation, settings } from './global-status';
 import { showTypoDialog } from './changelog';
@@ -152,22 +152,46 @@ export async function checkDuplicateDiary() {
     let docks = await getDocsByHpath(hpath, notebook);
     if (docks.length > 1) {
         console.warn(`检测到重复的日记: ${notebook.name} ${hpath}`);
+
+        let confilctTable = [];
+        for (let doc of docks) {
+            let id = `[${doc.id}](siyuan://blocks/${doc.id})`
+            let created = doc.created;
+            created = `${created.slice(0, 4)}-${created.slice(4, 6)}-${created.slice(6, 8)} ${created.slice(8, 10)}:${created.slice(10, 12)}:${created.slice(12, 14)}`
+            let updated = doc.updated;
+            updated = `${updated.slice(0, 4)}-${updated.slice(4, 6)}-${updated.slice(6, 8)} ${updated.slice(8, 10)}:${updated.slice(10, 12)}:${updated.slice(12, 14)}`
+            let row = `| ${id} | ${doc.content} | ${created} | ${updated} |\n`;
+            confilctTable.push(row);
+        }
+
         let content: string = `
         ## 注意: 检测到重复的日记
 
-        | 文档 ID | 标题 | 创建时间 |
-        | --- | --- | --- |
-        |||
-
         - 为什么会出现这种情况?
+            由于同步的问题, 可能出现在一端创建日记后, 另一端不知情然后重复创建了日记.
+        - 应该如何处理?
+            以下列出了冲突的日记, 请自行合并删除多余的日记
 
-            由于同步的问题，可能出现在一端创建日记后，另一端不知情然后重复创建了日记.
+        冲突文件如下:
 
-        - 应该如何处处理?
-
-            请自行合并删除多余的日记
-        `;
-        showTypoDialog("今日笔记", content, "50%");
+        | 文档 ID | 标题 | 创建时间 | 更新时间 |
+        | --- | --- | --- | --- |
+        `.replace(/\n        /g, "\n");
+        for (let row of confilctTable) {
+            content += row;
+        }
+        content = lute.Md2HTML(content);
+        let html = `
+        <div class="b3-typography typofont-1rem"
+            style="margin: 0.5rem;"
+        >
+            ${content}
+        </div>`;
+        new Dialog({
+            title: i18n.Name,
+            content: html,
+            width: "50%"
+        });
     }
 }
 
