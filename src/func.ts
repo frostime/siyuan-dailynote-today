@@ -155,31 +155,20 @@ export async function checkDuplicateDiary() {
 
         let confilctTable = [];
         for (let doc of docks) {
-            let id = `[${doc.id}](siyuan://blocks/${doc.id})`
+            let id = doc.id;
             let created = doc.created;
             created = `${created.slice(0, 4)}-${created.slice(4, 6)}-${created.slice(6, 8)} ${created.slice(8, 10)}:${created.slice(10, 12)}:${created.slice(12, 14)}`
             let updated = doc.updated;
             updated = `${updated.slice(0, 4)}-${updated.slice(4, 6)}-${updated.slice(6, 8)} ${updated.slice(8, 10)}:${updated.slice(10, 12)}:${updated.slice(12, 14)}`
-            let row = `| ${id} | ${doc.content} | ${created} | ${updated} |\n`;
+            let row = `| ${id} | ${doc.content} | ${created} | ${updated} | ${notebook.name} |\n`;
             confilctTable.push(row);
         }
 
-        let content: string = `
-        ## 注意: 检测到重复的日记
-
-        - 为什么会出现这种情况?
-            由于同步的问题, 可能出现在一端创建日记后, 另一端不知情然后重复创建了日记.
-        - 应该如何处理?
-            以下列出了冲突的日记, 请自行合并删除多余的日记
-
-        冲突文件如下:
-
-        | 文档 ID | 标题 | 创建时间 | 更新时间 |
-        | --- | --- | --- | --- |
-        `.replace(/\n        /g, "\n");
+        let content: string = i18n.ConflictDiary.part1.join("\n") + "\n";
         for (let row of confilctTable) {
             content += row;
         }
+        content += "\n" + i18n.ConflictDiary.part2.join("\n");
         content = lute.Md2HTML(content);
         let html = `
         <div class="b3-typography typofont-1rem"

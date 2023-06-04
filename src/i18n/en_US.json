@@ -86,5 +86,18 @@
     "Msg": {
         "PruneResv": "Pruned",
         "Resv404": "<h3>Ooops!??</h3><p>It should have been reservation blocks here, but the blocks are not found</p><p>Maybe they were deleted or the notebook is closed</p>"
+    },
+    "ConflictDiary": {
+        "part1": [
+            "## Note: Duplicate diary detected",
+            "Conflict files are listed below:",
+            "| Document ID | Title | Created | Updated | Notebook |",
+            "| --- | --- | --- | --- | --- |"
+        ],
+        "part2": [
+            "- Why does this happen?",
+            "    You may have created a diary on another device before and then created a diary on this device, resulting in a synchronization conflict.",
+            "    Please merge and delete redundant diaries manually: Open today's diary, locate the diary document, and the conflicting document will be nearby."
+        ]
     }
 }
