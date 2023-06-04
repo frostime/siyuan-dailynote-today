@@ -3,7 +3,7 @@ import { i18n, lute } from "./utils";
 import * as serverApi from "./serverApi";
 
 
-function showTypoDialog(title: string, typo: string, width?: string) {
+export function showTypoDialog(title: string, typo: string, width?: string) {
     new Dialog({
         title: title,
         content: `<div id="dialog" class="b3-typography" style="margin: 2rem">${typo}</div>`,
