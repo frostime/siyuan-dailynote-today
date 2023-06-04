@@ -7,6 +7,8 @@ This minor update mainly optimizes some feature details, see [Milestone V1.1.2](
 - Cancelling reservation: When tapping on the menu of a block that is already booked, the button that says 'Reserve this block' will now say 'Cancel reservation'
 - Expand the feature menu to show by default: The new version of SiYuan now organises all of the plugin's menus under a secondary menu. The plugin now expands all function menus by default under the secondary menu of 'Plugins' instead of the tertiary menu of 'Plugins - Daily Note Today'. This is a configurable option that you can change in the settings.
 - Block menu related settings take effect directly. All three of the existing block-related menus take effect directly after the change is made, without the need to restart the plugin.
+- Added option to choose whether to display a confirmation window when reserving a block.
+- Removed "Update All" button from settings.
 
 #### Fix
 

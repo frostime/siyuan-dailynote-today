@@ -12,7 +12,7 @@ type IconPosition = 'left' | 'right';
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
     'DiaryUpToDate' | 'PluginVersion' | "EnableMove" |
-    'EnableReserve' | "ExpandGutterMenu"
+    'EnableReserve' | "ExpandGutterMenu" | 'PopupReserveDialog'
 );
 
 interface Item {
@@ -32,10 +32,10 @@ class SettingManager {
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
         PluginVersion: '',
-        EnableMove: false as boolean,
-        EnableReserve: false as boolean,
-        ExpandGutterMenu: true as boolean //是否将菜单项目展开
-
+        EnableMove: true as boolean,
+        EnableReserve: true as boolean,
+        ExpandGutterMenu: true as boolean, //是否将菜单项目展开
+        PopupReserveDialog: true as boolean //是否弹出预约对话框
     };
 
     constructor() {
