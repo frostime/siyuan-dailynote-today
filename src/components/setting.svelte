@@ -62,6 +62,12 @@
         settingValue={settings.get("EnableReserve")}
     />
     <SettingItem
+        type="checkbox"
+        content={contents.ExpandGutterMenu}
+        settingKey="ExpandGutterMenu"
+        settingValue={settings.get("ExpandGutterMenu")}
+    />
+    <SettingItem
         type="button"
         content={contents.update}
         settingKey="Update"
