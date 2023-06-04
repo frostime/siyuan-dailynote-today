@@ -89,7 +89,7 @@
     },
     "ConflictDiary": {
         "part1": [
-            "## Note: Duplicate diary detected",
+            "#### Note: Duplicate diary detected",
             "Conflict files are listed below:",
             "| Document ID | Title | Created | Updated | Notebook |",
             "| --- | --- | --- | --- | --- |"
