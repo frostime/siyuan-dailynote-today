@@ -13,7 +13,7 @@ This minor update mainly optimizes some feature details, see [Milestone V1.1.2](
 - The bug with duplicate reservation no longer occurs
 - Multi-device sync conflict issue [Issue #87](https://github.com/frostime/siyuan-dailynote-today/issues/87)
 
-    As the SiYuan plugin loads before the synced data, if you have the 'Open Today's Diary Automatically' feature enabled, you may have a situation where you create a diary and then sync the diary created in another device.
+    As the SiYuan plugin loads before the synced data, if you have the "Open Today's Diary Automatically" feature enabled, you may have a situation where you create a diary and then sync the diary created in another device.
 
     This problem was caused by SiYuan's own import mechanism and there was nothing the plugin itself could do about it. However, with this update, the plugin will check for conflicting diaries after the first data sync is completed after startup, and if there are any, a dialog box will pop up to alert the user.
 
