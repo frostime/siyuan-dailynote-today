@@ -98,11 +98,13 @@ You can think of the reservation block as a simple schedule management or task r
 
 4. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
 
-5. After completing the reservation block, a custom attribute `custom-reservation` will be automatically added to the block and memo will be filled in, making it easier for users to identify which blocks have been booked.
+5. After completing the reservation block, a custom attribute `custom-reservation` will be automatically added to the block and memo will be filled in, making it easier for users to identify which blocks have been reserved.
 
     ![](asset/R-memo.png)
 
     ![](asset/R-attr.png)
+
+6. Click again on a block that has already been reserved and you can choose to 'Cancel Reservation'
 
 
 You can customize the CSS styles to display these reservation blocks. Here is an example that you can add to your code snippet:
