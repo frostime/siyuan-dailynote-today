@@ -5,7 +5,7 @@ import { openTab, Plugin, getFrontend } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import { notify, updateTodayReservation } from './func';
+import { checkDuplicateDiary, notify, updateTodayReservation } from './func';
 import { error, info, setI18n, setIsMobile } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
@@ -16,12 +16,17 @@ import { showChangeLog } from './changelog';
 import "./index.scss";
 
 
+let OnWsMainEvent: EventListener;
+const WAIT_TIME_FOR_SYNC_CHECK = 1000 * 60 * 1; //1min
+
+
 export default class DailyNoteTodayPlugin extends Plugin {
 
     version: string;
     upToDate: any = null;
     enableBlockIconClickEvent: boolean = false;
     isMobile: boolean = false;
+    isSyncChecked = false;
 
     toolbarItem: ToolbarMenuItem;
 
@@ -37,6 +42,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
+
         setIsMobile(this.isMobile);
 
         setI18n(this.i18n); //设置全局 i18n
@@ -58,10 +64,18 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initContextMenu(); //不依赖 settings.load();
         this.initUpToDate();  //依赖 settings.load();
 
-        eventBus.subscribe(eventBus.EventUpdateAll, () => {this.updateAll()});
+        eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
 
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         await this.toolbarItem.autoOpenDailyNote();
+
+        OnWsMainEvent = this.onWsMain.bind(this);
+        this.eventBus.on("ws-main", OnWsMainEvent);
+        //120s 后自动取消, 防止长时间占用 (同步数据一般也不可能超过 2min)
+        setTimeout(() => {
+            info(`取消 ws-main 事件监听`);
+            this.eventBus.off("ws-main", OnWsMainEvent);
+        }, WAIT_TIME_FOR_SYNC_CHECK);
 
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);
@@ -143,6 +157,17 @@ export default class DailyNoteTodayPlugin extends Plugin {
             }
         } catch (error_msg) {
             error(`Setting load error: ${error_msg}`);
+        }
+    }
+
+    private async onWsMain({ detail }) {
+        let cmd = detail.cmd;
+        if (cmd === 'syncing' && !this.isSyncChecked) {
+            console.log('检查同步文件');
+            let hasDuplicate = await checkDuplicateDiary();
+            if (hasDuplicate) {
+                this.isSyncChecked = true;
+            }
         }
     }
 
