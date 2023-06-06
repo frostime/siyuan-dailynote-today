@@ -233,7 +233,7 @@ export async function initTodayReservation(notebook: Notebook) {
     let docId;
     let retry = 0;
     const MAX_RETRY = 5;
-    const INTERVAL = 1000;
+    const INTERVAL = 2000;
     while (retry < MAX_RETRY) {
         //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
         let docs = await getDocsByHpath(todayDiaryPath!, notebook);
