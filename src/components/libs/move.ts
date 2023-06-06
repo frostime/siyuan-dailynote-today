@@ -45,7 +45,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
     notify(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 'info', 2500);
 }
 
-export function createMenuItems(data_id: string) {
+export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'block') {
     let menuItems: any[] = [];
     for (let notebook of notebooks) {
         let item = {
@@ -53,8 +53,10 @@ export function createMenuItems(data_id: string) {
             icon: `icon-${notebook.icon}`,
             click: async () => {
                 info(`Move ${data_id} to ${notebook.id} [${notebook.name}]`);
-                await moveBlocksToDailyNote(data_id, notebook);
-                eventBus.publish('moveBlocks', '');
+                if (srcBlock === 'block') {
+                    await moveBlocksToDailyNote(data_id, notebook);
+                    eventBus.publish('moveBlocks', '');
+                }
             }
         }
         menuItems.push(item);

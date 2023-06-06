@@ -5,7 +5,8 @@ import { settings } from "../global-status";
 import { reserveBlock, dereserveBlock } from "./libs/reserve";
 import { createMenuItems } from "./libs/move";
 
-let blockGutterClickEvent: any;
+let blockGutterClickEvent: EventListener;
+let docGutterClickEvent: EventListener;
 
 //后面会用来替代原来的菜单组件
 export class GutterMenu {
@@ -14,14 +15,15 @@ export class GutterMenu {
 
     constructor(eventBus: EventBus) {
         blockGutterClickEvent = (e) => this.onBlockGutterClicked(e);
+        docGutterClickEvent = (e) => this.onDocGutterClicked(e);
         this.eventBus = eventBus;
         eventBus.on("click-blockicon", blockGutterClickEvent);
-        // eventBus.on("click-editortitleicon", clickEvent);
+        eventBus.on("click-editortitleicon", docGutterClickEvent);
     }
 
     release() {
         this.eventBus.off("click-blockicon", blockGutterClickEvent);
-        // this.eventBus.off("click-editortitleicon", clickEvent);
+        this.eventBus.off("click-editortitleicon", docGutterClickEvent);
     }
 
     onBlockGutterClicked({ detail }: any) {
@@ -83,5 +85,25 @@ export class GutterMenu {
                 });
             }
         }
+    }
+
+    onDocGutterClicked({ detail }: any) {
+        console.log(detail);
+
+        let docId = detail.data.id;
+        if (docId === undefined) {
+            return;
+        }
+
+        let menu: Menu = detail.menu;
+        let protyle: HTMLElement = detail.protyle.title.element;
+        
+        let items = createMenuItems(docId);
+        menu.addItem({
+            label: i18n.MoveMenu.Move,
+            type: 'submenu',
+            icon: 'iconMove',
+            submenu: items,
+        });
     }
 }
