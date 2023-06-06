@@ -1,29 +1,31 @@
 import { i18n } from "../utils";
-import { Menu } from "siyuan";
+import { EventBus, Menu } from "siyuan";
 import { iconDiary } from "./svg";
 import { settings } from "../global-status";
 import { reserveBlock, dereserveBlock } from "./libs/reserve";
 import { createMenuItems } from "./libs/move";
 
-let clickEvent: any;
+let blockGutterClickEvent: any;
 
 //后面会用来替代原来的菜单组件
 export class GutterMenu {
     menuItems: any[] = [];
     eventBus: any;
 
-    constructor(eventBus) {
-        clickEvent = (e) => this.onGutterClicked(e);
+    constructor(eventBus: EventBus) {
+        blockGutterClickEvent = (e) => this.onBlockGutterClicked(e);
         this.eventBus = eventBus;
-        eventBus.on("click-blockicon", clickEvent);
+        eventBus.on("click-blockicon", blockGutterClickEvent);
+        // eventBus.on("click-editortitleicon", clickEvent);
     }
 
     release() {
-        this.eventBus.off("click-blockicon", clickEvent);
+        this.eventBus.off("click-blockicon", blockGutterClickEvent);
+        // this.eventBus.off("click-editortitleicon", clickEvent);
     }
 
-    onGutterClicked({ detail }: any) {
-        // console.log(detail);
+    onBlockGutterClicked({ detail }: any) {
+        console.log(detail);
 
         //一次只移动一个块
         if (detail.blockElements.length > 1) {
