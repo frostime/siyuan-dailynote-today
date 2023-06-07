@@ -98,7 +98,7 @@ export class GutterMenu {
         let menu: Menu = detail.menu;
         let protyle: HTMLElement = detail.protyle.title.element;
         
-        let items = createMenuItems(docId);
+        let items = createMenuItems(docId, 'doc');
         menu.addItem({
             label: i18n.MoveMenu.Move,
             type: 'submenu',

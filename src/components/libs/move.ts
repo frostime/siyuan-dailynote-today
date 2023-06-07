@@ -4,7 +4,7 @@ import { info, error, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDocsByHpath, createDiary, notify } from "@/func";
 
-export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebook) {
+export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
 
     if (block == null) {
@@ -45,6 +45,29 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
     notify(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 'info', 2500);
 }
 
+export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Notebook) {
+    let srcBlock: Block = await serverApi.getBlockByID(srcDocId);
+
+    if (srcBlock === null) {
+        error(`Document ${srcDocId} not found`);
+        return;
+    }
+
+    //获取目标文档的路径
+    let scrDocPath = srcBlock.path;
+    let dstDiaryPath = notebook.dailynotePath;
+
+    let dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
+    console.log("日记路径:", dstDocs);
+    let dstDocId: DocumentId;
+    if (dstDocs != null && dstDocs.length > 0) {
+        dstDocId = dstDocs[0].id;
+    } else {
+        // dstDocId = await createDiary(notebook, dstDiaryPath!);
+        // notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
+    }
+}
+
 export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'block') {
     let menuItems: any[] = [];
     for (let notebook of notebooks) {
@@ -52,9 +75,12 @@ export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'bl
             label: notebook.name,
             icon: `icon-${notebook.icon}`,
             click: async () => {
-                info(`Move ${data_id} to ${notebook.id} [${notebook.name}]`);
                 if (srcBlock === 'block') {
+                    info(`Move block ${data_id} to ${notebook.id} [${notebook.name}]`);
                     await moveBlocksToDailyNote(data_id, notebook);
+                    eventBus.publish('moveBlocks', '');
+                } else {
+                    await moveDocUnderDailyNote(data_id, notebook);
                     eventBus.publish('moveBlocks', '');
                 }
             }
