@@ -44,6 +44,16 @@ export async function getNotebookConf(notebookId: NotebookId) {
     return request(url, data);
 }
 
+export async function moveDocs(fromPaths: string[], toNotebook: NotebookId, toPath: string) {
+    let data = {
+        fromPaths: fromPaths,
+        toNotebook: toNotebook,
+        toPath: toPath
+    };
+    let url = '/api/filetree/moveDocs';
+    return request(url, data);
+}
+
 export async function getBlockByID(blockId: BlockId) {
     let sqlScript = `select * from blocks where id ='${blockId}'`;
     let data = await sql(sqlScript);

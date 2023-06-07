@@ -64,7 +64,8 @@
     "MoveMenu": {
         "Move": "移动到",
         "NotLi": "不可以移动单独的列表项，请移动整个列表!",
-        "VerIssue": "当前版本不支持移动块功能(≥ 2.8.8)"
+        "VerIssue": "当前版本不支持移动块功能(≥ 2.8.8)",
+        "NotMoveDiary": "请不要移动日记本身!"
     },
     "ReserveMenu": {
         "name": "预约此块",

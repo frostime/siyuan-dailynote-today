@@ -5,8 +5,7 @@ import { showMessage, confirm, Dialog } from 'siyuan';
 import notebooks from './global-notebooks';
 import { info, warn, error, i18n, lute } from "./utils";
 import * as serverApi from './serverApi';
-import { reservation, settings } from './global-status';
-import { showTypoDialog } from './changelog';
+import { reservation } from './global-status';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -47,13 +46,13 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         for (let notebook of all_notebooks) {
             let sprig = await getDailynoteSprig(notebook.id);
             notebook.dailynoteSprig = sprig != "" ? sprig : default_sprig;
-            notebook.dailynotePath = await renderDailynotePath(notebook.dailynoteSprig);
+            notebook.dailynoteHpath = await renderDailynotePath(notebook.dailynoteSprig);
 
             //防止出现不符合规范的 sprig, 不过根据 debug 情况看似乎不会出现这种情况
-            if (notebook.dailynotePath == "") {
+            if (notebook.dailynoteHpath == "") {
                 warn(`Invalid daily note srpig of ${notebook.name}`);
                 notebook.dailynoteSprig = default_sprig;
-                notebook.dailynotePath = await renderDailynotePath(default_sprig);
+                notebook.dailynoteHpath = await renderDailynotePath(default_sprig);
             }
 
             if (notebook.icon == "") {
@@ -82,7 +81,7 @@ export async function currentDiaryStatus() {
     //所有 hpath 的配置方案
     let hpath_set: Set<string> = new Set();
     notebooks.notebooks.forEach((notebook) => {
-        hpath_set.add(notebook.dailynotePath!);
+        hpath_set.add(notebook.dailynoteHpath!);
     });
 
     let diaryStatus: Map<string, boolean> = new Map();
@@ -148,7 +147,7 @@ export async function getDocsByHpath(hpath: string, notebook: Notebook | null = 
  */
 export async function checkDuplicateDiary(): Promise<boolean> {
     let notebook: Notebook = notebooks.default;
-    let hpath = notebook.dailynotePath!;
+    let hpath = notebook.dailynoteHpath!;
     let docks = await getDocsByHpath(hpath, notebook);
 
     if (docks.length <= 1) {
@@ -229,11 +228,11 @@ export async function filterExistsBlocks(blockIds: string[]): Promise<Set<string
 }
 
 export async function initTodayReservation(notebook: Notebook) {
-    let todayDiaryPath = notebook.dailynotePath;
+    let todayDiaryPath = notebook.dailynoteHpath;
     let docId;
     let retry = 0;
     const MAX_RETRY = 5;
-    const INTERVAL = 1000;
+    const INTERVAL = 2000;
     while (retry < MAX_RETRY) {
         //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
         let docs = await getDocsByHpath(todayDiaryPath!, notebook);
@@ -253,7 +252,7 @@ export async function initTodayReservation(notebook: Notebook) {
 }
 
 export async function updateTodayReservation(notebook: Notebook, refresh: boolean = false) {
-    let todayDiaryPath = notebook.dailynotePath;
+    let todayDiaryPath = notebook.dailynoteHpath;
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let docId = docs[0].id;
     updateDocReservation(docId, refresh);

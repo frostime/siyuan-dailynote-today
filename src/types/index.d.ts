@@ -11,7 +11,7 @@ type Notebook = {
     sort: number;
     closed: boolean;
     dailynoteSprig?: string;
-    dailynotePath?: string;
+    dailynoteHpath?: string;
 }
 
 type NotebookConf = {

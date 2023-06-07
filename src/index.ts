@@ -17,7 +17,7 @@ import "./index.scss";
 
 
 let OnWsMainEvent: EventListener;
-const WAIT_TIME_FOR_SYNC_CHECK = 1000 * 60 * 1; //1min
+const WAIT_TIME_FOR_SYNC_CHECK = 1000 * 60 * 3;
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -69,6 +69,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         await this.toolbarItem.autoOpenDailyNote();
 
+        this.checkDuplicateDiary();
         OnWsMainEvent = this.onWsMain.bind(this);
         this.eventBus.on("ws-main", OnWsMainEvent);
         //120s 后自动取消, 防止长时间占用 (同步数据一般也不可能超过 2min)
@@ -160,14 +161,18 @@ export default class DailyNoteTodayPlugin extends Plugin {
         }
     }
 
+    private async checkDuplicateDiary() {
+        let hasDuplicate = await checkDuplicateDiary();
+        if (hasDuplicate) {
+            this.isSyncChecked = true;
+        }
+    }
+
     private async onWsMain({ detail }) {
         let cmd = detail.cmd;
         if (cmd === 'syncing' && !this.isSyncChecked) {
             console.log('检查同步文件');
-            let hasDuplicate = await checkDuplicateDiary();
-            if (hasDuplicate) {
-                this.isSyncChecked = true;
-            }
+            this.checkDuplicateDiary();
         }
     }
 

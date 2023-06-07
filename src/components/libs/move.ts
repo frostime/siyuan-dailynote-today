@@ -3,8 +3,9 @@ import { eventBus } from "@/event-bus";
 import { info, error, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDocsByHpath, createDiary, notify } from "@/func";
+import { showMessage } from "siyuan";
 
-export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebook) {
+export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
 
     if (block == null) {
@@ -13,7 +14,7 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
     }
 
     //获取目标文档的 id
-    let todayDiaryPath = notebook.dailynotePath;
+    let todayDiaryPath = notebook.dailynoteHpath;
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let doc_id;
     if (docs != null && docs.length > 0) {
@@ -45,16 +46,57 @@ export async function moveBlocksToDailyNote(srcBlockId: string, notebook: Notebo
     notify(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 'info', 2500);
 }
 
-export function createMenuItems(data_id: string) {
+export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Notebook) {
+    let srcBlock: Block = await serverApi.getBlockByID(srcDocId);
+
+    if (srcBlock === null) {
+        error(`Document ${srcDocId} not found`);
+        return;
+    }
+
+    //获取目标文档的路径
+    let srcDocPath = srcBlock.path;
+    let srcDocHpath = srcBlock.hpath;
+    let dstDiaryPath: string = notebook.dailynoteHpath;
+
+    for (let notebook of notebooks) {
+        if (notebook.dailynoteHpath === srcDocHpath) {
+            error(`不可以移动日记!`);
+            showMessage(i18n.MoveMenu.NotMoveDiary, 2500, 'error');
+            return;
+        }
+    }
+
+    let dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
+    console.log("日记路径:", dstDocs);
+    let dstDocId: DocumentId;
+    if (dstDocs != null && dstDocs.length > 0) {
+        dstDocId = dstDocs[0].id;
+    } else {
+        dstDocId = await createDiary(notebook, dstDiaryPath!);
+        dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
+        notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
+    }
+
+    let dstDocPath = dstDocs[0].path;
+    serverApi.moveDocs([srcDocPath], notebook.id, dstDocPath);
+}
+
+export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'block') {
     let menuItems: any[] = [];
     for (let notebook of notebooks) {
         let item = {
             label: notebook.name,
             icon: `icon-${notebook.icon}`,
             click: async () => {
-                info(`Move ${data_id} to ${notebook.id} [${notebook.name}]`);
-                await moveBlocksToDailyNote(data_id, notebook);
-                eventBus.publish('moveBlocks', '');
+                if (srcBlock === 'block') {
+                    info(`Move block ${data_id} to ${notebook.id} [${notebook.name}]`);
+                    await moveBlocksToDailyNote(data_id, notebook);
+                    eventBus.publish('moveBlocks', '');
+                } else {
+                    await moveDocUnderDailyNote(data_id, notebook);
+                    eventBus.publish('moveBlocks', '');
+                }
             }
         }
         menuItems.push(item);
