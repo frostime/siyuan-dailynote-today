@@ -5,8 +5,7 @@ import { showMessage, confirm, Dialog } from 'siyuan';
 import notebooks from './global-notebooks';
 import { info, warn, error, i18n, lute } from "./utils";
 import * as serverApi from './serverApi';
-import { reservation, settings } from './global-status';
-import { showTypoDialog } from './changelog';
+import { reservation } from './global-status';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`

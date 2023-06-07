@@ -116,7 +116,7 @@ export class ToolbarMenuItem {
             let item: IMenuItemOption = {
                 label: notebook.name,
                 icon: this.iconStatus.get(notebook.id),
-                click: async (ele) => openDiary(notebook),
+                click: async () => openDiary(notebook),
             }
             menuItems.push(item);
         }
