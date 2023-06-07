@@ -13,7 +13,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
     }
 
     //获取目标文档的 id
-    let todayDiaryPath = notebook.dailynotePath;
+    let todayDiaryPath = notebook.dailynoteHpath;
     let docs = await getDocsByHpath(todayDiaryPath!, notebook);
     let doc_id;
     if (docs != null && docs.length > 0) {
@@ -55,7 +55,7 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
 
     //获取目标文档的路径
     let srcDocPath = srcBlock.path;
-    let dstDiaryPath: string = notebook.dailynotePath;
+    let dstDiaryPath: string = notebook.dailynoteHpath;
 
     let dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
     console.log("日记路径:", dstDocs);
