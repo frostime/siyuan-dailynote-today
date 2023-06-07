@@ -54,8 +54,8 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
     }
 
     //获取目标文档的路径
-    let scrDocPath = srcBlock.path;
-    let dstDiaryPath = notebook.dailynotePath;
+    let srcDocPath = srcBlock.path;
+    let dstDiaryPath: string = notebook.dailynotePath;
 
     let dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
     console.log("日记路径:", dstDocs);
@@ -63,9 +63,13 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
     if (dstDocs != null && dstDocs.length > 0) {
         dstDocId = dstDocs[0].id;
     } else {
-        // dstDocId = await createDiary(notebook, dstDiaryPath!);
-        // notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
+        dstDocId = await createDiary(notebook, dstDiaryPath!);
+        dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
+        notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
     }
+
+    let dstDocPath = dstDocs[0].path;
+    serverApi.moveDocs([srcDocPath], notebook.id, dstDocPath);
 }
 
 export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'block') {
