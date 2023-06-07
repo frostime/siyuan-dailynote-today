@@ -3,6 +3,7 @@ import { eventBus } from "@/event-bus";
 import { info, error, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDocsByHpath, createDiary, notify } from "@/func";
+import { showMessage } from "siyuan";
 
 export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
@@ -55,7 +56,16 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
 
     //获取目标文档的路径
     let srcDocPath = srcBlock.path;
+    let srcDocHpath = srcBlock.hpath;
     let dstDiaryPath: string = notebook.dailynoteHpath;
+
+    for (let notebook of notebooks) {
+        if (notebook.dailynoteHpath === srcDocHpath) {
+            error(`不可以移动日记!`);
+            showMessage(i18n.MoveMenu.NotMoveDiary, 2500, 'error');
+            return;
+        }
+    }
 
     let dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
     console.log("日记路径:", dstDocs);

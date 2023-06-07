@@ -64,7 +64,8 @@
     "MoveMenu": {
         "Move": "Move to",
         "NotLi": "Only support moving entrie list, instead of signle list item!",
-        "VerIssue": "Current version dose not support \"Move Blocks\" function (≥ 2.8.8))"
+        "VerIssue": "Current version dose not support \"Move Blocks\" function (≥ 2.8.8))",
+        "NotMoveDiary": "Don't move daily note itself!"
     },
     "ReserveMenu": {
         "name": "Reserve this block",
