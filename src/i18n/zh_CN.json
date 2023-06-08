@@ -52,6 +52,14 @@
         "PopupReserveDialog": {
             "title": "预约块时弹出确认窗口",
             "text": "预约块的时候自动弹出确认窗口, 确保日期无误"
+        },
+        "ResvEmbedAt": {
+            "title": "将预约插入到",
+            "text": "将今日的预约块插入到文档的开头还是结尾",
+            "options": {
+                "top": "文档开头",
+                "bottom": "文档结尾"
+            }
         }
     },
     "Open": "打开日记",

@@ -68,4 +68,10 @@
         settingKey="PopupReserveDialog"
         settingValue={settings.get("PopupReserveDialog")}
     />
+    <SettingItem
+        type="select"
+        content={contents.ResvEmbedAt}
+        settingKey="ResvEmbedAt"
+        settingValue={settings.get("ResvEmbedAt")}
+    />
 </div>

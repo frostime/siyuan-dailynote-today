@@ -12,8 +12,9 @@ type IconPosition = 'left' | 'right';
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
     'DiaryUpToDate' | 'PluginVersion' | "EnableMove" |
-    'EnableReserve' | "ExpandGutterMenu" | 'PopupReserveDialog'
+    'EnableReserve' | "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt'
 );
+type ResvEmbedAt = 'top' | 'bottom';
 
 interface Item {
     key: SettingKey,
@@ -35,7 +36,8 @@ class SettingManager {
         EnableMove: true as boolean,
         EnableReserve: true as boolean,
         ExpandGutterMenu: true as boolean, //是否将菜单项目展开
-        PopupReserveDialog: true as boolean //是否弹出预约对话框
+        PopupReserveDialog: true as boolean, //是否弹出预约对话框
+        ResvEmbedAt: 'top' as ResvEmbedAt //预约块嵌入位置
     };
 
     constructor() {
