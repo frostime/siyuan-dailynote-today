@@ -91,6 +91,16 @@ export async function prependBlock(parentId: ParentID, content: string, dataType
     return request(url, data);
 }
 
+export async function appendBlock(parentId: ParentID, content: string, dataType: 'markdown' | 'dom') {
+    let url = '/api/block/appendBlock';
+    let data = {
+        data: content,
+        parentID: parentId,
+        dataType: dataType,
+    }
+    return request(url, data);
+}
+
 // /api/block/deleteBlock
 export async function deleteBlock(blockId: BlockId) {
     let url = '/api/block/deleteBlock';

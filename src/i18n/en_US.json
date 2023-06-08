@@ -52,6 +52,14 @@
         "PopupReserveDialog": {
             "title": "Popup Confirmation Window When Reserving a Block",
             "text": "Automatically displays a confirmation window when reserving a block to ensure the date is correct."
+        },
+        "ResvEmbedAt": {
+            "title": "Insert reservations at",
+            "text": "Insert reservations at top or bottom of today's daily note",
+            "options": {
+                "top": "Top of the document",
+                "bottom": "Bottom of the document"
+            }
         }
     },
     "Open": "Open daily note",

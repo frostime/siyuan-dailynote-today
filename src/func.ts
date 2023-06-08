@@ -5,7 +5,7 @@ import { showMessage, confirm, Dialog } from 'siyuan';
 import notebooks from './global-notebooks';
 import { info, warn, error, i18n, lute } from "./utils";
 import * as serverApi from './serverApi';
-import { reservation } from './global-status';
+import { reservation, settings } from './global-status';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -288,7 +288,12 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
         } else {
             //否则, 就更新
             let sqlBlock = `{{${sql}}}`;
-            let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+            let data;
+            if (settings.get('ResvEmbedAt') == 'bottom') {
+                data = await serverApi.appendBlock(docId, sqlBlock, 'markdown');
+            } else {
+                data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+            }
             let blockId = data[0].doOperations[0].id;
             serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
         }
