@@ -288,7 +288,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
         } else {
             //否则, 就更新
             let sqlBlock = `{{${sql}}}`;
-            let data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
+            let data = await serverApi.appendBlock(docId, sqlBlock, 'markdown');
             let blockId = data[0].doOperations[0].id;
             serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
         }
