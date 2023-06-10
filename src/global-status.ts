@@ -11,8 +11,8 @@ import { filterExistsBlocks } from './func';
 
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
-    'DiaryUpToDate' | 'PluginVersion' | "EnableMove" |
-    'EnableReserve' | "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' | 'RetvType'
+    'PluginVersion' | "EnableMove" | 'EnableReserve' | 
+    "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' | 'RetvType'
 );
 
 interface Item {
@@ -27,7 +27,6 @@ class SettingManager {
 
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
-        DiaryUpToDate: true as boolean, //自动更新日记的日期
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
         PluginVersion: '',

@@ -112,9 +112,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     private initUpToDate() {
         this.upToDate = null;
-        if (settings.get('DiaryUpToDate')) {
-            this.startUpdateOnNextDay();
-        }
+        this.startUpdateOnNextDay();
     }
 
     private initBlockIconClickEvent() {
