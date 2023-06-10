@@ -3,7 +3,7 @@ import * as serverApi from '@/serverApi';
 type RetvPosition = 'top' | 'bottom';
 type markdown = string;
 type RetvBlockContent = markdown;
-type RetvBlockId = BlockId;
+type RetvBlock = Block;
 type ResvBlockIds = BlockId[];
 
 /**
@@ -16,7 +16,7 @@ export abstract class Retrieve {
     dstDocId: DocumentId; //目标日记的 ID
     position: RetvPosition; //插入位置
 
-    retvBlock: Block; // 和本操作相关的 Retrieve 块 ID
+    retvBlock: RetvBlock; // 和本操作相关的 Retrieve 块 ID
 
     constructor(position: RetvPosition, resvBlockIds: ResvBlockIds, docId: DocumentId) {
         this.position = position;
@@ -122,9 +122,71 @@ export class RetvAsLink extends Retrieve {
                 retrieveBlockList.push(`* ${block.id} not found`);
             }
         }
-        let retrieveBlockContent = retrieveBlockList.join('\n');
+        let retvBlockContent = retrieveBlockList.join('\n');
+        this.insertRetrieve(retvBlockContent);
     }
     async update() {
+        let resvBlocks = await this.retrieveResvBlocks();
+        let retrieveBlockList = [];
+        for (let block of resvBlocks) {
+            if (block.content) {
+                retrieveBlockList.push(`* [${block.content}](siyuan://blocks/${block.id})`);
+            } else {
+                retrieveBlockList.push(`* ${block.id} not found`);
+            }
+        }
+        let retvBlockContent = retrieveBlockList.join('\n');
+        this.updateRetrieve(retvBlockContent);
+    }
+}
 
+export class RetvAsRef extends Retrieve {
+
+    async retrieveResvBlocks() {
+        let retrieveRes = [];
+        for (let id of this.resvBlockIds) {
+            let block: Block = await serverApi.getBlockByID(id);
+            console.log(id, '-->', block);
+            if (block) {
+                retrieveRes.push({
+                    id: block.id,
+                    content: clipString(block.content, 20),
+                });
+            } else {
+                retrieveRes.push({
+                    id: id,
+                    content: undefined,
+                });
+            }
+        }
+        return retrieveRes;
+    }
+
+    async insert() {
+        // let resvBlockLinks = this.resvBlockIds.map((id) => `siyuan://blocks/${id}`);
+        let resvBlocks = await this.retrieveResvBlocks();
+        let retrieveBlockList = [];
+        for (let block of resvBlocks) {
+            if (block.content) {
+                retrieveBlockList.push(`* ((${block.id} "${block.content}"))`);
+            } else {
+                retrieveBlockList.push(`* ${block.id} not found`);
+            }
+        }
+        let retvBlockContent = retrieveBlockList.join('\n');
+        this.insertRetrieve(retvBlockContent);
+    }
+    async update() {
+        let resvBlocks = await this.retrieveResvBlocks();
+        let retrieveBlockList = [];
+        for (let block of resvBlocks) {
+            if (block.content) {
+                retrieveBlockList.push(`* ((${block.id} "${block.content}"))`);
+            } else {
+                retrieveBlockList.push(`* ${block.id} not found`);
+            }
+        }
+        let retvBlockContent = retrieveBlockList.join('\n');
+        this.updateRetrieve(retvBlockContent);
     }
 }
