@@ -223,8 +223,8 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     if (resvBlockIds.length == 0) {
         return;
     }
-
-    let retv: Retrieve = RetvFactory('ref', settings.get('ResvEmbedAt'), resvBlockIds, docId);
+    let retvType = settings.get('RetvType');
+    let retv: Retrieve = RetvFactory(retvType, settings.get('ResvEmbedAt'), resvBlockIds, docId);
     let retvBlocks = await retv.checkRetv();
     const hasInserted = retvBlocks.length > 0;
 

@@ -60,6 +60,15 @@
                 "top": "Top of the document",
                 "bottom": "Bottom of the document"
             }
+        },
+        "RetvType": {
+            "title": "Insert reservations as",
+            "text": "Target block's type for reservations, could be embed block, link, or reference",
+            "options": {
+                "embed": "Embed",
+                "link": "Link",
+                "ref": "Ref"
+            }
         }
     },
     "Open": "Open daily note",

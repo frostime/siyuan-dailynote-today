@@ -74,4 +74,10 @@
         settingKey="ResvEmbedAt"
         settingValue={settings.get("ResvEmbedAt")}
     />
+    <SettingItem
+        type="select"
+        content={contents.RetvType}
+        settingKey="RetvType"
+        settingValue={settings.get("RetvType")}
+    />
 </div>
