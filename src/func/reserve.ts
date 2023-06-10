@@ -104,7 +104,6 @@ export abstract class Retrieve {
     abstract createContent(): RetvBlockContent|Promise<RetvBlockContent>;
 }
 
-
 /**
  * 将预约作为嵌入块插入到日记中
  */

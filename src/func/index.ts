@@ -6,7 +6,7 @@ import notebooks from '../global-notebooks';
 import { info, warn, error, i18n, lute } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
-import { Retrieve, RetvAsEmbed, RetvAsLink, RetvAsRef } from './reserve';
+import { Retrieve, RetvFactory } from './reserve';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -264,8 +264,8 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     if (resvBlockIds.length == 0) {
         return;
     }
-    // let resv: Retrieve = new RetvAsEmbed(settings.get('ResvEmbedAt'), resvBlockIds, docId);
-    let retv: Retrieve = new RetvAsRef(settings.get('ResvEmbedAt'), resvBlockIds, docId);
+
+    let retv: Retrieve = RetvFactory('ref', settings.get('ResvEmbedAt'), resvBlockIds, docId);
     let retvBlocks = await retv.checkRetv();
     const hasInserted = retvBlocks.length > 0;
 
