@@ -118,9 +118,9 @@ export class RetvAsLink extends Retrieve {
         let retrieveBlockList = [];
         for (let block of resvBlocks) {
             if (block.content) {
-                retrieveBlockList.push(`* [${block.content}](siyuan://blocks/${block.id})`);
+                retrieveBlockList.push(`* [ ] [${block.content}](siyuan://blocks/${block.id})`);
             } else {
-                retrieveBlockList.push(`* ${block.id} not found`);
+                retrieveBlockList.push(`* [x] \`${block.id}\` not found`);
             }
         }
         let retvBlockContent = retrieveBlockList.join('\n');
@@ -135,9 +135,9 @@ export class RetvAsRef extends Retrieve {
         let retrieveBlockList = [];
         for (let block of resvBlocks) {
             if (block.content) {
-                retrieveBlockList.push(`* ((${block.id} "${block.content}"))`);
+                retrieveBlockList.push(`* [ ] ((${block.id} "${block.content}"))`);
             } else {
-                retrieveBlockList.push(`* ${block.id} not found`);
+                retrieveBlockList.push(`* [x] \`${block.id}\` not found`);
             }
         }
         let retvBlockContent = retrieveBlockList.join('\n');
