@@ -1,15 +1,17 @@
 import * as serverApi from '@/serverApi';
 
-type ResvPosition = 'top' | 'bottom';
+type RetvPosition = 'top' | 'bottom';
+type RetvBlockContent = string;
+type RetvBlockId = BlockId;
 type ResvBlockIds = BlockId[];
 
 export abstract class Resv {
 
-    position: ResvPosition;
+    position: RetvPosition;
     resvBlockIds: ResvBlockIds
     dstDocId: DocumentId;
 
-    constructor(position: ResvPosition, resvBlockIds: ResvBlockIds, docId: DocumentId) {
+    constructor(position: RetvPosition, resvBlockIds: ResvBlockIds, docId: DocumentId) {
         this.position = position;
         this.resvBlockIds = resvBlockIds;
         this.dstDocId = docId;
@@ -25,6 +27,22 @@ export abstract class Resv {
     abstract update(embedBlock: Block): void;
 }
 
+async function insertRetrieve(content: RetvBlockContent, docId: DocumentId, position: RetvPosition) {
+    let data;
+    if (position === 'bottom') {
+        data = await serverApi.appendBlock(docId, content, 'markdown');
+    } else {
+        data = await serverApi.prependBlock(docId, content, 'markdown');
+    }
+    let blockId = data[0].doOperations[0].id;
+    serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
+}
+
+async function updateRetrieve(id: RetvBlockId, content: RetvBlockContent) {
+    serverApi.updateBlock(id, content, 'markdown');
+    serverApi.setBlockAttrs(id, { name: 'Reservation', breadcrumb: "true" });
+}
+
 /**
  * 将预约作为嵌入块插入到日记中
  */
@@ -34,21 +52,61 @@ export class ResvAsEmbed extends Resv {
         let resvBlockIds = this.resvBlockIds.map((id) => `"${id}"`);
         let sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
         let sqlBlock = `{{${sql}}}`;
-        let data;
-        if (this.position === 'bottom') {
-            data = await serverApi.appendBlock(this.dstDocId, sqlBlock, 'markdown');
-        } else {
-            data = await serverApi.prependBlock(this.dstDocId, sqlBlock, 'markdown');
-        }
-        let blockId = data[0].doOperations[0].id;
-        serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
+        insertRetrieve(sqlBlock, this.dstDocId, this.position);
     }
 
     async update(embedBlock: Block) {
         let resvBlockIds = this.resvBlockIds.map((id) => `"${id}"`);
         let sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
         let sqlBlock = `{{${sql}}}`;
-        serverApi.updateBlock(embedBlock.id, sqlBlock, 'markdown');
-        serverApi.setBlockAttrs(embedBlock.id, { name: 'Reservation', breadcrumb: "true" });
+        updateRetrieve(embedBlock.id, sqlBlock);
+    }
+}
+
+function clipString(str: string, len: number) {
+    if (str.length > len) {
+        return str.slice(0, len) + '...';
+    } else {
+        return str;
+    }
+}
+
+export class ResvAsLink extends Resv {
+
+    async retrieveResvBlocks() {
+        let retrieveRes = [];
+        for (let id of this.resvBlockIds) {
+            let block: Block = await serverApi.getBlockByID(id);
+            console.log(id, '-->', block);
+            if (block) {
+                retrieveRes.push({
+                    id: block.id,
+                    content: clipString(block.content, 20),
+                });
+            } else {
+                retrieveRes.push({
+                    id: id,
+                    content: undefined,
+                });
+            }
+        }
+        return retrieveRes;
+    }
+
+    async insert() {
+        // let resvBlockLinks = this.resvBlockIds.map((id) => `siyuan://blocks/${id}`);
+        let resvBlocks = await this.retrieveResvBlocks();
+        let retrieveBlockList = [];
+        for (let block of resvBlocks) {
+            if (block.content) {
+                retrieveBlockList.push(`* [${block.content}](siyuan://blocks/${block.id})`);
+            } else {
+                retrieveBlockList.push(`* ${block.id} not found`);
+            }
+        }
+        let retrieveBlockContent = retrieveBlockList.join('\n');
+    }
+    async update(embedBlock: Block) {
+
     }
 }
