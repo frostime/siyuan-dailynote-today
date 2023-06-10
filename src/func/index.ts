@@ -283,7 +283,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
         }
         //如果是初次创建, 则插入到日记的最前面
         if (hasInserted) {
-            resv.update(retvBlocks[0]);
+            resv.update();
         } else {
             //否则, 就更新
             resv.insert();

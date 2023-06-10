@@ -1,15 +1,22 @@
 import * as serverApi from '@/serverApi';
 
 type RetvPosition = 'top' | 'bottom';
-type RetvBlockContent = string;
+type markdown = string;
+type RetvBlockContent = markdown;
 type RetvBlockId = BlockId;
 type ResvBlockIds = BlockId[];
 
+/**
+ * Retrieve 代指插入到日记中的预约的记录
+ * 可以是嵌入块，链接或者双链等
+ */
 export abstract class Retrieve {
 
-    position: RetvPosition;
-    resvBlockIds: ResvBlockIds
-    dstDocId: DocumentId;
+    resvBlockIds: ResvBlockIds //Source 的预约块 ID
+    dstDocId: DocumentId; //目标日记的 ID
+    position: RetvPosition; //插入位置
+
+    retvBlock: Block; // 和本操作相关的 Retrieve 块 ID
 
     constructor(position: RetvPosition, resvBlockIds: ResvBlockIds, docId: DocumentId) {
         this.position = position;
@@ -20,28 +27,39 @@ export abstract class Retrieve {
     async checkRetv(): Promise<Block[]> {
         let sql = `select * from blocks where path like "%${this.dstDocId}%" and name = "Reservation"`;
         let retvBlocks: Block[] = await serverApi.sql(sql);
+        // return retvBlocks;
+        this.retvBlock = retvBlocks.length > 0 ? retvBlocks[0] : undefined;
         return retvBlocks;
     }
 
-    abstract insert(): void;
-    abstract update(retvBlock: Block): void;
-}
-
-async function insertRetrieve(content: RetvBlockContent, docId: DocumentId, position: RetvPosition) {
-    let data;
-    if (position === 'bottom') {
-        data = await serverApi.appendBlock(docId, content, 'markdown');
-    } else {
-        data = await serverApi.prependBlock(docId, content, 'markdown');
+    /**
+     * 执行实际的插入操作
+     * @param content 插入块的 markdown 内容
+     */
+    async insertRetrieve(content: RetvBlockContent) {
+        let data;
+        if (this.position === 'bottom') {
+            data = await serverApi.appendBlock(this.dstDocId, content, 'markdown');
+        } else {
+            data = await serverApi.prependBlock(this.dstDocId, content, 'markdown');
+        }
+        let blockId = data[0].doOperations[0].id;
+        serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
     }
-    let blockId = data[0].doOperations[0].id;
-    serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
+
+    /**
+     * 更新 Retrieve 块的内容
+     * @param content 新的内容
+     */
+    async updateRetrieve(content: RetvBlockContent) {
+        serverApi.updateBlock(this.retvBlock.id, content, 'markdown');
+        serverApi.setBlockAttrs(this.retvBlock.id, { name: 'Reservation', breadcrumb: "true" });
+    }
+
+    abstract insert(): void;
+    abstract update(): void;
 }
 
-async function updateRetrieve(id: RetvBlockId, content: RetvBlockContent) {
-    serverApi.updateBlock(id, content, 'markdown');
-    serverApi.setBlockAttrs(id, { name: 'Reservation', breadcrumb: "true" });
-}
 
 /**
  * 将预约作为嵌入块插入到日记中
@@ -52,14 +70,14 @@ export class RetvAsEmbed extends Retrieve {
         let resvBlockIds = this.resvBlockIds.map((id) => `"${id}"`);
         let sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
         let sqlBlock = `{{${sql}}}`;
-        insertRetrieve(sqlBlock, this.dstDocId, this.position);
+        this.insertRetrieve(sqlBlock);
     }
 
-    async update(retvBlock: Block) {
+    async update() {
         let resvBlockIds = this.resvBlockIds.map((id) => `"${id}"`);
         let sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
         let sqlBlock = `{{${sql}}}`;
-        updateRetrieve(retvBlock.id, sqlBlock);
+        this.updateRetrieve(sqlBlock);
     }
 }
 
@@ -106,7 +124,7 @@ export class RetvAsLink extends Retrieve {
         }
         let retrieveBlockContent = retrieveBlockList.join('\n');
     }
-    async update(retvBlock: Block) {
+    async update() {
 
     }
 }
