@@ -5,7 +5,7 @@ type RetvBlockContent = string;
 type RetvBlockId = BlockId;
 type ResvBlockIds = BlockId[];
 
-export abstract class Resv {
+export abstract class Retrieve {
 
     position: RetvPosition;
     resvBlockIds: ResvBlockIds
@@ -17,14 +17,14 @@ export abstract class Resv {
         this.dstDocId = docId;
     }
 
-    async checkResv(): Promise<Block[]> {
+    async checkRetv(): Promise<Block[]> {
         let sql = `select * from blocks where path like "%${this.dstDocId}%" and name = "Reservation"`;
-        let embedBlocks: Block[] = await serverApi.sql(sql);
-        return embedBlocks;
+        let retvBlocks: Block[] = await serverApi.sql(sql);
+        return retvBlocks;
     }
 
     abstract insert(): void;
-    abstract update(embedBlock: Block): void;
+    abstract update(retvBlock: Block): void;
 }
 
 async function insertRetrieve(content: RetvBlockContent, docId: DocumentId, position: RetvPosition) {
@@ -46,7 +46,7 @@ async function updateRetrieve(id: RetvBlockId, content: RetvBlockContent) {
 /**
  * 将预约作为嵌入块插入到日记中
  */
-export class ResvAsEmbed extends Resv {
+export class RetvAsEmbed extends Retrieve {
 
     async insert() {
         let resvBlockIds = this.resvBlockIds.map((id) => `"${id}"`);
@@ -55,11 +55,11 @@ export class ResvAsEmbed extends Resv {
         insertRetrieve(sqlBlock, this.dstDocId, this.position);
     }
 
-    async update(embedBlock: Block) {
+    async update(retvBlock: Block) {
         let resvBlockIds = this.resvBlockIds.map((id) => `"${id}"`);
         let sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
         let sqlBlock = `{{${sql}}}`;
-        updateRetrieve(embedBlock.id, sqlBlock);
+        updateRetrieve(retvBlock.id, sqlBlock);
     }
 }
 
@@ -71,7 +71,7 @@ function clipString(str: string, len: number) {
     }
 }
 
-export class ResvAsLink extends Resv {
+export class RetvAsLink extends Retrieve {
 
     async retrieveResvBlocks() {
         let retrieveRes = [];
@@ -106,7 +106,7 @@ export class ResvAsLink extends Resv {
         }
         let retrieveBlockContent = retrieveBlockList.join('\n');
     }
-    async update(embedBlock: Block) {
+    async update(retvBlock: Block) {
 
     }
 }

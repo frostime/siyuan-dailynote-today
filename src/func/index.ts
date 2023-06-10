@@ -6,7 +6,7 @@ import notebooks from '../global-notebooks';
 import { info, warn, error, i18n, lute } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
-import { Resv, ResvAsEmbed } from './reserve';
+import { Retrieve, RetvAsEmbed } from './reserve';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -264,9 +264,9 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     if (resvBlockIds.length == 0) {
         return;
     }
-    let resv: Resv = new ResvAsEmbed(settings.get('ResvEmbedAt'), resvBlockIds, docId);
-    let embedBlocks = await resv.checkResv();
-    const hasInserted = embedBlocks.length > 0;
+    let resv: Retrieve = new RetvAsEmbed(settings.get('ResvEmbedAt'), resvBlockIds, docId);
+    let retvBlocks = await resv.checkRetv();
+    const hasInserted = retvBlocks.length > 0;
 
     if (hasInserted && !refresh) {
         info(`今日已经插入过预约了`);
@@ -283,7 +283,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
         }
         //如果是初次创建, 则插入到日记的最前面
         if (hasInserted) {
-            resv.update(embedBlocks[0]);
+            resv.update(retvBlocks[0]);
         } else {
             //否则, 就更新
             resv.insert();
