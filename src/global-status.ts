@@ -8,13 +8,12 @@ import { filterExistsBlocks } from './func';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
-type IconPosition = 'left' | 'right';
+
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
     'DiaryUpToDate' | 'PluginVersion' | "EnableMove" |
     'EnableReserve' | "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt'
 );
-type ResvEmbedAt = 'top' | 'bottom';
 
 interface Item {
     key: SettingKey,
@@ -37,7 +36,7 @@ class SettingManager {
         EnableReserve: true as boolean,
         ExpandGutterMenu: true as boolean, //是否将菜单项目展开
         PopupReserveDialog: true as boolean, //是否弹出预约对话框
-        ResvEmbedAt: 'top' as ResvEmbedAt //预约块嵌入位置
+        ResvEmbedAt: 'top' as RetvPosition //预约块嵌入位置
     };
 
     constructor() {

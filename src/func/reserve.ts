@@ -1,10 +1,5 @@
 import * as serverApi from '@/serverApi';
 
-type RetvPosition = 'top' | 'bottom';
-type markdown = string;
-type RetvBlockContent = markdown;
-type RetvBlock = Block;
-type ResvBlockIds = BlockId[];
 
 function clipString(str: string, len: number) {
     if (str.length > len) {
@@ -149,8 +144,6 @@ export class RetvAsRef extends Retrieve {
         return retvBlockContent;
     }
 }
-
-export type RetvType = 'embed' | 'link' | 'ref';
 
 export function RetvFactory(type: RetvType, position: RetvPosition, resvBlockIds: ResvBlockIds, docId: DocumentId) {
     let retv: Retrieve;

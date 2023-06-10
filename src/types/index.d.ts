@@ -4,6 +4,18 @@ type NotebookId = string;
 type PreviousID = BlockId;
 type ParentID = BlockId | DocumentId;
 
+type markdown = string;
+
+type ResvBlock = Block;
+type ResvBlockIds = BlockId[];
+
+type RetvPosition = 'top' | 'bottom';
+type RetvType = 'embed' | 'link' | 'ref';
+type RetvBlockContent = markdown;
+type RetvBlock = Block;
+
+type IconPosition = 'left' | 'right';
+
 type Notebook = {
     id: NotebookId;
     name: string;
