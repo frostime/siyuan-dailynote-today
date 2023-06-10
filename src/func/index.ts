@@ -2,10 +2,10 @@
  * Copyright (c) 2023 frostime all rights reserved.
  */
 import { showMessage, confirm, Dialog } from 'siyuan';
-import notebooks from './global-notebooks';
-import { info, warn, error, i18n, lute } from "./utils";
-import * as serverApi from './serverApi';
-import { reservation, settings } from './global-status';
+import notebooks from '../global-notebooks';
+import { info, warn, error, i18n, lute } from "../utils";
+import * as serverApi from '../serverApi';
+import { reservation, settings } from '../global-status';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
