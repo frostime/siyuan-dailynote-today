@@ -82,12 +82,24 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
     serverApi.moveDocs([srcDocPath], notebook.id, dstDocPath);
 }
 
+/**
+ * 大无语，V姐在新的 2.9 版本把 emoji 的解析大改
+ */
+function parseEmoji(code: string) {
+    try {
+        let emoji = String.fromCodePoint(parseInt(code, 16));
+        return `<span class="b3-menu__icon">${emoji}</span>`;
+    } catch (error) {
+        return `<span class="b3-menu__icon"> </span>`;
+    }
+}
+
 export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'block') {
     let menuItems: any[] = [];
     for (let notebook of notebooks) {
         let item = {
             label: notebook.name,
-            icon: `icon-${notebook.icon}`,
+            iconHTML: parseEmoji(notebook.icon),
             click: async () => {
                 if (srcBlock === 'block') {
                     info(`Move block ${data_id} to ${notebook.id} [${notebook.name}]`);
