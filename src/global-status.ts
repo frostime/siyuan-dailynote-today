@@ -4,7 +4,7 @@
 import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 import { eventBus } from './event-bus';
-import { filterExistsBlocks, notify } from './func';
+import { filterExistsBlocks } from './func';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'

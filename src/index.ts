@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { openTab, Plugin, getFrontend } from 'siyuan';
+import { openTab, Plugin, getFrontend, showMessage } from 'siyuan';
 import Setting from './components/setting.svelte'
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import { checkDuplicateDiary, notify, updateTodayReservation } from './func';
+import { checkDuplicateDiary, updateTodayReservation } from './func';
 import { error, info, setI18n, setIsMobile } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
@@ -136,7 +136,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.menu.bindMenuOnCurrentTabs();
         this.menu.addEditorTabObserver();
         updateTodayReservation(notebooks.default, true);
-        notify(this.i18n.UpdateAll, 'info', 2500);
+        showMessage(this.i18n.UpdateAll, 2500, 'info');
     }
 
     private async checkPluginVersion() {
@@ -152,7 +152,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             //发现更新到了不同的版本
             if (this.version !== settings.get('PluginVersion')) {
                 settings.set('PluginVersion', this.version);
-                notify(`${this.i18n.Name}${this.i18n.NewVer}: v${this.version}`, 'info', 1500);
+                showMessage(`${this.i18n.Name}${this.i18n.NewVer}: v${this.version}`, 1500, 'info');
                 settings.save();
                 showChangeLog(this.version);
             }
@@ -219,7 +219,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let today = new Date();
         today.toDateString();
         let msg = `${this.i18n.NewDay[0]} ${today.toLocaleDateString()} ${this.i18n.NewDay[1]}`
-        notify(msg, 'info', 5000);
+        showMessage(msg, 5000, 'info');
     }
 
     onunload() {

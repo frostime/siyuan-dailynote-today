@@ -13,10 +13,6 @@ import { getDailynoteSprig, renderDailynotePath } from './dailynote';
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
-export async function notify(msg: string, type: 'error' | 'info' = 'info', timeout?: number) {
-    showMessage(msg, timeout = timeout, type = type);
-}
-
 /**
  * 获取所有笔记本，并解析今日日记路径
  * @details
@@ -185,7 +181,7 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
 export async function openDiary(notebook: Notebook) {
 
     await serverApi.createDailyNote(notebook.id, "");
-    notify(`${i18n.Open}: ${notebook.name}`, 'info', 2000);
+    showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
 
     // if (docs != null && docs.length > 0) {
     //     let doc = docs[0];
