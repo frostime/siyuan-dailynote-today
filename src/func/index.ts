@@ -6,6 +6,7 @@ import notebooks from '../global-notebooks';
 import { info, warn, error, i18n, lute } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
+import { Resv, ResvAsEmbed } from './reserve';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -263,17 +264,17 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     if (resvBlockIds.length == 0) {
         return;
     }
-    //检查是否已经插入过
-    let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
-    let embedBlock = await serverApi.sql(sql);
-    const hasInserted = embedBlock.length > 0;
+    let resv: Resv = new ResvAsEmbed(settings.get('ResvEmbedAt'), resvBlockIds, docId);
+    let embedBlocks = await resv.checkResv();
+    const hasInserted = embedBlocks.length > 0;
+
     if (hasInserted && !refresh) {
         info(`今日已经插入过预约了`);
         return;
     } else {
         resvBlockIds = resvBlockIds.map((id) => `"${id}"`);
-        sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
-        console.log(resvBlockIds);
+        let sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
+        // console.log(resvBlockIds);
         //1. 先检查预约块是否存在
         let resvBlocks: Block[] = await serverApi.sql(sql);
         if (resvBlocks.length === 0) {
@@ -282,20 +283,10 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
         }
         //如果是初次创建, 则插入到日记的最前面
         if (hasInserted) {
-            let sqlBlock = `{{${sql}}}`;
-            serverApi.updateBlock(embedBlock[0].id, sqlBlock, 'markdown');
-            serverApi.setBlockAttrs(embedBlock[0].id, { name: 'Reservation', breadcrumb: "true" });
+            resv.update(embedBlocks[0]);
         } else {
             //否则, 就更新
-            let sqlBlock = `{{${sql}}}`;
-            let data;
-            if (settings.get('ResvEmbedAt') == 'bottom') {
-                data = await serverApi.appendBlock(docId, sqlBlock, 'markdown');
-            } else {
-                data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
-            }
-            let blockId = data[0].doOperations[0].id;
-            serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
+            resv.insert();
         }
     }
 }
