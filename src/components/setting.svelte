@@ -27,12 +27,6 @@
         settingValue={checked}
     />
     <SettingItem
-        type="checkbox"
-        content={contents.DiaryUpToDate}
-        settingKey="DiaryUpToDate"
-        settingValue={settings.get("DiaryUpToDate")}
-    />
-    <SettingItem
         type="input"
         content={contents.DefaultNotebook}
         settingKey="DefaultNotebook"
@@ -73,5 +67,11 @@
         content={contents.ResvEmbedAt}
         settingKey="ResvEmbedAt"
         settingValue={settings.get("ResvEmbedAt")}
+    />
+    <SettingItem
+        type="select"
+        content={contents.RetvType}
+        settingKey="RetvType"
+        settingValue={settings.get("RetvType")}
     />
 </div>

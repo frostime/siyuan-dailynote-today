@@ -2,18 +2,16 @@
  * Copyright (c) 2023 frostime all rights reserved.
  */
 import { showMessage, confirm, Dialog } from 'siyuan';
-import notebooks from './global-notebooks';
-import { info, warn, error, i18n, lute } from "./utils";
-import * as serverApi from './serverApi';
-import { reservation, settings } from './global-status';
+import notebooks from '../global-notebooks';
+import { info, warn, error, i18n, lute } from "../utils";
+import * as serverApi from '../serverApi';
+import { reservation, settings } from '../global-status';
+import { Retrieve, RetvFactory } from './reserve';
+import { getDailynoteSprig, renderDailynotePath } from './dailynote';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
-
-export async function notify(msg: string, type: 'error' | 'info' = 'info', timeout?: number) {
-    showMessage(msg, timeout = timeout, type = type);
-}
 
 /**
  * 获取所有笔记本，并解析今日日记路径
@@ -32,13 +30,6 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         all_notebooks = all_notebooks.filter(
             notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
         );
-
-        //没有必要了
-        // if (settings.settings.NotebookSort == 'custom-sort') {
-        //     all_notebooks = all_notebooks.sort((a, b) => {
-        //         return a.sort - b.sort;
-        //     });
-        // }
 
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
 
@@ -102,26 +93,7 @@ export async function currentDiaryStatus() {
 }
 
 
-/**
- * 
- * @param notebook 笔记本对象
- * @returns 笔记本的 Daily Note 路径模板
- */
-export async function getDailynoteSprig(notebookId: string): Promise<string> {
-    let conf = await serverApi.getNotebookConf(notebookId);
-    let sprig: string = conf.conf.dailyNoteSavePath;
-    return sprig;
-}
 
-
-/**
- * 要求思源解析模板
- * @param sprig
- * @returns 
- */
-export async function renderDailynotePath(sprig: string) {
-    return await serverApi.renderSprig(sprig);
-}
 
 /**
  * getDocsByHpath returns all documents in the database that have a given hpath. 
@@ -200,20 +172,8 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-
     await serverApi.createDailyNote(notebook.id, "");
-    notify(`${i18n.Open}: ${notebook.name}`, 'info', 2000);
-
-    // if (docs != null && docs.length > 0) {
-    //     let doc = docs[0];
-    //     let id = doc.id;
-    //     window.open(`siyuan://blocks/${id}`);
-    //     notify(`${i18n.Open}： ${notebook.name}`, 'info', 2500);
-    // } else {
-    //     let id = await createDiary(notebook, todayDiaryPath!);
-    //     window.open(`siyuan://blocks/${id}`);
-    //     notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
-    // }
+    showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
 }
 
 export async function filterExistsBlocks(blockIds: string[]): Promise<Set<string>> {
@@ -263,17 +223,18 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     if (resvBlockIds.length == 0) {
         return;
     }
-    //检查是否已经插入过
-    let sql = `select * from blocks where path like "%${docId}%" and name = "Reservation"`;
-    let embedBlock = await serverApi.sql(sql);
-    const hasInserted = embedBlock.length > 0;
+    let retvType = settings.get('RetvType');
+    let retv: Retrieve = RetvFactory(retvType, settings.get('ResvEmbedAt'), resvBlockIds, docId);
+    let retvBlocks = await retv.checkRetv();
+    const hasInserted = retvBlocks.length > 0;
+
     if (hasInserted && !refresh) {
         info(`今日已经插入过预约了`);
         return;
     } else {
         resvBlockIds = resvBlockIds.map((id) => `"${id}"`);
-        sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
-        console.log(resvBlockIds);
+        let sql = `select * from blocks where id in (${resvBlockIds.join(',')})`;
+        // console.log(resvBlockIds);
         //1. 先检查预约块是否存在
         let resvBlocks: Block[] = await serverApi.sql(sql);
         if (resvBlocks.length === 0) {
@@ -282,20 +243,10 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
         }
         //如果是初次创建, 则插入到日记的最前面
         if (hasInserted) {
-            let sqlBlock = `{{${sql}}}`;
-            serverApi.updateBlock(embedBlock[0].id, sqlBlock, 'markdown');
-            serverApi.setBlockAttrs(embedBlock[0].id, { name: 'Reservation', breadcrumb: "true" });
+            retv.update();
         } else {
             //否则, 就更新
-            let sqlBlock = `{{${sql}}}`;
-            let data;
-            if (settings.get('ResvEmbedAt') == 'bottom') {
-                data = await serverApi.appendBlock(docId, sqlBlock, 'markdown');
-            } else {
-                data = await serverApi.prependBlock(docId, sqlBlock, 'markdown');
-            }
-            let blockId = data[0].doOperations[0].id;
-            serverApi.setBlockAttrs(blockId, { name: 'Reservation', breadcrumb: "true" });
+            retv.insert();
         }
     }
 }

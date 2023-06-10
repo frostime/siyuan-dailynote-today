@@ -2,7 +2,7 @@ import notebooks from "@/global-notebooks";
 import { eventBus } from "@/event-bus";
 import { info, error, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
-import { getDocsByHpath, createDiary, notify } from "@/func";
+import { getDocsByHpath, createDiary } from "@/func";
 import { showMessage } from "siyuan";
 
 export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Notebook) {
@@ -21,7 +21,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
         doc_id = docs[0].id;
     } else {
         doc_id = await createDiary(notebook, todayDiaryPath!);
-        notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
+        showMessage(`${i18n.Create}: ${notebook.name}`, 2500, 'info');
     }
 
     info(`Call 移动块: ${block.id} --> ${doc_id}`)
@@ -43,7 +43,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
     } else {
         await serverApi.moveBlock(block.id, null, doc_id);
     }
-    notify(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 'info', 2500);
+    showMessage(`${block.id} ${i18n.MoveMenu.Move} ${notebook.name}`, 2500, 'info');
 }
 
 export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Notebook) {
@@ -75,7 +75,7 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
     } else {
         dstDocId = await createDiary(notebook, dstDiaryPath!);
         dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
-        notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
+        showMessage(`${i18n.Create}: ${notebook.name}`, 2500, 'info');
     }
 
     let dstDocPath = dstDocs[0].path;

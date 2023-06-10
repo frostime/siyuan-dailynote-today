@@ -33,10 +33,6 @@
                 "right": "Topbar right"
             }
         },
-        "DiaryUpToDate": {
-            "title": "Auto refresh diary's path as day passed",
-            "text": "When new day comes, the plugin will automatically update the status"
-        },
         "EnableMove": {
             "title": "Enable \"Move Block\" in menu",
             "text": "When enabled, the \"Move Block\" item will be added to the menu after clicking on the block icon"
@@ -59,6 +55,15 @@
             "options": {
                 "top": "Top of the document",
                 "bottom": "Bottom of the document"
+            }
+        },
+        "RetvType": {
+            "title": "Insert reservations as",
+            "text": "Target block's type for reservations, could be embed block, link, or reference",
+            "options": {
+                "embed": "Embed",
+                "link": "Link",
+                "ref": "Ref"
             }
         }
     },

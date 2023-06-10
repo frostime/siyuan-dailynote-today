@@ -4,17 +4,16 @@
 import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 import { eventBus } from './event-bus';
-import { filterExistsBlocks, notify } from './func';
+import { filterExistsBlocks } from './func';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
-type IconPosition = 'left' | 'right';
+
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
-    'DiaryUpToDate' | 'PluginVersion' | "EnableMove" |
-    'EnableReserve' | "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt'
+    'PluginVersion' | "EnableMove" | 'EnableReserve' | 
+    "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' | 'RetvType'
 );
-type ResvEmbedAt = 'top' | 'bottom';
 
 interface Item {
     key: SettingKey,
@@ -28,8 +27,6 @@ class SettingManager {
 
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
-        DiaryUpToDate: true as boolean, //自动更新日记的日期
-        // NotebookSort: 'doc-tree' as NotebookSorting, //笔记本排序方式
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
         PluginVersion: '',
@@ -37,7 +34,8 @@ class SettingManager {
         EnableReserve: true as boolean,
         ExpandGutterMenu: true as boolean, //是否将菜单项目展开
         PopupReserveDialog: true as boolean, //是否弹出预约对话框
-        ResvEmbedAt: 'top' as ResvEmbedAt //预约块嵌入位置
+        ResvEmbedAt: 'top' as RetvPosition, //Retrieved 块嵌入位置
+        RetvType: 'embed' as RetvType //Retrieved 块的类型
     };
 
     constructor() {
