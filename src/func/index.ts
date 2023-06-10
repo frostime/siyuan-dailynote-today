@@ -31,13 +31,6 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
         );
 
-        //没有必要了
-        // if (settings.settings.NotebookSort == 'custom-sort') {
-        //     all_notebooks = all_notebooks.sort((a, b) => {
-        //         return a.sort - b.sort;
-        //     });
-        // }
-
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
 
         //Get all daily note sprig
@@ -179,20 +172,8 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-
     await serverApi.createDailyNote(notebook.id, "");
     showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
-
-    // if (docs != null && docs.length > 0) {
-    //     let doc = docs[0];
-    //     let id = doc.id;
-    //     window.open(`siyuan://blocks/${id}`);
-    //     notify(`${i18n.Open}： ${notebook.name}`, 'info', 2500);
-    // } else {
-    //     let id = await createDiary(notebook, todayDiaryPath!);
-    //     window.open(`siyuan://blocks/${id}`);
-    //     notify(`${i18n.Create}: ${notebook.name}`, 'info', 2500);
-    // }
 }
 
 export async function filterExistsBlocks(blockIds: string[]): Promise<Set<string>> {
