@@ -71,7 +71,7 @@ export abstract class Retrieve {
             if (block) {
                 retrieveRes.push({
                     id: block.id,
-                    content: clipString(block.content, 20),
+                    content: clipString(block.content, 50),
                 });
             } else {
                 retrieveRes.push({
