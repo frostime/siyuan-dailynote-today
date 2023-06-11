@@ -105,6 +105,7 @@ You can think of the reservation block as a simple schedule management or task r
     ![](asset/R-attr.png)
 
 6. Click again on a block that has already been reserved and you can choose to 'Cancel Reservation'
+7. By default, all reservations will be inserted as an embedded block at the beginning of the document. If you are not satisfied with the default behavior, you can change it in the settings.
 
 
 You can customize the CSS styles to display these reservation blocks. Here is an example that you can add to your code snippet:
