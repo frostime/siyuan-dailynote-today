@@ -17,7 +17,8 @@ import "./index.scss";
 
 
 let OnWsMainEvent: EventListener;
-const WAIT_TIME_FOR_SYNC_CHECK: Milisecond = 1000 * 60 * 5;
+// const WAIT_TIME_FOR_SYNC_CHECK: Milisecond = 1000 * 60 * 5;
+const MAX_CHECK_SYNC_TIMES: number = 10; //为了避免每次同步都检查，最多检查10次
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -26,7 +27,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
     upToDate: any = null;
     enableBlockIconClickEvent: boolean = false;
     isMobile: boolean = false;
+
     isSyncChecked = false;
+    hasCheckSyncFor: number = 0;
 
     toolbarItem: ToolbarMenuItem;
 
@@ -73,12 +76,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.checkDuplicateDiary();
         OnWsMainEvent = this.onWsMain.bind(this);
         this.eventBus.on("ws-main", OnWsMainEvent);
-
-        //120s 后自动取消, 防止长时间占用 (同步数据一般也不可能超过 2min)
-        setTimeout(() => {
-            info(`取消 ws-main 事件监听`);
-            this.eventBus.off("ws-main", OnWsMainEvent);
-        }, WAIT_TIME_FOR_SYNC_CHECK);
 
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);
@@ -166,12 +163,18 @@ export default class DailyNoteTodayPlugin extends Plugin {
         if (hasDuplicate) {
             this.isSyncChecked = true;
         }
+        this.hasCheckSyncFor++;
+        //多次检查后，如果还是没有同步，则认为没有必要再检查了
+        if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
+            this.isSyncChecked = true;
+            info('关闭自动检查同步文件');
+        }
     }
 
     private async onWsMain({ detail }) {
         let cmd = detail.cmd;
         if (cmd === 'syncing' && !this.isSyncChecked) {
-            console.log('检查同步文件');
+            info('检查同步文件');
             this.checkDuplicateDiary();
         }
     }
@@ -219,6 +222,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let today = new Date();
         today.toDateString();
         let msg = `${this.i18n.NewDay[0]} ${today.toLocaleDateString()} ${this.i18n.NewDay[1]}`
+
+        this.isSyncChecked = false; //重置同步检查状态
+
         showMessage(msg, 5000, 'info');
     }
 
