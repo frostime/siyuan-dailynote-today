@@ -9,7 +9,7 @@ import { checkDuplicateDiary, updateTodayReservation } from './func';
 import { error, info, setI18n, setIsMobile } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
-import { ContextMenu } from './components/legacy-menu';
+// import { ContextMenu } from './components/legacy-menu';
 import { eventBus } from './event-bus';
 import * as serverApi from './serverApi';
 import { showChangeLog } from './changelog';
@@ -17,7 +17,7 @@ import "./index.scss";
 
 
 let OnWsMainEvent: EventListener;
-const WAIT_TIME_FOR_SYNC_CHECK = 1000 * 60 * 3;
+const WAIT_TIME_FOR_SYNC_CHECK: Milisecond = 1000 * 60 * 5;
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -33,7 +33,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     component_setting: Setting;
     tab_setting: any;
 
-    menu: ContextMenu;
+    // menu: ContextMenu;
     gutterMenu: GutterMenu;
 
     async onload() {
@@ -61,7 +61,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.checkPluginVersion(); //依赖 settings.load();
         this.initBlockIconClickEvent();  //依赖 settings.load();
 
-        this.initContextMenu(); //不依赖 settings.load();
+        // this.initContextMenu(); //不依赖 settings.load();
+
         this.initUpToDate();  //依赖 settings.load();
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
@@ -72,6 +73,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.checkDuplicateDiary();
         OnWsMainEvent = this.onWsMain.bind(this);
         this.eventBus.on("ws-main", OnWsMainEvent);
+
         //120s 后自动取消, 防止长时间占用 (同步数据一般也不可能超过 2min)
         setTimeout(() => {
             info(`取消 ws-main 事件监听`);
@@ -105,9 +107,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
      * @deprecated 2.9.0 版本后将不再使用
      */
     private async initContextMenu() {
-        this.menu = new ContextMenu();
-        this.menu.bindMenuOnCurrentTabs();
-        this.menu.addEditorTabObserver();
+        // this.menu = new ContextMenu();
+        // this.menu.bindMenuOnCurrentTabs();
+        // this.menu.addEditorTabObserver();
     }
 
     private initUpToDate() {
@@ -129,10 +131,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
         info('updateAll');
         await notebooks.update(); // 更新笔记本状态
         this.toolbarItem.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
-        this.menu.releaseMenuOnCurrentTabs();
-        this.menu.removeEditorTabObserver();
-        this.menu.bindMenuOnCurrentTabs();
-        this.menu.addEditorTabObserver();
+        // this.menu.releaseMenuOnCurrentTabs();
+        // this.menu.removeEditorTabObserver();
+        // this.menu.bindMenuOnCurrentTabs();
+        // this.menu.addEditorTabObserver();
         updateTodayReservation(notebooks.default, true);
         showMessage(this.i18n.UpdateAll, 2500, 'info');
     }
@@ -223,8 +225,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
     onunload() {
         info('Plugin unload')
         this.toolbarItem.release();
-        this.menu.releaseMenuOnCurrentTabs();
-        this.menu.removeEditorTabObserver();
+        // this.menu.releaseMenuOnCurrentTabs();
+        // this.menu.removeEditorTabObserver();
         settings.save();
         reservation.save();
         if (this.upToDate) {
