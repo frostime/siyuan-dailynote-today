@@ -64,8 +64,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.checkPluginVersion(); //依赖 settings.load();
         this.initBlockIconClickEvent();  //依赖 settings.load();
 
-        // this.initContextMenu(); //不依赖 settings.load();
-
         this.initUpToDate();  //依赖 settings.load();
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
@@ -100,15 +98,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
     }
 
-    /**
-     * @deprecated 2.9.0 版本后将不再使用
-     */
-    private async initContextMenu() {
-        // this.menu = new ContextMenu();
-        // this.menu.bindMenuOnCurrentTabs();
-        // this.menu.addEditorTabObserver();
-    }
-
     private initUpToDate() {
         this.upToDate = null;
         this.startUpdateOnNextDay();
@@ -128,10 +117,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         info('updateAll');
         await notebooks.update(); // 更新笔记本状态
         this.toolbarItem.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
-        // this.menu.releaseMenuOnCurrentTabs();
-        // this.menu.removeEditorTabObserver();
-        // this.menu.bindMenuOnCurrentTabs();
-        // this.menu.addEditorTabObserver();
         updateTodayReservation(notebooks.default, true);
         showMessage(this.i18n.UpdateAll, 2500, 'info');
     }
@@ -231,8 +216,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
     onunload() {
         info('Plugin unload')
         this.toolbarItem.release();
-        // this.menu.releaseMenuOnCurrentTabs();
-        // this.menu.removeEditorTabObserver();
         settings.save();
         reservation.save();
         if (this.upToDate) {
