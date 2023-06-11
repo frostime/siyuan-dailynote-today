@@ -27,8 +27,6 @@ export class GutterMenu {
     }
 
     onBlockGutterClicked({ detail }: any) {
-        console.log(detail);
-
         //一次只移动一个块
         if (detail.blockElements.length > 1) {
             return;
