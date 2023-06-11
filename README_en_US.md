@@ -130,17 +130,17 @@ With custom attributes, you can use SQL to query all reservation blocks. For mor
     - Month and date can be added with 0: `04-01`, `04-1`, `4-1` are possible
     - You can leave out the year, so that it will be considered the same year by default: for example, on a day in the year 23, the `09-08` will be considered as `2023-09-08`.
     - > Unfortunately, this plugin does not plan to provide support for users who can live beyond the year 3000, so you can only use years before 2999.
-- Chinese month and day
-    - `九月十二号`
-    - `三月六日`
-- Week Timer
-    - `周二`
-    - `星期三`
-    - `礼拜日`，`礼拜天`
-    - `下周六`
-    - **Only chinese supported yet, English support will be comming soon**
+
 - Relative time
     - N days later, e.g. `10 days later`; Arabic numerals only
+
+- English date support by using [chrono](https://github.com/wanasit/chrono)
+
+    - Today, Tomorrow, Yesterday
+    - 17 August 2023
+    - This Friday
+    - 2 weeks from now
+    - Note: These english dates are currently not supported for highlighting matching text items in the confirmation window
 
 Translated with www.DeepL.com/Translator (free version)
 

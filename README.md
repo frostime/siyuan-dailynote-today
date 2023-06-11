@@ -156,6 +156,14 @@
 
         ![](asset/R-Ndayslater.png)
 
+- 大量英文日期
+
+    - Today, Tomorrow, Yesterday
+    - 17 August 2023
+    - This Friday
+    - 2 weeks from now
+    - 注意: 英文日期暂时还不支持在确认窗口里高亮匹配的文本项, 且匹配优先级相较于上面的模式更低
+
 #### 注意
 
 1. 只有在插件自动创建/打开日记的时候, 才会自动插入预约块
