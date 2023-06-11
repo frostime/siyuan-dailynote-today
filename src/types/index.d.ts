@@ -16,6 +16,9 @@ type RetvBlock = Block;
 
 type IconPosition = 'left' | 'right';
 
+type Second = number;
+type Milisecond = number;
+
 type Notebook = {
     id: NotebookId;
     name: string;
