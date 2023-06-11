@@ -12,7 +12,7 @@
     "replace-plugin": "node ./scripts/replace_plugin.js",
     "dev": "vite build --watch",
     "build": "vite build",
-    "git-reset-dev": "git remote prune origin && git branch dev -f main"
+    "sync-to-pr": "git checkout main && git pull origin main && git branch -f dev main && git checkout dev"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
