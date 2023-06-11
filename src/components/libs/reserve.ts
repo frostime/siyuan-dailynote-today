@@ -2,6 +2,7 @@ import { i18n, lute } from "../../utils";
 import { showMessage, confirm } from "siyuan";
 import * as serverApi from "../../serverApi";
 import { reservation, settings } from "../../global-status";
+import { parseDate } from 'chrono-node';
 
 
 const Zh1to9 = '一二三四五六七八九';
@@ -147,6 +148,10 @@ export async function reserveBlock(blockId) {
     }
 
     if (!resDate) {
+        resDate = parseDate(kramdown);
+    }
+
+    if (!resDate) {
         showMessage(i18n.ReserveMenu.Date404, 3000, 'error');
         return;
     }
@@ -204,11 +209,15 @@ function createConfirmDialog(srcKramdown: string, match: RegExpMatchArray): stri
         let after = text.substring(beg + len);
         return `${before}<span data-type="mark">${middle}</span>${after}`;
     }
-    srcKramdown = hightLightStr(srcKramdown, match.index, match[0].length);
+    //用了 chrono 之后，可能 match 就没有了
+    let matched: string = match ? `<p>${i18n.ReserveMenu.Match}: ${match[0]}</p>` : '';
+    if (match) {
+        srcKramdown = hightLightStr(srcKramdown, match.index, match[0].length);
+    }
     let html = lute.Md2HTML(srcKramdown);
     // console.log(html);
     html = `
-    <p>${i18n.ReserveMenu.Match}: ${match[0]}</p>
+    ${matched}
     <div class="b3-typography typofont-1rem"
         style="margin: 0.5rem; box-shadow: 0px 0px 5px var(--b3-theme-on-background);"
     >
