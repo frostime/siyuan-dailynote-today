@@ -1,3 +1,8 @@
+### Patch Update Notes
+
+The recently updated 1.1.3 version contained a minor error. This patch update fixes the issue.
+
+
 ### Daily Note Today v1.1.3 Update Notes
 
 See [Milestone V1.1.3](https://github.com/frostime/siyuan-dailynote-today/milestone/14) for details.

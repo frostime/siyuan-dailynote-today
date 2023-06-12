@@ -1,3 +1,7 @@
+### Patch 更新说明
+
+刚刚更新的 1.1.3 版本存在一个低级小错误，这次的 patch 更新修复了这个问题。
+
 ### 今日笔记 v1.1.3 更新说明
 
 详情见 [Milestone V1.1.3](https://github.com/frostime/siyuan-dailynote-today/milestone/14)

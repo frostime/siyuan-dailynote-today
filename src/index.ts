@@ -209,6 +209,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let msg = `${this.i18n.NewDay[0]} ${today.toLocaleDateString()} ${this.i18n.NewDay[1]}`
 
         this.isSyncChecked = false; //重置同步检查状态
+        this.hasCheckSyncFor = 0; //重置同步检查次数
 
         showMessage(msg, 5000, 'info');
     }
