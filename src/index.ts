@@ -3,7 +3,7 @@
  */
 import { openTab, Plugin, getFrontend, showMessage } from 'siyuan';
 import Setting from './components/setting.svelte'
-import ShowReserve  from './components/show-reserve.svelte';
+import ShowReserve  from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { checkDuplicateDiary, updateTodayReservation } from './func';
@@ -100,9 +100,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.addDock({
             config: {
                 position: "RightBottom",
-                size: {width: 200, height: 0},
+                size: {width: 250, height: 0},
                 icon: "iconSaving",
                 title: "Custom Dock",
+                show: false
             },
             data: {
                 text: "This is my custom dock"

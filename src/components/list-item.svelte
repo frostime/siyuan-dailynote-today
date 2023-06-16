@@ -1,14 +1,14 @@
 <script lang="ts">
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
+    export let isExpanded: boolean = false;
 
-    export function toggleExpand() {
-        isExpanded = !isExpanded;
+    export function toggleExpand(expand?: boolean) {
+        isExpanded = expand === undefined ? !isExpanded : expand;
     }
 
     let liSvgClass = 'b3-list-item__arrow';
     let ulClass = 'fn__none';
-    let isExpanded: boolean = false;
     $: {
         if (isExpanded) {
             liSvgClass = 'b3-list-item__arrow b3-list-item__arrow--open';
@@ -26,7 +26,7 @@
     data-treetype="bookmark"
     data-type="undefined"
     data-subtype="undefined"
-    on:click={toggleExpand}
+    on:click={() => toggleExpand()}
     on:keydown={() => {}}
 >
     <span
