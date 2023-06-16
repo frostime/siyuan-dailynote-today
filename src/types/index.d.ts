@@ -19,6 +19,11 @@ type IconPosition = 'left' | 'right';
 type Second = number;
 type Milisecond = number;
 
+type Reservation = {
+    id: BlockId;
+    date: string;
+}
+
 type Notebook = {
     id: NotebookId;
     name: string;

@@ -44,3 +44,10 @@ export function setIsMobile(isMobile_: boolean) {
     isMobile = isMobile_;
 }
 
+export function merge<T>(list: T[] | undefined, item: T): T[] {
+    list = list || [];
+    if (list.indexOf(item) < 0) {
+        list.push(item);
+    }
+    return list;
+}
