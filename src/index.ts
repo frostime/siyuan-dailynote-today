@@ -3,6 +3,7 @@
  */
 import { openTab, Plugin, getFrontend, showMessage } from 'siyuan';
 import Setting from './components/setting.svelte'
+import ShowReserve  from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { checkDuplicateDiary, updateTodayReservation } from './func';
@@ -95,6 +96,32 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 this.setting.$destroy();
             }
         });
+
+        this.addDock({
+            config: {
+                position: "RightBottom",
+                size: {width: 250, height: 0},
+                icon: "iconHistory",
+                //@ts-ignore
+                title: this.i18n.DockReserve.arial,
+                show: false
+            },
+            data: {
+                text: "This is my custom dock"
+            },
+            type: 'dock_tab',
+            init() {
+                this.element.innerHTML = '<div id="ShowResv"/>';
+                new ShowReserve({
+                    target: this.element.querySelector('#ShowResv')
+                });
+            },
+            destroy() {
+                console.log("destroy dock:");
+            }
+        });
+
+
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
     }
 

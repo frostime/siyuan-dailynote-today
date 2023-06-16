@@ -5,6 +5,7 @@ import { Plugin } from 'siyuan';
 import { info, error } from './utils';
 import { eventBus } from './event-bus';
 import { filterExistsBlocks } from './func';
+import { retrieveResvFromBlocks } from '@/func/reserve';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -162,7 +163,6 @@ class ReservationManger {
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
             info(`没有预约文件，使用默认配置`)
-            this.save();
         } else {
             //如果有配置文件，则使用配置文件
             info(`读入预约文件: ${ReserveFile}`)
@@ -177,10 +177,26 @@ class ReservationManger {
             } catch (error_msg) {
                 error(`Setting load error: ${error_msg}`);
             }
-            this.save();
         }
+        await this.syncWithBlock();
         this.doPurgeExpired();
         this.updateReserved();
+        this.save();
+    }
+
+    async syncWithBlock() {
+        let reservations: Reservation[] = await retrieveResvFromBlocks('future');
+        for (let reservation of reservations) {
+            let blockId = reservation.id;
+            let date = reservation.date;
+            if (!(date in this.reservations.OnDate)) {
+                this.reservations.OnDate[date] = [];
+            }
+            if (this.reservations.OnDate[date].indexOf(blockId) < 0) {
+                this.reservations.OnDate[date].push(blockId);
+            }
+            this.reserved.set(blockId, date);
+        }
     }
 
     save() {
@@ -223,6 +239,9 @@ class ReservationManger {
         let date_str = this.dateTemplate(date);
         for (let key in this.reservations.OnDate) {
             if (key < date_str) {
+                delete this.reservations.OnDate[key];
+            }
+            if (this.reservations.OnDate[key].length == 0) {
                 delete this.reservations.OnDate[key];
             }
         }
