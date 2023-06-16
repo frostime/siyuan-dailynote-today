@@ -101,8 +101,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
             config: {
                 position: "RightBottom",
                 size: {width: 250, height: 0},
-                icon: "iconSaving",
-                title: "Custom Dock",
+                icon: "iconHistory",
+                title: "今日笔记预约",
                 show: false
             },
             data: {

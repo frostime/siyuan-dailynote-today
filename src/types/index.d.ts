@@ -21,6 +21,7 @@ type Milisecond = number;
 
 type Reservation = {
     id: BlockId;
+    content: string;
     date: string;
 }
 

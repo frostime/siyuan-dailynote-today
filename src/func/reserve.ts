@@ -171,8 +171,9 @@ export async function retrieveResvFromBlocks(time: 'today' | 'future'): Promise<
     } else if (time === 'future') {
         cond = `A.value >= strftime('%Y%m%d', datetime('now'))`;
     }
-    let sql = `select B.id, A.value as date from blocks as B inner join attributes as A
+    let sql = `select B.id, B.content, A.value as date from blocks as B inner join attributes as A
         on(A.block_id = B.id and  A.name = 'custom-reservation' and ${cond}) order by A.value;`;
     let results: Reservation[] = await serverApi.sql(sql);
+    console.log(results);
     return results;
 }

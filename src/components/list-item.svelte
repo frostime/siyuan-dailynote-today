@@ -39,7 +39,7 @@
             ><use xlink:href="#iconRight" /></svg
         >
     </span>
-    <svg class="b3-list-item__graphic"><use xlink:href="#iconBookmark" /></svg>
+    <svg class="b3-list-item__graphic"><use xlink:href="#iconHistory" /></svg>
     <span class="b3-list-item__text">{sectionTitle}</span>
     <span class="b3-list-item__action"
         ><svg><use xlink:href="#iconMore" /></svg></span

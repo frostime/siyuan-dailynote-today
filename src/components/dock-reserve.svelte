@@ -1,9 +1,11 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import ListItem from "./list-item.svelte";
+    import { reservation } from "@/global-status";
+    import * as api from "@/serverApi";
 
-    let expandStatus = [
-        false, false
-    ]
+    let expandStatus = [];
+    let allResvs = [];
 
     function allExpand() {
         console.log("allExpand");
@@ -19,13 +21,50 @@
         }
     }
 
+    async function updateWithReservations() {
+        //[ [date, [blockIds]] ]
+        let entries = Object.entries(reservation.reservations.OnDate);
+        let dateCnt = entries.length;
+        let allBlockIds = [];
+        for (let i = 0; i < dateCnt; i++) {
+            let entry = entries[i];
+            let blocks = entry[1];
+            allBlockIds = allBlockIds.concat(blocks);
+        }
+        let sql = `select id, content from blocks where id in (${allBlockIds.map((id) => `'${id}'`).join(",")})`;
+        let results: any[] = await api.sql(sql);
+        let resulsMap: any = {};
+        results.forEach((result) => {
+            resulsMap[result.id] = result.content;
+        });
+
+        expandStatus = new Array(dateCnt).fill(false);
+        let newResvs = [];
+        for (let i = 0; i < dateCnt; i++) {
+            let entry = entries[i];
+            let blocks = [];
+            entry[1].forEach((blockId) => {
+                blocks.push({
+                    id: blockId,
+                    content: resulsMap[blockId],
+                });
+            });
+            newResvs.push({
+                date: entry[0],
+                blocks: blocks,
+            });
+        }
+        allResvs = newResvs;
+    }
+
     const doNothing = () => {};
 
+    onMount(() => {
+        updateWithReservations();
+    });
 </script>
 
-<div
-    class="fn__flex-1 fn__flex-column file-tree layout__tab"
->
+<div class="fn__flex-1 fn__flex-column file-tree layout__tab">
     <div class="block__icons">
         <div class="block__logo">
             <svg><use xlink:href="#iconBookmark" /></svg>
@@ -34,11 +73,14 @@
         <span class="fn__flex-1" />
         <span class="fn__space" />
         <span
+            on:click={() => updateWithReservations()}
+            on:keydown={doNothing}
             data-type="refresh"
             class="block__icon b3-tooltips b3-tooltips__sw"
             aria-label="刷新"
-            ><svg class=""><use xlink:href="#iconRefresh" /></svg></span
         >
+            <svg class=""><use xlink:href="#iconRefresh" /></svg>
+        </span>
         <span class="fn__space" />
         <span
             on:click={() => allExpand()}
@@ -68,31 +110,12 @@
         >
     </div>
     <div class="fn__flex-1">
-        <ListItem
-            sectionTitle="20221012"
-            bind:isExpanded={expandStatus[0]}
-            blocks={[
-                { id: "ddd", content: "ddd" },
-                { id: "ddd", content: "ddd" },
-                {
-                    id: "ddd",
-                    content:
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                },
-            ]}
-        />
-        <ListItem
-            sectionTitle="20221014"
-            bind:isExpanded={expandStatus[1]}
-            blocks={[
-                { id: "ddd", content: "ddd" },
-                { id: "ddd", content: "ddd" },
-                {
-                    id: "ddd",
-                    content:
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                },
-            ]}
-        />
+        {#each allResvs as resv, i}
+            <ListItem
+                sectionTitle={resv.date}
+                bind:isExpanded={expandStatus[i]}
+                blocks={resv.blocks}
+            />
+        {/each}
     </div>
 </div>
