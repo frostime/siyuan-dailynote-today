@@ -102,7 +102,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 position: "RightBottom",
                 size: {width: 250, height: 0},
                 icon: "iconHistory",
-                title: "今日笔记预约",
+                //@ts-ignore
+                title: this.i18n.DockReserve.arial,
                 show: false
             },
             data: {

@@ -1,6 +1,4 @@
 <script lang="ts">
-    import * as api from "@/serverApi";
-
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
     export let isExpanded: boolean = false;
@@ -54,16 +52,16 @@
     <!-- <span class="b3-list-item__action"
         ><svg><use xlink:href="#iconMore" /></svg></span
     > -->
-    <span class="counter">{blocks.length}</span>
+    <span class="counter">{blocks?.length}</span>
 </li>
 
 <ul class={ulClass}>
     {#each blocks as block}
         <li
-            on:click={() => clickItem(block.doc)}
+            on:click={() => clickItem(block?.doc)}
             on:keydown={() => {}}
             class="b3-list-item b3-list-item--hide-action"
-            data-node-id={block.id}
+            data-node-id={block?.id}
             data-ref-text=""
             data-def-id=""
             data-treetype="bookmark"

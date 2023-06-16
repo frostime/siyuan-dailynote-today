@@ -3,19 +3,21 @@
     import ListItem from "./list-item.svelte";
     import { reservation } from "@/global-status";
     import * as api from "@/serverApi";
+    import { i18n } from "@/utils";
 
     let expandStatus = [];
     let allResvs = [];
+    let _i18n = i18n.DockReserve;
 
     function allExpand() {
-        console.log("allExpand");
+        // console.log("allExpand");
         for (let i = 0; i < expandStatus.length; i++) {
             expandStatus[i] = true;
         }
     }
 
     function allCollapse() {
-        console.log("allCollapse");
+        // console.log("allCollapse");
         for (let i = 0; i < expandStatus.length; i++) {
             expandStatus[i] = false;
         }
@@ -31,14 +33,16 @@
             let blocks = entry[1];
             allBlockIds = allBlockIds.concat(blocks);
         }
-        let sql = `select id, content, root_id from blocks where id in (${allBlockIds.map((id) => `'${id}'`).join(",")})`;
+        let sql = `select id, content, root_id from blocks where id in (${allBlockIds
+            .map((id) => `'${id}'`)
+            .join(",")})`;
         let results: any[] = await api.sql(sql);
         let resulsMap: any = {};
         results.forEach((result) => {
             resulsMap[result.id] = {
                 content: result.content,
-                doc: result.root_id
-            }
+                doc: result.root_id,
+            };
         });
 
         expandStatus = new Array(dateCnt).fill(false);
@@ -50,11 +54,14 @@
                 blocks.push({
                     id: blockId,
                     content: resulsMap[blockId].content,
-                    doc: resulsMap[blockId].doc
+                    doc: resulsMap[blockId].doc,
                 });
             });
             newResvs.push({
-                date: `${entry[0].slice(0, 4)}-${entry[0].slice(4, 6)}-${entry[0].slice(6, 8)}`,
+                date: `${entry[0].slice(0, 4)}-${entry[0].slice(
+                    4,
+                    6
+                )}-${entry[0].slice(6, 8)}`,
                 blocks: blocks,
             });
         }
@@ -72,7 +79,7 @@
     <div class="block__icons">
         <div class="block__logo">
             <svg><use xlink:href="#iconBookmark" /></svg>
-            预约
+            {_i18n.title}
         </div>
         <span class="fn__flex-1" />
         <span class="fn__space" />
@@ -81,7 +88,7 @@
             on:keydown={doNothing}
             data-type="refresh"
             class="block__icon b3-tooltips b3-tooltips__sw"
-            aria-label="刷新"
+            aria-label={_i18n.refresh}
         >
             <svg class=""><use xlink:href="#iconRefresh" /></svg>
         </span>
@@ -91,7 +98,7 @@
             on:keydown={doNothing}
             data-type="expand"
             class="block__icon b3-tooltips b3-tooltips__sw"
-            aria-label="展开 Ctrl+↓"
+            aria-label="{_i18n.expand} Ctrl+↓"
         >
             <svg><use xlink:href="#iconExpand" /></svg>
         </span>
@@ -101,7 +108,7 @@
             on:keydown={doNothing}
             data-type="collapse"
             class="block__icon b3-tooltips b3-tooltips__sw"
-            aria-label="折叠 Ctrl+↑"
+            aria-label="{_i18n.collapse} Ctrl+↑"
         >
             <svg><use xlink:href="#iconContract" /></svg>
         </span>
@@ -109,7 +116,7 @@
         <span
             data-type="min"
             class="block__icon b3-tooltips b3-tooltips__sw"
-            aria-label="最小化 Ctrl+W"
+            aria-label="{_i18n.min} Ctrl+W"
             ><svg><use xlink:href="#iconMin" /></svg></span
         >
     </div>
