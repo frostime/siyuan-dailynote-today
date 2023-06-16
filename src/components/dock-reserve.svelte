@@ -31,11 +31,14 @@
             let blocks = entry[1];
             allBlockIds = allBlockIds.concat(blocks);
         }
-        let sql = `select id, content from blocks where id in (${allBlockIds.map((id) => `'${id}'`).join(",")})`;
+        let sql = `select id, content, root_id from blocks where id in (${allBlockIds.map((id) => `'${id}'`).join(",")})`;
         let results: any[] = await api.sql(sql);
         let resulsMap: any = {};
         results.forEach((result) => {
-            resulsMap[result.id] = result.content;
+            resulsMap[result.id] = {
+                content: result.content,
+                doc: result.root_id
+            }
         });
 
         expandStatus = new Array(dateCnt).fill(false);
@@ -46,11 +49,12 @@
             entry[1].forEach((blockId) => {
                 blocks.push({
                     id: blockId,
-                    content: resulsMap[blockId],
+                    content: resulsMap[blockId].content,
+                    doc: resulsMap[blockId].doc
                 });
             });
             newResvs.push({
-                date: entry[0],
+                date: `${entry[0].slice(0, 4)}-${entry[0].slice(4, 6)}-${entry[0].slice(6, 8)}`,
                 blocks: blocks,
             });
         }

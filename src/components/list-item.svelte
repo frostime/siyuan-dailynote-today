@@ -1,4 +1,6 @@
 <script lang="ts">
+    import * as api from "@/serverApi";
+
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
     export let isExpanded: boolean = false;
@@ -16,6 +18,14 @@
         } else {
             liSvgClass = 'b3-list-item__arrow';
             ulClass = 'fn__none';
+        }
+    }
+
+    async function clickItem(docId: BlockId) {
+        console.log('clickItem', docId);//
+        // let block: Block = await api.getBlockByID(id);
+        if (docId) {
+            window.open(`siyuan://blocks/${docId}`);
         }
     }
 
@@ -41,15 +51,17 @@
     </span>
     <svg class="b3-list-item__graphic"><use xlink:href="#iconHistory" /></svg>
     <span class="b3-list-item__text">{sectionTitle}</span>
-    <span class="b3-list-item__action"
+    <!-- <span class="b3-list-item__action"
         ><svg><use xlink:href="#iconMore" /></svg></span
-    >
+    > -->
     <span class="counter">{blocks.length}</span>
 </li>
 
 <ul class={ulClass}>
     {#each blocks as block}
         <li
+            on:click={() => clickItem(block.doc)}
+            on:keydown={() => {}}
             class="b3-list-item b3-list-item--hide-action"
             data-node-id={block.id}
             data-ref-text=""
@@ -69,9 +81,9 @@
             </span>
             <span class="b3-list-item__text">{block.content}</span>
 
-            <span class="b3-list-item__action"
+            <!-- <span class="b3-list-item__action"
                 ><svg><use xlink:href="#iconMore" /></svg></span
-            >
+            > -->
         </li>
     {/each}
 </ul>
