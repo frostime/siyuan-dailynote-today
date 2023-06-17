@@ -97,31 +97,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             }
         });
 
-        this.addDock({
-            config: {
-                position: "RightBottom",
-                size: {width: 250, height: 0},
-                icon: "iconHistory",
-                //@ts-ignore
-                title: this.i18n.DockReserve.arial,
-                show: false
-            },
-            data: {
-                text: "This is my custom dock"
-            },
-            type: 'dock_tab',
-            init() {
-                this.element.innerHTML = '<div id="ShowResv"/>';
-                new ShowReserve({
-                    target: this.element.querySelector('#ShowResv')
-                });
-            },
-            destroy() {
-                console.log("destroy dock:");
-            }
-        });
-
-
+        eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
     }
 
@@ -137,6 +113,36 @@ export default class DailyNoteTodayPlugin extends Plugin {
             this.enableBlockIconClickEvent = true;
             this.gutterMenu = new GutterMenu(this.eventBus);
         }
+    }
+
+    private onSettingLoaded() {
+
+        if (settings.get('EnableResvDock') === true) {
+            this.addDock({
+                config: {
+                    position: "RightBottom",
+                    size: {width: 250, height: 0},
+                    icon: "iconHistory",
+                    //@ts-ignore
+                    title: this.i18n.DockReserve.arial,
+                    show: false
+                },
+                data: {
+                    text: "This is my custom dock"
+                },
+                type: 'dock_tab',
+                init() {
+                    this.element.innerHTML = '<div id="ShowResv"/>';
+                    new ShowReserve({
+                        target: this.element.querySelector('#ShowResv')
+                    });
+                },
+                destroy() {
+                    console.log("destroy dock:");
+                }
+            });
+        }
+
     }
 
 

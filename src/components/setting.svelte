@@ -52,6 +52,12 @@
     />
     <SettingItem
         type="checkbox"
+        content={contents.EnableResvDock}
+        settingKey="EnableResvDock"
+        settingValue={settings.get("EnableResvDock")}
+    />
+    <SettingItem
+        type="checkbox"
         content={contents.ExpandGutterMenu}
         settingKey="ExpandGutterMenu"
         settingValue={settings.get("ExpandGutterMenu")}

@@ -13,7 +13,8 @@ import { retrieveResvFromBlocks } from '@/func/reserve';
 type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
     'PluginVersion' | "EnableMove" | 'EnableReserve' | 
-    "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' | 'RetvType'
+    "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
+    'RetvType' | 'EnableResvDock'
 );
 
 interface Item {
@@ -33,6 +34,7 @@ class SettingManager {
         PluginVersion: '',
         EnableMove: true as boolean,
         EnableReserve: true as boolean,
+        EnableResvDock: true as boolean,
         ExpandGutterMenu: true as boolean, //是否将菜单项目展开
         PopupReserveDialog: true as boolean, //是否弹出预约对话框
         ResvEmbedAt: 'top' as RetvPosition, //Retrieved 块嵌入位置
