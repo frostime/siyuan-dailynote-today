@@ -36,7 +36,8 @@
     - If the ID is incorrectly filled in, a warning will be given when the plugin is launched
     - For more information on how to open the settings panel, please read the later part of the document
 
-![](asset/DefaultNotebook.png)
+![](asset/DefaultNotebook-en.png)
+
 
 ### 2. Left lick the icon, quickly creating/opening today's note.
 
@@ -56,16 +57,11 @@ At 0 o'clock the plug-in will automatically chime in and update the status of yo
 
 ![](asset/UpToDate.gif)
 
-This feature can be turned off in the settings, but this setting is scheduled to be removed with the SiS update version 2.9.
-
-![](asset/SetUpToDate.png)
-
-
-
 
 ### 3. Right click the icon, quickly configuration.
 
-![](asset/IconRightClick.png)
+
+![](asset/IconRightClick-en.png)
 
 
 - Click to enter the plugin settings panel
@@ -79,30 +75,29 @@ You can think of the reservation block as a simple schedule management or task r
 
 1. Click the block and select "Reserve this block".
 
-    ![](asset/Reserve1.png)
+    <!-- ![](asset/Reserve1.png) -->
+    ![](asset/Reserve1-en.png)
     <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/69479868c4da8344.png) -->
 
 2. The plugin will automatically match the date and time in the block content, and after confirmation, the plugin will help you record the reservation.
 
-    The matched time will be highlighted in the confirmation dialog;. As you can see below, the plug-in matches `6月01号` and resolves to `2023-06-01`.
+    The matched time will be highlighted in the confirmation dialog;. As you can see below, the plug-in matches `06-24` and resolves to `2023-06-01`.
 
-    > `6月01号` is the date representative in chinese.
-
-    ![](asset/Reserve2.png)
+    ![](asset/Reserve2-en.png)
     <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/2a30bad068dc534f.png) -->
 
 3. When the day arrives, the plugin will automatically insert the related reservations as embedded blocks into the diary entry.
 
-    ![](asset/Reserve3.png)
+    ![](asset/Reserve3-en.png)
     <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/f10c726b06042635.png) -->
 
 4. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
 
 5. After completing the reservation block, a custom attribute `custom-reservation` will be automatically added to the block and memo will be filled in, making it easier for users to identify which blocks have been reserved.
 
-    ![](asset/R-memo.png)
+    ![](asset/R-memo-en.png)
 
-    ![](asset/R-attr.png)
+    ![](asset/R-attr-en.png)
 
 6. Click again on a block that has already been reserved and you can choose to 'Cancel Reservation'
 7. By default, all reservations will be inserted as an embedded block at the beginning of the document. If you are not satisfied with the default behavior, you can change it in the settings.
@@ -160,7 +155,8 @@ Translated with www.DeepL.com/Translator (free version)
 
 ### 5. Move blocks into today's daily note
 
-![](asset/MoveBlock.png)
+<!-- ![](asset/MoveBlock.png) -->
+![](asset/MoveBlock-en.png)
 
 - Select the icon leftside of a block and press "Alt + Right Click" to bring up a moving block panel. Choose a notebook to move the current block to the diary of the corresponding notebook for today.
 - Support moving single block
@@ -175,7 +171,8 @@ Translated with www.DeepL.com/Translator (free version)
 
 ### 6. Setting pannel
 
-![](asset/Setting.png)
+<!-- ![](asset/Setting.png) -->
+![](asset/Setting-en.png)
 
 ### 7. Alt + Right-click: a compatible function menu
 
