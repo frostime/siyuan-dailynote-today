@@ -41,6 +41,10 @@
             "title": "Enable \"Reserve Block\" in menu",
             "text": "When enabled, the \"Reserve Block\" item will be added to the menu after clicking on the block icon"
         },
+        "EnableResvDock": {
+            "title": "Enable \"Show reservations\" in dock menu",
+            "text": "When enabled, the \"Show reservations\" pannel will be added to the dock menu at the right bottom side of the dock bar"
+        },
         "ExpandGutterMenu": {
             "title": "Expand all block menu items",
             "text": "When enabled, the plugin's block menu items are expanded to appear as a separate secondary menu under the plugin menu"

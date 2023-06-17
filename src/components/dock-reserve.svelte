@@ -53,8 +53,8 @@
             entry[1].forEach((blockId) => {
                 blocks.push({
                     id: blockId,
-                    content: resulsMap[blockId].content,
-                    doc: resulsMap[blockId].doc,
+                    content: resulsMap[blockId]?.content,
+                    doc: resulsMap[blockId]?.doc,
                 });
             });
             newResvs.push({
