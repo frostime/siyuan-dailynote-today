@@ -114,9 +114,18 @@ You can customize the CSS styles to display these reservation blocks. Here is an
 }
 ```
 
-With custom attributes, you can use SQL to query all reservation blocks. For more information, see FAQs.
+With custom attributes, you can use SQL to query all reservation blocks. For more information, see [FAQs](#q-how-to-view-all-reservation-blocks).
 
-### Currently supported date templates
+#### 4.1 View scheduled appointments
+
+There is a panel provided in the Dock to view scheduled appointments.
+
+![](asset/ShowResv.png)
+
+Note that only future appointments can be viewed here, and due to the limitation of data query from SiYuan, up to 32 appointments can be viewed at most. If you want to view all appointments more freely, please refer to [FAQs](#q-how-to-view-all-reservation-blocks).
+
+
+#### 4.2 Currently supported date templates
 
 - Standard year, month and day
     - `2020-04-01`, `2020/04/01`, `2020.04.01`
@@ -140,7 +149,7 @@ With custom attributes, you can use SQL to query all reservation blocks. For mor
 Translated with www.DeepL.com/Translator (free version)
 
 
-### Notice
+####  4.2 Notice
 
 1. The embeded block for reservations will be insert automatically only when the diary is created/opened automatically by the plugin
 2. You can use the 'Update' button to manually insert appointment blocks into the diary
