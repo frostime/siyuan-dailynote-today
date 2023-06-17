@@ -2,7 +2,7 @@ import { i18n, lute } from "../../utils";
 import { showMessage, confirm } from "siyuan";
 import * as serverApi from "../../serverApi";
 import { reservation, settings } from "../../global-status";
-import { parseDate } from 'chrono-node';
+import { parseDate, parse, ParsedResult } from 'chrono-node';
 
 
 const Zh1to9 = '一二三四五六七八九';
@@ -128,6 +128,7 @@ export async function reserveBlock(blockId) {
 
     // let year: string, month: string, day: string = null;
     let resMatch: RegExpMatchArray = null;
+    let matchedTest: MatchedText = undefined;
     let resDate: Date = null;
     let resIndex: number = Infinity;
     //匹配日期正则表达式
@@ -148,7 +149,22 @@ export async function reserveBlock(blockId) {
     }
 
     if (!resDate) {
-        resDate = parseDate(kramdown);
+        // resDate = parseDate(kramdown);
+        let result = parse(kramdown, null, { forwardDate: true });
+        if (result.length > 0) {
+            let parseResult: ParsedResult = result[0];
+            resDate = parseResult.start.date();
+            resDate.setHours(0, 0, 0, 0);
+            matchedTest = {
+                text: parseResult.text,
+                index: parseResult.index
+            }
+        }
+    } else {
+        matchedTest = {
+            text: resMatch[0],
+            index: resMatch.index
+        }
     }
 
     if (!resDate) {
@@ -165,7 +181,7 @@ export async function reserveBlock(blockId) {
     }
 
     if (settings.get('PopupReserveDialog')) {
-        let html = createConfirmDialog(kramdown, resMatch);
+        let html = createConfirmDialog(kramdown, matchedTest);
         confirm(`${i18n.ReserveMenu.Title}: ${resDate.toLocaleDateString()}?`, html
             , () => doReserveBlock(blockId, resDate)
         );
@@ -201,7 +217,12 @@ function doReserveBlock(blockId, date: Date) {
     showMessage(`${i18n.ReserveMenu.Success} ${date.toLocaleDateString()}`, 3000, 'info');
 }
 
-function createConfirmDialog(srcKramdown: string, match: RegExpMatchArray): string {
+interface MatchedText {
+    index: number;
+    text: string;
+}
+
+function createConfirmDialog(srcKramdown: string, match?: MatchedText): string {
 
     function hightLightStr(text: string, beg: number, len: number) {
         let before = text.substring(0, beg);
@@ -210,9 +231,9 @@ function createConfirmDialog(srcKramdown: string, match: RegExpMatchArray): stri
         return `${before}<span data-type="mark">${middle}</span>${after}`;
     }
     //用了 chrono 之后，可能 match 就没有了
-    let matched: string = match ? `<p>${i18n.ReserveMenu.Match}: ${match[0]}</p>` : '';
+    let matched: string = match ? `<p>${i18n.ReserveMenu.Match}: ${match.text}</p>` : '';
     if (match) {
-        srcKramdown = hightLightStr(srcKramdown, match.index, match[0].length);
+        srcKramdown = hightLightStr(srcKramdown, match.index, match.text.length);
     }
     let html = lute.Md2HTML(srcKramdown);
     // console.log(html);

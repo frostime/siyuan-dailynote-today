@@ -1,4 +1,6 @@
-# Today's Note
+[README 中文](README.md)
+
+# Daily Note Today
 
 
 **This plugin is mainly used for enhancement for daily note workflow in SiYuan.**

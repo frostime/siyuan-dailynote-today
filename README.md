@@ -1,3 +1,5 @@
+[README English](README_en_US.md)
+
 # 今日笔记
 
 **本插件主要用于辅助在思源中的 Daily Note 笔记工作流**
