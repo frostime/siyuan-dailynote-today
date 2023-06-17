@@ -243,7 +243,7 @@ class ReservationManger {
             if (key < date_str) {
                 delete this.reservations.OnDate[key];
             }
-            if (this.reservations.OnDate[key].length == 0) {
+            if (this.reservations.OnDate[key]?.length === 0) {
                 delete this.reservations.OnDate[key];
             }
         }
