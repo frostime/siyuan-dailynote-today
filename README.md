@@ -1,4 +1,4 @@
-![README English](README_en_US.md)
+[README English](README_en_US.md)
 
 # 今日笔记
 

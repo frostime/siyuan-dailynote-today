@@ -1,4 +1,4 @@
-![README 中文](README.md)
+[README 中文](README.md)
 
 # Daily Note Today
 
