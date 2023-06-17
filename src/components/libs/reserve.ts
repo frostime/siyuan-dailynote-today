@@ -154,6 +154,7 @@ export async function reserveBlock(blockId) {
         if (result.length > 0) {
             let parseResult: ParsedResult = result[0];
             resDate = parseResult.start.date();
+            resDate.setHours(0, 0, 0, 0);
             matchedTest = {
                 text: parseResult.text,
                 index: parseResult.index
