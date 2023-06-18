@@ -129,6 +129,7 @@
         "refresh": "刷新",
         "expand": "展开",
         "collapse": "折叠",
-        "min": "最小化"
+        "min": "最小化",
+        "emptyContent": "未找到相关内容"
     }
 }
