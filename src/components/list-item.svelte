@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { openBlock } from '@/func';
+    import { openBlock } from "@/func";
 
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
@@ -9,28 +9,30 @@
         isExpanded = expand === undefined ? !isExpanded : expand;
     }
 
-    let liSvgClass = 'b3-list-item__arrow';
-    let ulClass = 'fn__none';
+    let liSvgClass = "b3-list-item__arrow";
+    let ulClass = "fn__none";
     let titleStyle = "";
     $: {
         if (isExpanded) {
-            liSvgClass = 'b3-list-item__arrow b3-list-item__arrow--open';
-            ulClass = '';
+            liSvgClass = "b3-list-item__arrow b3-list-item__arrow--open";
+            ulClass = "";
         } else {
-            liSvgClass = 'b3-list-item__arrow';
-            ulClass = 'fn__none';
+            liSvgClass = "b3-list-item__arrow";
+            ulClass = "fn__none";
         }
     }
 
     /**
      * 高亮今天的日期
-    */
+     */
     $: {
         let today = new Date();
         let year = today.getFullYear();
         let month = today.getMonth() + 1;
         let day = today.getDate();
-        let todayStr = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+        let todayStr = `${year}-${month < 10 ? "0" + month : month}-${
+            day < 10 ? "0" + day : day
+        }`;
         if (sectionTitle === todayStr) {
             titleStyle = "color: var(--b3-font-color1); font-weight: bold;";
         } else {
@@ -39,13 +41,17 @@
     }
 
     async function clickItem(docId: BlockId) {
-        console.log('clickItem', docId);//
+        console.log("clickItem", docId); //
         // let block: Block = await api.getBlockByID(id);
         if (docId) {
             openBlock(docId);
         }
     }
 
+    function clickListMore(event: MouseEvent) {
+        event.stopPropagation();
+        console.log("clickListMore", event);
+    }
 </script>
 
 <li
@@ -60,17 +66,19 @@
         style="padding-left: 4px;margin-right: 2px"
         class="b3-list-item__toggle b3-list-item__toggle--hl"
     >
-        <svg
-            data-id="Doing0"
-            class={liSvgClass}
+        <svg data-id="Doing0" class={liSvgClass}
             ><use xlink:href="#iconRight" /></svg
         >
     </span>
     <svg class="b3-list-item__graphic"><use xlink:href="#iconHistory" /></svg>
     <span class="b3-list-item__text" style={titleStyle}>{sectionTitle}</span>
-    <!-- <span class="b3-list-item__action"
-        ><svg><use xlink:href="#iconMore" /></svg></span
-    > -->
+    <span
+        class="b3-list-item__action"
+        on:click={(event) => clickListMore(event)}
+        on:keydown={() => {}}
+    >
+        <svg><use xlink:href="#iconMore" /></svg>
+    </span>
     <span class="counter">{blocks?.length}</span>
 </li>
 
