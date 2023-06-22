@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { openBlock } from '@/func';
+
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
     export let isExpanded: boolean = false;
@@ -40,7 +42,7 @@
         console.log('clickItem', docId);//
         // let block: Block = await api.getBlockByID(id);
         if (docId) {
-            window.open(`siyuan://blocks/${docId}`);
+            openBlock(docId);
         }
     }
 
@@ -75,7 +77,7 @@
 <ul class={ulClass}>
     {#each blocks as block}
         <li
-            on:click={() => clickItem(block?.doc)}
+            on:click={() => clickItem(block?.id)}
             on:keydown={() => {}}
             class="b3-list-item b3-list-item--hide-action"
             data-node-id={block?.id}

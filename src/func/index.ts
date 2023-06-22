@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { showMessage, confirm, Dialog } from 'siyuan';
+import { showMessage, confirm, Dialog, openTab } from 'siyuan';
 import notebooks from '../global-notebooks';
-import { info, warn, error, i18n, lute } from "../utils";
+import { info, warn, error, i18n, lute, app } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
 import { Retrieve, RetvFactory } from './reserve';
@@ -275,4 +275,15 @@ export function compareVersion(v1Str: string, v2Str: string) {
     }
 
     return 0
+}
+
+export function openBlock(blockId: BlockId) {
+    openTab({
+        app: app,
+        doc: {
+            id: blockId,
+            action: ['cb-get-focus'],
+            zoomIn: true
+        }
+    });
 }

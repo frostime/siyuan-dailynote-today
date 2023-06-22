@@ -1,5 +1,6 @@
 import zh_Hans from "./i18n/zh_CN.json";
 import en_US from "./i18n/en_US.json";
+import { App } from "siyuan";
 
 //@ts-ignore
 export const lute = window.Lute!.New();
@@ -42,6 +43,11 @@ export function setI18n(i18n_: any) {
 export let isMobile: boolean;
 export function setIsMobile(isMobile_: boolean) {
     isMobile = isMobile_;
+}
+
+export let app: App;
+export function setApp(app_: App) {
+    app = app_;
 }
 
 export function merge<T>(list: T[] | undefined, item: T): T[] {
