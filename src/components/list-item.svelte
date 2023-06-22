@@ -1,6 +1,6 @@
 <script lang="ts">
     import { openBlock } from "@/func";
-    import { plugin } from "@/utils";
+    import { plugin, i18n } from "@/utils";
 
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
@@ -98,7 +98,7 @@
     <span class="b3-list-item__text" style={titleStyle}>{sectionTitle}</span>
     <span
         class="b3-list-item__action b3-tooltips b3-tooltips__w"
-        aria-label="查看该日预约"
+        aria-label={i18n.DockReserve.PopupResv}
         on:click={(event) => clickListMore(event)}
         on:keydown={() => {}}
     >

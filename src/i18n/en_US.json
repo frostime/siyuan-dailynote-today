@@ -129,6 +129,7 @@
         "expand": "expand",
         "collapse": "collapse",
         "min": "minimize",
-        "emptyContent": "No related content found"
+        "emptyContent": "No related content found",
+        "PopupResv": "Inspect reservations"
     }
 }
