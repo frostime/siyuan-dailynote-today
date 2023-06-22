@@ -7,7 +7,7 @@ import ShowReserve  from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { checkDuplicateDiary, updateTodayReservation } from './func';
-import { error, info, setI18n, setIsMobile } from './utils';
+import { error, info, setApp, setI18n, setIsMobile, setPlugin } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
@@ -50,6 +50,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         setIsMobile(this.isMobile);
 
         setI18n(this.i18n); //设置全局 i18n
+        setApp(this.app); //设置全局 app
+        setPlugin(this); //设置全局 plugin
 
         settings.setPlugin(this);
         reservation.setPlugin(this);

@@ -36,7 +36,13 @@
         let sql = `select id, content, root_id from blocks where id in (${allBlockIds
             .map((id) => `'${id}'`)
             .join(",")})`;
-        let results: any[] = await api.sql(sql);
+        let results: any[] | null = await api.sql(sql);
+        
+        if (results === null) {
+            allResvs = [];
+            return;
+        }
+
         let resulsMap: any = {};
         results.forEach((result) => {
             resulsMap[result.id] = {
@@ -121,12 +127,17 @@
         >
     </div>
     <div class="fn__flex-1">
-        {#each allResvs as resv, i}
-            <ListItem
-                sectionTitle={resv.date}
-                bind:isExpanded={expandStatus[i]}
-                blocks={resv.blocks}
-            />
-        {/each}
+        {#if allResvs.length === 0}
+            <li class="b3-list--empty">{i18n.DockReserve.emptyContent}</li>
+        {:else}
+            {#each allResvs as resv, i}
+                <ListItem
+                    sectionTitle={resv.date}
+                    bind:isExpanded={expandStatus[i]}
+                    blocks={resv.blocks}
+                />
+            {/each}
+        {/if}
+        
     </div>
 </div>
