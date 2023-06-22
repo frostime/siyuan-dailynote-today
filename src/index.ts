@@ -7,12 +7,14 @@ import ShowReserve  from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { checkDuplicateDiary, updateTodayReservation } from './func';
-import { error, info, setApp, setI18n, setIsMobile, setPlugin } from './utils';
+import { info, setApp, setI18n, setIsMobile, setPlugin } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
 import { eventBus } from './event-bus';
-import * as serverApi from './serverApi';
+
+import { changelog } from 'sy-plugin-changelog';
+
 import "./index.scss";
 
 
@@ -78,6 +80,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);
+
+        changelog(this, 'i18n/CHANGELOG-${lang}.md');
     }
 
     private initPluginUI() {
