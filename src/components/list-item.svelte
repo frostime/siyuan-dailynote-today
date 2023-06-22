@@ -95,15 +95,22 @@
     </span>
     <svg class="b3-list-item__graphic"><use xlink:href="#iconHistory" /></svg>
     <span class="b3-list-item__text" style={titleStyle}>{sectionTitle}</span>
-    <span
+    <!-- <span
         class="b3-list-item__action b3-tooltips b3-tooltips__w"
         aria-label={i18n.DockReserve.PopupResv}
         on:click={(event) => clickListMore(event)}
         on:keydown={() => {}}
     >
         <svg><use xlink:href="#iconMore" /></svg>
+    </span> -->
+    <span
+        class="counter b3-list-item__action b3-tooltips b3-tooltips__w"
+        aria-label={i18n.DockReserve.PopupResv}
+        on:click={(event) => clickListMore(event)}
+        on:keydown={() => {}}
+    >
+        {blocks?.length}
     </span>
-    <span class="counter">{blocks?.length}</span>
 </li>
 
 <ul class={ulClass}>
