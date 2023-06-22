@@ -31,7 +31,6 @@ class SettingManager {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
         DefaultNotebook: '', //默认笔记本的 ID
         IconPosition: 'left' as IconPosition, //图标放置位置
-        PluginVersion: '',
         EnableMove: true as boolean,
         EnableReserve: true as boolean,
         EnableResvDock: true as boolean,

@@ -13,7 +13,6 @@ import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
 import { eventBus } from './event-bus';
 import * as serverApi from './serverApi';
-import { showChangeLog } from './changelog';
 import "./index.scss";
 
 
@@ -64,7 +63,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         await settings.load();
         await notebooks.init();  //依赖 settings.load();
 
-        this.checkPluginVersion(); //依赖 settings.load();
         this.initBlockIconClickEvent();  //依赖 settings.load();
 
         this.initUpToDate();  //依赖 settings.load();
@@ -154,28 +152,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.toolbarItem.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
         updateTodayReservation(notebooks.default, true);
         showMessage(this.i18n.UpdateAll, 2500, 'info');
-    }
-
-    private async checkPluginVersion() {
-        try {
-            let plugin_file = await serverApi.getFile('/data/plugins/siyuan-dailynote-today/plugin.json');
-            if (plugin_file === null) {
-                return;
-            }
-            plugin_file = JSON.parse(plugin_file);
-            this.version = plugin_file.version;
-            info(`插件版本: ${this.version}`);
-
-            //发现更新到了不同的版本
-            if (this.version !== settings.get('PluginVersion')) {
-                settings.set('PluginVersion', this.version);
-                showMessage(`${this.i18n.Name}${this.i18n.NewVer}: v${this.version}`, 1500, 'info');
-                settings.save();
-                showChangeLog(this.version);
-            }
-        } catch (error_msg) {
-            error(`Setting load error: ${error_msg}`);
-        }
     }
 
     private async checkDuplicateDiary() {
