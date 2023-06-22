@@ -56,7 +56,6 @@
 
         const width = document.body.clientWidth; // 获取页面宽度
         const rect = liElement.getBoundingClientRect(); // 获取 list-item 的位置
-        console.log("rect", rect); //
 
         plugin.addFloatLayer({
             ids: blocks.map((block) => block.id),
