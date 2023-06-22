@@ -1,9 +1,12 @@
 <script lang="ts">
     import { openBlock } from "@/func";
+    import { plugin } from "@/utils";
 
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
     export let isExpanded: boolean = false;
+
+    let liElement: HTMLElement;
 
     export function toggleExpand(expand?: boolean) {
         isExpanded = expand === undefined ? !isExpanded : expand;
@@ -50,7 +53,27 @@
 
     function clickListMore(event: MouseEvent) {
         event.stopPropagation();
-        console.log("clickListMore", event);
+
+        const layout: HTMLElement = document.querySelector('#layouts');
+        const width = document.body.clientWidth; // 获取页面宽度
+        const rect = liElement.getBoundingClientRect(); // 获取 list-item 的位置
+        console.log("rect", rect); //
+
+        plugin.addFloatLayer({
+            ids: blocks.map((block) => block.id),
+            targetElement: layout
+        });
+
+        //@ts-ignore
+        const blockPanels: any[] = window.siyuan.blockPanels;
+        const panel = blockPanels[blockPanels.length - 1];
+        const ele: HTMLElement = panel?.element;
+
+        //将弹出框移动到 list-item 的下方
+        ele.style.top = `${rect.bottom + 10}px`; // 将 y 坐标设为 list-item 下方
+        ele.style.left = '';
+        ele.style.right = `${width - rect.right}px`;
+
     }
 </script>
 
@@ -59,6 +82,7 @@
     data-treetype="bookmark"
     data-type="undefined"
     data-subtype="undefined"
+    bind:this={liElement}
     on:click={() => toggleExpand()}
     on:keydown={() => {}}
 >
@@ -73,7 +97,8 @@
     <svg class="b3-list-item__graphic"><use xlink:href="#iconHistory" /></svg>
     <span class="b3-list-item__text" style={titleStyle}>{sectionTitle}</span>
     <span
-        class="b3-list-item__action"
+        class="b3-list-item__action b3-tooltips b3-tooltips__w"
+        aria-label="查看该日预约"
         on:click={(event) => clickListMore(event)}
         on:keydown={() => {}}
     >
