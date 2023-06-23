@@ -7,8 +7,6 @@ import { svelte } from "@sveltejs/vite-plugin-svelte"
 import zipPack from "vite-plugin-zip-pack";
 import fg from 'fast-glob';
 
-import { replace } from './scripts/replace-dist-imgbed';
-
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const devDistDir = "./dev"
@@ -16,6 +14,20 @@ const distDir = isWatch ? devDistDir : "./dist"
 
 console.log("isWatch=>", isWatch)
 console.log("distDir=>", distDir)
+
+const imgbedPrefix = 'https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/-/raw/main';
+
+/**
+ * 更换图片链接
+ */
+function replace(content: string, prefix: string=imgbedPrefix): string {
+    let imgPat = /!\[.*?\]\(\.?\/?(.*?)\)/g
+    let imgurl = `${prefix}/$1`
+    let newReadme = content.replace(imgPat, `![](${imgurl})`);
+    // await fs.promises.writeFile(readmePath, newReadme)
+    return newReadme;
+}
+
 
 export default defineConfig({
     resolve: {
@@ -32,6 +44,7 @@ export default defineConfig({
                 {
                     src: "./README*.md",
                     dest: "./",
+                    // 更换图片链接
                     transform: (contents, filename) => {
                         console.log("transform=>", filename);
                         contents = replace(contents);
