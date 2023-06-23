@@ -20,8 +20,8 @@ const imgbedPrefix = 'https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/
  * 更换图片链接
  */
 function transformMdFile(content: string, filename: string, prefix: string=imgbedPrefix): string {
-    //如果不是md文件，直接返回
-    if (!filename.endsWith(".md")) {
+    //如果不是md文件，或者是watch模式，不做处理
+    if (isWatch || !filename.endsWith(".md")) {
         return content;
     }
 
