@@ -7,6 +7,8 @@ import { svelte } from "@sveltejs/vite-plugin-svelte"
 import zipPack from "vite-plugin-zip-pack";
 import fg from 'fast-glob';
 
+import { replace } from './scripts/replace-dist-imgbed';
+
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const devDistDir = "./dev"
@@ -30,6 +32,11 @@ export default defineConfig({
                 {
                     src: "./README*.md",
                     dest: "./",
+                    transform: (contents, filename) => {
+                        console.log("transform=>", filename);
+                        contents = replace(contents);
+                        return contents;
+                    }
                 },
                 {
                     src: "./icon.png",
@@ -46,6 +53,13 @@ export default defineConfig({
                 {
                     src: "./src/i18n/**",
                     dest: "./i18n/",
+                    transform: (contents, filename) => {
+                        if (filename.endsWith(".md")) {
+                            console.log("transform=>", filename);
+                            contents = replace(contents);
+                        }
+                        return contents;
+                    }
                 },
             ],
         }),
