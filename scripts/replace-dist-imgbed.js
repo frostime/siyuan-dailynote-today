@@ -7,7 +7,7 @@ async function replace(readmePath, prefix) {
     const readme = await fs.promises.readFile(readmePath, 'utf-8')
     //![](asset/img.png)
     let imgPat = /!\[.*?\]\(\.?\/?(.*?)\)/g
-    let imgurl = `prefix/$1`
+    let imgurl = `${prefix}/$1`
     let newReadme = readme.replace(imgPat, `![](${imgurl})`);
     await fs.promises.writeFile(readmePath, newReadme)
 }
