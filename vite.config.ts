@@ -15,6 +15,25 @@ const distDir = isWatch ? devDistDir : "./dist"
 console.log("isWatch=>", isWatch)
 console.log("distDir=>", distDir)
 
+const imgbedPrefix = 'https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/-/raw/main';
+/**
+ * 更换图片链接
+ */
+function transformMdFile(content: string, filename: string, prefix: string=imgbedPrefix): string {
+    //如果不是md文件，或者是watch模式，不做处理
+    if (isWatch || !filename.endsWith(".md")) {
+        return content;
+    }
+
+    console.log("transform=>", filename);
+    let imgPat = /!\[.*?\]\(\.?\/?(.*?)\)/g
+    let imgurl = `${prefix}/$1`
+    let newReadme = content.replace(imgPat, `![](${imgurl})`);
+    // await fs.promises.writeFile(readmePath, newReadme)
+    return newReadme;
+}
+
+
 export default defineConfig({
     resolve: {
         alias: {
@@ -30,6 +49,8 @@ export default defineConfig({
                 {
                     src: "./README*.md",
                     dest: "./",
+                    // 更换图片链接
+                    transform: transformMdFile
                 },
                 {
                     src: "./icon.png",
@@ -46,6 +67,7 @@ export default defineConfig({
                 {
                     src: "./src/i18n/**",
                     dest: "./i18n/",
+                    transform: transformMdFile
                 },
             ],
         }),
