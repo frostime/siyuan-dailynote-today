@@ -69,11 +69,12 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
 
     let dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
     console.log("日记路径:", dstDocs);
-    let dstDocId: DocumentId;
+    // let dstDocId: DocumentId;
     if (dstDocs != null && dstDocs.length > 0) {
-        dstDocId = dstDocs[0].id;
+        // dstDocId = dstDocs[0].id;
     } else {
-        dstDocId = await createDiary(notebook, dstDiaryPath!);
+        // dstDocId = await createDiary(notebook, dstDiaryPath!);
+        await createDiary(notebook, dstDiaryPath!);
         dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
         showMessage(`${i18n.Create}: ${notebook.name}`, 2500, 'info');
     }

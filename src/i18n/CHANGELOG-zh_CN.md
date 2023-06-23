@@ -1,14 +1,10 @@
+### 今日笔记 v1.1.5 更新说明
 
+详情见 [Milestone V1.1.5](https://github.com/frostime/siyuan-dailynote-today/milestone/16)
 
-### 今日笔记 v1.1.4 更新说明
+本次更新优化了预约窗口的功能:
 
-详情见 [Milestone V1.1.4](https://github.com/frostime/siyuan-dailynote-today/milestone/15)
-
-
-#### Feature
-
-- 启用的时候对预约块做一次校验
-- 更新了文档, 优化了英文文档中的图片
-- 预约窗口现在会高亮匹配到的英文日期
-- 新功能: 在右边侧栏中增加了查看未来所有预约的面板, 可以在设置中选择是否启用
+1. 修复了预约面板在没有预约的情况下显示不正常的 bug
+2. 使用 openTab API 来打开块, 更加流畅
+3. 增加了新功能: 点击预约面板日期旁边的数字，可以在悬浮窗口中查看所有预约块
 
