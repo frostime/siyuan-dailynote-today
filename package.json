@@ -11,7 +11,7 @@
     "make-link": "node ./scripts/make_dev_link.js",
     "replace-plugin": "node ./scripts/replace_plugin.js",
     "dev": "vite build --watch",
-    "build": "vite build",
+    "build": "vite build && node ./scripts/replace-dist-imgbed.js",
     "sync-to-pr": "git checkout main && git pull origin main && git branch -f dev main && git checkout dev"
   },
   "devDependencies": {
