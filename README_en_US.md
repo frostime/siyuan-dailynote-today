@@ -124,6 +124,10 @@ There is a panel provided in the Dock to view scheduled appointments.
 
 ![](asset/ShowResv.png)
 
+Click the counter to the right side of the date, you can view all the reservations that day.
+
+![](asset/ShowDateResv.png)
+
 Note that only future appointments can be viewed here, and due to the limitation of data query from SiYuan, up to 32 appointments can be viewed at most. If you want to view all appointments more freely, please refer to [FAQs](#q-how-to-view-all-reservation-blocks).
 
 
