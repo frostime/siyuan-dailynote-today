@@ -16,11 +16,16 @@ console.log("isWatch=>", isWatch)
 console.log("distDir=>", distDir)
 
 const imgbedPrefix = 'https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/-/raw/main';
-
 /**
  * 更换图片链接
  */
-function replace(content: string, prefix: string=imgbedPrefix): string {
+function transformMdFile(content: string, filename: string, prefix: string=imgbedPrefix): string {
+    //如果不是md文件，直接返回
+    if (!filename.endsWith(".md")) {
+        return content;
+    }
+
+    console.log("transform=>", filename);
     let imgPat = /!\[.*?\]\(\.?\/?(.*?)\)/g
     let imgurl = `${prefix}/$1`
     let newReadme = content.replace(imgPat, `![](${imgurl})`);
@@ -45,11 +50,7 @@ export default defineConfig({
                     src: "./README*.md",
                     dest: "./",
                     // 更换图片链接
-                    transform: (contents, filename) => {
-                        console.log("transform=>", filename);
-                        contents = replace(contents);
-                        return contents;
-                    }
+                    transform: transformMdFile
                 },
                 {
                     src: "./icon.png",
@@ -66,13 +67,7 @@ export default defineConfig({
                 {
                     src: "./src/i18n/**",
                     dest: "./i18n/",
-                    transform: (contents, filename) => {
-                        if (filename.endsWith(".md")) {
-                            console.log("transform=>", filename);
-                            contents = replace(contents);
-                        }
-                        return contents;
-                    }
+                    transform: transformMdFile
                 },
             ],
         }),
