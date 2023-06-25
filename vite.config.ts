@@ -47,10 +47,15 @@ export default defineConfig({
         viteStaticCopy({
             targets: [
                 {
-                    src: "./README*.md",
-                    dest: "./",
-                    // 更换图片链接
+                    //将 README 当中的图片路径替换为图床链接
+                    src: "./README.md",
+                    dest: "../",
+                    rename: "README_zh_CN.md", //替换到根目录方便 bazzar 获取
                     transform: transformMdFile
+                },
+                {
+                    src: ["./README_zh_CN.md", "./README_en_US.md"],
+                    dest: "./",
                 },
                 {
                     src: "./icon.png",
