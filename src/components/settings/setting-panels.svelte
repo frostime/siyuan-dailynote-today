@@ -32,3 +32,9 @@
         />
     {/each}
 </div>
+
+<style>
+    .config__panel>ul>li {
+        padding-left: 1rem;
+    }
+</style>
