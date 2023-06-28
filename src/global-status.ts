@@ -10,13 +10,6 @@ import { retrieveResvFromBlocks } from '@/func/reserve';
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
 
-type SettingKey = (
-    'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
-    'PluginVersion' | "EnableMove" | 'EnableReserve' | 
-    "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
-    'RetvType' | 'EnableResvDock'
-);
-
 interface Item {
     key: SettingKey,
     value: any
