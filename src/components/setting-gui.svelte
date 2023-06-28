@@ -2,7 +2,7 @@
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
     import { i18n } from "../utils";
-    import SettingContainer from "./settings/setting-container.svelte";
+    import SettingPanel from "./settings/setting-panel.svelte";
 
     let contents = i18n.Setting;
 
@@ -69,4 +69,4 @@
     });
 </script>
 
-<SettingContainer dataname="global" {settingItems} />
+<SettingPanel dataname="global" {settingItems} />

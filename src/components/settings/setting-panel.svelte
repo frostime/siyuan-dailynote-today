@@ -3,9 +3,13 @@
 
     export let dataname: string;
     export let settingItems: ISettingItem[];
+
+    export let display: boolean = true;
+    $: fn__none = display ? "" : "fn__none";
+
 </script>
 
-<div class="config__tab-container" data-name={dataname}>
+<div class="config__tab-container {fn__none}" data-name={dataname}>
     {#each settingItems as item (item.key)}
         <SettingItem
             type={item.type}

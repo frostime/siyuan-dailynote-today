@@ -2,7 +2,7 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { openTab, Plugin, getFrontend, showMessage } from 'siyuan';
-import Setting from './components/setting-panel.svelte'
+import Setting from './components/setting-gui.svelte'
 import ShowReserve  from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
