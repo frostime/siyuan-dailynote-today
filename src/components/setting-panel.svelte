@@ -2,7 +2,7 @@
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
     import { i18n } from "../utils";
-    import SettingItem from "./setting-item.svelte";
+    import SettingItem from "./settings/setting-item.svelte";
     let checked = settings.get("OpenOnStart");
     let defaultNotebook = settings.get("DefaultNotebook");
     let iconPosition = settings.get("IconPosition");

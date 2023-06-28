@@ -80,3 +80,11 @@ type doOperation = {
     previousID: BlockId;
     retData: null;
 }
+
+
+interface ISettingItem {
+    type: string;
+    key: string;
+    value: any;
+    content: any;
+}
