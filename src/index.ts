@@ -194,9 +194,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let dialog = new Dialog({
             //@ts-ignore
             title: `${this.i18n.Name}: ${this.i18n.Setting.name}`,
-            content: `<div id="SettingPanel"></div>`,
+            content: `<div id="SettingPanel" style="height: 100%"></div>`,
             width: '50%',
-            height: '25rem',
+            height: '27rem',
             destroyCallback: (options) => {
                 console.log("destroyCallback", options);
                 //You'd better destroy the component when the dialog is closed

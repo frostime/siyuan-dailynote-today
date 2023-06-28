@@ -8,7 +8,7 @@
             "text": "Open Today's Diary automatically when the plugin is loaded"
         },
         "DefaultNotebook": {
-            "title": "Default Notebook",
+            "title": "Default Notebook ID",
             "text": "The notebook where the daily note is created by default, use the first notebook if blank",
             "placeholder": "Please copy from notebook's ID"
         },

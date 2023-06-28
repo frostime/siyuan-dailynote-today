@@ -34,6 +34,9 @@
 </div>
 
 <style>
+    .config__panel {
+        height: 100%;
+    }
     .config__panel>ul>li {
         padding-left: 1rem;
     }
