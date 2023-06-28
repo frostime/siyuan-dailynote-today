@@ -2,60 +2,76 @@
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
     import { i18n } from "../utils";
-    import SettingPanel from "./settings/setting-panel.svelte";
+
+    import SettingPanels from "./settings/setting-panels.svelte";
 
     let contents = i18n.Setting;
 
-    let items = [
-        {
+    let groups = {
+        base: [
+            {
             name: "OpenOnStart",
             type: "checkbox",
-        },
-        {
-            name: "DefaultNotebook",
-            type: "input",
-        },
-        {
-            name: "IconPosition",
-            type: "select",
-        },
-        {
-            name: "EnableMove",
-            type: "checkbox",
-        },
-        {
-            name: "EnableReserve",
-            type: "checkbox",
-        },
-        {
-            name: "EnableResvDock",
-            type: "checkbox",
-        },
-        {
-            name: "ExpandGutterMenu",
-            type: "checkbox",
-        },
-        {
-            name: "PopupReserveDialog",
-            type: "checkbox",
-        },
-        {
-            name: "ResvEmbedAt",
-            type: "select",
-        },
-        {
-            name: "RetvType",
-            type: "select",
-        },
-    ];
-    let settingItems: ISettingItem[] = [];
-    for (let item of items) {
-        //@ts-ignore
-        settingItems.push({
-            type: item.type,
-            content: contents[item.name],
-            key: item.name,
-            value: settings.get(<SettingKey>item.name),
+            },
+            {
+                name: "EnableMove",
+                type: "checkbox",
+            },
+            {
+                name: "EnableReserve",
+                type: "checkbox",
+            },
+            {
+                name: "EnableResvDock",
+                type: "checkbox",
+            },
+            {
+                name: "DefaultNotebook",
+                type: "input",
+            },
+        ],
+        func: [
+            {
+                name: "IconPosition",
+                type: "select",
+            },
+            {
+                name: "ExpandGutterMenu",
+                type: "checkbox",
+            },
+            {
+                name: "PopupReserveDialog",
+                type: "checkbox",
+            },
+            {
+                name: "ResvEmbedAt",
+                type: "select",
+            },
+            {
+                name: "RetvType",
+                type: "select",
+            },
+        ]
+    };
+
+    let allSettingPanels: {
+        name: string;
+        items: ISettingItem[];
+    }[] = [];
+
+    for (let key in groups) {
+        let items: ISettingItem[] = [];
+        for (let item of groups[key]) {
+            items.push({
+                type: item.type,
+                key: item.name,
+                value: settings.get(item.name),
+                content: contents[item.name],
+            });
+        }
+        allSettingPanels.push({
+            name: key,
+            items: items,
         });
     }
 
@@ -69,4 +85,6 @@
     });
 </script>
 
-<SettingPanel dataname="global" {settingItems} />
+<!-- <SettingPanel dataname="global" {settingItems} />
+ -->
+<SettingPanels panels={allSettingPanels} />
