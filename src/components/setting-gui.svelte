@@ -8,7 +8,7 @@
     let contents = i18n.Setting;
 
     let groups = {
-        base: [
+        enable: [
             {
             name: "OpenOnStart",
             type: "checkbox",
@@ -24,13 +24,9 @@
             {
                 name: "EnableResvDock",
                 type: "checkbox",
-            },
-            {
-                name: "DefaultNotebook",
-                type: "input",
-            },
+            }
         ],
-        func: [
+        interact: [
             {
                 name: "IconPosition",
                 type: "select",
@@ -39,6 +35,14 @@
                 name: "ExpandGutterMenu",
                 type: "checkbox",
             },
+        ],
+        dailynote: [
+            {
+                name: "DefaultNotebook",
+                type: "input",
+            },
+        ],
+        reservation: [
             {
                 name: "PopupReserveDialog",
                 type: "checkbox",

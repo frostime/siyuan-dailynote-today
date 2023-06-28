@@ -1,5 +1,6 @@
 <script lang="ts">
     import SettingPanel from "./setting-panel.svelte";
+    import { i18n } from "@/utils";
 
     export let panels: {
         name: string;
@@ -19,7 +20,7 @@
                 class="b3-list-item"
                 on:click={() => {focusName = name}} on:keydown={() => {}}
             >
-                <span class="b3-list-item__text">{name}</span>
+                <span class="b3-list-item__text">{i18n.SettingGroups[name]}</span>
             </li>
         {/each}
     </ul>

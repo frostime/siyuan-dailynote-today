@@ -71,6 +71,12 @@
             }
         }
     },
+    "SettingGroups": {
+        "enable": "Enable",
+        "interact": "Interact",
+        "dailynote": "Daily Note",
+        "reservation": "Reservation"
+    },
     "Open": "Open daily note",
     "Create": "Create daily note",
     "UpdateAll": "Notebook status updated",
