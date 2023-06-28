@@ -20,8 +20,8 @@ const imgbedPrefix = 'https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/
  * 更换图片链接
  */
 function transformMdFile(content: string, filename: string, prefix: string=imgbedPrefix): string {
-    //如果不是md文件，或者是watch模式，不做处理
-    if (isWatch || !filename.endsWith(".md")) {
+    //如果不是md文件，不做处理
+    if (!filename.endsWith(".md")) {
         return content;
     }
 
@@ -116,9 +116,10 @@ export default defineConfig({
                             //监听静态资源文件
                             name: 'watch-external',
                             async buildStart() {
+                                console.log('watch-external buildStart');
                                 const files = await fg([
                                     'src/i18n/*.json',
-                                    './README*.md',
+                                    './README.md',
                                     './plugin.json'
                                 ]);
                                 for (let file of files) {
