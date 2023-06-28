@@ -80,3 +80,17 @@ type doOperation = {
     previousID: BlockId;
     retData: null;
 }
+
+type SettingKey = (
+    'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
+    'PluginVersion' | "EnableMove" | 'EnableReserve' | 
+    "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
+    'RetvType' | 'EnableResvDock'
+);
+
+interface ISettingItem {
+    type: string;
+    key: string;
+    value: any;
+    content: any;
+}

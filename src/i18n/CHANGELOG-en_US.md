@@ -1,11 +1,3 @@
-### Daily Note Today v1.1.5 Update
+### 今日笔记 v1.2.0
 
-Details can be found in [Milestone V1.1.5](https://github.com/frostime/siyuan-dailynote-today/milestone/16)
-
-This update has improved the reservation window:
-
-1. Fixed a bug where the reservation panel was not displayed properly when there were no reservations.
-2. Use the openTab API to open blocks, which is smoother.
-3. New feature: Click the counter number next to the reservation panel date to view all reservation blocks in the floating window.
-
-    ![](asset/ShowDateResv.png)
+- 设置界面样式改版。随着插件功能逐渐复杂，设置页面也逐渐变得凌乱，本次更新改版了设置页面，使其看上去更加井然有序。

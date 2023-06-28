@@ -71,6 +71,13 @@
             }
         }
     },
+    "SettingGroups": {
+        "enable": "启用",
+        "interact": "交互",
+        "dailynote": "日记",
+        "reservation": "预约"
+
+    },
     "Open": "打开日记",
     "Create": "创建日记",
     "UpdateAll": "笔记本状态已更新",

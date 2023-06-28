@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { openTab, Plugin, getFrontend, showMessage } from 'siyuan';
-import Setting from './components/setting.svelte'
+import { Plugin, getFrontend, showMessage, Dialog } from 'siyuan';
+import Setting from './components/setting-gui.svelte'
 import ShowReserve  from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
@@ -35,8 +35,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     toolbarItem: ToolbarMenuItem;
 
-    component_setting: Setting;
-    tab_setting: any;
+    // component_setting: Setting;
+    // setting_ui: any;
 
     // menu: ContextMenu;
     gutterMenu: GutterMenu;
@@ -87,19 +87,19 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private initPluginUI() {
         this.toolbarItem = new ToolbarMenuItem(this);
 
-        this.tab_setting = this.addTab({
-            type: "custom_tab",
-            init() {
-                let div: HTMLDivElement = document.createElement('div');
-                this.setting = new Setting({
-                    target: div
-                });
-                this.element.appendChild(div);
-            },
-            destroy() {
-                this.setting.$destroy();
-            }
-        });
+        // this.setting_ui = this.addTab({
+        //     type: "custom_tab",
+        //     init() {
+        //         let div: HTMLDivElement = document.createElement('div');
+        //         this.setting = new Setting({
+        //             target: div
+        //         });
+        //         this.element.appendChild(div);
+        //     },
+        //     destroy() {
+        //         this.setting.$destroy();
+        //     }
+        // });
 
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
@@ -180,16 +180,31 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     openSetting(): void {
-        openTab({
-            app: this.app,
-            custom: {
-                icon: "iconSettings",
-                title: "今日笔记 Setting",
-                data: {
-                    text: "This is my custom tab",
-                },
-                fn: this.tab_setting
+        // openTab({
+        //     app: this.app,
+        //     custom: {
+        //         icon: "iconSettings",
+        //         title: "今日笔记 Setting",
+        //         data: {
+        //             text: "This is my custom tab",
+        //         },
+        //         fn: this.setting_ui
+        //     }
+        // });
+        let dialog = new Dialog({
+            //@ts-ignore
+            title: `${this.i18n.Name}: ${this.i18n.Setting.name}`,
+            content: `<div id="SettingPanel" style="height: 100%"></div>`,
+            width: '50%',
+            height: '27rem',
+            destroyCallback: (options) => {
+                console.log("destroyCallback", options);
+                //You'd better destroy the component when the dialog is closed
+                pannel.$destroy();
             }
+        });
+        let pannel = new Setting({
+            target: dialog.element.querySelector("#SettingPanel"),
         });
     }
 
