@@ -13,8 +13,8 @@
             "placeholder": "Please copy from notebook's ID"
         },
         "DisableAutoCreateOnMobile": {
-            "title": "移动端不启用自动打开日记功能",
-            "text": "本功能主要为了避免在移动端遇到生成冲突日记的时候不方便处理的问题; 如果将本选项开启，则「自动打开 Daily Note」在移动端将不会生效"
+            "title": "Disable Auto Create Diary On Mobile",
+            "text": "This feature is mainly to avoid the problem of inconvenient handling when generating conflict diaries in mobile; if this option is turned on, \"Open Today's Diary Automatically\" will not work on mobile."
         },
         "update": {
             "title": "Update Status",
