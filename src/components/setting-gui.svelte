@@ -41,6 +41,10 @@
                 name: "DefaultNotebook",
                 type: "input",
             },
+            {
+                name: "DisableAutoCreateOnMobile",
+                type: "checkbox"
+            }
         ],
         reservation: [
             {
