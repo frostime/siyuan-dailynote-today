@@ -13,7 +13,7 @@
             "placeholder": "请复制笔记本 ID"
         },
         "DisableAutoCreateOnMobile": {
-            "title": "移动端不启用自动打开日记功能",
+            "title": "移动端强制关闭「自动打开日记」功能",
             "text": "本功能主要为了避免在移动端遇到生成冲突日记的时候不方便处理的问题; 如果将本选项关闭，则「自动打开 Daily Note」在移动端将不会生效"
         },
         "update": {

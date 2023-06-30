@@ -85,7 +85,7 @@ type SettingKey = (
     'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
     'PluginVersion' | "EnableMove" | 'EnableReserve' | 
     "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
-    'RetvType' | 'EnableResvDock'
+    'RetvType' | 'EnableResvDock' | 'DisableAutoCreateOnMobile'
 );
 
 interface ISettingItem {
