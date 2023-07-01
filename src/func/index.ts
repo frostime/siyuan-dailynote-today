@@ -150,11 +150,20 @@ export async function checkDuplicateDiary(): Promise<boolean> {
             style="margin: 0.5rem;"
         >
             ${content}
-        </div>`;
-    new Dialog({
+        </div>
+        <div class="fn__flex b3-label">
+            <div class="fn__flex-1"></div>
+            <span class="fn__space"></span>
+            <button class="b3-button b3-button--outline fn__flex-center fn__size200" id="merge">自动合并</button>
+        </div>
+        `;
+    let dialog = new Dialog({
         title: i18n.Name,
         content: html,
         width: "50%"
+    });
+    dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
+        showMessage("Merge", 2000, "info");
     });
     return true;
 }

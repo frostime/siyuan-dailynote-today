@@ -62,3 +62,42 @@ export function merge<T>(list: T[] | undefined, item: T): T[] {
     }
     return list;
 }
+
+
+class Debouncer {
+    Timer: { [key: string]: any } = {};
+    DefaultTimer: any = null;
+
+    getTimer(key?: string) { 
+        return key ? this.Timer[key] : this.DefaultTimer;
+    }
+
+    setTimer(timer: any, key?: string) {
+        if (key) {
+            this.Timer[key] = timer;
+        } else {
+            this.DefaultTimer = timer;
+        }
+    }
+
+    clearTimer(key?: string) {
+        if (key) {
+            clearTimeout(this.Timer[key]);
+            delete this.Timer[key];
+        } else {
+            clearTimeout(this.DefaultTimer);
+            this.DefaultTimer = null;
+        }
+    }
+
+    debounce<T extends Function>(cb: T, wait = 20, key?: string) {
+        let callable = (...args: any) => {
+            this.clearTimer(key);
+            let timer = setTimeout(() => cb(...args), wait);
+            this.setTimer(timer, key);
+        };
+        return <T>(<any>callable);
+    }
+}
+
+export const debouncer = new Debouncer();
