@@ -126,7 +126,7 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         return false;
     }
 
-    console.warn(`检测到重复的日记: ${notebook.name} ${hpath}`);
+    console.warn(`Conflict daily note: ${notebook.name} ${hpath}`);
 
     let confilctTable = [];
     for (let doc of docks) {
@@ -171,6 +171,7 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         let latestDoc = docks.pop();
         let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
         let lastChildBlockID = childs[childs.length - 1].id;
+        //将其他的日记合并到最新的日记中
         for (let doc of docks) {
             let id = doc.id;
             await serverApi.doc2Heading(id, lastChildBlockID, true);

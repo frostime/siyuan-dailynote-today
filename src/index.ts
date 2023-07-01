@@ -90,20 +90,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private initPluginUI() {
         this.toolbarItem = new ToolbarMenuItem(this);
 
-        // this.setting_ui = this.addTab({
-        //     type: "custom_tab",
-        //     init() {
-        //         let div: HTMLDivElement = document.createElement('div');
-        //         this.setting = new Setting({
-        //             target: div
-        //         });
-        //         this.element.appendChild(div);
-        //     },
-        //     destroy() {
-        //         this.setting.$destroy();
-        //     }
-        // });
-
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
     }
