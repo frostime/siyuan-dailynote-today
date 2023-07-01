@@ -154,7 +154,7 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         <div class="fn__flex b3-label">
             <div class="fn__flex-1"></div>
             <span class="fn__space"></span>
-            <button class="b3-button b3-button--outline fn__flex-center fn__size200" id="merge">自动合并</button>
+            <button class="b3-button b3-button--outline fn__flex-center fn__size200" id="merge">${i18n.ConflictDiary.AutoMerge}</button>
         </div>
         `;
     let dialog = new Dialog({

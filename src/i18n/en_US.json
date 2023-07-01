@@ -130,7 +130,8 @@
             "- Why does this happen?",
             "    You may have created a diary on another device before and then created a diary on this device, resulting in a synchronization conflict.",
             "    Please merge and delete redundant diaries manually: Open today's diary, locate the diary document, and the conflicting document will be nearby."
-        ]
+        ],
+        "AutoMerge": "自动合并"
     },
     "DockReserve": {
         "arial": "Daily Note Today Reservations",
