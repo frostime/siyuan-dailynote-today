@@ -128,7 +128,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             this.addDock({
                 config: {
                     position: "RightBottom",
-                    size: {width: 250, height: 0},
+                    size: { width: 250, height: 0 },
                     icon: "iconHistory",
                     //@ts-ignore
                     title: this.i18n.DockReserve.arial,
@@ -164,12 +164,13 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private async checkDuplicateDiary() {
         let hasDuplicate = await checkDuplicateDiary();
         if (hasDuplicate) {
-            this.isSyncChecked = true;
+            //TODO: 记得改回来
+            // this.isSyncChecked = true;
         }
         this.hasCheckSyncFor++;
         //多次检查后，如果还是没有同步，则认为没有必要再检查了
         if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
-            this.isSyncChecked = true;
+            // this.isSyncChecked = true;
             info('关闭自动检查同步文件');
         }
     }

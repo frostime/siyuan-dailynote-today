@@ -163,7 +163,18 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         width: "50%"
     });
     dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
-        showMessage("Merge", 2000, "info");
+        showMessage("Merge", 1000, "info");
+        docks = docks.sort((a, b) => {
+            return a.created <= b.created ? -1 : 1;
+        });
+        //选择最新的日记
+        let latestDoc = docks.pop();
+        let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
+        let lastChildBlockID = childs[childs.length - 1].id;
+        for (let doc of docks) {
+            let id = doc.id;
+            await serverApi.doc2Heading(id, lastChildBlockID, true);
+        }
     });
     return true;
 }

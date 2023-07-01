@@ -54,13 +54,24 @@ export async function moveDocs(fromPaths: string[], toNotebook: NotebookId, toPa
     return request(url, data);
 }
 
+//api/filetree/doc2Heading
+export async function doc2Heading(srcID: BlockId, targetID: BlockId, after: boolean) {
+    let data = {
+        srcID: srcID,
+        targetID: targetID,
+        after: after
+    };
+    let url = '/api/filetree/doc2Heading';
+    return request(url, data);
+}
+
 export async function getBlockByID(blockId: BlockId) {
     let sqlScript = `select * from blocks where id ='${blockId}'`;
     let data = await sql(sqlScript);
     return data[0];
 }
 
-export async function getChildBlocks(blockId: BlockId) {
+export async function getChildBlocks(blockId: BlockId): Promise<Block[]> {
     let data = { id: blockId };
     let url = '/api/block/getChildBlocks';
     return request(url, data);
