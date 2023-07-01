@@ -28,6 +28,8 @@
 - If you don't need it, you can turn off this feature in the settings panel
 - The custom paths and templates set in the notebook settings page are still valid
 
+> If you have enabled multi-device synchronization, duplicate daily notes may occur. For more details, please refer to [FAQ](#q-why-are-there-duplicateconflict-daily-notes)
+
 #### 1.1 I have multiple notebooks, which notebook will be used to create notes by default?
 
 
@@ -208,6 +210,15 @@ Please note that the Alt + Right-click menu has some unstable bugs, such as the 
 
 Please toggle off "Open Today's Diary Automatically" in the plugin settings.
 
+### Q: Why are there duplicate/conflict daily notes?
+
+The conditions for this issue to occur are:
+
+1. The automatic creation of daily notes is enabled.
+2. Multiple devices are being used for synchronization.
+
+The reason for this problem is that in the architecture of SiYuan, **the plugin's initialization runs before the data synchronization during startup**. If you previously created a daily note on Device A and then open Device B, the plugin will automatically create another daily note for you. Only after that, Obsidian will synchronize the data, resulting in duplicate daily notes, one from the previous creation on Device A and another from the current creation on Device B.
+
 ### Q: Is the dropdown box used for selecting the default notebook?
 
 > - **Note: Don't misunderstand**, this drop-down box is not for selecting the default notebook, but for opening the diary quickly!
@@ -222,7 +233,7 @@ Life, work, and Hobby have a "√" in front of them, which means that they have 
 
 At this point, if I click on "Academic Learn", then a new diary will be created under this notebook, and then you can open the drop-down box again and you will see that a √ symbol also appears in front of this notebook.
 
-### Q: How to view all reservation blocks?
+### Q: How to query all reservation blocks by SQL?
 
 If the plugin version is 1.1.1 or higher, all inserted blocks will have the `custom-reservation` attribute set, so you can use SQL to query them. Here is the template:
 

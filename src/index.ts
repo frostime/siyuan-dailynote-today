@@ -150,13 +150,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private async checkDuplicateDiary() {
         let hasDuplicate = await checkDuplicateDiary();
         if (hasDuplicate) {
-            //TODO: 记得改回来
-            // this.isSyncChecked = true;
+            this.isSyncChecked = true;
         }
         this.hasCheckSyncFor++;
         //多次检查后，如果还是没有同步，则认为没有必要再检查了
         if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
-            // this.isSyncChecked = true;
+            this.isSyncChecked = true;
             info('关闭自动检查同步文件');
         }
     }
@@ -173,20 +172,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     openSetting(): void {
-        // openTab({
-        //     app: this.app,
-        //     custom: {
-        //         icon: "iconSettings",
-        //         title: "今日笔记 Setting",
-        //         data: {
-        //             text: "This is my custom tab",
-        //         },
-        //         fn: this.setting_ui
-        //     }
-        // });
         let dialog = new Dialog({
             //@ts-ignore
-            title: `${this.i18n.Name}: ${this.i18n.Setting.name}`,
+            title: `${this.i18n.Name}`,
             content: `<div id="SettingPanel" style="height: 100%"></div>`,
             width: '50%',
             height: '27rem',
