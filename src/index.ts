@@ -150,7 +150,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private async checkDuplicateDiary() {
         let hasDuplicate = await checkDuplicateDiary();
         if (hasDuplicate) {
-            //TODO: 记得改回来
             this.isSyncChecked = true;
         }
         this.hasCheckSyncFor++;
