@@ -3,7 +3,7 @@
  */
 import { showMessage, confirm, Dialog, openTab } from 'siyuan';
 import notebooks from '../global-notebooks';
-import { info, warn, error, i18n, lute, app } from "../utils";
+import { info, warn, error, i18n, lute, app, isMobile } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
 import { Retrieve, RetvFactory } from './reserve';
@@ -162,7 +162,7 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     let dialog = new Dialog({
         title: i18n.Name,
         content: html,
-        width: "50%"
+        width: isMobile ? "80%" : "50%",
     });
     dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
         showMessage("Merge", 1000, "info");
