@@ -151,12 +151,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let hasDuplicate = await checkDuplicateDiary();
         if (hasDuplicate) {
             //TODO: 记得改回来
-            // this.isSyncChecked = true;
+            this.isSyncChecked = true;
         }
         this.hasCheckSyncFor++;
         //多次检查后，如果还是没有同步，则认为没有必要再检查了
         if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
-            // this.isSyncChecked = true;
+            this.isSyncChecked = true;
             info('关闭自动检查同步文件');
         }
     }
