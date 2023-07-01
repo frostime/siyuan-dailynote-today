@@ -3,11 +3,11 @@
  */
 import { Plugin, getFrontend, showMessage, Dialog } from 'siyuan';
 import Setting from './components/setting-gui.svelte'
-import ShowReserve  from './components/dock-reserve.svelte';
+import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { checkDuplicateDiary, updateTodayReservation } from './func';
-import { info, setApp, setI18n, setIsMobile, setPlugin } from './utils';
+import { info, setApp, setI18n, setIsMobile, setPlugin, debouncer } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
@@ -75,6 +75,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
         await this.toolbarItem.autoOpenDailyNote();
 
         this.checkDuplicateDiary();
+        this.checkDuplicateDiary_Debounce = debouncer.debounce(
+            this.checkDuplicateDiary.bind(this), 2000, 'CheckDuplicateDiary'
+        );  // 防抖, 避免频繁检查
         OnWsMainEvent = this.onWsMain.bind(this);
         this.eventBus.on("ws-main", OnWsMainEvent);
 
@@ -171,11 +174,14 @@ export default class DailyNoteTodayPlugin extends Plugin {
         }
     }
 
+    private checkDuplicateDiary_Debounce: typeof this.checkDuplicateDiary = null;
+
     private async onWsMain({ detail }) {
         let cmd = detail.cmd;
         if (cmd === 'syncing' && !this.isSyncChecked) {
             info('检查同步文件');
-            this.checkDuplicateDiary();
+            // this.checkDuplicateDiary();
+            this.checkDuplicateDiary_Debounce();
         }
     }
 

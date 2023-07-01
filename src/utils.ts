@@ -81,22 +81,27 @@ class Debouncer {
     }
 
     clearTimer(key?: string) {
-        if (key) {
-            clearTimeout(this.Timer[key]);
-            delete this.Timer[key];
-        } else {
-            clearTimeout(this.DefaultTimer);
-            this.DefaultTimer = null;
+        let timer = this.getTimer(key);
+        if (timer) {
+            clearTimeout(timer);
+            this.setTimer(null, key);
         }
     }
 
+    /**
+     * 返回一个经过防抖处理的函数
+     * @param cb 待调用的函数
+     * @param wait ms
+     * @param key string
+     * @returns Function
+     */
     debounce<T extends Function>(cb: T, wait = 20, key?: string) {
         let callable = (...args: any) => {
             this.clearTimer(key);
             let timer = setTimeout(() => cb(...args), wait);
             this.setTimer(timer, key);
         };
-        return <T>(<any>callable);
+        return <T><any>callable;
     }
 }
 
