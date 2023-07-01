@@ -3,11 +3,11 @@
  */
 import { Plugin, getFrontend, showMessage, Dialog } from 'siyuan';
 import Setting from './components/setting-gui.svelte'
-import ShowReserve  from './components/dock-reserve.svelte';
+import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { checkDuplicateDiary, updateTodayReservation } from './func';
-import { info, setApp, setI18n, setIsMobile, setPlugin } from './utils';
+import { info, setApp, setI18n, setIsMobile, setPlugin, debouncer } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
@@ -75,6 +75,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
         await this.toolbarItem.autoOpenDailyNote();
 
         this.checkDuplicateDiary();
+        this.checkDuplicateDiary_Debounce = debouncer.debounce(
+            this.checkDuplicateDiary.bind(this), 2000, 'CheckDuplicateDiary'
+        );  // 防抖, 避免频繁检查
         OnWsMainEvent = this.onWsMain.bind(this);
         this.eventBus.on("ws-main", OnWsMainEvent);
 
@@ -86,20 +89,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     private initPluginUI() {
         this.toolbarItem = new ToolbarMenuItem(this);
-
-        // this.setting_ui = this.addTab({
-        //     type: "custom_tab",
-        //     init() {
-        //         let div: HTMLDivElement = document.createElement('div');
-        //         this.setting = new Setting({
-        //             target: div
-        //         });
-        //         this.element.appendChild(div);
-        //     },
-        //     destroy() {
-        //         this.setting.$destroy();
-        //     }
-        // });
 
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
@@ -125,7 +114,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             this.addDock({
                 config: {
                     position: "RightBottom",
-                    size: {width: 250, height: 0},
+                    size: { width: 250, height: 0 },
                     icon: "iconHistory",
                     //@ts-ignore
                     title: this.i18n.DockReserve.arial,
@@ -161,21 +150,25 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private async checkDuplicateDiary() {
         let hasDuplicate = await checkDuplicateDiary();
         if (hasDuplicate) {
-            this.isSyncChecked = true;
+            //TODO: 记得改回来
+            // this.isSyncChecked = true;
         }
         this.hasCheckSyncFor++;
         //多次检查后，如果还是没有同步，则认为没有必要再检查了
         if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
-            this.isSyncChecked = true;
+            // this.isSyncChecked = true;
             info('关闭自动检查同步文件');
         }
     }
+
+    private checkDuplicateDiary_Debounce: typeof this.checkDuplicateDiary = null;
 
     private async onWsMain({ detail }) {
         let cmd = detail.cmd;
         if (cmd === 'syncing' && !this.isSyncChecked) {
             info('检查同步文件');
-            this.checkDuplicateDiary();
+            // this.checkDuplicateDiary();
+            this.checkDuplicateDiary_Debounce();
         }
     }
 

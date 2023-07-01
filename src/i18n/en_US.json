@@ -12,6 +12,10 @@
             "text": "The notebook where the daily note is created by default, use the first notebook if blank",
             "placeholder": "Please copy from notebook's ID"
         },
+        "DisableAutoCreateOnMobile": {
+            "title": "Disable Auto Create Diary On Mobile",
+            "text": "This feature is mainly to avoid the problem of inconvenient handling when generating conflict diaries in mobile; if this option is turned on, \"Open Today's Diary Automatically\" will not work on mobile."
+        },
         "update": {
             "title": "Update Status",
             "text": "Update the status of the notebook when the notebook configuration changes",
@@ -126,7 +130,8 @@
             "- Why does this happen?",
             "    You may have created a diary on another device before and then created a diary on this device, resulting in a synchronization conflict.",
             "    Please merge and delete redundant diaries manually: Open today's diary, locate the diary document, and the conflicting document will be nearby."
-        ]
+        ],
+        "AutoMerge": "自动合并"
     },
     "DockReserve": {
         "arial": "Daily Note Today Reservations",

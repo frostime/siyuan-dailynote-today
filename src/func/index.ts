@@ -126,7 +126,7 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         return false;
     }
 
-    console.warn(`检测到重复的日记: ${notebook.name} ${hpath}`);
+    console.warn(`Conflict daily note: ${notebook.name} ${hpath}`);
 
     let confilctTable = [];
     for (let doc of docks) {
@@ -150,11 +150,35 @@ export async function checkDuplicateDiary(): Promise<boolean> {
             style="margin: 0.5rem;"
         >
             ${content}
-        </div>`;
-    new Dialog({
+        </div>
+        <div class="fn__flex b3-label" style="border-top: 1px solid var(--b3-theme-surface-lighter);">
+            <div class="fn__flex-1"></div>
+            <span class="fn__space"></span>
+            <button class="b3-button b3-button--outline fn__flex-center fn__size200" id="merge">
+                ${i18n.ConflictDiary.AutoMerge}
+            </button>
+        </div>
+        `;
+    let dialog = new Dialog({
         title: i18n.Name,
         content: html,
         width: "50%"
+    });
+    dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
+        showMessage("Merge", 1000, "info");
+        docks = docks.sort((a, b) => {
+            return a.created <= b.created ? -1 : 1;
+        });
+        //选择最新的日记
+        let latestDoc = docks.pop();
+        let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
+        let lastChildBlockID = childs[childs.length - 1].id;
+        //将其他的日记合并到最新的日记中
+        for (let doc of docks) {
+            let id = doc.id;
+            await serverApi.doc2Heading(id, lastChildBlockID, true);
+        }
+        dialog.destroy();
     });
     return true;
 }

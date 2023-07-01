@@ -62,3 +62,47 @@ export function merge<T>(list: T[] | undefined, item: T): T[] {
     }
     return list;
 }
+
+
+class Debouncer {
+    Timer: { [key: string]: any } = {};
+    DefaultTimer: any = null;
+
+    getTimer(key?: string) { 
+        return key ? this.Timer[key] : this.DefaultTimer;
+    }
+
+    setTimer(timer: any, key?: string) {
+        if (key) {
+            this.Timer[key] = timer;
+        } else {
+            this.DefaultTimer = timer;
+        }
+    }
+
+    clearTimer(key?: string) {
+        let timer = this.getTimer(key);
+        if (timer) {
+            clearTimeout(timer);
+            this.setTimer(null, key);
+        }
+    }
+
+    /**
+     * 返回一个经过防抖处理的函数
+     * @param cb 待调用的函数
+     * @param wait ms
+     * @param key string
+     * @returns Function
+     */
+    debounce<T extends Function>(cb: T, wait = 20, key?: string) {
+        let callable = (...args: any) => {
+            this.clearTimer(key);
+            let timer = setTimeout(() => cb(...args), wait);
+            this.setTimer(timer, key);
+        };
+        return <T><any>callable;
+    }
+}
+
+export const debouncer = new Debouncer();

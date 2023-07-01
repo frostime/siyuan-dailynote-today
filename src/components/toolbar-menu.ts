@@ -128,6 +128,10 @@ export class ToolbarMenuItem {
      */
     async autoOpenDailyNote() {
         info('自动开启日记');
+        if (isMobile && settings.get('DisableAutoCreateOnMobile') === true) {
+            // showMessage('移动端不开放');
+            return;
+        }
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
