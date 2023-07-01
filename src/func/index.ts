@@ -176,6 +176,7 @@ export async function checkDuplicateDiary(): Promise<boolean> {
             let id = doc.id;
             await serverApi.doc2Heading(id, lastChildBlockID, true);
         }
+        dialog.destroy();
     });
     return true;
 }
