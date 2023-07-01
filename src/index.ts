@@ -172,20 +172,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     openSetting(): void {
-        // openTab({
-        //     app: this.app,
-        //     custom: {
-        //         icon: "iconSettings",
-        //         title: "今日笔记 Setting",
-        //         data: {
-        //             text: "This is my custom tab",
-        //         },
-        //         fn: this.setting_ui
-        //     }
-        // });
         let dialog = new Dialog({
             //@ts-ignore
-            title: `${this.i18n.Name}: ${this.i18n.Setting.name}`,
+            title: `${this.i18n.Name}`,
             content: `<div id="SettingPanel" style="height: 100%"></div>`,
             width: '50%',
             height: '27rem',
