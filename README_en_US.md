@@ -233,7 +233,7 @@ Life, work, and Hobby have a "√" in front of them, which means that they have 
 
 At this point, if I click on "Academic Learn", then a new diary will be created under this notebook, and then you can open the drop-down box again and you will see that a √ symbol also appears in front of this notebook.
 
-### Q: How to view all reservation blocks?
+### Q: How to query all reservation blocks by SQL?
 
 If the plugin version is 1.1.1 or higher, all inserted blocks will have the `custom-reservation` attribute set, so you can use SQL to query them. Here is the template:
 

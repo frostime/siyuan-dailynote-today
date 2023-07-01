@@ -242,7 +242,7 @@
 
 此时，如果我再点击「Academic Learn」，那么就会在这个笔记本下新创建一个日记，然后你再打开下拉框，就会发现这个笔记本前面也出现了一个「√」符号。
 
-### Q: 如何查看所有的预约？
+### Q: 如何用 SQL 查询所有的预约？
 
 如果插件版本在 1.1.1 以上，那么所有插入块都会设置 `custom-reservation` 属性，所以可以使用 SQL 来查询，这里给出模板。
 
@@ -298,12 +298,3 @@ on(
 
 [CHANGELOG](CHANGELOG.md)
 
-## 计划中...
-
-- [x] 日记预约提醒功能 [#44](https://github.com/frostime/siyuan-dailynote-today/issues/44)
-- [ ] 日记预约功能支持更多的日期匹配模板
-    - 相对时间: 明天, 后天, 五天后
-    - 周时间: 周二, 下周日
-    - 英文时间
-- [ ] 移动块后在原地留下块的引用或者链接 [#25](https://github.com/frostime/siyuan-dailynote-today/issues/25)
-- [ ] 移动文档快 [#11](https://github.com/frostime/siyuan-dailynote-today/issues/11)
