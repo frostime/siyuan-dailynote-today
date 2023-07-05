@@ -84,7 +84,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);
 
-        changelog(this, 'i18n/CHANGELOG-${lang}.md');
+        let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
+        if (ans?.Dialog) {
+            let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
+            ele.style.height = '15rem';
+            ele.style.width = '30rem';
+        }
     }
 
     private initPluginUI() {

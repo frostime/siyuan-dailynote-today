@@ -1,3 +1,11 @@
+<!--
+ Copyright (c) 2023 by frostime (Yp Z), All Rights Reserved.
+ Author       : Yp Z
+ Date         : 2023-07-01 19:23:50
+ FilePath     : /src/components/settings/setting-panels.svelte
+ LastEditTime : 2023-07-05 20:46:20
+ Description  : 
+-->
 <script lang="ts">
     import SettingPanel from "./setting-panel.svelte";
     import { i18n } from "@/utils";
@@ -24,13 +32,15 @@
             </li>
         {/each}
     </ul>
-    {#each panels as panel}
-        <SettingPanel
-            dataname={panel.name}
-            settingItems={panel.items}
-            display={panel.name === focusName}
-        />
-    {/each}
+    <div class="config__tab-wrap">
+        {#each panels as panel}
+            <SettingPanel
+                dataname={panel.name}
+                settingItems={panel.items}
+                display={panel.name === focusName}
+            />
+        {/each}
+    </div>
 </div>
 
 <style>
