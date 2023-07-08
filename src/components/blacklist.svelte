@@ -3,13 +3,16 @@
  Author       : Yp Z
  Date         : 2023-07-08 17:18:57
  FilePath     : /src/components/blacklist.svelte
- LastEditTime : 2023-07-08 18:10:51
+ LastEditTime : 2023-07-08 18:24:25
  Description  : 
 -->
 <script lang="ts">
     import { lsNotebooks } from '@/serverApi';
 
     const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
+
+    let checkboxTop: HTMLInputElement;
+    let checkedStatus: { [key: NotebookId]: boolean } = {};
 
     function parseEmoji(code: string) {
         try {
@@ -26,7 +29,41 @@
         all_notebooks = all_notebooks.filter(
             notebook => !hiddenNotebook.has(notebook.name)
         );
+        checkedStatus = {};
+        all_notebooks.forEach(notebook => {
+            checkedStatus[notebook.id] = false;
+        });
         return all_notebooks;
+    }
+
+    function toggleNotebook() {
+        let hasChecked: number = Object.values(checkedStatus).filter(
+            checked => checked
+        ).length;
+        const cnt = Object.keys(checkedStatus).length;
+        if (hasChecked === cnt) {
+            checkboxTop.checked = true;
+            checkboxTop.indeterminate = false;
+        } else if (hasChecked === 0) {
+            checkboxTop.checked = false;
+            checkboxTop.indeterminate = false;
+        } else {
+            checkboxTop.checked = false;
+            checkboxTop.indeterminate = true;
+        }
+    }
+
+    function toggleTop() {
+        let topChecked = checkboxTop.checked;
+        if (topChecked) {
+            Object.keys(checkedStatus).forEach(key => {
+                checkedStatus[key] = true;
+            });
+        } else {
+            Object.keys(checkedStatus).forEach(key => {
+                checkedStatus[key] = false;
+            });
+        }
     }
 
 </script>
@@ -44,17 +81,13 @@
                 <svg class="b3-list-item__graphic"><use xlink:href="#iconEdit"></use></svg>
                 <span class="b3-list-item__text">Toggle</span>
 
-                <input
-                    type="checkbox"
-                    class="b3-switch fn__flex-center"
-                    checked={false}
-                />
+                <input type="checkbox" bind:this={checkboxTop} on:change={toggleTop}/>
             </li>
 
             {#await query()}
                 Wait...
             {:then notebooks} 
-                {#each notebooks as notebook}
+                {#each notebooks as notebook, i}
                     <li
                         class="b3-list-item b3-list-item--hide-action"
                     >
@@ -64,7 +97,9 @@
                         <input
                             type="checkbox"
                             class="b3-switch fn__flex-center"
-                            checked={false}
+                            value={notebook.id}
+                            bind:checked={checkedStatus[notebook.id]}
+                            on:change={toggleNotebook}
                         />
                     </li>
                 {/each}
