@@ -42,6 +42,10 @@
                 type: "input",
             },
             {
+                name: "NotebookBlacklist",
+                type: "button"
+            },
+            {
                 name: "DisableAutoCreateOnMobile",
                 type: "checkbox"
             }
@@ -91,8 +95,13 @@
         console.log("Setting Svelte Destroyed");
         settings.save();
     });
+
+    function onClick({ detail }) {
+        console.log(detail);
+    }
+
 </script>
 
 <!-- <SettingPanel dataname="global" {settingItems} />
  -->
-<SettingPanels panels={allSettingPanels} />
+<SettingPanels panels={allSettingPanels} on:click={onClick}/>
