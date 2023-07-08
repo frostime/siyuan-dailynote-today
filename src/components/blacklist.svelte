@@ -3,9 +3,34 @@
  Author       : Yp Z
  Date         : 2023-07-08 17:18:57
  FilePath     : /src/components/blacklist.svelte
- LastEditTime : 2023-07-08 17:46:42
+ LastEditTime : 2023-07-08 18:10:51
  Description  : 
 -->
+<script lang="ts">
+    import { lsNotebooks } from '@/serverApi';
+
+    const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
+
+    function parseEmoji(code: string) {
+        try {
+            return String.fromCodePoint(parseInt(code, 16));
+        } catch (error) {
+            return '📔';
+        }
+    }
+
+    async function query() {
+        let result = await lsNotebooks();
+        let all_notebooks: Array<Notebook> = result.notebooks;
+
+        all_notebooks = all_notebooks.filter(
+            notebook => !hiddenNotebook.has(notebook.name)
+        );
+        return all_notebooks;
+    }
+
+</script>
+
 <div class="fn__flex-column">
     <div
         class="fn__flex-1"
@@ -25,18 +50,26 @@
                     checked={false}
                 />
             </li>
-            <li
-                class="b3-list-item b3-list-item--hide-action"
-            >
-                <span class="b3-list-item__icon">📔</span>
-                <span class="b3-list-item__text">思源笔记用户指南</span>
 
-                <input
-                    type="checkbox"
-                    class="b3-switch fn__flex-center"
-                    checked={false}
-                />
-            </li>
+            {#await query()}
+                Wait...
+            {:then notebooks} 
+                {#each notebooks as notebook}
+                    <li
+                        class="b3-list-item b3-list-item--hide-action"
+                    >
+                        <span class="b3-list-item__icon">{parseEmoji(notebook.icon)}</span>
+                        <span class="b3-list-item__text">{notebook.name}</span>
+
+                        <input
+                            type="checkbox"
+                            class="b3-switch fn__flex-center"
+                            checked={false}
+                        />
+                    </li>
+                {/each}
+            {/await}
+
         </ul>
     </div>
     <div class="fn__flex b3-label">
