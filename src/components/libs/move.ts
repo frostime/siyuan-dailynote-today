@@ -4,6 +4,7 @@ import { info, error, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDocsByHpath, createDiary } from "@/func";
 import { showMessage } from "siyuan";
+import { settings } from "@/global-status";
 
 export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Notebook) {
     let block = await serverApi.getBlockByID(srcBlockId);
@@ -97,7 +98,14 @@ function parseEmoji(code: string) {
 
 export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'block') {
     let menuItems: any[] = [];
+    let blacklist = settings.get('NotebookBlacklist');
     for (let notebook of notebooks) {
+        let forbidden = blacklist?.[notebook.id];
+        forbidden = forbidden === undefined ? false : forbidden;
+        if (forbidden === true) {
+            continue;
+        }
+
         let item = {
             label: notebook.name,
             iconHTML: parseEmoji(notebook.icon),

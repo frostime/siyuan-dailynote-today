@@ -1,9 +1,11 @@
 <script lang="ts">
+    import { Dialog } from "siyuan";
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
     import { i18n } from "../utils";
 
     import SettingPanels from "./settings/setting-panels.svelte";
+    import Blacklist from "./blacklist.svelte";
 
     let contents = i18n.Setting;
 
@@ -40,6 +42,10 @@
             {
                 name: "DefaultNotebook",
                 type: "input",
+            },
+            {
+                name: "NotebookBlacklist",
+                type: "button"
             },
             {
                 name: "DisableAutoCreateOnMobile",
@@ -91,8 +97,27 @@
         console.log("Setting Svelte Destroyed");
         settings.save();
     });
+
+    function onClick({ detail }) {
+        console.log(detail);
+        let dialog = new Dialog({
+            title: i18n.Blacklist.name,
+            content: `<div id="blacklist" style="height: 100%;"></div>`,
+            height: "25rem",
+            width: "30rem",
+        });
+        new Blacklist({
+            target: dialog.element.querySelector("#blacklist"),
+            props: {
+                close: () => {
+                    dialog.destroy();
+                },
+            },
+        });
+    }
+
 </script>
 
 <!-- <SettingPanel dataname="global" {settingItems} />
  -->
-<SettingPanels panels={allSettingPanels} />
+<SettingPanels panels={allSettingPanels} on:click={onClick}/>

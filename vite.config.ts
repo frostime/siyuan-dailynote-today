@@ -51,7 +51,7 @@ export default defineConfig({
                     src: "./README.md",
                     dest: "./",
                     rename: "README_zh_CN.md", //替换到根目录方便 bazzar 获取
-                    transform: transformMdFile
+                    // transform: transformMdFile
                 },
                 {
                     src: ["./README.md", "./README_en_US.md"],
@@ -72,7 +72,7 @@ export default defineConfig({
                 {
                     src: "./src/i18n/**",
                     dest: "./i18n/",
-                    transform: transformMdFile
+                    // transform: transformMdFile
                 },
             ],
         }),

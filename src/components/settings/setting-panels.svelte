@@ -3,10 +3,11 @@
  Author       : Yp Z
  Date         : 2023-07-01 19:23:50
  FilePath     : /src/components/settings/setting-panels.svelte
- LastEditTime : 2023-07-05 20:46:20
+ LastEditTime : 2023-07-08 17:11:25
  Description  : 
 -->
 <script lang="ts">
+    import { createEventDispatcher } from "svelte";
     import SettingPanel from "./setting-panel.svelte";
     import { i18n } from "@/utils";
 
@@ -17,6 +18,12 @@
     let names = panels.map((panel) => panel.name);
 
     let focusName = names[0];
+
+    const dispatch = createEventDispatcher();
+
+    function onClick( {detail}) {
+        dispatch("click", detail);
+    }
 
 </script>
 
@@ -38,6 +45,7 @@
                 dataname={panel.name}
                 settingItems={panel.items}
                 display={panel.name === focusName}
+                on:click={onClick}
             />
         {/each}
     </div>

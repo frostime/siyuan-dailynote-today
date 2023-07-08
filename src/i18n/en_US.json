@@ -16,6 +16,11 @@
             "title": "Disable Auto Create Diary On Mobile",
             "text": "This feature is mainly to avoid the problem of inconvenient handling when generating conflict diaries in mobile; if this option is turned on, \"Open Today's Diary Automatically\" will not work on mobile."
         },
+        "NotebookBlacklist": {
+            "title": "Notebook Blacklist",
+            "text": "Notebook in the blacklist will not be shown in the dropdown menu. Default notebook can not be in the blacklist",
+            "button": "Set it"
+        },
         "update": {
             "title": "Update Status",
             "text": "Update the status of the notebook when the notebook configuration changes",
@@ -142,5 +147,10 @@
         "min": "minimize",
         "emptyContent": "No related content found",
         "PopupResv": "Inspect reservations"
+    },
+    "Blacklist": {
+        "name": "Blacklist",
+        "toggle": "Add to blacklist",
+        "update": "Update blacklist"
     }
 }

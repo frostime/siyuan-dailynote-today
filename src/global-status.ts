@@ -6,6 +6,7 @@ import { info, error } from './utils';
 import { eventBus } from './event-bus';
 import { filterExistsBlocks } from './func';
 import { retrieveResvFromBlocks } from '@/func/reserve';
+import notebooks from './global-notebooks';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -31,7 +32,8 @@ class SettingManager {
         ExpandGutterMenu: true as boolean, //是否将菜单项目展开
         PopupReserveDialog: true as boolean, //是否弹出预约对话框
         ResvEmbedAt: 'top' as RetvPosition, //Retrieved 块嵌入位置
-        RetvType: 'embed' as RetvType //Retrieved 块的类型
+        RetvType: 'embed' as RetvType, //Retrieved 块的类型
+        NotebookBlacklist: {}, //笔记本黑名单
     };
 
     constructor() {
@@ -57,6 +59,11 @@ class SettingManager {
         }
 
         this.settings[key] = value;
+
+        if (key === 'DefaultNotebook') {
+            notebooks.updateDefault();
+        }
+
     }
 
     /**
@@ -90,6 +97,13 @@ class SettingManager {
     }
 
     async save() {
+        //检查一下默认笔记本是否在黑名单中，如果在，则移除
+        let defaultNodebook = notebooks.default;
+        let flag = this.settings['NotebookBlacklist']?.[defaultNodebook.id];
+        if (flag === true) {
+            this.settings['NotebookBlacklist'][defaultNodebook.id] = false;
+        }
+
         let json = JSON.stringify(this.settings);
         info(`写入配置文件: ${json}`);
         this.plugin.saveData(SettingFile, json);
