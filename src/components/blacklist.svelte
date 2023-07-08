@@ -3,12 +3,13 @@
  Author       : Yp Z
  Date         : 2023-07-08 17:18:57
  FilePath     : /src/components/blacklist.svelte
- LastEditTime : 2023-07-08 18:39:24
+ LastEditTime : 2023-07-08 18:47:38
  Description  : 
 -->
 <script lang="ts">
     import { lsNotebooks } from '@/serverApi';
     import { settings } from '@/global-status';
+    import notebooks from '@/global-notebooks';
 
     export let close: Function;
 
@@ -30,9 +31,9 @@
         let all_notebooks: Array<Notebook> = result.notebooks;
 
         all_notebooks = all_notebooks.filter(
-            notebook => !hiddenNotebook.has(notebook.name)
+            notebook => !hiddenNotebook.has(notebook.name) && notebook.id !== notebooks.default.id
         );
-        checkedStatus = {};
+
         all_notebooks.forEach(notebook => {
             let status = checkedStatus?.[notebook.id];
             status = status === undefined ? false : status;
