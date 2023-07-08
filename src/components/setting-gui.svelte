@@ -1,9 +1,11 @@
 <script lang="ts">
+    import { Dialog } from "siyuan";
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
     import { i18n } from "../utils";
 
     import SettingPanels from "./settings/setting-panels.svelte";
+    import Blacklist from "./blacklist.svelte";
 
     let contents = i18n.Setting;
 
@@ -98,6 +100,13 @@
 
     function onClick({ detail }) {
         console.log(detail);
+        let dialog = new Dialog({
+            title: "黑名单",
+            content: `<div id="blacklist" style="height: 100%;"></div>`,
+        });
+        new Blacklist({
+            target: dialog.element.querySelector("#blacklist")
+        });
     }
 
 </script>
