@@ -10,6 +10,7 @@
     import { lsNotebooks } from '@/serverApi';
     import { settings } from '@/global-status';
     import notebooks from '@/global-notebooks';
+    import { i18n } from '@/utils';
 
     export let close: Function;
 
@@ -91,7 +92,7 @@
                 style="border-bottom: 1px solid var(--b3-border-color);"
             >
                 <svg class="b3-list-item__graphic"><use xlink:href="#iconEdit"></use></svg>
-                <span class="b3-list-item__text">Toggle</span>
+                <span class="b3-list-item__text">{i18n.Blacklist.toggle}</span>
 
                 <input type="checkbox" bind:this={checkboxTop} on:change={toggleTop}/>
             </li>
@@ -125,7 +126,7 @@
             class="b3-button b3-button--outline fn__flex-center fn__size200"
             on:click={update}
         >
-            应用黑名单
+            {i18n.Blacklist.update}
         </button>
     </div>
 </div>

@@ -18,7 +18,7 @@
         },
         "NotebookBlacklist": {
             "title": "笔记本黑名单",
-            "text": "加入黑名单后, 该笔记本将不会再下拉框当中显示",
+            "text": "加入黑名单后, 该笔记本将不会再下拉框当中显示, 默认笔记本不能加入黑名单",
             "button": "设置"
         },
         "update": {
@@ -149,5 +149,10 @@
         "min": "最小化",
         "emptyContent": "未找到相关内容",
         "PopupResv": "查看当日预约"
+    },
+    "Blacklist": {
+        "name": "黑名单",
+        "toggle": "加入黑名单",
+        "update": "更新黑名单"
     }
 }

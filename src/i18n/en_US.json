@@ -18,7 +18,7 @@
         },
         "NotebookBlacklist": {
             "title": "Notebook Blacklist",
-            "text": "Notebook in the blacklist will not be shown in the dropdown menu",
+            "text": "Notebook in the blacklist will not be shown in the dropdown menu. Default notebook can not be in the blacklist",
             "button": "Set it"
         },
         "update": {
@@ -147,5 +147,10 @@
         "min": "minimize",
         "emptyContent": "No related content found",
         "PopupResv": "Inspect reservations"
+    },
+    "Blacklist": {
+        "name": "Blacklist",
+        "toggle": "Add to blacklist",
+        "update": "Update blacklist"
     }
 }

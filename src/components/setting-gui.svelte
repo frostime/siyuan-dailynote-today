@@ -101,7 +101,7 @@
     function onClick({ detail }) {
         console.log(detail);
         let dialog = new Dialog({
-            title: "黑名单",
+            title: i18n.Blacklist.name,
             content: `<div id="blacklist" style="height: 100%;"></div>`,
             height: "20rem",
             width: "40rem",
