@@ -3,7 +3,7 @@
  Author       : Yp Z
  Date         : 2023-07-08 17:18:57
  FilePath     : /src/components/blacklist.svelte
- LastEditTime : 2023-07-08 18:24:25
+ LastEditTime : 2023-07-08 18:28:07
  Description  : 
 -->
 <script lang="ts">
@@ -66,6 +66,10 @@
         }
     }
 
+    function update() {
+        console.log(checkedStatus);
+    }
+
 </script>
 
 <div class="fn__flex-column">
@@ -87,7 +91,7 @@
             {#await query()}
                 Wait...
             {:then notebooks} 
-                {#each notebooks as notebook, i}
+                {#each notebooks as notebook (notebook.id)}
                     <li
                         class="b3-list-item b3-list-item--hide-action"
                     >
@@ -111,8 +115,9 @@
         <div class="fn__flex-1" />
         <button
             class="b3-button b3-button--outline fn__flex-center fn__size200"
+            on:click={update}
         >
-            更新
+            应用黑名单
         </button>
     </div>
 </div>
