@@ -102,7 +102,7 @@ export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'bl
     for (let notebook of notebooks) {
         let forbidden = blacklist?.[notebook.id];
         forbidden = forbidden === undefined ? false : forbidden;
-        if (forbidden) {
+        if (forbidden === true) {
             continue;
         }
 
