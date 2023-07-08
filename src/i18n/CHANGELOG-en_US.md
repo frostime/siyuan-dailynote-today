@@ -1,4 +1,4 @@
-### aily Note Today v1.2.2
+### Daily Note Today v1.2.2
 
 1. Fixed the issue of not being able to see the floating window when clicking on the reservation menu on the left side of the sidebar and bouncing to the left [#149](https://github.com/frostime/siyuan-dailynote-today/issues/149)
 2. Tooltips when viewing reservations [#129](https://github.com/frostime/siyuan-dailynote-today/issues/129)
