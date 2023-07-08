@@ -27,8 +27,14 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         let result = await serverApi.lsNotebooks();
         let all_notebooks: Array<Notebook> = result.notebooks;
         //delete notebook with name "思源笔记用户指南"
+        const blacklist = settings.get("NotebookBlacklist");
         all_notebooks = all_notebooks.filter(
-            notebook => !notebook.closed && !hiddenNotebook.has(notebook.name)
+            notebook => {
+                const flag = !notebook.closed && !hiddenNotebook.has(notebook.name);
+                let forbidden = blacklist?.[notebook.id];
+                forbidden = forbidden === undefined ? false : forbidden;
+                return flag && !forbidden;
+            }
         );
 
         let all_notebook_names = all_notebooks.map(notebook => notebook.name);
