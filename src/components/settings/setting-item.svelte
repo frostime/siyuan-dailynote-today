@@ -9,7 +9,7 @@
     const dispatch = createEventDispatcher();
 
     function onClick() {
-        dispatch("click");
+        dispatch("click", { key: settingKey });
     }
 
     function updateSetting() {
