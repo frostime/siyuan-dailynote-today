@@ -103,8 +103,8 @@
         let dialog = new Dialog({
             title: i18n.Blacklist.name,
             content: `<div id="blacklist" style="height: 100%;"></div>`,
-            height: "20rem",
-            width: "40rem",
+            height: "25rem",
+            width: "30rem",
         });
         new Blacklist({
             target: dialog.element.querySelector("#blacklist"),

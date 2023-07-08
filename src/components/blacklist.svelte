@@ -3,7 +3,7 @@
  Author       : Yp Z
  Date         : 2023-07-08 17:18:57
  FilePath     : /src/components/blacklist.svelte
- LastEditTime : 2023-07-08 18:47:38
+ LastEditTime : 2023-07-08 18:57:53
  Description  : 
 -->
 <script lang="ts">
@@ -32,7 +32,7 @@
         let all_notebooks: Array<Notebook> = result.notebooks;
 
         all_notebooks = all_notebooks.filter(
-            notebook => !hiddenNotebook.has(notebook.name) && notebook.id !== notebooks.default.id
+            notebook => !hiddenNotebook.has(notebook.name) && notebook.id !== notebooks.default?.id
         );
 
         all_notebooks.forEach(notebook => {
