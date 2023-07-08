@@ -30,10 +30,7 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         const blacklist = settings.get("NotebookBlacklist");
         all_notebooks = all_notebooks.filter(
             notebook => {
-                const flag = !notebook.closed && !hiddenNotebook.has(notebook.name);
-                let forbidden = blacklist?.[notebook.id];
-                forbidden = forbidden === undefined ? false : forbidden;
-                return flag && !forbidden;
+                return !notebook.closed && !hiddenNotebook.has(notebook.name);
             }
         );
 

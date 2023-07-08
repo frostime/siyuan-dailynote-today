@@ -111,8 +111,15 @@ export class ToolbarMenuItem {
     }
 
     createMenuItems() {
+        let blacklist = settings.get('NotebookBlacklist');
         let menuItems: any[] = [];
         for (let notebook of notebooks) {
+            let forbidden = blacklist?.[notebook.id];
+            forbidden = forbidden === undefined ? false : forbidden;
+            if (forbidden) {
+                continue;
+            }
+
             let item: IMenuItemOption = {
                 label: notebook.name,
                 icon: this.iconStatus.get(notebook.id),
