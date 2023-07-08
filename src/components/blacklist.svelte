@@ -3,7 +3,7 @@
  Author       : Yp Z
  Date         : 2023-07-08 17:18:57
  FilePath     : /src/components/blacklist.svelte
- LastEditTime : 2023-07-08 17:44:12
+ LastEditTime : 2023-07-08 17:46:42
  Description  : 
 -->
 <div class="fn__flex-column">
@@ -13,7 +13,19 @@
     >
         <ul>
             <li
-                on:keydown={() => {}}
+                class="b3-list-item b3-list-item--hide-action"
+                style="border-bottom: 1px solid var(--b3-border-color);"
+            >
+                <svg class="b3-list-item__graphic"><use xlink:href="#iconEdit"></use></svg>
+                <span class="b3-list-item__text">Toggle</span>
+
+                <input
+                    type="checkbox"
+                    class="b3-switch fn__flex-center"
+                    checked={false}
+                />
+            </li>
+            <li
                 class="b3-list-item b3-list-item--hide-action"
             >
                 <span class="b3-list-item__icon">📔</span>
