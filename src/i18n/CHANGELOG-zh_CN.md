@@ -1,9 +1,9 @@
-### v1.2.1-patch 紧急补丁
+### 今日笔记 v1.2.2
 
-这是一次临时的补丁更新，修复了此前由于没有把 README.md 文件加入打包，而导致新用户无法在已下载当中看到今日笔记插件的问题。
+1. 修复了预约菜单在侧栏左侧时点击悬浮窗向左弹看不到的问题 [#149](https://github.com/frostime/siyuan-dailynote-today/issues/149)
+2. 查看预约的面板时增加悬浮提示 [#129](https://github.com/frostime/siyuan-dailynote-today/issues/129)
+3. 新功能: 添加笔记本黑名单 [#135](https://github.com/frostime/siyuan-dailynote-today/issues/135)
 
-> 需要注意的是，1.2.1 更新仅仅针对 2.9.4；而这个补丁却针对 2.9.0 以上所有设备，所以如果你在更新后发现设置面板出现显示异常，这是正常现象，请更新到思源 2.9.4 版本以上。
+    当把某个笔记本添加入黑名单的后, 顶端的下拉框内将不再显示该笔记本
 
-### 今日笔记 v1.2.1
-
-修复了思源 2.9.4 的更新导致设置面板显示异常的问题。
+    ![](asset/Blacklist.png)

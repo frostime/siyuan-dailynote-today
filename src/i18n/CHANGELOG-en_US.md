@@ -1,9 +1,10 @@
-### v1.2.1-patch Emergency Update
+### aily Note Today v1.2.2
 
-This is a patch update that fixes the problem of not being able to see the plugin in the already downloaded panel due to not including the README.md file in the package.
+1. Fixed the issue of not being able to see the floating window when clicking on the reservation menu on the left side of the sidebar and bouncing to the left [#149](https://github.com/frostime/siyuan-dailynote-today/issues/149)
+2. Tooltips when viewing reservations [#129](https://github.com/frostime/siyuan-dailynote-today/issues/129)
+3. New feature: Added a notebook blacklist [#135](https://github.com/frostime/siyuan-dailynote-today/issues/135)
 
-> Please note that the 1.2.1 update only applies to 2.9.4; while this patch applies to all devices above 2.9.0. Therefore, if you find that the settings panel displays abnormally after the update, this is normal. Please update to version 2.9.4 or above of Siyuan.
+    When a notebook is added to the blacklist, it will no longer be displayed in the dropdown box at the top.
 
-### Daily Note Today v1.2.1
+    ![](asset/Blacklist.png)
 
-Fix the abnormal display problem of setting panel cause by the SiYuan v2.9.4's update.
