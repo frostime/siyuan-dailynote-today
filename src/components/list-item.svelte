@@ -1,6 +1,6 @@
 <script lang="ts">
     import { openBlock } from "@/func";
-    import { plugin, i18n } from "@/utils";
+    import { plugin, i18n, clipString, wrapString } from "@/utils";
 
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
@@ -57,6 +57,8 @@
         const width = document.body.clientWidth; // 获取页面宽度
         const rect = liElement.getBoundingClientRect(); // 获取 list-item 的位置
 
+        const atRight = rect.right > width / 2; // list-item 是否在页面右侧
+
         plugin.addFloatLayer({
             ids: blocks.map((block) => block.id),
             x: 0,
@@ -68,10 +70,14 @@
         const panel = blockPanels[blockPanels.length - 1];
         const ele: HTMLElement = panel?.element;
 
-        //将弹出框移动到 list-item 的下方
-        ele.style.top = `${rect.bottom + 10}px`; // 将 y 坐标设为 list-item 下方
-        ele.style.left = '';
-        ele.style.right = `${width - rect.right}px`;
+        if (atRight) {
+            //将弹出框移动到 list-item 的下方
+            ele.style.top = `${rect.bottom + 10}px`; // 将 y 坐标设为 list-item 下方
+            ele.style.left = '';
+            ele.style.right = `${width - rect.right}px`;
+        } else {
+            ele.style.top = `${rect.bottom + 10}px`;
+        }
 
     }
 </script>
@@ -124,6 +130,7 @@
             data-def-id=""
             data-treetype="bookmark"
             data-def-path=""
+            title={wrapString(clipString(block.content, 50), 15)}
         >
             <span
                 style="padding-left: 22px;margin-right: 2px"

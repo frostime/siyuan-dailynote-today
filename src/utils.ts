@@ -64,6 +64,23 @@ export function merge<T>(list: T[] | undefined, item: T): T[] {
 }
 
 
+export function clipString(str: string, len: number) {
+    if (str.length > len) {
+        return str.slice(0, len) + '...';
+    } else {
+        return str;
+    }
+}
+
+export function wrapString(str: string, len: number) {
+    let lineArr = [];
+    for (let i = 0; i < str.length; i += len) {
+        lineArr.push(str.slice(i, i + len));
+    }
+    return lineArr.join('\n');
+}
+
+
 class Debouncer {
     Timer: { [key: string]: any } = {};
     DefaultTimer: any = null;
