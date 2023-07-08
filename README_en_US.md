@@ -42,6 +42,12 @@
 
 ![](asset/DefaultNotebook-en.png)
 
+## 1.2 Blacklist
+
+If you have too many notebooks, you can choose to add some notebooks to the blacklist, so that these notebooks will not appear in the dropdown list
+
+![](asset/Blacklist.png)
+
 
 ### 2. Left lick the icon, quickly creating/opening today's note.
 
