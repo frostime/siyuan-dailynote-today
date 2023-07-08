@@ -3,16 +3,19 @@
  Author       : Yp Z
  Date         : 2023-07-08 17:18:57
  FilePath     : /src/components/blacklist.svelte
- LastEditTime : 2023-07-08 18:28:07
+ LastEditTime : 2023-07-08 18:39:24
  Description  : 
 -->
 <script lang="ts">
     import { lsNotebooks } from '@/serverApi';
+    import { settings } from '@/global-status';
+
+    export let close: Function;
 
     const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
 
     let checkboxTop: HTMLInputElement;
-    let checkedStatus: { [key: NotebookId]: boolean } = {};
+    let checkedStatus: { [key: NotebookId]: boolean } = settings.get('NotebookBlacklist');
 
     function parseEmoji(code: string) {
         try {
@@ -31,7 +34,9 @@
         );
         checkedStatus = {};
         all_notebooks.forEach(notebook => {
-            checkedStatus[notebook.id] = false;
+            let status = checkedStatus?.[notebook.id];
+            status = status === undefined ? false : status;
+            checkedStatus[notebook.id] = status;
         });
         return all_notebooks;
     }
@@ -68,6 +73,8 @@
 
     function update() {
         console.log(checkedStatus);
+        settings.set('NotebookBlacklist', checkedStatus);
+        close()
     }
 
 </script>

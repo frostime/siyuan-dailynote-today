@@ -31,7 +31,8 @@ class SettingManager {
         ExpandGutterMenu: true as boolean, //是否将菜单项目展开
         PopupReserveDialog: true as boolean, //是否弹出预约对话框
         ResvEmbedAt: 'top' as RetvPosition, //Retrieved 块嵌入位置
-        RetvType: 'embed' as RetvType //Retrieved 块的类型
+        RetvType: 'embed' as RetvType, //Retrieved 块的类型
+        NotebookBlacklist: {}, //笔记本黑名单
     };
 
     constructor() {

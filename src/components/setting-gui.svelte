@@ -107,7 +107,12 @@
             width: "40rem",
         });
         new Blacklist({
-            target: dialog.element.querySelector("#blacklist")
+            target: dialog.element.querySelector("#blacklist"),
+            props: {
+                close: () => {
+                    dialog.destroy();
+                },
+            },
         });
     }
 
