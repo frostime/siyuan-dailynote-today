@@ -1,6 +1,6 @@
 <script lang="ts">
     import { openBlock } from "@/func";
-    import { plugin, i18n } from "@/utils";
+    import { plugin, i18n, clipString, wrapString } from "@/utils";
 
     export let sectionTitle: string = "";
     export let blocks: any[] = [];
@@ -124,6 +124,7 @@
             data-def-id=""
             data-treetype="bookmark"
             data-def-path=""
+            title={wrapString(clipString(block.content, 50), 15)}
         >
             <span
                 style="padding-left: 22px;margin-right: 2px"
