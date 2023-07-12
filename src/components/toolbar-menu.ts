@@ -82,6 +82,7 @@ export class ToolbarMenuItem {
         menu.open({
             x: rect.left,
             y: rect.bottom,
+            isLeft: settings.get('IconPosition') === 'right',
         })
         event.stopPropagation();
     }
