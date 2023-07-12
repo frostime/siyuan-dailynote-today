@@ -105,7 +105,7 @@ export class ToolbarMenuItem {
             menu.open({
                 x: rect.right,
                 y: rect.bottom,
-                isLeft: true,
+                isLeft: settings.get('IconPosition') === 'right',
             });
         }
         // this.updateDailyNoteStatus();
