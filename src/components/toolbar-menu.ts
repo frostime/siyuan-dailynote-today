@@ -79,10 +79,11 @@ export class ToolbarMenuItem {
         });
 
         let rect = this.ele.getBoundingClientRect();
+        const iconIsRight = settings.get('IconPosition') === 'right';
         menu.open({
-            x: rect.left,
+            x: iconIsRight ? rect.right : rect.left,
             y: rect.bottom,
-            isLeft: settings.get('IconPosition') === 'right',
+            isLeft: iconIsRight,
         })
         event.stopPropagation();
     }
@@ -102,10 +103,11 @@ export class ToolbarMenuItem {
         if (isMobile) {
             menu.fullscreen();
         } else {
+            const iconIsRight = settings.get('IconPosition') === 'right';
             menu.open({
-                x: rect.right,
+                x: iconIsRight ? rect.right : rect.left,
                 y: rect.bottom,
-                isLeft: settings.get('IconPosition') === 'right',
+                isLeft: iconIsRight,
             });
         }
         // this.updateDailyNoteStatus();
