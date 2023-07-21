@@ -7,7 +7,7 @@ import { showMessage } from "siyuan";
 import { settings } from "@/global-status";
 
 export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Notebook) {
-    let block = await serverApi.getBlockByID(srcBlockId);
+    let block: Block = await serverApi.getBlockByID(srcBlockId);
 
     if (block == null) {
         error(`Block ${srcBlockId} not found`);
@@ -28,10 +28,9 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
     info(`Call 移动块: ${block.id} --> ${doc_id}`)
 
     //列表项需要额外特殊处理
-    let moveLi = block.type === 'i';
 
     //移动块
-    if (moveLi) {
+    if (block.type === 'i') {
         //如果是列表项，需要先新建一个列表块，然后把列表项插入到列表块中
         let ans = await serverApi.prependBlock(doc_id, '* ', 'markdown');
         let newListId = ans[0].doOperations[0].id;
@@ -41,6 +40,13 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
         let allChild = await serverApi.getChildBlocks(newListId);
         let blankItem = allChild[1]; // 上述行为会导致出现一个额外的多余列表项
         await serverApi.deleteBlock(blankItem.id);
+    } else if (block.type === 'h') {
+        let div: HTMLDivElement = document.querySelector(`#layouts div.protyle-content div[data-node-id="${block.id}"]`);
+        let fold = div.getAttribute('fold');
+        if (fold != "1") {
+            await serverApi.fold(block.id);
+        }
+        await serverApi.moveBlock(block.id, null, doc_id);
     } else {
         await serverApi.moveBlock(block.id, null, doc_id);
     }
