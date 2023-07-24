@@ -47,6 +47,12 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
             await serverApi.fold(block.id);
         }
         await serverApi.moveBlock(block.id, null, doc_id);
+        if (fold != "1") {
+            //如果原来是展开的，那么移动后也展开, 等待 500ms
+            setTimeout(() => {
+                serverApi.unfold(block.id);
+            }, 500);
+        }
     } else {
         await serverApi.moveBlock(block.id, null, doc_id);
     }

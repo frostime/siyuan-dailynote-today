@@ -196,3 +196,17 @@ export async function fold(blockID: BlockId) {
     let url = '/api/transactions'
     return request(url, payload);
 }
+
+export async function unfold(blockID: BlockId) {
+    let payload = { 
+        session: "", "app": "",
+        transactions: [
+            {
+                doOperations: [{ action: "unfoldHeading", id: blockID }],
+                undoOperations: [{ action: "foldHeading", id: blockID }]
+            }
+        ]
+    }
+    let url = '/api/transactions'
+    return request(url, payload);
+}
