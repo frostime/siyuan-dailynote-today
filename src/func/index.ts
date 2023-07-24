@@ -186,10 +186,18 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     return true;
 }
 
+function today(): string {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
+}
 
 export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
     info(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
+    serverApi.setBlockAttrs(doc_id, { "custom-dailynote": today() });
     return doc_id;
 }
 
