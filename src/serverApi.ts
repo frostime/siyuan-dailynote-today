@@ -182,3 +182,31 @@ export async function getFile(path: string): Promise<any> {
         return null;
     }
 }
+
+export async function fold(blockID: BlockId) {
+    let payload = { 
+        session: "", "app": "",
+        transactions: [
+            {
+                doOperations: [{ action: "foldHeading", id: blockID }],
+                undoOperations: [{ action: "unfoldHeading", id: blockID }]
+            }
+        ]
+    }
+    let url = '/api/transactions'
+    return request(url, payload);
+}
+
+export async function unfold(blockID: BlockId) {
+    let payload = { 
+        session: "", "app": "",
+        transactions: [
+            {
+                doOperations: [{ action: "unfoldHeading", id: blockID }],
+                undoOperations: [{ action: "foldHeading", id: blockID }]
+            }
+        ]
+    }
+    let url = '/api/transactions'
+    return request(url, payload);
+}

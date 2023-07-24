@@ -184,11 +184,9 @@ Translated with www.DeepL.com/Translator (free version)
 - Select the icon leftside of a block and press "Alt + Right Click" to bring up a moving block panel. Choose a notebook to move the current block to the diary of the corresponding notebook for today.
 - Support moving single block
 - Support moving a list item
-- Fold the header block, you can move the entire header and it's children blocks
+- Move the entire header and it's children blocks
 - Disabled by default, you can enable it in the setting panel
 
-> - You can also use alt + right click, but it will be remove in the future
-> If you find that there are no blocks in the target document, don't panic, press 'F5' to refresh the page.
 
 ![](asset/MoveBlocks.gif)
 
@@ -196,17 +194,6 @@ Translated with www.DeepL.com/Translator (free version)
 
 <!-- ![](asset/Setting.png) -->
 ![](asset/Setting-en.png)
-
-### 7. Alt + Right-click: a compatible function menu
-
-Due to technical reasons, the block menu provided by the plugin conflicts with the menu of some themes. Specifically, after enabling the plugin, the built-in block menu items of the theme are hidden.
-
-Currently, this problem cannot be solved, so we have provided a compromise solution:
-
-- Disable the "Move Block" and "Reserve Block" buttons in the settings and then restart. The plugin's custom menu items will disappear, and the theme's built-in menu will be displayed.
-- You can use Alt + Right-click to bring up a custom menu provided by the plugin, which also includes the "Move Block" and "Reserve Block" buttons.
-
-Please note that the Alt + Right-click menu has some unstable bugs, such as the inability to bring up the menu properly after closing all tabs and opening a new one. In this case, just click "Update Status" to fix it.
 
 
 ## FAQ
