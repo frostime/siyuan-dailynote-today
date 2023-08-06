@@ -46,6 +46,17 @@ export const DatePatternRules = [
         }
     },
     {
+        pattern: /今[天日]/,
+        parse(match: RegExpMatchArray): [string, string, string] {
+            console.log(match);
+            let today = new Date();
+            let year = today.getFullYear().toString();
+            let month = (today.getMonth() + 1).toString();
+            let day = today.getDate().toString();
+            return [year, month, day];
+        }
+    },
+    {
         pattern: /(?<diff>\d+)\s*(?:天[之以]?后|days? later)/,
         parse(match: RegExpMatchArray): [string, string, string] {
             let today = new Date();
