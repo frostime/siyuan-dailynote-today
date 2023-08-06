@@ -249,8 +249,9 @@ class ReservationManger {
     doPurgeExpired() {
         let date = new Date();
         let date_str = this.dateTemplate(date);
+        let datenum = parseInt(date_str);
         for (let key in this.reservations.OnDate) {
-            if (key < date_str) {
+            if (parseInt(key) + 2 < datenum) {
                 delete this.reservations.OnDate[key];
             }
             if (this.reservations.OnDate[key]?.length === 0) {
