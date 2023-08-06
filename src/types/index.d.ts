@@ -95,3 +95,11 @@ interface ISettingItem {
     value: any;
     content: any;
 }
+
+interface ITreeStat {
+    imageCount: number;
+    linkCount: number;
+    refCount: number;
+    runeCount: number;
+    wordCount: number;
+}

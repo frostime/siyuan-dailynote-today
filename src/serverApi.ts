@@ -54,6 +54,27 @@ export async function moveDocs(fromPaths: string[], toNotebook: NotebookId, toPa
     return request(url, data);
 }
 
+//api/filetree/removeDoc
+export async function removeDoc(notebook: NotebookId, path: string) {
+    let data = {
+        notebook: notebook,
+        path: path
+    };
+    let url = '/api/filetree/removeDoc';
+    return request(url, data);
+}
+
+///api/filetree/renameDoc
+export async function renameDoc(notebook: NotebookId, path: string, title: string) {
+    let data = {
+        notebook: notebook,
+        path: path,
+        title: title
+    };
+    let url = '/api/filetree/renameDoc';
+    return request(url, data);
+}
+
 //api/filetree/doc2Heading
 export async function doc2Heading(srcID: BlockId, targetID: BlockId, after: boolean) {
     let data = {
@@ -69,6 +90,13 @@ export async function getBlockByID(blockId: BlockId) {
     let sqlScript = `select * from blocks where id ='${blockId}'`;
     let data = await sql(sqlScript);
     return data[0];
+}
+
+///api/block/getTreeStat
+export async function getTreeStat(blockId: BlockId): Promise<ITreeStat> {
+    let data = { id: blockId };
+    let url = '/api/block/getTreeStat';
+    return request(url, data);
 }
 
 export async function getChildBlocks(blockId: BlockId): Promise<Block[]> {

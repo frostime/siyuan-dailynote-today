@@ -3,7 +3,7 @@
  */
 import { showMessage, confirm, Dialog, openTab } from 'siyuan';
 import notebooks from '../global-notebooks';
-import { info, warn, error, i18n, lute, app, isMobile } from "../utils";
+import { info, warn, error, i18n, lute, app, isMobile, formatBlockTime } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
 import { Retrieve, RetvFactory } from './reserve';
@@ -170,16 +170,46 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
         showMessage("Merge", 1000, "info");
         docks = docks.sort((a, b) => {
-            return a.created <= b.created ? -1 : 1;
+            return a.created >= b.created ? -1 : 1;
         });
-        //选择最新的日记
+        //选择最早的日记
         let latestDoc = docks.pop();
         let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
         let lastChildBlockID = childs[childs.length - 1].id;
         //将其他的日记合并到最新的日记中
         for (let doc of docks) {
             let id = doc.id;
-            await serverApi.doc2Heading(id, lastChildBlockID, true);
+            let created: string = doc.created;
+            let updated: string = doc.updated;
+
+            let stat = await serverApi.getTreeStat(id);
+            //if all value is 0
+            let empty = true;
+            Object.keys(stat).forEach(key => {
+                if (stat[key] != 0) {
+                    empty = false;
+                }
+            });
+
+            //空白日记, 直接删除
+            if (empty) {
+                await serverApi.removeDoc(doc.box, doc.path);
+                console.log(`Remove empty doc ${id}`);
+                continue;
+            }
+
+            const noRefLink = stat.refCount == 0 && stat.linkCount == 0;
+
+            //如果无链接, 且创建时间和更新时间相差超过 5 秒, 大概率是模板日记, 可以直接删除
+            if (noRefLink && parseInt(created) + 5 >= parseInt(updated)) {
+                await serverApi.removeDoc(doc.box, doc.path);
+                console.log(`Remove not modified doc ${id} ${created} ${updated}`);
+            } else {
+                let time = formatBlockTime(created);
+                await serverApi.renameDoc(doc.box, doc.path, `${doc.content} [${time}]`);
+                await serverApi.doc2Heading(id, lastChildBlockID, true);
+                console.log(`Merge doc ${id}`);
+            }
         }
         dialog.destroy();
     });

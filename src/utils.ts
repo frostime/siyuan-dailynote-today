@@ -80,6 +80,17 @@ export function wrapString(str: string, len: number) {
     return lineArr.join('\n');
 }
 
+export function formatBlockTime(time: string) {
+    //time format: 20230729171305
+    let year = time.slice(0, 4);
+    let month = time.slice(4, 6);
+    let day = time.slice(6, 8);
+    let hour = time.slice(8, 10);
+    let minute = time.slice(10, 12);
+    let second = time.slice(12, 14);
+    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+}
+
 
 class Debouncer {
     Timer: { [key: string]: any } = {};
