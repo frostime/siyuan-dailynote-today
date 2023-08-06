@@ -99,6 +99,9 @@ class SettingManager {
     async save() {
         //检查一下默认笔记本是否在黑名单中，如果在，则移除
         let defaultNodebook = notebooks.default;
+        if (!defaultNodebook) {
+            return;
+        }
         let flag = this.settings['NotebookBlacklist']?.[defaultNodebook.id];
         if (flag === true) {
             this.settings['NotebookBlacklist'][defaultNodebook.id] = false;
