@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023 by Yp Z (frostime). All Rights Reserved.
+ * @Author       : Yp Z
+ * @Date         : 2023-06-03 23:36:46
+ * @FilePath     : /src/global-notebooks.ts
+ * @LastEditTime : 2023-08-06 18:07:20
+ * @Description  : 
+ */
 import { queryNotebooks } from './func';
 import { settings } from './global-status';
 
@@ -72,6 +80,7 @@ class Notebooks {
         } else {
             this.default = this.get(0);
         }
+        settings.save();
     }
 
 }
