@@ -54,6 +54,13 @@ export default defineConfig({
                     transform: transformMdFile
                 },
                 {
+                    //将 README 当中的图片路径替换为图床链接
+                    src: "./README.md",
+                    dest: "../",
+                    rename: "README_zh_CN.md", //替换到根目录方便 bazzar 获取
+                    transform: transformMdFile
+                },
+                {
                     src: ["./README.md", "./README_en_US.md"],
                     dest: "./",
                 },
