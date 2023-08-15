@@ -71,7 +71,7 @@
                 blocks: blocks,
             });
         }
-        allResvs = newResvs;
+        allResvs = newResvs.filter((resv) => resv.blocks.length > 0);
     }
 
     const doNothing = () => {};
