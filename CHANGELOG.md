@@ -1,3 +1,8 @@
+### [2023-08-15] v1.2.5
+
+fix: [#159](https://github.com/frostime/siyuan-dailynote-today/issues/159)
+
+
 ### [2023-08-06] v1.2.4
 
 1. 优化合并功能 [#156](https://github.com/frostime/siyuan-dailynote-today/issues/156)
