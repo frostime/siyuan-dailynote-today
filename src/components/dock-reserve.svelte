@@ -37,7 +37,7 @@
             .map((id) => `'${id}'`)
             .join(",")})`;
         let results: any[] | null = await api.sql(sql);
-        
+
         if (results === null) {
             allResvs = [];
             return;
@@ -57,11 +57,13 @@
             let entry = entries[i];
             let blocks = [];
             entry[1].forEach((blockId) => {
-                blocks.push({
-                    id: blockId,
-                    content: resulsMap[blockId]?.content,
-                    doc: resulsMap[blockId]?.doc,
-                });
+                if (blockId in resulsMap) {
+                    blocks.push({
+                        id: blockId,
+                        content: resulsMap[blockId]?.content,
+                        doc: resulsMap[blockId]?.doc,
+                    });
+                }
             });
             newResvs.push({
                 date: `${entry[0].slice(0, 4)}-${entry[0].slice(
@@ -138,6 +140,5 @@
                 />
             {/each}
         {/if}
-        
     </div>
 </div>
