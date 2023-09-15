@@ -1,3 +1,6 @@
-### [2023-08-15] v1.2.5
+### [2023-09-15] v1.2.6
 
-fix: [#159](https://github.com/frostime/siyuan-dailynote-today/issues/159)
+稳定性修复
+
+- [#162](https://github.com/frostime/siyuan-dailynote-today/issues/162)
+- [#161](https://github.com/frostime/siyuan-dailynote-today/issues/161)
