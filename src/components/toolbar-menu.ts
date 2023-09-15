@@ -142,6 +142,14 @@ export class ToolbarMenuItem {
             // showMessage('移动端不开放');
             return;
         }
+        //小窗打开模式下, 不再自动打开
+        const url = new URL(window.location.href);
+        // showMessage(url.pathname);
+        if (url.pathname.startsWith('/stage/build/app/window.html')) {
+            console.log('小窗模式');
+            return;
+        }
+
         if (notebooks.notebooks.length > 0) {
             if (settings.settings.OpenOnStart === true) {
                 let notebookId: string = settings.get('DefaultNotebook');
