@@ -123,16 +123,26 @@ export async function getDocsByHpath(hpath: string, notebook: Notebook | null = 
 export async function checkDuplicateDiary(): Promise<boolean> {
     let notebook: Notebook = notebooks.default;
     let hpath = notebook.dailynoteHpath!;
-    let docks = await getDocsByHpath(hpath, notebook);
+    let docs = await getDocsByHpath(hpath, notebook);
 
-    if (docks.length <= 1) {
+    if (docs.length <= 1) {
         return false;
     }
+    //莫名其妙出现了重复的 id, 所以还是去重一下
+    let idSet: Set<string> = new Set();
+    let uniqueDocs: Array<Block> = [];
+    docs.forEach((doc) => {
+        if (!idSet.has(doc.id)) {
+            uniqueDocs.push(doc);
+            idSet.add(doc.id);
+        }
+    });
+    docs = uniqueDocs;
 
     console.warn(`Conflict daily note: ${notebook.name} ${hpath}`);
 
     let confilctTable = [];
-    for (let doc of docks) {
+    for (let doc of docs) {
         let id = doc.id;
         let created = doc.created;
         created = `${created.slice(0, 4)}-${created.slice(4, 6)}-${created.slice(6, 8)} ${created.slice(8, 10)}:${created.slice(10, 12)}:${created.slice(12, 14)}`
@@ -169,15 +179,15 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     });
     dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
         showMessage("Merge", 1000, "info");
-        docks = docks.sort((a, b) => {
+        docs = docs.sort((a, b) => {
             return a.created >= b.created ? -1 : 1;
         });
         //选择最早的日记
-        let latestDoc = docks.pop();
+        let latestDoc = docs.pop();
         let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
         let lastChildBlockID = childs[childs.length - 1].id;
         //将其他的日记合并到最新的日记中
-        for (let doc of docks) {
+        for (let doc of docs) {
             let id = doc.id;
             let created: string = doc.created;
             let updated: string = doc.updated;
