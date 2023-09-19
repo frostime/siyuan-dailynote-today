@@ -211,9 +211,11 @@ export async function getFile(path: string): Promise<any> {
     }
 }
 
-export async function fold(blockID: BlockId) {
-    let payload = { 
-        session: "", "app": "",
+export async function fold(blockID: BlockId, sessionId: string = "", appId: string = "") {
+    let payload = {
+        session: sessionId,
+        app: appId,
+        reqId: new Date().getTime(),
         transactions: [
             {
                 doOperations: [{ action: "foldHeading", id: blockID }],
@@ -225,9 +227,11 @@ export async function fold(blockID: BlockId) {
     return request(url, payload);
 }
 
-export async function unfold(blockID: BlockId) {
-    let payload = { 
-        session: "", "app": "",
+export async function unfold(blockID: BlockId, sessionId: string = "", appId: string = "") {
+    let payload = {
+        session: sessionId,
+        app: appId,
+        reqId: new Date().getTime(),
         transactions: [
             {
                 doOperations: [{ action: "unfoldHeading", id: blockID }],

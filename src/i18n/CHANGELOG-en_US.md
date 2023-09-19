@@ -1,6 +1,4 @@
-### [2023-09-15] v1.2.6
+### [2023-09-19] v1.2.7
 
-Stability issues.
+Stability, fix error for moving block in v2.10.6
 
-- [#162](https://github.com/frostime/siyuan-dailynote-today/issues/162)
-- [#161](https://github.com/frostime/siyuan-dailynote-today/issues/161)
