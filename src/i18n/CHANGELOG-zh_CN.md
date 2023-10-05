@@ -1,3 +1,3 @@
-### [2023-09-19] v1.2.7
+### [2023-10-06] v1.2.8
 
-稳定性修复, 解决思源 2.10.6 版本移动标题块失效的问题
+稳定性修复, fix [#166](https://github.com/frostime/siyuan-dailynote-today/issues/166)

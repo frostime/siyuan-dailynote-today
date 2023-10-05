@@ -139,6 +139,10 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     });
     docs = uniqueDocs;
 
+    if (docs.length <= 1) {
+        return false;
+    }
+
     console.warn(`Conflict daily note: ${notebook.name} ${hpath}`);
 
     let confilctTable = [];
