@@ -13,7 +13,7 @@ import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
 import { eventBus } from './event-bus';
 
-import { changelog } from 'sy-plugin-changelog';
+// import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
 
@@ -84,12 +84,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let end = performance.now();
         info(`启动耗时: ${end - start} ms`);
 
-        let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
-        if (ans?.Dialog) {
-            let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
-            ele.style.height = '15rem';
-            ele.style.width = '40rem';
-        }
+        // let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
+        // if (ans?.Dialog) {
+        //     let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
+        //     ele.style.height = '15rem';
+        //     ele.style.width = '40rem';
+        // }
     }
 
     private initPluginUI() {

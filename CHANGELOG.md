@@ -1,3 +1,8 @@
+### [2023-10-22] v1.2.9
+
+优化合并重复日记的策略 [#167](https://github.com/frostime/siyuan-dailynote-today/issues/167)
+
+
 ### [2023-10-06] v1.2.8
 
 稳定性修复, fix [#166](https://github.com/frostime/siyuan-dailynote-today/issues/166)
