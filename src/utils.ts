@@ -23,6 +23,10 @@ export function checkI18n(): boolean {
 //     showMessage('i18n check failed', 5000, 'error');
 // }
 
+export function debug(...msg: any[]): void {
+    console.debug(`[DailyNoteToday][DEBUG] ${msg}`);
+}
+
 export function info(...msg: any[]): void {
     console.log(`[DailyNoteToday][INFO] ${msg}`);
 }

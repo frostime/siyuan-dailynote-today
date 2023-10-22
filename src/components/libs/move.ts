@@ -1,6 +1,6 @@
 import notebooks from "@/global-notebooks";
 import { eventBus } from "@/event-bus";
-import { info, error, i18n } from "@/utils";
+import { debug, info, error, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDocsByHpath, createDiary } from "@/func";
 import { showMessage } from "siyuan";
@@ -25,7 +25,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
         showMessage(`${i18n.Create}: ${notebook.name}`, 2500, 'info');
     }
 
-    info(`Call 移动块: ${block.id} --> ${doc_id}`)
+    debug(`Call 移动块: ${block.id} --> ${doc_id}`)
 
     //列表项需要额外特殊处理
 
@@ -35,7 +35,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
         let ans = await serverApi.prependBlock(doc_id, '* ', 'markdown');
         let newListId = ans[0].doOperations[0].id;
         await serverApi.moveBlock(block.id, null, newListId);
-        info(`移动列表项 ${block.id} --> ${newListId}`);
+        debug(`移动列表项 ${block.id} --> ${newListId}`);
         //获取新的列表的子项
         let allChild = await serverApi.getChildBlocks(newListId);
         let blankItem = allChild[1]; // 上述行为会导致出现一个额外的多余列表项

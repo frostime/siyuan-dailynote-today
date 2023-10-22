@@ -3,7 +3,7 @@
  */
 import { showMessage, confirm, Dialog, openTab } from 'siyuan';
 import notebooks from '../global-notebooks';
-import { info, warn, error, i18n, lute, app, isMobile, formatBlockTime } from "../utils";
+import { info, warn, error, i18n, lute, app, isMobile, formatBlockTime, debug } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
 import { Retrieve, RetvFactory } from './reserve';
@@ -54,7 +54,7 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             }
         }
 
-        info(`Read all notebooks: ${all_notebook_names}`);
+        debug(`Read all notebooks: ${all_notebook_names}`);
         return all_notebooks;
     } catch (err) {
         error(err);
@@ -188,14 +188,24 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         });
         //选择最早的日记
         let latestDoc = docs.pop();
-        let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
-        let lastChildBlockID = childs[childs.length - 1].id;
+        // let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
+        // let lastChildBlockID = childs[childs.length - 1].id;
+        let result = await serverApi.appendBlock(latestDoc.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
+        let lastChildBlockID = result?.[0]?.doOperations[0].id;
+        if (lastChildBlockID === undefined) {
+            error(`无法获取最新日记的最后一个 block id`);
+            showMessage(i18n.ConflictDiary.fail, 2000, "error");
+            dialog.destroy();
+            return;
+        }
+
         //将其他的日记合并到最新的日记中
         for (let doc of docs) {
             let id = doc.id;
             let created: string = doc.created;
-            let updated: string = doc.updated;
 
+            /* 可能存在不安全的情况, 保守一点, 不删除无用文档
+            let updated: string = doc.updated;
             let stat = await serverApi.getTreeStat(id);
             //if all value is 0
             let empty = true;
@@ -224,7 +234,13 @@ export async function checkDuplicateDiary(): Promise<boolean> {
                 await serverApi.doc2Heading(id, lastChildBlockID, true);
                 console.log(`Merge doc ${id}`);
             }
+            */
+            let time = formatBlockTime(created);
+            await serverApi.renameDoc(doc.box, doc.path, `${doc.content} [${time}]`);
+            await serverApi.doc2Heading(id, lastChildBlockID, true);
+            console.log(`Merge doc ${id}`);
         }
+        showMessage(i18n.ConflictDiary.success, 2000, "info");
         dialog.destroy();
     });
     return true;
@@ -275,7 +291,7 @@ export async function initTodayReservation(notebook: Notebook) {
     while (retry < MAX_RETRY) {
         //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
         let docs = await getDocsByHpath(todayDiaryPath!, notebook);
-        info(`In initResrv, retry: ${retry}`);
+        debug(`In initResrv, retry: ${retry}`);
         if (docs[0]?.id !== undefined) {
             docId = docs[0].id;
             break;
@@ -308,7 +324,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     const hasInserted = retvBlocks.length > 0;
 
     if (hasInserted && !refresh) {
-        info(`今日已经插入过预约了`);
+        debug(`今日已经插入过预约了`);
         return;
     } else {
         resvBlockIds = resvBlockIds.map((id) => `"${id}"`);

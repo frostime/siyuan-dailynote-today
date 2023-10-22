@@ -7,13 +7,13 @@ import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 import { checkDuplicateDiary, updateTodayReservation } from './func';
-import { info, setApp, setI18n, setIsMobile, setPlugin, debouncer } from './utils';
+import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
 import { eventBus } from './event-bus';
 
-import { changelog } from 'sy-plugin-changelog';
+// import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
 
@@ -42,7 +42,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     gutterMenu: GutterMenu;
 
     async onload() {
-        info('Plugin load');
+        debug('Plugin load');
         let start = performance.now();
 
         const frontEnd = getFrontend();
@@ -61,9 +61,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initPluginUI();
 
         //初始化数据
-        reservation.load();
-        await settings.load();
-        await notebooks.init();  //依赖 settings.load();
+        // await reservation.load();
+        // await settings.load();
+        // await notebooks.init();  //依赖 settings.load();
+        await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
 
         this.initBlockIconClickEvent();  //依赖 settings.load();
 
@@ -71,6 +72,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
 
+        this.toolbarItem.startMonitorDailyNoteForReservation();
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         await this.toolbarItem.autoOpenDailyNote();
 
@@ -82,14 +84,14 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.eventBus.on("ws-main", OnWsMainEvent);
 
         let end = performance.now();
-        info(`启动耗时: ${end - start} ms`);
+        debug(`启动耗时: ${end - start} ms`);
 
-        let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
-        if (ans?.Dialog) {
-            let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
-            ele.style.height = '15rem';
-            ele.style.width = '40rem';
-        }
+        // let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
+        // if (ans?.Dialog) {
+        //     let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
+        //     ele.style.height = '15rem';
+        //     ele.style.width = '40rem';
+        // }
     }
 
     private initPluginUI() {
@@ -107,7 +109,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private initBlockIconClickEvent() {
         if (settings.get("EnableMove") === true || settings.get("EnableReserve") === true) {
             // console.log(settings.get("EnableMove"));
-            info('添加块菜单项目');
+            debug('添加块菜单项目');
             this.enableBlockIconClickEvent = true;
             this.gutterMenu = new GutterMenu(this.eventBus);
         }
@@ -145,7 +147,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
 
     private async updateAll() {
-        info('updateAll');
+        debug('updateAll');
         await notebooks.update(); // 更新笔记本状态
         this.toolbarItem.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
         updateTodayReservation(notebooks.default, true);
@@ -161,7 +163,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         //多次检查后，如果还是没有同步，则认为没有必要再检查了
         if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
             this.isSyncChecked = true;
-            info('关闭自动检查同步文件');
+            debug('关闭自动检查同步文件');
         }
     }
 
@@ -170,7 +172,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private async onWsMain({ detail }) {
         let cmd = detail.cmd;
         if (cmd === 'syncing' && !this.isSyncChecked) {
-            info('检查同步文件');
+            debug('检查同步文件');
             // this.checkDuplicateDiary();
             this.checkDuplicateDiary_Debounce();
         }
@@ -231,12 +233,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     onunload() {
-        info('Plugin unload')
+        debug('Plugin unload')
         this.toolbarItem.release();
         settings.save();
         reservation.save();
         if (this.upToDate) {
-            info(`清理定时器 ${this.upToDate}`);
+            debug(`清理定时器 ${this.upToDate}`);
             clearTimeout(this.upToDate);
             this.upToDate = null;
         }
