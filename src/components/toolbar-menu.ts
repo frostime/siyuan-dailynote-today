@@ -1,8 +1,8 @@
 import { IMenuItemOption, Menu, Plugin, confirm, showMessage } from "siyuan";
-import { currentDiaryStatus, openDiary, initTodayReservation, updateTodayReservation } from "../func";
+import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
-import { info, i18n, isMobile } from "../utils";
+import { info, i18n, isMobile, debug } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
 
@@ -65,7 +65,7 @@ export class ToolbarMenuItem {
         this.ele.remove();
         this.ele = null;
         this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
-        info('TopBarIcon released');
+        debug('TopBarIcon released');
     }
 
     //等到设置加载完毕后, 重新更新图标位置
@@ -161,7 +161,7 @@ export class ToolbarMenuItem {
      * 初始化的时候，加载所有的笔记本
      */
     async autoOpenDailyNote() {
-        info('自动开启日记');
+        debug('自动开启日记');
         if (isMobile && settings.get('DisableAutoCreateOnMobile') === true) {
             // showMessage('移动端不开放');
             return;
@@ -170,7 +170,7 @@ export class ToolbarMenuItem {
         const url = new URL(window.location.href);
         // showMessage(url.pathname);
         if (url.pathname.startsWith('/stage/build/app/window.html')) {
-            console.log('小窗模式');
+            debug('小窗模式, 无需自动打开日记');
             return;
         }
 
@@ -213,7 +213,7 @@ export class ToolbarMenuItem {
             if (cnt > 3) {
                 return;
             }
-            console.debug("检查", blockId);
+            debug("检查", blockId);
             const block: Block = await serverApi.getBlockByID(blockId);
             if (block === undefined) {
                 console.warn(`New opened docId ${blockId} undefined`);
@@ -223,12 +223,12 @@ export class ToolbarMenuItem {
             }
             // console.log(block.hpath);
             if (notebooks.default.dailynoteHpath === block.hpath) {
-                console.debug('Got Today\'s daily note');
+                debug('Got Today\'s daily note');
                 this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
                 await updateTodayReservation(notebooks.default, true);
             }
         }
-        console.debug("2s后检查",  block_.id);
+        debug("打开新的文档, 2s后检查",  block_.id);
         //如果是新创建的日记，那么在这一刻后端是拿不到对应的块的，所以需要先等一下
         setTimeout(() => CheckReservation(block_.id), 1000 * 2);
     }

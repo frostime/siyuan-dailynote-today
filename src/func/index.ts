@@ -54,7 +54,7 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             }
         }
 
-        info(`Read all notebooks: ${all_notebook_names}`);
+        debug(`Read all notebooks: ${all_notebook_names}`);
         return all_notebooks;
     } catch (err) {
         error(err);
@@ -291,7 +291,7 @@ export async function initTodayReservation(notebook: Notebook) {
     while (retry < MAX_RETRY) {
         //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
         let docs = await getDocsByHpath(todayDiaryPath!, notebook);
-        info(`In initResrv, retry: ${retry}`);
+        debug(`In initResrv, retry: ${retry}`);
         if (docs[0]?.id !== undefined) {
             docId = docs[0].id;
             break;
