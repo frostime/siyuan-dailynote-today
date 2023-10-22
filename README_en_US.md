@@ -7,6 +7,9 @@
 
 > The words "diary", "notes" and "daily note" may be used interchangeably in the document, so don't worry, they all mean the same thing.
 
+
+> See changelog in: [CHANGELOG.md](CHANGELOG.md)
+
 ## Do I need this plugin?
 
 - This plugin** is mainly for people who use daily note workflow**, so if you're used to making notes in the document tree rather than in your daily notes, then this plugin may not be for you

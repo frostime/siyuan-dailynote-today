@@ -5,11 +5,12 @@
 **本插件主要用于辅助在思源中的 Daily Note 笔记工作流**
 
 - 提交 Issue 请访问[Github](https://github.com/frostime/siyuan-dailynote-today)
-- 上不了 Github 可访问[国内托管](https://gitcode.net/frostime/siyuan-plugin-daily-note)
 - **如果使用的过程中有问题，可以先阅读 [常见问题](#常见问题) 一节；如果还有问题，再到 Github 上提 Issue**
-- 有问题尽量在 Github 或 Gitcode 上提，在群里问我不一定看得见
+- 有问题尽量在 Github 上提，在群里问我不一定看得见
 
 > 文档中「日记」「笔记」「daily note」几个词可能会交替使用，不用在意，他们都表示一个含义.
+
+> 更新日志见: [CHANGELOG.md](CHANGELOG.md)
 
 ## 我需要这个插件吗？
 
