@@ -238,6 +238,10 @@ class ReservationManger {
         this.reserved.set(blockId, date_str);
     }
 
+    isTodayReserved(): boolean {
+        return this.getTodayReservations().length > 0;
+    }
+
     //获取今天的预约
     getTodayReservations(): string[] {
         let date = new Date();

@@ -3,7 +3,7 @@
  */
 import { showMessage, confirm, Dialog, openTab } from 'siyuan';
 import notebooks from '../global-notebooks';
-import { info, warn, error, i18n, lute, app, isMobile, formatBlockTime } from "../utils";
+import { info, warn, error, i18n, lute, app, isMobile, formatBlockTime, debug } from "../utils";
 import * as serverApi from '../serverApi';
 import { reservation, settings } from '../global-status';
 import { Retrieve, RetvFactory } from './reserve';
@@ -324,7 +324,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     const hasInserted = retvBlocks.length > 0;
 
     if (hasInserted && !refresh) {
-        info(`今日已经插入过预约了`);
+        debug(`今日已经插入过预约了`);
         return;
     } else {
         resvBlockIds = resvBlockIds.map((id) => `"${id}"`);

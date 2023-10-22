@@ -1,10 +1,12 @@
 import { IMenuItemOption, Menu, Plugin, confirm, showMessage } from "siyuan";
-import { currentDiaryStatus, openDiary, initTodayReservation } from "../func";
+import { currentDiaryStatus, openDiary, initTodayReservation, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { info, i18n, isMobile } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
+
+import * as serverApi from '@/serverApi';
 
 
 let ContextMenuListener: EventListener;
@@ -13,6 +15,8 @@ export class ToolbarMenuItem {
     plugin: Plugin;
     ele: HTMLElement;
     iconStatus: Map<string, string>;
+
+    private onProtyleLoadedBindThis = this.onProtyleLoaded.bind(this);
 
     constructor(plugin: Plugin) {
         this.plugin = plugin;
@@ -34,6 +38,25 @@ export class ToolbarMenuItem {
 
         // setting 异步加载完成后, 发送 event bus
         eventBus.subscribe(eventBus.EventSettingLoaded, () => { this.addTopBarIcon(); });
+        
+    }
+
+    /**
+     * 根据预约情况, 监听日记本的加载, 如果是今天的日记本, 则更新预约状态
+     * @returns 
+     */
+    startMonitorDailyNoteForReservation() {
+        if (!reservation.isTodayReserved) {
+            return
+        }
+        this.plugin.eventBus.on("loaded-protyle", this.onProtyleLoadedBindThis);
+        // 3分钟后, 取消监听, 防止不必要的性能损耗
+        setTimeout(
+            () => {
+                this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+            }, 
+            1000 * 60 * 2
+        );
     }
 
     release() {
@@ -41,6 +64,7 @@ export class ToolbarMenuItem {
         eventBus.unSubscribe('moveBlocks', UpdateDailyNoteStatusListener);
         this.ele.remove();
         this.ele = null;
+        this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
         info('TopBarIcon released');
     }
 
@@ -156,13 +180,57 @@ export class ToolbarMenuItem {
                 let notebook: Notebook = notebooks.default;
                 if (notebook) {
                     await openDiary(notebook);
-                    initTodayReservation(notebook);
+                    // initTodayReservation(notebook);
                 } else {
                     confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
                     return
                 }
             }
         }
+    }
+
+    /**
+     * 监听自动打开日记后，插入当天预约用
+     */
+    private async onProtyleLoaded({ detail }) {
+        const block_ = detail.block;
+        if (block_.id != block_.rootID) {
+            return;
+        }
+        //是否为文档
+        const headElement: HTMLElement = detail?.model?.headElement;
+        if (!headElement) {
+            return;
+        }
+        //笔记本是否是默认笔记本
+        const notebookId = detail.notebookId;
+        if (notebookId !== notebooks.default.id) {
+            return;
+        }
+
+
+        const CheckReservation = async (blockId: BlockId, cnt: number =1) => {
+            if (cnt > 3) {
+                return;
+            }
+            console.debug("检查", blockId);
+            const block: Block = await serverApi.getBlockByID(blockId);
+            if (block === undefined) {
+                console.warn(`New opened docId ${blockId} undefined`);
+                //能调用这个函数，说明这个文档一定存在，查不到就继续等继续差
+                setTimeout(() => CheckReservation(blockId, cnt++), 1000 * cnt);
+                return
+            }
+            // console.log(block.hpath);
+            if (notebooks.default.dailynoteHpath === block.hpath) {
+                console.debug('Got Today\'s daily note');
+                this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+                await updateTodayReservation(notebooks.default, true);
+            }
+        }
+        console.debug("2s后检查",  block_.id);
+        //如果是新创建的日记，那么在这一刻后端是拿不到对应的块的，所以需要先等一下
+        setTimeout(() => CheckReservation(block_.id), 1000 * 2);
     }
 
     async updateDailyNoteStatus() {

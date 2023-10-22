@@ -61,9 +61,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initPluginUI();
 
         //初始化数据
-        reservation.load();
-        await settings.load();
-        await notebooks.init();  //依赖 settings.load();
+        // await reservation.load();
+        // await settings.load();
+        // await notebooks.init();  //依赖 settings.load();
+        await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
 
         this.initBlockIconClickEvent();  //依赖 settings.load();
 
@@ -71,6 +72,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
 
+        this.toolbarItem.startMonitorDailyNoteForReservation();
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
         await this.toolbarItem.autoOpenDailyNote();
 
