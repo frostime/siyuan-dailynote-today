@@ -6,7 +6,7 @@
     "en_US": "Daily Note Today"
   },
   "url": "https://github.com/frostime/siyuan-dailynote-today",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "minAppVersion": "2.10.6",
   "description": {
     "zh_CN": "自动创建日记 + 快速打开日记 + 日程 TODO 管理 + 移动块功能",
@@ -27,5 +27,6 @@
     "custom": [
       "https://afdian.net/a/frostime"
     ]
-  }
+  },
+  "keywords": ["dailynote", "diary", "日记", "笔记", "日程", "TODO", "预约", "reservation"]
 }

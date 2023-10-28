@@ -1,3 +1,7 @@
+### [2023-10-28] v1.2.10
+
+- fix bug 多窗口模式下，使用顶栏菜单打开日记的行为，会错误的广播到所有窗口 [#171](https://github.com/frostime/siyuan-dailynote-today/issues/171)
+
 ### [2023-10-22] v1.2.9
 
 - 优化合并重复日记的策略 [#167](https://github.com/frostime/siyuan-dailynote-today/issues/167)
