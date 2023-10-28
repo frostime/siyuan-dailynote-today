@@ -5,6 +5,7 @@ import { showMessage, confirm, Dialog, openTab } from 'siyuan';
 import notebooks from '../global-notebooks';
 import { info, warn, error, i18n, lute, app, isMobile, formatBlockTime, debug } from "../utils";
 import * as serverApi from '../serverApi';
+import * as utils from '@/utils';
 import { reservation, settings } from '../global-status';
 import { Retrieve, RetvFactory } from './reserve';
 import { getDailynoteSprig, renderDailynotePath } from './dailynote';
@@ -267,7 +268,16 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    await serverApi.createDailyNote(notebook.id, "");
+    console.log(utils.app)
+    //@ts-ignore
+    const ws_url: string = window.siyuan.ws.ws.url;
+    const appIdReg = /app=(\w+)&/
+    let match = ws_url.match(appIdReg);
+    let appId = ""; //https://github.com/frostime/siyuan-dailynote-today/issues/171
+    if (match) {
+        appId = match[1];
+    }
+    await serverApi.createDailyNote(notebook.id, appId);
     showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
 }
 
