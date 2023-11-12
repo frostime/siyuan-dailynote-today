@@ -11,7 +11,7 @@ import { settings } from '@/global-status';
 import type DailyNoteTodayPlugin from '@/index';
 export * from './basic';
 export * from './open-dn';
-// export * from './check-duplicate';
+export * from './handle-duplicate';
 
 //@ts-ignore
 const SYNC_ENABLED = window.siyuan.config.sync.enabled;

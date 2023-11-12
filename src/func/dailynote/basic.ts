@@ -9,7 +9,7 @@
 import * as serverApi from '@/serverApi';
 import notebooks from "@/global-notebooks";
 import { info } from '@/utils';
-import { getDocsByHpath } from '@/func';
+import { getDocsByHpath } from '@/func/misc';
 
 /**
  * 
