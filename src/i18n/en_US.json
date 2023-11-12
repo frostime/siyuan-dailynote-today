@@ -140,6 +140,14 @@
             "    You may have created a diary on another device before and then created a diary on this device, resulting in a synchronization conflict.",
             "    Please merge and delete redundant diaries manually: Open today's diary, locate the diary document, and the conflicting document will be nearby."
         ],
+        "part3": [
+            "<p style=\"font-weight: bold; color: red\">",
+            "We found that in addition to the dailynote document conflict, the parent document at the upper level seems to be in conflict as well, and \"Auto Merge\" cannot handle this complexity of merging document trees.",
+            "</p>",
+            "<p style=\"font-weight: bold; color: red\">",
+            "Of course, <u>you can still to use the \"Auto Merge\" feature</u> to merge dailynote, but it is recommended that you manually deal with duplicate parent documents after auto-merging.",
+            "</p>"
+        ],
         "AutoMerge": "Auto merge",
         "HeadingMarkdown": "# Duplicate diaries are listed below",
         "success": "Merge success",

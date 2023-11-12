@@ -41,7 +41,7 @@ async function mergeDocs(docs: DocBlock[], callback?: () => void) {
     return latestDoc;
 }
 
-function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook): string {
+function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook, ansestorDup?: boolean): string {
 
     let confilctTable = [];
     for (let doc of docs) {
@@ -65,6 +65,7 @@ function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook): string {
             style="margin: 0.5rem;"
         >
             ${content}
+            ${ansestorDup ? i18n.ConflictDiary.part3.join("\n") : ""}
         </div>
         <div class="fn__flex b3-label" style="border-top: 1px solid var(--b3-theme-surface-lighter);">
             <div class="fn__flex-1"></div>
@@ -78,11 +79,30 @@ function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook): string {
 }
 
 /**
+ * 检查这些文档是否祖先文档树不同
+ */
+function ifAncestorDiff(docs: DocBlock[]): boolean {
+    let paths: string[] = docs.map(doc => doc.path);
+    //trim base doc
+    paths = paths.map(path => path.slice(0, path.lastIndexOf("/")));
+    //check if identical
+    let identical = true;
+    for (let i = 1; i < paths.length; i++) {
+        if (paths[i] !== paths[0]) {
+            identical = false;
+            break;
+        }
+    }
+    return !identical;
+}
+
+/**
  * 由于同步的问题，默认的笔记本中可能出现重复的日记，这里检查下是否有重复的日记
  * @param notebook 
  * @param todayDiaryHpath 
  */
 export async function checkDuplicateDiary(): Promise<boolean> {
+    // ==================== 检查是否有重复 ====================
     let notebook: Notebook = notebooks.default;
     let hpath = notebook.dailynoteHpath!;
     let docs = (await getDocsByHpath(hpath, notebook)) as DocBlock[];
@@ -90,7 +110,8 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     if (docs.length <= 1) {
         return false;
     }
-    //莫名其妙出现了重复的 id, 所以还是去重一下
+
+    // ==================== 由于未知原因可能出现重复的 id, 需要去重 ====================
     let idSet: Set<string> = new Set();
     let uniqueDocs: Array<DocBlock> = [];
     docs.forEach((doc) => {
@@ -105,16 +126,24 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         return false;
     }
 
+    // ==================== 检查顶部文档树是否也有重复 ====================
+    const ascendantDiff = ifAncestorDiff(docs); //如果为 true，说明祖先的文档树也不同
+
+    // ==================== 合并今天的日记 ====================
     console.warn(`Conflict daily note: ${notebook.name} ${hpath}`);
-    const html = buildShowDuplicateDocDom(docs, notebook);
+    const html = buildShowDuplicateDocDom(docs, notebook, ascendantDiff);
     let dialog = new Dialog({
         title: i18n.Name,
         content: html,
         width: isMobile ? "80%" : "50%",
     });
-    let uniqueDNDoc = null;
     dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
-        uniqueDNDoc = mergeDocs(docs, () => { dialog.destroy() });
+        mergeDocs(docs, () => { 
+            dialog.destroy();
+            if (ascendantDiff) {
+                showMessage("祖先", 10000, "info");
+            }
+        });
     });
     return true;
 }
