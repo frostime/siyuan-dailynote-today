@@ -21,6 +21,8 @@ import "./index.scss";
 let OnWsMainEvent: EventListener;
 // const WAIT_TIME_FOR_SYNC_CHECK: Milisecond = 1000 * 60 * 5;
 const MAX_CHECK_SYNC_TIMES: number = 10; //为了避免每次同步都检查，最多检查10次
+//@ts-ignore
+const SYNC_ENABLED = window.siyuan.config.sync.enabled;
 
 
 export default class DailyNoteTodayPlugin extends Plugin {

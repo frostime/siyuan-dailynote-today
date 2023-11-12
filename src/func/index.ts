@@ -5,10 +5,12 @@ import { showMessage, confirm, Dialog, openTab } from 'siyuan';
 import notebooks from '../global-notebooks';
 import { info, warn, error, i18n, lute, app, isMobile, formatBlockTime, debug } from "../utils";
 import * as serverApi from '../serverApi';
-import * as utils from '@/utils';
 import { reservation, settings } from '../global-status';
 import { Retrieve, RetvFactory } from './reserve';
 import { getDailynoteSprig, renderDailynotePath } from './dailynote';
+
+export * from './dailynote';
+export * from './reserve';
 
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
@@ -95,8 +97,6 @@ export async function currentDiaryStatus() {
     info(`更新日记状态: 当前日记共 ${count_diary} 篇`);
     return diaryStatus;
 }
-
-
 
 
 /**
@@ -247,32 +247,6 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     return true;
 }
 
-function today(): string {
-    let date = new Date();
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
-}
-
-export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
-    let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
-    info(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
-    serverApi.setBlockAttrs(doc_id, { "custom-dailynote": today() });
-    return doc_id;
-}
-
-
-/**
- * 打开指定的笔记本下今天的日记，如果不存在则创建
- * @param notebook_index 笔记本的 index
- */
-export async function openDiary(notebook: Notebook) {
-    // console.log(utils.app)
-    let appId = utils.app.appId;
-    await serverApi.createDailyNote(notebook.id, appId);
-    showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
-}
 
 export async function filterExistsBlocks(blockIds: string[]): Promise<Set<string>> {
     let idStr = blockIds.map(id => `'${id}'`).join(",");
