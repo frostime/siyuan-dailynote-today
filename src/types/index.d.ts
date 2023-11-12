@@ -72,6 +72,10 @@ type Block = {
     updated: string;
 }
 
+type DocBlock = Block & {
+    type: 'd'
+}
+
 type doOperation = {
     action: string;
     data: string;

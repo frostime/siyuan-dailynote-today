@@ -50,11 +50,12 @@
             {
                 name: "DisableAutoCreateOnMobile",
                 type: "checkbox"
-            },
-            {
-                name: "AutoOpenAfterSync",
-                type: "checkbox"
             }
+            //1.3.0 版本再加上
+            // {
+            //     name: "AutoOpenAfterSync",
+            //     type: "checkbox"
+            // }
         ],
         reservation: [
             {
