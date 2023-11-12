@@ -72,6 +72,10 @@ type Block = {
     updated: string;
 }
 
+type DocBlock = Block & {
+    type: 'd'
+}
+
 type doOperation = {
     action: string;
     data: string;
@@ -86,7 +90,7 @@ type SettingKey = (
     'PluginVersion' | "EnableMove" | 'EnableReserve' | 
     "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
     'RetvType' | 'EnableResvDock' | 'DisableAutoCreateOnMobile' |
-    'NotebookBlacklist'
+    'NotebookBlacklist' | 'AutoOpenAfterSync'
 );
 
 interface ISettingItem {

@@ -1,4 +1,4 @@
-import { IMenuItemOption, Menu, Plugin, confirm, showMessage } from "siyuan";
+import { IMenuItemOption, Menu, Plugin, showMessage, IEventBusMap } from "siyuan";
 import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
@@ -42,6 +42,7 @@ export class ToolbarMenuItem {
     }
 
     /**
+     * #TODO: 将这个函数重构放到 reservation.ts 下
      * 根据预约情况, 监听日记本的加载, 如果是今天的日记本, 则更新预约状态
      * @returns 
      */
@@ -49,11 +50,11 @@ export class ToolbarMenuItem {
         if (!reservation.isTodayReserved) {
             return
         }
-        this.plugin.eventBus.on("loaded-protyle", this.onProtyleLoadedBindThis);
+        this.plugin.eventBus.on("loaded-protyle-static", this.onProtyleLoadedBindThis);
         // 3分钟后, 取消监听, 防止不必要的性能损耗
         setTimeout(
             () => {
-                this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+                this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
             }, 
             1000 * 60 * 2
         );
@@ -64,7 +65,7 @@ export class ToolbarMenuItem {
         eventBus.unSubscribe('moveBlocks', UpdateDailyNoteStatusListener);
         this.ele.remove();
         this.ele = null;
-        this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+        this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
         debug('TopBarIcon released');
     }
 
@@ -158,52 +159,22 @@ export class ToolbarMenuItem {
     }
 
     /**
-     * 初始化的时候，加载所有的笔记本
-     */
-    async autoOpenDailyNote() {
-        debug('自动开启日记');
-        if (isMobile && settings.get('DisableAutoCreateOnMobile') === true) {
-            // showMessage('移动端不开放');
-            return;
-        }
-        //小窗打开模式下, 不再自动打开
-        const url = new URL(window.location.href);
-        // showMessage(url.pathname);
-        if (url.pathname.startsWith('/stage/build/app/window.html')) {
-            debug('小窗模式, 无需自动打开日记');
-            return;
-        }
-
-        if (notebooks.notebooks.length > 0) {
-            if (settings.settings.OpenOnStart === true) {
-                let notebookId: string = settings.get('DefaultNotebook');
-                let notebook: Notebook = notebooks.default;
-                if (notebook) {
-                    await openDiary(notebook);
-                    // initTodayReservation(notebook);
-                } else {
-                    confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
-                    return
-                }
-            }
-        }
-    }
-
-    /**
      * 监听自动打开日记后，插入当天预约用
      */
     private async onProtyleLoaded({ detail }) {
-        const block_ = detail.block;
+        console.debug(detail);
+        const protyle = detail.protyle;
+        const block_ = protyle.block;
         if (block_.id != block_.rootID) {
             return;
         }
         //是否为文档
-        const headElement: HTMLElement = detail?.model?.headElement;
+        const headElement: HTMLElement = protyle?.model?.headElement;
         if (!headElement) {
             return;
         }
         //笔记本是否是默认笔记本
-        const notebookId = detail.notebookId;
+        const notebookId = protyle.notebookId;
         if (notebookId !== notebooks.default.id) {
             return;
         }
@@ -224,7 +195,7 @@ export class ToolbarMenuItem {
             // console.log(block.hpath);
             if (notebooks.default.dailynoteHpath === block.hpath) {
                 debug('Got Today\'s daily note');
-                this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+                this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
                 await updateTodayReservation(notebooks.default, true);
             }
         }

@@ -6,7 +6,7 @@ import Setting from './components/setting-gui.svelte'
 import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import { checkDuplicateDiary, updateTodayReservation } from './func';
+import { checkDuplicateDiary, updateTodayReservation, autoOpenDailyNote } from './func';
 import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
@@ -74,7 +74,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         this.toolbarItem.startMonitorDailyNoteForReservation();
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
-        await this.toolbarItem.autoOpenDailyNote();
+        await autoOpenDailyNote();
 
         this.checkDuplicateDiary();
         this.checkDuplicateDiary_Debounce = debouncer.debounce(
