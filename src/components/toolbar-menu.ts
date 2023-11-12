@@ -1,4 +1,4 @@
-import { IMenuItemOption, Menu, Plugin, confirm, showMessage, IEventBusMap } from "siyuan";
+import { IMenuItemOption, Menu, Plugin, showMessage, IEventBusMap } from "siyuan";
 import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
@@ -42,6 +42,7 @@ export class ToolbarMenuItem {
     }
 
     /**
+     * #TODO: 将这个函数重构放到 reservation.ts 下
      * 根据预约情况, 监听日记本的加载, 如果是今天的日记本, 则更新预约状态
      * @returns 
      */
@@ -155,38 +156,6 @@ export class ToolbarMenuItem {
             menuItems.push(item);
         }
         return menuItems;
-    }
-
-    /**
-     * 初始化的时候，加载所有的笔记本
-     */
-    async autoOpenDailyNote() {
-        debug('自动开启日记');
-        if (isMobile && settings.get('DisableAutoCreateOnMobile') === true) {
-            // showMessage('移动端不开放');
-            return;
-        }
-        //小窗打开模式下, 不再自动打开
-        const url = new URL(window.location.href);
-        // showMessage(url.pathname);
-        if (url.pathname.startsWith('/stage/build/app/window.html')) {
-            debug('小窗模式, 无需自动打开日记');
-            return;
-        }
-
-        if (notebooks.notebooks.length > 0) {
-            if (settings.settings.OpenOnStart === true) {
-                let notebookId: string = settings.get('DefaultNotebook');
-                let notebook: Notebook = notebooks.default;
-                if (notebook) {
-                    await openDiary(notebook);
-                    // initTodayReservation(notebook);
-                } else {
-                    confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
-                    return
-                }
-            }
-        }
     }
 
     /**

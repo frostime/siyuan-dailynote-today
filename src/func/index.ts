@@ -67,39 +67,6 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
 
 
 /**
- * 根据思源中已经有 diary 的笔记本，更新下拉框中的笔记本状态
- * 注意，本函数不会更新 notebooks
- * @details
- * 1. 遍历所有笔记本，找到所有的 daily note 的 hpath
- * 2. 对每种 hpath，调用 `await getDocsByHpath(todayDNHpath)`，查询是否存在对应的文件
- */
-export async function currentDiaryStatus() {
-    // let todayDiary = getTodayDiaryPath();
-    //所有 hpath 的配置方案
-    let hpath_set: Set<string> = new Set();
-    notebooks.notebooks.forEach((notebook) => {
-        hpath_set.add(notebook.dailynoteHpath!);
-    });
-
-    let diaryStatus: Map<string, boolean> = new Map();
-    let count_diary = 0;
-    for (const todayDNHpath of hpath_set) {
-        //对每种 daily note 的方案，看看是否存在对应的路径
-        let docs = await getDocsByHpath(todayDNHpath);
-        if (docs.length > 0) {
-            let notebook_with_diary = docs.map(doc => doc.box);
-            notebook_with_diary.forEach((notebookId: string) => {
-                diaryStatus.set(notebookId, true);
-            });
-            count_diary += notebook_with_diary.length;
-        }
-    }
-    info(`更新日记状态: 当前日记共 ${count_diary} 篇`);
-    return diaryStatus;
-}
-
-
-/**
  * getDocsByHpath returns all documents in the database that have a given hpath. 
  * If a notebook is not null, then it only returns documents in that notebook that have the given hpath.
  * @param hpath 
