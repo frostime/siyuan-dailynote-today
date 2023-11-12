@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023 by Yp Z (frostime). All Rights Reserved.
+ * @Author       : Yp Z
+ * @Date         : 2023-06-17 13:55:54
+ * @FilePath     : /src/func/reserve/reserve.ts
+ * @LastEditTime : 2023-11-12 18:27:58
+ * @Description  : 
+ */
 import * as serverApi from '@/serverApi';
 
 
