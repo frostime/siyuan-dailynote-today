@@ -50,6 +50,10 @@
             {
                 name: "DisableAutoCreateOnMobile",
                 type: "checkbox"
+            },
+            {
+                name: "AutoOpenAfterSync",
+                type: "checkbox"
             }
         ],
         reservation: [

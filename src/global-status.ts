@@ -23,6 +23,7 @@ class SettingManager {
 
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
+        AutoOpenAfterSync: false as boolean, //在第一次同步之后再自动打开日记
         DefaultNotebook: '', //默认笔记本的 ID
         DisableAutoCreateOnMobile: false as boolean, //移动端自动创建日记
         IconPosition: 'left' as IconPosition, //图标放置位置
