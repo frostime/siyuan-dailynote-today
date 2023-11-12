@@ -1,4 +1,4 @@
-import { IMenuItemOption, Menu, Plugin, confirm, showMessage } from "siyuan";
+import { IMenuItemOption, Menu, Plugin, confirm, showMessage, IEventBusMap } from "siyuan";
 import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
@@ -49,11 +49,11 @@ export class ToolbarMenuItem {
         if (!reservation.isTodayReserved) {
             return
         }
-        this.plugin.eventBus.on("loaded-protyle", this.onProtyleLoadedBindThis);
+        this.plugin.eventBus.on("loaded-protyle-static", this.onProtyleLoadedBindThis);
         // 3分钟后, 取消监听, 防止不必要的性能损耗
         setTimeout(
             () => {
-                this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+                this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
             }, 
             1000 * 60 * 2
         );
@@ -64,7 +64,7 @@ export class ToolbarMenuItem {
         eventBus.unSubscribe('moveBlocks', UpdateDailyNoteStatusListener);
         this.ele.remove();
         this.ele = null;
-        this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+        this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
         debug('TopBarIcon released');
     }
 
@@ -193,17 +193,19 @@ export class ToolbarMenuItem {
      * 监听自动打开日记后，插入当天预约用
      */
     private async onProtyleLoaded({ detail }) {
-        const block_ = detail.block;
+        console.debug(detail);
+        const protyle = detail.protyle;
+        const block_ = protyle.block;
         if (block_.id != block_.rootID) {
             return;
         }
         //是否为文档
-        const headElement: HTMLElement = detail?.model?.headElement;
+        const headElement: HTMLElement = protyle?.model?.headElement;
         if (!headElement) {
             return;
         }
         //笔记本是否是默认笔记本
-        const notebookId = detail.notebookId;
+        const notebookId = protyle.notebookId;
         if (notebookId !== notebooks.default.id) {
             return;
         }
@@ -224,7 +226,7 @@ export class ToolbarMenuItem {
             // console.log(block.hpath);
             if (notebooks.default.dailynoteHpath === block.hpath) {
                 debug('Got Today\'s daily note');
-                this.plugin.eventBus.off("loaded-protyle", this.onProtyleLoadedBindThis);
+                this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
                 await updateTodayReservation(notebooks.default, true);
             }
         }

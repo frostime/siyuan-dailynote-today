@@ -268,7 +268,7 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    console.log(utils.app)
+    // console.log(utils.app)
     let appId = utils.app.appId;
     await serverApi.createDailyNote(notebook.id, appId);
     showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
