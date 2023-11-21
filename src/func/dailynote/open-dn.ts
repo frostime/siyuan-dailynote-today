@@ -1,4 +1,12 @@
-import { showMessage, confirm } from 'siyuan';
+/*
+ * Copyright (c) 2023 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Date         : 2023-11-12 19:53:10
+ * @FilePath     : /src/func/dailynote/open-dn.ts
+ * @LastEditTime : 2023-11-21 14:18:09
+ * @Description  : 
+ */
+import { showMessage, confirm, openTab, Constants } from 'siyuan';
 
 
 import notebooks from "@/global-notebooks";
@@ -30,10 +38,19 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
  * @param notebook_index 笔记本的 index
  */
 export async function openDiary(notebook: Notebook) {
-    // console.log(utils.app)
     let appId = utils.app.appId;
-    await serverApi.createDailyNote(notebook.id, appId);
+    let dailynote = await serverApi.createDailyNote(notebook.id, appId);
     showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
+    //打开文档
+    openTab({
+        app: utils.app,
+        doc: {
+            id: dailynote.id,
+            zoomIn: false
+        }
+    });
+    //设置日记日期的自定义属性 (现在也没啥用, 以后也不一定会用到, 但是加一个也不碍事)
+    serverApi.setBlockAttrs(dailynote.id, { "custom-dailynote": today() });
 }
 
 

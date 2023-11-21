@@ -33,7 +33,11 @@ export async function createDocWithMd(notebookId: NotebookId, path: string, mark
     return request(url, data);
 }
 
-export async function createDailyNote(notebookId: NotebookId, app: string) {
+interface ICreateDNResult {
+    id: BlockId;
+}
+
+export async function createDailyNote(notebookId: NotebookId, app: string): Promise<ICreateDNResult> {
     let url = '/api/filetree/createDailyNote';
     return request(url, { notebook: notebookId, app: app });
 }
