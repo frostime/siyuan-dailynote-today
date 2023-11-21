@@ -43,6 +43,7 @@ export class ToolbarMenuItem {
 
     /**
      * #TODO: 将这个函数重构放到 reservation.ts 下
+     * #TODO: 2.10.16 版本之后 SiYuan 的 createDailyNote 返回 doc id, 所以可以不需要再使用监听了
      * 根据预约情况, 监听日记本的加载, 如果是今天的日记本, 则更新预约状态
      * @returns 
      */

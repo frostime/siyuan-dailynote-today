@@ -61,9 +61,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initPluginUI();
 
         //初始化数据
-        // await reservation.load();
-        // await settings.load();
-        // await notebooks.init();  //依赖 settings.load();
         await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
 
         this.initBlockIconClickEvent();  //依赖 settings.load();

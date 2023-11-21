@@ -1,3 +1,3 @@
-### [2023-10-22] v1.2.9
+### [2023-11-21] v1.2.12
 
-优化合并重复日记的策略 [#167](https://github.com/frostime/siyuan-dailynote-today/issues/167)
+- fix: After SiYuan update 2.10.16, the plugin can't open the diary document due to the change of the internal API implementation.
