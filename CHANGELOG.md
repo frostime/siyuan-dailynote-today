@@ -1,3 +1,15 @@
+### [2023-11-21] v1.2.12
+
+- fix: 思源更新 2.10.16 后, 由于修改内部 API 的实现方案导致插件无法打开日记文档
+
+
+### [2023-11-12] v1.2.11
+
+- 重构代码
+- fix: 检查父文档树是否重复 [#175](https://github.com/frostime/siyuan-dailynote-today/issues/175)
+- update: 使用新的 `loaded-protyle-static` API
+
+
 ### [2023-10-28] v1.2.10
 
 - fix bug 多窗口模式下，使用顶栏菜单打开日记的行为，会错误的广播到所有窗口 [#171](https://github.com/frostime/siyuan-dailynote-today/issues/171)

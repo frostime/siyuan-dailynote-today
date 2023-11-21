@@ -1,3 +1,3 @@
-### [2023-10-22] v1.2.9
+### [2023-11-21] v1.2.12
 
-优化合并重复日记的策略 [#167](https://github.com/frostime/siyuan-dailynote-today/issues/167)
+- fix: 思源更新 2.10.16 后, 由于修改内部 API 的实现方案导致插件无法打开日记文档
