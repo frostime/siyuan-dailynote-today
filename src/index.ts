@@ -6,14 +6,15 @@ import Setting from './components/setting-gui.svelte'
 import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
+import {reserveBlock, dereserveBlock} from './components/libs/reserve';
 import { checkDuplicateDiary, updateTodayReservation, autoOpenDailyNote } from './func';
-import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer } from './utils';
+import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
 import { eventBus } from './event-bus';
 
-// import { changelog } from 'sy-plugin-changelog';
+import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
 
@@ -83,15 +84,45 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let end = performance.now();
         debug(`启动耗时: ${end - start} ms`);
 
-        // let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
-        // if (ans?.Dialog) {
-        //     let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
-        //     ele.style.height = '15rem';
-        //     ele.style.width = '40rem';
-        // }
+        let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
+        if (ans?.Dialog) {
+            let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
+            ele.style.height = '25rem';
+            ele.style.width = '40rem';
+        }
     }
 
     private initPluginUI() {
+        this.addCommand({
+            langKey: 'reserve',
+            hotkey: '⌥⇧R',
+            editorCallback: async () => {
+                let block: HTMLElement = getFocusedBlock();
+                if (block) {
+                    //解决列表块的特殊情况
+                    let datatype = block.getAttribute('data-type');
+                    if (datatype === 'NodeParagraph') {
+                        let parent = block?.parentElement;
+                        datatype = parent?.getAttribute('data-type');
+                        if (datatype === 'NodeListItem') {
+                            block = parent;
+                        }
+                    }
+
+                    const blockId = block.getAttribute('data-node-id');
+                    let reservation: Attr = block.attributes.getNamedItem('custom-reservation');
+                    if (settings.get("EnableReserve") === true) {
+                        //存在预约, 可以用于取消
+                        if (reservation) {
+                            dereserveBlock(blockId)
+                        } else {
+                            reserveBlock(blockId)
+                        }
+                    }
+                }
+            }
+        });
+
         this.toolbarItem = new ToolbarMenuItem(this);
 
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
