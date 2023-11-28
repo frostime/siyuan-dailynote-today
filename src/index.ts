@@ -87,7 +87,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
         if (ans?.Dialog) {
             let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
-            ele.style.height = '17rem';
+            ele.style.height = '25rem';
             ele.style.width = '40rem';
         }
     }

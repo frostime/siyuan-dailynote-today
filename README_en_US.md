@@ -129,6 +129,10 @@ You can customize the CSS styles to display these reservation blocks. Here is an
 
 With custom attributes, you can use SQL to query all reservation blocks. For more information, see [FAQs](#q-how-to-view-all-reservation-blocks).
 
+#### Hot key
+
+Press `Shift+Alt+R` to trigger the reservation quickly.
+
 #### 4.1 View scheduled appointments
 
 There is a panel provided in the Dock to view scheduled appointments.

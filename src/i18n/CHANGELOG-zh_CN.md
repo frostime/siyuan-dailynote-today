@@ -4,3 +4,7 @@
 
     - [#179](https://github.com/frostime/siyuan-dailynote-today/issues/179)
     - 参考: https://github.com/siyuan-note/siyuan/issues/9738?utm_source=ld246.com
+
+- feat: 为预约块增加**快捷键** [#95](https://github.com/frostime/siyuan-dailynote-today/issues/95)
+
+    现在光标聚焦在块上，然后使用 `Shift+Alt+R` 可以快速对块执行预约功能
