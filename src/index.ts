@@ -97,8 +97,18 @@ export default class DailyNoteTodayPlugin extends Plugin {
             langKey: 'reserve',
             hotkey: '⌥⇧R',
             editorCallback: async () => {
-                const block: HTMLElement = getFocusedBlock();
+                let block: HTMLElement = getFocusedBlock();
                 if (block) {
+                    //解决列表块的特殊情况
+                    let datatype = block.getAttribute('data-type');
+                    if (datatype === 'NodeParagraph') {
+                        let parent = block?.parentElement;
+                        datatype = parent?.getAttribute('data-type');
+                        if (datatype === 'NodeListItem') {
+                            block = parent;
+                        }
+                    }
+
                     const blockId = block.getAttribute('data-node-id');
                     let reservation: Attr = block.attributes.getNamedItem('custom-reservation');
                     if (settings.get("EnableReserve") === true) {
