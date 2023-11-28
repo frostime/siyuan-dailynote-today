@@ -6,8 +6,9 @@ import Setting from './components/setting-gui.svelte'
 import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
+import {reserveBlock, dereserveBlock} from './components/libs/reserve';
 import { checkDuplicateDiary, updateTodayReservation, autoOpenDailyNote } from './func';
-import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer } from './utils';
+import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
@@ -92,6 +93,26 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     private initPluginUI() {
+        this.addCommand({
+            langKey: 'reserve',
+            hotkey: '⌥⇧R',
+            editorCallback: async () => {
+                const block: HTMLElement = getFocusedBlock();
+                if (block) {
+                    const blockId = block.getAttribute('data-node-id');
+                    let reservation: Attr = block.attributes.getNamedItem('custom-reservation');
+                    if (settings.get("EnableReserve") === true) {
+                        //存在预约, 可以用于取消
+                        if (reservation) {
+                            dereserveBlock(blockId)
+                        } else {
+                            reserveBlock(blockId)
+                        }
+                    }
+                }
+            }
+        });
+
         this.toolbarItem = new ToolbarMenuItem(this);
 
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
