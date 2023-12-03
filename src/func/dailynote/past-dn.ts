@@ -11,12 +11,14 @@ export async function getPastDNHPath(notebook: NotebookId | Notebook, date: Date
         notebook = notebooks.find(notebook);
     }
     if (notebook === null) {
-        throw new Error('DailyNoteToday: 请先设置日记本');
+        // throw new Error('DailyNoteToday: 请先设置日记本');
+        return null;
     }
 
     let dnSprig = notebook?.dailynoteSprig;
     if (dnSprig === undefined) {
-        throw new Error('DailyNoteToday: 请先设置日记本');
+        // throw new Error('DailyNoteToday: 请先设置日记本');
+        return null;
     }
 
     let dateStr = formatDate(date, '-');
@@ -47,6 +49,9 @@ interface IDailyNote {
  */
 export async function searchDailyNote(notebook: Notebook, date: Date): Promise<IDailyNote> {
     let hpath = await getPastDNHPath(notebook, date);
+    if (hpath === null) {
+        return null;
+    }
     let docs: Block[] = await getDocsByHpath(hpath, notebook);
     let ans = {
         date: date,
@@ -63,7 +68,8 @@ export async function searchDailyNotesBetween(notebook: Notebook, begin: Date, e
     let dnSprig = notebook?.dailynoteSprig;
 
     if (dnSprig === undefined) {
-        throw new Error('DailyNoteToday: 请先设置日记本');
+        // throw new Error('DailyNoteToday: 请先设置日记本');
+        return [];
     }
 
     end = end === undefined ? new Date() : end;
@@ -78,7 +84,7 @@ export async function searchDailyNotesBetween(notebook: Notebook, begin: Date, e
     }
     let allDnDocs = allDates.map(async (date: Date) => {
         let ans = await searchDailyNote(notebook, date);
-        if (callback !== undefined) {
+        if (callback !== undefined && callback !== null) {
             callback(ans);
         }
         return ans;
@@ -98,8 +104,8 @@ export async function searchDailyNotesBetween(notebook: Notebook, begin: Date, e
 export async function searchAndSearchAllDNAttr(notebook: Notebook) {
 
     let dailynoteSprig = notebook?.dailynoteSprig;
-    if (dailynoteSprig === undefined) {
-        throw new Error('DailyNoteToday: 请先设置日记本');
+    if (dailynoteSprig === undefined || dailynoteSprig === null || dailynoteSprig === '') {
+        return;
     }
     if (dailynoteSprig.startsWith('/')) {
         dailynoteSprig = dailynoteSprig.substring(1);
@@ -122,7 +128,8 @@ export async function searchAndSearchAllDNAttr(notebook: Notebook) {
         order by created asc limit 1;`;
     let docs = await api.sql(sql);
     if (docs.length === 0) {
-        throw `DailyNoteToday: 未找到日记本 ${notebook.name} 的第一篇日记`;
+        console.warn(`未找到日记本 ${notebook.name} 的日记`);
+        return;
     }
     let firstDoc = docs[0];
     let created: string = firstDoc.created;

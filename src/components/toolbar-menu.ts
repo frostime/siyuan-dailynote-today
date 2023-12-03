@@ -1,5 +1,5 @@
-import { IMenuItemOption, Menu, Plugin, showMessage, IEventBusMap } from "siyuan";
-import { currentDiaryStatus, openDiary, updateTodayReservation, searchPastDailyNotes } from "../func";
+import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
+import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { i18n, isMobile, debug } from "../utils";
@@ -102,13 +102,6 @@ export class ToolbarMenuItem {
             label: i18n.Setting.update.title,
             icon: 'iconRefresh',
             click: () => {eventBus.publish(eventBus.EventUpdateAll, '');}
-        });
-        menu.addItem({
-            label: '设置所有过去日期',
-            icon: 'iconEmoji',
-            click: async () => {
-                let dailynotes = await searchPastDailyNotes(notebooks.notebooks[0], new Date('2023-03-01'));
-            }
         });
 
         let rect = this.ele.getBoundingClientRect();

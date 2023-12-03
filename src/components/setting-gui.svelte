@@ -7,6 +7,8 @@
     import SettingPanels from "./settings/setting-panels.svelte";
     import Blacklist from "./blacklist.svelte";
 
+    import { setDNAttrDialog } from "./set-past-dn-attr";
+
     let contents = i18n.Setting;
 
     let groups = {
@@ -50,6 +52,10 @@
             {
                 name: "DisableAutoCreateOnMobile",
                 type: "checkbox"
+            },
+            {
+                name: "SetPastDailyNoteAttr",
+                type: "button"
             }
             //1.3.0 版本再加上
             // {
@@ -105,22 +111,26 @@
 
     function onClick({ detail }) {
         console.log(detail);
-        let dialog = new Dialog({
-            title: i18n.Blacklist.name,
-            content: `<div id="blacklist" style="height: 100%;"></div>`,
-            height: "25rem",
-            width: "30rem",
-        });
-        new Blacklist({
-            target: dialog.element.querySelector("#blacklist"),
-            props: {
-                close: () => {
-                    dialog.destroy();
+        let key = detail.key;
+        if (key === 'NotebookBlacklist') {
+            let dialog = new Dialog({
+                title: i18n.Blacklist.name,
+                content: `<div id="blacklist" style="height: 100%;"></div>`,
+                height: "25rem",
+                width: "30rem",
+            });
+            new Blacklist({
+                target: dialog.element.querySelector("#blacklist"),
+                props: {
+                    close: () => {
+                        dialog.destroy();
+                    },
                 },
-            },
-        });
+            });
+        } else if (key === 'SetPastDailyNoteAttr') {
+            setDNAttrDialog();
+        }
     }
-
 </script>
 
 <!-- <SettingPanel dataname="global" {settingItems} />

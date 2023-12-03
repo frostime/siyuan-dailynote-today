@@ -82,6 +82,10 @@
                 "link": "Link",
                 "ref": "Ref"
             }
+        },
+        "SetPastDailyNoteAttr": {
+            "title": "Addl document attribute for past Daily Notes",
+            "text": "✨ Due to the limitations of SiYuan's implementation, it used to be difficult to find specific daily note at any time, adding this doc attribute is a prerequisite for the subsequent optimization of daily note's functionality.<br/>If you don't understand what this button is for, it is recommended that you press it, and it won't bring you any extra trouble!<br/> Note: Clicking this button once is enough."
         }
     },
     "SettingGroups": {
