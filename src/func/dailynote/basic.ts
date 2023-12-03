@@ -11,6 +11,15 @@ import notebooks from "@/global-notebooks";
 import { info } from '@/utils';
 import { getDocsByHpath } from '@/func/misc';
 
+
+export function formatDate(date?: Date, sep=''): string {
+    date = date === undefined ? new Date() : date;
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    return `${year}${sep}${month < 10 ? '0' + month : month}${sep}${day < 10 ? '0' + day : day}`;
+}
+
 /**
  * 
  * @param notebook 笔记本对象

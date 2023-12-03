@@ -3,21 +3,12 @@
  * @Author       : frostime
  * @Date         : 2023-12-03 11:38:29
  * @FilePath     : /src/func/dailynote/dn-attr.ts
- * @LastEditTime : 2023-12-03 11:42:44
+ * @LastEditTime : 2023-12-03 13:29:27
  * @Description  : To distinguish the daily note from other plain notes, we set a custom attribute for it.
  *                 The attribute is like: custom-dailynote-yyyyMMdd: yyyyMMdd
  */
 import * as serverApi from '@/serverApi';
-
-
-function formatDate(date?: Date): string {
-    date = date === undefined ? new Date() : date;
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
-}
-
+import { formatDate } from './basic';
 
 /**
  * 对 DailyNote 的自定义属性进行设置, custom-dailynote-yyyyMMdd: yyyyMMdd
