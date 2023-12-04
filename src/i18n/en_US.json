@@ -85,7 +85,7 @@
         },
         "SetPastDailyNoteAttr": {
             "title": "Add document attribute to past daily notes",
-            "text": "✨ Add attribute custom-dailynote to past daily notes.<br/>If you don't understand what this button is for, it is recommended that you press it, and it won't bring you any extra trouble!<br/> Note: Clicking this button once is enough."
+            "text": "✨ Adding the custom-dailynote attribute to past daily notes for compatibility with <span style=\"color: var(--b3-theme-primary)\">SiYuan versions prior to 2.11.1</span>.<br/>If you don't understand what this button is for, it is recommended that you press it, and it won't bring you any extra trouble!<br/> Note: Clicking this button once is enough."
         }
     },
     "SettingGroups": {
