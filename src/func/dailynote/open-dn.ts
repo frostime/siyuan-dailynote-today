@@ -47,7 +47,7 @@ export async function openDiary(notebook: Notebook) {
         });
     }
     //设置日记日期的自定义属性 (现在也没啥用, 以后也不一定会用到, 但是加一个也不碍事)
-    setCustomDNAttr(dailynote.id);
+    // setCustomDNAttr(dailynote.id); // 内核实现
 }
 
 
