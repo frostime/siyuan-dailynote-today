@@ -82,6 +82,11 @@
                 "link": "链接块",
                 "ref": "引用块"
             }
+        },
+        "SetPastDailyNoteAttr": {
+            "title": "为过去的 Daily Note 补充文档属性",
+            "text": "✨ 为过去的日记添加 custom-dailynote 属性，以<span style=\"color: var(--b3-theme-primary)\">兼容 2.11.1 版本前</span>的思源。<br/>你不必理解具体的细节, 点一下这个按钮, 不会给你带来任何额外的麻烦。<br/>注: 这个按钮点一次就够了",
+            "button": "开始"
         }
     },
     "SettingGroups": {

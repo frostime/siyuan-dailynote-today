@@ -1,8 +1,8 @@
-import { IMenuItemOption, Menu, Plugin, showMessage, IEventBusMap } from "siyuan";
+import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
-import { info, i18n, isMobile, debug } from "../utils";
+import { i18n, isMobile, debug } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
 

@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-11-12 19:53:10
  * @FilePath     : /src/func/dailynote/open-dn.ts
- * @LastEditTime : 2023-11-21 14:18:09
+ * @LastEditTime : 2023-12-04 18:17:26
  * @Description  : 
  */
 import { showMessage, confirm, openTab, openMobileFileById } from 'siyuan';
@@ -16,20 +16,13 @@ import * as serverApi from '@/serverApi';
 import * as utils from '@/utils';
 import { info, i18n, isMobile, debug } from '@/utils';
 
-
-function today(): string {
-    let date = new Date();
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
-}
+import { setCustomDNAttr } from './dn-attr';
 
 
 export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
     info(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
-    serverApi.setBlockAttrs(doc_id, { "custom-dailynote": today() });
+    setCustomDNAttr(doc_id);
     return doc_id;
 }
 
@@ -54,7 +47,7 @@ export async function openDiary(notebook: Notebook) {
         });
     }
     //设置日记日期的自定义属性 (现在也没啥用, 以后也不一定会用到, 但是加一个也不碍事)
-    serverApi.setBlockAttrs(dailynote.id, { "custom-dailynote": today() });
+    setCustomDNAttr(dailynote.id); // 内核实现
 }
 
 
