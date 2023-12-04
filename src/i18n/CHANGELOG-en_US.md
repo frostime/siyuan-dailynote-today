@@ -14,7 +14,7 @@ The plugin has made adjustments primarily for this feature:
     - Open the plugin settings - Daily Notes
     - Click the "Add document attribute to past Daily Notes" button
 
-    ![](https://github.com/frostime/siyuan-dailynote-today/asset/OldDNAttr.png)
+    ![](https://cdn.jsdelivr.net/gh/frostime/siyuan-dailynote-today/asset/OldDNAttr.png)
 
 
 Afterwards, you can query daily notes using SQL statements similar to the following example. The statement `custom-dailynote-202312%` will match all daily notes from December 2023:

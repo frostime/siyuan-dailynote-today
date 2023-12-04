@@ -14,7 +14,7 @@
     - 打开插件设置-日记
     - 点击「为过去的 Daily Note 补充文档属性」按钮
 
-    ![](https://github.com/frostime/siyuan-dailynote-today/asset/OldDNAttr.png)
+    ![](https://cdn.jsdelivr.net/gh/frostime/siyuan-dailynote-today/asset/OldDNAttr.png)
 
 
 此后, 你就可以通过类似的 SQL 语句查询 daily note 了, 如下 `custom-dailynote-202312%` 会匹配 2023 年 12 月份的所有日记
