@@ -17,6 +17,7 @@ import { eventBus } from './event-bus';
 import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
+import type { TypoDialog } from 'sy-plugin-changelog/dist/utils';
 
 
 let OnWsMainEvent: EventListener;
@@ -86,9 +87,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
         if (ans?.Dialog) {
-            let ele: HTMLDivElement = ans.Dialog.element.querySelector('.b3-dialog__container');
-            ele.style.height = '25rem';
-            ele.style.width = '40rem';
+            let dialog: TypoDialog = ans.Dialog;
+            dialog.setSize({ width: '50rem', height: '42rem' });
+            dialog.setFont('1.2rem');
         }
     }
 

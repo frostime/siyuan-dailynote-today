@@ -39,8 +39,8 @@ devDependencies:
     specifier: ^3.57.0
     version: 3.57.0
   sy-plugin-changelog:
-    specifier: ^0.0.6
-    version: 0.0.6
+    specifier: ^0.0.7
+    version: registry.npmmirror.com/sy-plugin-changelog@0.0.7
   ts-node:
     specifier: ^10.9.1
     version: 10.9.1(@types/node@20.2.0)(typescript@5.0.4)
@@ -619,10 +619,6 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /sy-plugin-changelog@0.0.6:
-    resolution: {integrity: sha512-Y4tvKFLF3HZuviZsK8HRJ82ltMI326N3752nv1lEeGv0U2G22GsSRQItw2Ha8IQw7bS4e12qMSyesQD9xyqK2w==}
-    dev: true
-
   /to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
@@ -1033,4 +1029,10 @@ packages:
     resolution: {integrity: sha512-dKKr1sQKP9+zFl9E75DDtyXfkfzVpyBrtGGRvtjl9ji+46xTIipbj0O7kfXWnEbxKPMNHIZ7g0zPk5B5hQgr7w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/siyuan/-/siyuan-0.8.9.tgz}
     name: siyuan
     version: 0.8.9
+    dev: true
+
+  registry.npmmirror.com/sy-plugin-changelog@0.0.7:
+    resolution: {integrity: sha512-2xiSeiyp1OzMW+iuYGcQ8R+/3cxf6a4DEXwGxWXhdvDp6MdPJYsgyza/M++YoLP7B0TdDQneVWyMMMCA4y4vQg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/sy-plugin-changelog/-/sy-plugin-changelog-0.0.7.tgz}
+    name: sy-plugin-changelog
+    version: 0.0.7
     dev: true
