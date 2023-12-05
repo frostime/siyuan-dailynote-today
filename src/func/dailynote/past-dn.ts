@@ -4,7 +4,7 @@ import * as api from "@/serverApi";
 import { formatDate } from './basic';
 import { getDocsByHpath } from '@/func/misc';
 import { setCustomDNAttr } from "./dn-attr";
-import { debug, info } from "@/utils";
+import { info } from "@/utils";
 
 export async function getPastDNHPath(notebook: NotebookId | Notebook, date: Date): Promise<string> {
     if (typeof notebook === 'string') {

@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-11-12 19:53:10
  * @FilePath     : /src/func/dailynote/open-dn.ts
- * @LastEditTime : 2023-12-04 18:17:26
+ * @LastEditTime : 2023-12-04 20:30:15
  * @Description  : 
  */
 import { showMessage, confirm, openTab, openMobileFileById } from 'siyuan';
@@ -46,8 +46,7 @@ export async function openDiary(notebook: Notebook) {
             }
         });
     }
-    //设置日记日期的自定义属性 (现在也没啥用, 以后也不一定会用到, 但是加一个也不碍事)
-    setCustomDNAttr(dailynote.id); // 内核实现
+    // setCustomDNAttr(dailynote.id); // 内核会自动添加
 }
 
 
