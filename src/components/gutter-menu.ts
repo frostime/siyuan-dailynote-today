@@ -1,9 +1,9 @@
-import { i18n } from "../utils";
+import { i18n } from "@/utils";
 import { EventBus, Menu } from "siyuan";
 import { iconDiary } from "./svg";
-import { settings } from "../global-status";
-import { reserveBlock, dereserveBlock } from "./libs/reserve";
-import { createMenuItems } from "./libs/move";
+import { settings } from "@/global-status";
+import { reserveBlock, dereserveBlock } from "@/func/reserve";
+import { createMenuItems } from "@/func/move";
 
 let blockGutterClickEvent: EventListener;
 let docGutterClickEvent: EventListener;

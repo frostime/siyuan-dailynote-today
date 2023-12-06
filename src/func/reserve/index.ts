@@ -2,11 +2,12 @@ import { confirm } from 'siyuan';
 import { error, i18n, debug } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { reservation, settings } from '@/global-status';
-import { Retrieve, RetvFactory } from './core';
+import { Retrieve, RetvFactory } from './retrieve';
 
 import { getDocsByHpath } from '../misc';
 
-export * from './core';
+export * from './retrieve';
+export * from './reserve';
 
 
 export async function initTodayReservation(notebook: Notebook) {
