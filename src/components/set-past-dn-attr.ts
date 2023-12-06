@@ -1,5 +1,5 @@
 import { Dialog } from "siyuan";
-import {searchAndSearchAllDNAttr} from '@/func';
+import { searchAndSetAllDNAttr } from '@/func';
 import notebooks from "@/global-notebooks";
 
 /**
@@ -28,7 +28,7 @@ export const setDNAttrDialog = async () => {
         let li = document.createElement('li');
         li.innerHTML = `<b>${notebook.name}...</b>`;
         ul.appendChild(li);
-        let ans = await searchAndSearchAllDNAttr(notebook);
+        let ans = await searchAndSetAllDNAttr(notebook);
         li.innerHTML = `<b>${notebook.name}</b>: <b>${ans?.length ?? 0}</b> daily notes.`;
     }
     let body = dialog.element.querySelector("#body");
