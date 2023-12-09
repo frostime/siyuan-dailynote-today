@@ -20,7 +20,6 @@ import "./index.scss";
 import type { TypoDialog } from 'sy-plugin-changelog/dist/utils';
 
 
-let OnWsMainEvent: EventListener;
 // const WAIT_TIME_FOR_SYNC_CHECK: Milisecond = 1000 * 60 * 5;
 const MAX_CHECK_SYNC_TIMES: number = 10; //为了避免每次同步都检查，最多检查10次
 
@@ -42,6 +41,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     // menu: ContextMenu;
     gutterMenu: GutterMenu;
+
+    onSyncEndBindThis = this.onSyncEnd.bind(this);
 
     async onload() {
         debug('Plugin load');
@@ -79,8 +80,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.checkDuplicateDiary_Debounce = debouncer.debounce(
             this.checkDuplicateDiary.bind(this), 2000, 'CheckDuplicateDiary'
         );  // 防抖, 避免频繁检查
-        OnWsMainEvent = this.onWsMain.bind(this);
-        this.eventBus.on("ws-main", OnWsMainEvent);
+        this.eventBus.on('sync-end', this.onSyncEndBindThis);
 
         let end = performance.now();
         debug(`启动耗时: ${end - start} ms`);
@@ -187,22 +187,22 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let hasDuplicate = await checkDuplicateDiary();
         if (hasDuplicate) {
             this.isSyncChecked = true;
+            this.eventBus.off('sync-end', this.onSyncEndBindThis);
         }
         this.hasCheckSyncFor++;
         //多次检查后，如果还是没有同步，则认为没有必要再检查了
         if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
             this.isSyncChecked = true;
             debug('关闭自动检查同步文件');
+            this.eventBus.off('sync-end', this.onSyncEndBindThis);
         }
     }
 
     private checkDuplicateDiary_Debounce: typeof this.checkDuplicateDiary = null;
 
-    private async onWsMain({ detail }) {
-        let cmd = detail.cmd;
-        if (cmd === 'syncing' && !this.isSyncChecked) {
-            debug('检查同步文件');
-            // this.checkDuplicateDiary();
+    private async onSyncEnd({ detail }) {
+        console.info('onSyncEnd', detail);
+        if (!this.isSyncChecked) {
             this.checkDuplicateDiary_Debounce();
         }
     }
