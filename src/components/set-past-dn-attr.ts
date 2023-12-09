@@ -1,5 +1,13 @@
+/*
+ * Copyright (c) 2023 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Date         : 2023-12-04 18:48:59
+ * @FilePath     : /src/components/set-past-dn-attr.ts
+ * @LastEditTime : 2023-12-09 19:51:05
+ * @Description  : 
+ */
 import { Dialog } from "siyuan";
-import { searchAndSetAllDNAttr } from '@/func';
+import { searchAndSetAllDNAttr, findoutEarliestDN, formatDate } from '@/func';
 import notebooks from "@/global-notebooks";
 
 /**
@@ -10,26 +18,41 @@ export const setDNAttrDialog = async () => {
         title: 'Running',
         content: `
 <div class="b3-dialog__content">
-    <div id="body" style="padding: 6px 12px;">
-        <ul id="notebooks">
-        </ul>
+    <div id="body" style="padding: 6px 12px; width: 100%;">
+        <table id="notebooks" cellpadding="10" style="width: 100%;">
+            <thead>
+                <tr style="text-align: left;">
+                    <th>Notebook</th>
+                    <th>Start Date</th>
+                    <th>Daily Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
     </div>
 </div>`,
-        width: "20em",
-        height: "20em",
+        width: "50em",
+        height: "25em",
     });
     let div: HTMLDivElement = dialog.element.querySelector(".b3-dialog__container");
     div.style.maxHeight = "50%";
-    let ul: HTMLUListElement = dialog.element.querySelector("#body > ul#notebooks");
+    let table: HTMLTableElement = dialog.element.querySelector("#body > table#notebooks");
     for (let notebook of notebooks) {
         if (notebook.dailynoteSprig === undefined || notebook.dailynoteSprig === '') {
             continue;
         }
-        let li = document.createElement('li');
-        li.innerHTML = `<b>${notebook.name}...</b>`;
-        ul.appendChild(li);
-        let ans = await searchAndSetAllDNAttr(notebook);
-        li.innerHTML = `<b>${notebook.name}</b>: <b>${ans?.length ?? 0}</b> daily notes.`;
+        let start: Date = await findoutEarliestDN(notebook);
+        let tr: HTMLTableRowElement = document.createElement('tr');
+        tr.innerHTML = `<tr style="text-align: left;">
+            <td>${notebook.name}</td>
+            <td>${formatDate(start, '-')}</td>
+            <td>...</td>
+        </tr>`;
+        table.appendChild(tr);
+        let ans = await searchAndSetAllDNAttr(notebook, start);
+        (tr.querySelector('td:nth-child(3)') as HTMLTableCellElement).innerText = `${ans.length}`;
     }
     let body = dialog.element.querySelector("#body");
     let hint = document.createElement('div');

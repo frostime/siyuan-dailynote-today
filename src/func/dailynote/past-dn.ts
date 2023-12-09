@@ -97,7 +97,7 @@ export async function searchDailyNotesBetween(notebook: Notebook, begin: Date, e
 }
 
 
-async function findoutEarliestDN(notebook: Notebook): Promise<Date> {
+export async function findoutEarliestDN(notebook: Notebook): Promise<Date> {
 
     let dailynoteSprig = notebook?.dailynoteSprig;
     if (dailynoteSprig === undefined || dailynoteSprig === null || dailynoteSprig === '') {
