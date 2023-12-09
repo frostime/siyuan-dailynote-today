@@ -6,8 +6,11 @@ import Setting from './components/setting-gui.svelte'
 import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import {reserveBlock, dereserveBlock} from './func/reserve/reserve';
-import { checkDuplicateDiary, updateTodayReservation, autoOpenDailyNote } from './func';
+
+import { AfterLoadedEventHandler } from './func';
+import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
+import { autoOpenDailyNote, checkDuplicateDiary } from './func/dailynote';
+
 import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
@@ -44,6 +47,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     onSyncEndBindThis = this.onSyncEnd.bind(this);
 
+    afterLoadedHandler: AfterLoadedEventHandler;
+
     async onload() {
         debug('Plugin load');
         let start = performance.now();
@@ -66,11 +71,13 @@ export default class DailyNoteTodayPlugin extends Plugin {
         //初始化数据
         await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
 
-        this.initBlockIconClickEvent();  //依赖 settings.load();
+        this.initBlockIconClickEvent();  //绑定点击块图标事件
 
-        this.initUpToDate();  //依赖 settings.load();
+        this.initUpToDate();  //更新计时器
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
+
+        this.afterLoadedHandler = new AfterLoadedEventHandler(this);
 
         this.toolbarItem.startMonitorDailyNoteForReservation();
         // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
@@ -80,6 +87,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.checkDuplicateDiary_Debounce = debouncer.debounce(
             this.checkDuplicateDiary.bind(this), 2000, 'CheckDuplicateDiary'
         );  // 防抖, 避免频繁检查
+
         this.eventBus.on('sync-end', this.onSyncEndBindThis);
 
         let end = performance.now();
