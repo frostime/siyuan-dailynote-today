@@ -54,7 +54,7 @@ export class StartupEventHandler {
             this.checkDuplicateDiary.bind(this), 2000, 'CheckDuplicateDiary'
         );  // 防抖, 避免频繁检查
 
-        this.bindSyncEvent();
+        this.bindSyncEvent(); //绑定同步时间，以方便同步完成后检查是否有重复的日记
 
     }
 

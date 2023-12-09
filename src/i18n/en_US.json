@@ -8,7 +8,7 @@
             "text": "Open Today's Diary automatically when the plugin is loaded"
         },
         "AutoOpenAfterSync": {
-            "title": "Automatically create daily note only after synchronization <span style=\"font-weight: bold; color: red\">*Experimental Features</span>",
+            "title": "Auto create DN only after synchronization <span style=\"font-weight: bold; color: color: var(--b3-theme-primary)\">🏷️Experimental Features</span>",
             "text": "To solve the document conflict problem caused by synchronization + automatic opening of DN, try opening DN automatically after synchronization. This feature is <b>experimental</b> and lacks sufficient testing, so please use it at your discretion."
         },
         "DefaultNotebook": {
