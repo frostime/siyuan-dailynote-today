@@ -242,6 +242,11 @@ The conditions for this issue to occur are:
 
 The reason for this problem is that in the architecture of SiYuan, **the plugin's initialization runs before the data synchronization during startup**. If you previously created a daily note on Device A and then open Device B, the plugin will automatically create another daily note for you. Only after that, Obsidian will synchronize the data, resulting in duplicate daily notes, one from the previous creation on Device A and another from the current creation on Device B.
 
+There are two solutions:
+
+1. Manually merge the diaries.
+2. Enable the "Daily Note - Auto create DN only after synchronization" option in the settings. Please note that this is an experimental feature, so use it with caution.
+
 ### Q: Is the dropdown box used for selecting the default notebook?
 
 > - **Note: Don't misunderstand**, this drop-down box is not for selecting the default notebook, but for opening the diary quickly!
