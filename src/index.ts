@@ -6,9 +6,11 @@ import Setting from './components/setting-gui.svelte'
 import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
-import {reserveBlock, dereserveBlock} from './components/libs/reserve';
-import { checkDuplicateDiary, updateTodayReservation, autoOpenDailyNote } from './func';
-import { debug, info, setApp, setI18n, setIsMobile, setPlugin, debouncer, getFocusedBlock } from './utils';
+
+import { StartupEventHandler } from './func';
+import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
+
+import { debug, info, setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 // import { ContextMenu } from './components/legacy-menu';
@@ -20,20 +22,12 @@ import "./index.scss";
 import type { TypoDialog } from 'sy-plugin-changelog/dist/utils';
 
 
-let OnWsMainEvent: EventListener;
-// const WAIT_TIME_FOR_SYNC_CHECK: Milisecond = 1000 * 60 * 5;
-const MAX_CHECK_SYNC_TIMES: number = 10; //为了避免每次同步都检查，最多检查10次
-
-
 export default class DailyNoteTodayPlugin extends Plugin {
 
     version: string;
     upToDate: any = null;
     enableBlockIconClickEvent: boolean = false;
     isMobile: boolean = false;
-
-    isSyncChecked = false;
-    hasCheckSyncFor: number = 0;
 
     toolbarItem: ToolbarMenuItem;
 
@@ -42,6 +36,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     // menu: ContextMenu;
     gutterMenu: GutterMenu;
+
+    startupHandler: StartupEventHandler;
 
     async onload() {
         debug('Plugin load');
@@ -65,22 +61,17 @@ export default class DailyNoteTodayPlugin extends Plugin {
         //初始化数据
         await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
 
-        this.initBlockIconClickEvent();  //依赖 settings.load();
+        this.initBlockIconClickEvent();  //绑定点击块图标事件
 
-        this.initUpToDate();  //依赖 settings.load();
+        this.initUpToDate();  //更新计时器
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
 
-        this.toolbarItem.startMonitorDailyNoteForReservation();
-        // 如果有笔记本，且设置中允许启动时打开，则打开第一个笔记本
-        await autoOpenDailyNote();
+        this.startupHandler = new StartupEventHandler(this);
 
-        this.checkDuplicateDiary();
-        this.checkDuplicateDiary_Debounce = debouncer.debounce(
-            this.checkDuplicateDiary.bind(this), 2000, 'CheckDuplicateDiary'
-        );  // 防抖, 避免频繁检查
-        OnWsMainEvent = this.onWsMain.bind(this);
-        this.eventBus.on("ws-main", OnWsMainEvent);
+        this.toolbarItem.startMonitorDailyNoteForReservation();
+
+        this.startupHandler.onPluginLoad();
 
         let end = performance.now();
         debug(`启动耗时: ${end - start} ms`);
@@ -183,30 +174,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
         showMessage(this.i18n.UpdateAll, 2500, 'info');
     }
 
-    private async checkDuplicateDiary() {
-        let hasDuplicate = await checkDuplicateDiary();
-        if (hasDuplicate) {
-            this.isSyncChecked = true;
-        }
-        this.hasCheckSyncFor++;
-        //多次检查后，如果还是没有同步，则认为没有必要再检查了
-        if (this.hasCheckSyncFor >= MAX_CHECK_SYNC_TIMES) {
-            this.isSyncChecked = true;
-            debug('关闭自动检查同步文件');
-        }
-    }
-
-    private checkDuplicateDiary_Debounce: typeof this.checkDuplicateDiary = null;
-
-    private async onWsMain({ detail }) {
-        let cmd = detail.cmd;
-        if (cmd === 'syncing' && !this.isSyncChecked) {
-            debug('检查同步文件');
-            // this.checkDuplicateDiary();
-            this.checkDuplicateDiary_Debounce();
-        }
-    }
-
     openSetting(): void {
         let dialog = new Dialog({
             //@ts-ignore
@@ -255,8 +222,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         today.toDateString();
         let msg = `${this.i18n.NewDay[0]} ${today.toLocaleDateString()} ${this.i18n.NewDay[1]}`
 
-        this.isSyncChecked = false; //重置同步检查状态
-        this.hasCheckSyncFor = 0; //重置同步检查次数
+        //新的一天，重置同步检查状态
+        this.startupHandler.resetSyncCheckStatus();
 
         showMessage(msg, 5000, 'info');
     }

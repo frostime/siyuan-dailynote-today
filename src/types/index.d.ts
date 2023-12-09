@@ -1,5 +1,6 @@
 interface Window {
     siyuan: {
+        config: any;
         notebooks: any;
         menus: any;
         dialogs: any;

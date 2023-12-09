@@ -42,6 +42,10 @@
         ],
         dailynote: [
             {
+                name: "AutoOpenAfterSync",
+                type: "checkbox"
+            },
+            {
                 name: "DefaultNotebook",
                 type: "input",
             },
@@ -57,11 +61,6 @@
                 name: "SetPastDailyNoteAttr",
                 type: "button"
             }
-            //1.3.0 版本再加上
-            // {
-            //     name: "AutoOpenAfterSync",
-            //     type: "checkbox"
-            // }
         ],
         reservation: [
             {

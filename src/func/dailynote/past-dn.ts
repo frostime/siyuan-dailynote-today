@@ -97,15 +97,11 @@ export async function searchDailyNotesBetween(notebook: Notebook, begin: Date, e
 }
 
 
-/**
- * 查询、遍历之前所有的日记, 并为每个日记设置自定义属性 custom-dailynote-yyyyMMdd
- * @param notebook 
- */
-export async function searchAndSearchAllDNAttr(notebook: Notebook) {
+export async function findoutEarliestDN(notebook: Notebook): Promise<Date> {
 
     let dailynoteSprig = notebook?.dailynoteSprig;
     if (dailynoteSprig === undefined || dailynoteSprig === null || dailynoteSprig === '') {
-        return;
+        return null;
     }
     if (dailynoteSprig.startsWith('/')) {
         dailynoteSprig = dailynoteSprig.substring(1);
@@ -129,7 +125,7 @@ export async function searchAndSearchAllDNAttr(notebook: Notebook) {
     let docs = await api.sql(sql);
     if (docs.length === 0) {
         console.warn(`未找到日记本 ${notebook.name} 的日记`);
-        return;
+        return null;
     }
     let firstDoc = docs[0];
     let created: string = firstDoc.created;
@@ -137,6 +133,20 @@ export async function searchAndSearchAllDNAttr(notebook: Notebook) {
     let month = created.substring(4, 6);
     let day = created.substring(6, 8);
     let firstDate = new Date(`${year}-${month}-${day}`);
+    return firstDate;
+}
+
+
+/**
+ * 查询、遍历之前所有的日记, 并为每个日记设置自定义属性 custom-dailynote-yyyyMMdd
+ * @param notebook 
+ */
+export async function searchAndSetAllDNAttr(notebook: Notebook, firstDate?: Date) {
+
+    firstDate = firstDate !== undefined ? firstDate : await findoutEarliestDN(notebook);
+    if (firstDate === null) {
+        return [];
+    }
 
     // set custom attr for all past daily notes
     let dailynotes = await searchDailyNotesBetween(

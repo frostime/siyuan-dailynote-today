@@ -1,8 +1,8 @@
-import { i18n, lute } from "../../utils";
+import { i18n, lute } from "@/utils";
 import { showMessage, confirm } from "siyuan";
-import * as serverApi from "../../serverApi";
-import { confirmDialog } from "./dialogs";
-import { reservation, settings } from "../../global-status";
+import * as serverApi from "@/serverApi";
+import { confirmDialog } from "@/components/libs/dialogs";
+import { reservation, settings } from "@/global-status";
 import { parse, ParsedResult } from 'chrono-node';
 
 

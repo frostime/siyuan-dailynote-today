@@ -8,8 +8,8 @@
             "text": "插件启动后自动打开今日的 Daily Note"
         },
         "AutoOpenAfterSync": {
-            "title": "在同步后才自动创建日记 <span style=\"font-weight: bold; color: red\">*实验性功能</span>",
-            "text": "为了解决同步+自动打开日记造成的文件冲突问题，尝试在同步之后在自动打开日记。本功能为<b>实验性功能</b>，缺少足够的测试，请斟酌使用。"
+            "title": "同步后再创建日记 <span style=\"font-weight: bold; color: var(--b3-theme-primary)\">🏷️实验性功能</span>",
+            "text": "为了解决同步+自动打开日记造成的文件冲突问题，尝试在同步之后在自动打开日记。<br/>本功能为<b>实验性功能</b>，缺少足够的测试，请斟酌使用。"
         },
         "DefaultNotebook": {
             "title": "设置默认笔记本 ID",
