@@ -1,8 +1,7 @@
-### [2023-12-09] v1.3.1: 允许用户在同步后创建日记
+### [2023-12-09] v1.3.1: Allowing Users to Create Diaries after Synchronization
 
-- 允许用户在同步后创建日记
+- Allowing users to create diaries after synchronization: "Settings - Daily Note - Create Diary after Synchronization"
 
-    - 🔨 实验性功能, 缺少测试
+    - 🔨 Experimental feature, lacking testing
 
-- 优化对话框显示
-
+- Optimized dialog display
