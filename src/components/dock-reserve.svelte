@@ -86,7 +86,7 @@
 <div class="fn__flex-1 fn__flex-column file-tree layout__tab">
     <div class="block__icons">
         <div class="block__logo">
-            <svg><use xlink:href="#iconBookmark" /></svg>
+            <svg class="block__logoicon"><use xlink:href="#iconBookmark" /></svg>
             {_i18n.title}
         </div>
         <span class="fn__flex-1" />
@@ -118,15 +118,16 @@
             class="block__icon b3-tooltips b3-tooltips__sw"
             aria-label="{_i18n.collapse} Ctrl+↑"
         >
-            <svg><use xlink:href="#iconContract" /></svg>
+            <svg class=""><use xlink:href="#iconContract" /></svg>
         </span>
         <span class="fn__space" />
         <span
             data-type="min"
             class="block__icon b3-tooltips b3-tooltips__sw"
             aria-label="{_i18n.min} Ctrl+W"
-            ><svg><use xlink:href="#iconMin" /></svg></span
         >
+            <svg class=""><use xlink:href="#iconMin" /></svg>
+        </span>
     </div>
     <div class="fn__flex-1">
         {#if allResvs.length === 0}
