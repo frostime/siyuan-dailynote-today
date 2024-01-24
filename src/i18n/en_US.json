@@ -8,8 +8,8 @@
             "text": "Open Today's Diary automatically when the plugin is loaded"
         },
         "AutoOpenAfterSync": {
-            "title": "Auto create DN only after synchronization <span style=\"font-weight: bold; color: color: var(--b3-theme-primary)\">🏷️Experimental Features</span>",
-            "text": "To solve the document conflict problem caused by synchronization + automatic opening of DN, try opening DN automatically after synchronization. This feature is <b>experimental</b> and lacks sufficient testing, so please use it at your discretion."
+            "title": "Auto create DN only after synchronization <span style=\"font-weight: bold; color: color: var(--b3-theme-primary)\">🧪Experimental Features</span>",
+            "text": "To solve the document conflict problem caused by synchronization + automatic opening of DN, try opening DN automatically after synchronization.<br/>This feature is <b>experimental</b> and <del>lacks sufficient testing, so please use it at your discretion.</del><br/><b>Practical tests shown it not very useful, not recommended </b>"
         },
         "DefaultNotebook": {
             "title": "Default Notebook ID",
@@ -85,7 +85,8 @@
         },
         "SetPastDailyNoteAttr": {
             "title": "Add document attribute to past daily notes",
-            "text": "✨ Adding the custom-dailynote attribute to past daily notes for compatibility with <span style=\"color: var(--b3-theme-primary)\">SiYuan versions prior to 2.11.1</span>.<br/>If you don't understand what this button is for, it is recommended that you press it, and it won't bring you any extra trouble!<br/> Note: Clicking this button once is enough."
+            "text": "✨ Adding the custom-dailynote attribute to past daily notes for compatibility with <span style=\"color: var(--b3-theme-primary)\">SiYuan versions prior to 2.11.1</span>.<br/>If you don't understand what this button is for, it is recommended that you press it, and it won't bring you any extra trouble!<br/> Note: Clicking this button once is enough.",
+            "button": "GO!"
         }
     },
     "SettingGroups": {

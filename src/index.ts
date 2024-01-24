@@ -76,12 +76,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let end = performance.now();
         debug(`启动耗时: ${end - start} ms`);
 
-        let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
-        if (ans?.Dialog) {
-            let dialog: TypoDialog = ans.Dialog;
-            dialog.setSize({ width: '50rem', height: '42rem' });
-            dialog.setFont('1.2rem');
-        }
+        // let ans = await changelog(this, 'i18n/CHANGELOG-${lang}.md');
+        // if (ans?.Dialog) {
+        //     let dialog: TypoDialog = ans.Dialog;
+        //     dialog.setSize({ width: '50rem', height: '42rem' });
+        //     dialog.setFont('1.2rem');
+        // }
     }
 
     private initPluginUI() {

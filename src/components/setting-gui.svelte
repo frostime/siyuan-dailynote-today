@@ -42,10 +42,6 @@
         ],
         dailynote: [
             {
-                name: "AutoOpenAfterSync",
-                type: "checkbox"
-            },
-            {
                 name: "DefaultNotebook",
                 type: "input",
             },
@@ -60,6 +56,10 @@
             {
                 name: "SetPastDailyNoteAttr",
                 type: "button"
+            },
+            {
+                name: "AutoOpenAfterSync",
+                type: "checkbox"
             }
         ],
         reservation: [
