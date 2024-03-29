@@ -30,10 +30,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     toolbarItem: ToolbarMenuItem;
 
-    // component_setting: Setting;
-    // setting_ui: any;
-
-    // menu: ContextMenu;
     gutterMenu: GutterMenu;
 
     routineHandler: RoutineEventHandler;
