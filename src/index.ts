@@ -66,10 +66,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
 
-        this.startupHandler = new StartupEventHandler(this);
-
-        this.toolbarItem.startMonitorDailyNoteForReservation();
-
+        this.startupHandler = new SubtleEventHandler(this);
         this.startupHandler.onPluginLoad();
 
         let end = performance.now();
