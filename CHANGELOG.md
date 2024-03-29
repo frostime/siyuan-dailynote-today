@@ -2,6 +2,7 @@
 
 - 重构了预约插入功能，[#184](https://github.com/frostime/siyuan-dailynote-today/issues/184)
 - 重构了获取今日日记的方法，依赖更新的 `custom-daily-note-` 属性
+- 如果当天有预约，则图标加高亮 [#183](https://github.com/frostime/siyuan-dailynote-today/issues/183)
 
 
 ### [2023-12-09] v1.3.1: 允许用户在同步后创建日记
