@@ -8,11 +8,13 @@ import type DailyNoteTodayPlugin from '@/index';
 import type { EventBus } from 'siyuan';
 import { debouncer } from '@/utils';
 import { updateTodayReservation } from './reserve';
+import { updateStyleSheet } from './style';
 import notebooks from '@/global-notebooks';
 
 export * from './dailynote';
 export * from './misc';
 export * from './reserve';
+export * from './style';
 
 
 // const WAIT_TIME_FOR_SYNC_CHECK: Milisecond = 1000 * 60 * 5;
@@ -61,6 +63,7 @@ export class RoutineEventHandler {
 
     async onPluginLoad() {
 
+        this.updateResvIconStyle();
         const SYNC_ENABLED = window.siyuan.config.sync.enabled;
         if (!SYNC_ENABLED) {
             //Case 1: 如果思源没有开启同步, 就直接创建, 并无需绑定同步事件
@@ -95,6 +98,21 @@ export class RoutineEventHandler {
         this.flag.hasOpened = false; //重置是否已经打开
 
         this.flag.hasAutoInsertResv = false; //重置是否已经插入预约
+    }
+
+    /**
+     * 如果今天有预约，就在 head 中插入特殊的样式
+     */
+    public updateResvIconStyle() {
+        if (reservation.isTodayReserved()) {
+            updateStyleSheet(`
+                span[data-type="siyuan-dailynote-todaydock_tab"][data-title="${this.plugin.i18n.DockReserve.arial}"] {
+                    background-color: var(--b3-theme-primary-lightest);
+                }
+            `);
+        } else {
+            updateStyleSheet('');
+        }
     }
 
     /********** Duplicate **********/

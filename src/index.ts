@@ -9,6 +9,7 @@ import { GutterMenu } from './components/gutter-menu';
 
 import { RoutineEventHandler } from './func';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
+import { updateStyleSheet, removeStyleSheet } from './func';
 
 import { debug, info, setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
@@ -61,6 +62,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.initUpToDate();  //更新计时器
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
+
+        updateStyleSheet('');
 
         this.routineHandler = new RoutineEventHandler(this);
         this.routineHandler.onPluginLoad();
@@ -222,6 +225,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     onunload() {
         debug('Plugin unload')
+        removeStyleSheet();
         this.toolbarItem.release();
         settings.save();
         reservation.save();
