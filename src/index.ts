@@ -13,13 +13,12 @@ import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/res
 import { debug, info, setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
-// import { ContextMenu } from './components/legacy-menu';
+
 import { eventBus } from './event-bus';
 
-import { changelog } from 'sy-plugin-changelog';
+// import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
-import type { TypoDialog } from 'sy-plugin-changelog/dist/utils';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
