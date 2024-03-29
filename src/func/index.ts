@@ -1,12 +1,14 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { settings } from '@/global-status';
+import { reservation, settings } from '@/global-status';
 import { autoOpenDailyNote, checkDuplicateDiary } from './dailynote';
 
 import type DailyNoteTodayPlugin from '@/index';
 import type { EventBus } from 'siyuan';
 import { debouncer } from '@/utils';
+import { updateTodayReservation } from './reserve';
+import notebooks from '@/global-notebooks';
 
 export * from './dailynote';
 export * from './misc';
@@ -32,7 +34,9 @@ export class SubtleEventHandler {
         autoOpenAfterSync: false,
 
         isSyncChecked: false,
-        hasCheckSyncFor: 0
+        hasCheckSyncFor: 0,
+
+        hasAutoInsertResv: false //今天是否已经自动插入了预约
     }
 
     constructor(plugin: DailyNoteTodayPlugin) {
@@ -60,11 +64,11 @@ export class SubtleEventHandler {
         const SYNC_ENABLED = window.siyuan.config.sync.enabled;
         if (!SYNC_ENABLED) {
             //Case 1: 如果思源没有开启同步, 就直接创建, 并无需绑定同步事件
-            await this.tryToOpen();
+            await this.tryAutoOpenDN();
         } else if (this.flag.autoOpenAfterSync === false) {
             //Case 2: 如果思源开启了同步, 但是用户没有设置在同步后打开, 就直接创建
             this.bindSyncEvent();
-            this.tryToOpen();
+            await this.tryAutoOpenDN();
         } else {
             //Case 3: 如果思源开启了同步, 并且用户设置了在同步后打开, 就绑定同步事件
             this.bindSyncEvent();
@@ -75,7 +79,7 @@ export class SubtleEventHandler {
         console.debug('sync-end', detail);
 
         if (this.flag.hasOpened === false && this.flag.autoOpenAfterSync === true) {
-            this.tryToOpen();
+            this.tryAutoOpenDN();
         }
 
         if (!this.flag.isSyncChecked) {
@@ -84,10 +88,13 @@ export class SubtleEventHandler {
     }
 
 
-    public resetSyncCheckStatus() {
+    public resetStatusFlag() {
         this.flag.isSyncChecked = false; //重置同步检查状态
         this.flag.hasCheckSyncFor = 0; //重置同步检查次数
+
         this.flag.hasOpened = false; //重置是否已经打开
+
+        this.flag.hasAutoInsertResv = false; //重置是否已经插入预约
     }
 
     /********** Duplicate **********/
@@ -107,13 +114,36 @@ export class SubtleEventHandler {
     }
     private checkDuplicateDiary_Debounce: typeof this.checkDuplicateDiary = null;
 
-    private async tryToOpen() {
+    /**
+     * 尝试自动打开日记
+     */
+    private async tryAutoOpenDN() {
         if (this.flag.openOnStart === false) return;
         await autoOpenDailyNote();
         this.flag.hasOpened = true;
+        //在自动打开日记后一段时间后，进行相关的检查处理
         setTimeout(() => {
+            this.tryAutoInsertResv();
             this.checkDuplicateDiary();
         }, 1500);
+    }
+
+    /**
+     * 尝试自动插入今天的预约
+     */
+    private async tryAutoInsertResv() {
+        //如果已经插入过了，就不再插入
+        if (this.flag.hasAutoInsertResv === true) return;
+
+        //如果今天没有预约，就不插入
+        if (!reservation.isTodayReserved()) return;
+
+        let succeed = updateTodayReservation(notebooks.default);
+
+        if (succeed) {
+            this.flag.hasAutoInsertResv = true;
+        }
+
     }
 
 }

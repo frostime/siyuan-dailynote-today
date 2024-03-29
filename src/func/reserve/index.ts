@@ -41,12 +41,14 @@ export * from './reserve';
  * 给定笔记本，将今日的预约块插入笔记本的 daily note 中
  * @param notebook 
  * @param refresh 
+ * @returns
+ *  - boolean, true 代表走完了流程; false 代表没有走完流程（比如日记不存在）
  */
 export async function updateTodayReservation(notebook: Notebook, refresh: boolean = false) {
-    let todayDiaryPath = notebook.dailynoteHpath;
-    let docs = await getDocsByHpath(todayDiaryPath!, notebook);
-    let docId = docs[0].id;
+    let docId = notebook?.dailyNoteDocId; //dailyNoteDocId 是在 openDiary 和 createDiary 时动态设置的
+    if (!docId) return false;
     updateDocReservation(docId, refresh);
+    return true;
 }
 
 /**

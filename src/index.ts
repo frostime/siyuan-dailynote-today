@@ -7,7 +7,7 @@ import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 
-import { StartupEventHandler } from './func';
+import { SubtleEventHandler } from './func';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
 
 import { debug, info, setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
@@ -36,7 +36,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     // menu: ContextMenu;
     gutterMenu: GutterMenu;
 
-    startupHandler: StartupEventHandler;
+    startupHandler: SubtleEventHandler;
 
     async onload() {
         debug('Plugin load');
@@ -218,8 +218,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         today.toDateString();
         let msg = `${this.i18n.NewDay[0]} ${today.toLocaleDateString()} ${this.i18n.NewDay[1]}`
 
-        //新的一天，重置同步检查状态
-        this.startupHandler.resetSyncCheckStatus();
+        //新的一天，重置检查状态
+        this.startupHandler.resetStatusFlag();
 
         showMessage(msg, 5000, 'info');
     }
