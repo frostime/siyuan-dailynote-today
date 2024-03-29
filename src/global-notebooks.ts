@@ -80,7 +80,6 @@ class Notebooks {
         } else {
             this.default = this.get(0);
         }
-        settings.save();
     }
 
 }

@@ -1,3 +1,9 @@
+### [2024-03-29] v1.4.0: 优化预约功能
+
+- 重构了预约插入功能，[#184](https://github.com/frostime/siyuan-dailynote-today/issues/184)
+- 重构了获取今日日记的方法，依赖更新的 `custom-daily-note-` 属性
+
+
 ### [2023-12-09] v1.3.1: 允许用户在同步后创建日记
 
 - 允许用户在同步后创建日记
