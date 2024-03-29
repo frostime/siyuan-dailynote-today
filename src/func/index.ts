@@ -21,7 +21,7 @@ const MAX_CHECK_SYNC_TIMES: number = 10; //为了避免每次同步都检查，�
 /**
  * 处理插件加载完成后一系列关于日记、同步、预约等复杂的逻辑
  */
-export class SubtleEventHandler {
+export class RoutineEventHandler {
     plugin: DailyNoteTodayPlugin;
     eventBus: EventBus;
 
@@ -131,7 +131,7 @@ export class SubtleEventHandler {
     /**
      * 尝试自动插入今天的预约
      */
-    private async tryAutoInsertResv() {
+    public async tryAutoInsertResv() {
         //如果已经插入过了，就不再插入
         if (this.flag.hasAutoInsertResv === true) return;
 

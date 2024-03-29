@@ -1,22 +1,23 @@
-import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
-import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
+import { IMenuItemOption, Menu, showMessage } from "siyuan";
+import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { i18n, isMobile, debug } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
 
-import * as serverApi from '@/serverApi';
+import type DailyNoteTodayPlugin from '@/index';
+// import * as serverApi from '@/serverApi';
 
 
 let ContextMenuListener: EventListener;
 let UpdateDailyNoteStatusListener: EventListener;
 export class ToolbarMenuItem {
-    plugin: Plugin;
+    plugin: DailyNoteTodayPlugin;
     ele: HTMLElement;
     iconStatus: Map<string, string>;
 
-    constructor(plugin: Plugin) {
+    constructor(plugin: DailyNoteTodayPlugin) {
         this.plugin = plugin;
         ContextMenuListener = (event: MouseEvent) => this.contextMenu(event);
         UpdateDailyNoteStatusListener = () => this.updateDailyNoteStatus();
@@ -129,7 +130,14 @@ export class ToolbarMenuItem {
             let item: IMenuItemOption = {
                 label: notebook.name,
                 icon: this.iconStatus.get(notebook.id),
-                click: async () => openDiary(notebook),
+                click: async () => {
+                    if (notebook.id === notebooks.default.id) {
+                        await openDiary(notebook);
+                        this.plugin.routineHandler.tryAutoInsertResv();
+                    } else {
+                        openDiary(notebook);
+                    }
+                }
             }
             menuItems.push(item);
         }
