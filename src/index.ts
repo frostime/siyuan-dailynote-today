@@ -219,6 +219,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         //新的一天，重置检查状态
         this.routineHandler.resetStatusFlag();
+        this.routineHandler.updateResvIconStyle();
 
         showMessage(msg, 5000, 'info');
     }
