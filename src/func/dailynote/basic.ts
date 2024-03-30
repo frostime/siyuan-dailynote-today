@@ -3,7 +3,7 @@
  * @Author       : Yp Z
  * @Date         : 2023-11-12 18:06:46
  * @FilePath     : /src/func/dailynote/basic.ts
- * @LastEditTime : 2024-03-29 22:11:08
+ * @LastEditTime : 2024-03-30 21:57:20
  * @Description  : 
  */
 import * as serverApi from '@/serverApi';
@@ -37,7 +37,7 @@ export async function getDailynoteSprig(notebookId: string): Promise<string> {
 export async function queryTodayDailyNoteDoc(notebookId: NotebookId): Promise<Block[]> {
     let td = formatDate(new Date());
     const sql = `
-    select B.* from blocks as B join attributes as A
+    select distinct B.* from blocks as B join attributes as A
     on B.id = A.block_id
     where A.name = 'custom-dailynote-${td}' and B.box = '${notebookId}'
     `;
