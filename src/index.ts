@@ -7,19 +7,19 @@ import ShowReserve from './components/dock-reserve.svelte';
 import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 
-import { StartupEventHandler } from './func';
+import { RoutineEventHandler } from './func';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
+import { updateStyleSheet, removeStyleSheet } from './func';
 
 import { debug, info, setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
-// import { ContextMenu } from './components/legacy-menu';
+
 import { eventBus } from './event-bus';
 
-import { changelog } from 'sy-plugin-changelog';
+// import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
-import type { TypoDialog } from 'sy-plugin-changelog/dist/utils';
 
 
 export default class DailyNoteTodayPlugin extends Plugin {
@@ -31,13 +31,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
     toolbarItem: ToolbarMenuItem;
 
-    // component_setting: Setting;
-    // setting_ui: any;
-
-    // menu: ContextMenu;
     gutterMenu: GutterMenu;
 
-    startupHandler: StartupEventHandler;
+    routineHandler: RoutineEventHandler;
 
     async onload() {
         debug('Plugin load');
@@ -67,11 +63,10 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         eventBus.subscribe(eventBus.EventUpdateAll, () => { this.updateAll() });
 
-        this.startupHandler = new StartupEventHandler(this);
+        updateStyleSheet('');
 
-        this.toolbarItem.startMonitorDailyNoteForReservation();
-
-        this.startupHandler.onPluginLoad();
+        this.routineHandler = new RoutineEventHandler(this);
+        this.routineHandler.onPluginLoad();
 
         let end = performance.now();
         debug(`启动耗时: ${end - start} ms`);
@@ -222,17 +217,17 @@ export default class DailyNoteTodayPlugin extends Plugin {
         today.toDateString();
         let msg = `${this.i18n.NewDay[0]} ${today.toLocaleDateString()} ${this.i18n.NewDay[1]}`
 
-        //新的一天，重置同步检查状态
-        this.startupHandler.resetSyncCheckStatus();
+        //新的一天，重置检查状态
+        this.routineHandler.resetStatusFlag();
+        this.routineHandler.updateResvIconStyle();
 
         showMessage(msg, 5000, 'info');
     }
 
     onunload() {
         debug('Plugin unload')
+        removeStyleSheet();
         this.toolbarItem.release();
-        settings.save();
-        reservation.save();
         if (this.upToDate) {
             debug(`清理定时器 ${this.upToDate}`);
             clearTimeout(this.upToDate);

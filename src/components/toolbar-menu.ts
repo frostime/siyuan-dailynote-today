@@ -1,24 +1,23 @@
-import { IMenuItemOption, Menu, Plugin, showMessage } from "siyuan";
-import { currentDiaryStatus, openDiary, updateTodayReservation } from "../func";
+import { IMenuItemOption, Menu, showMessage } from "siyuan";
+import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
 import { i18n, isMobile, debug } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
 
-import * as serverApi from '@/serverApi';
+import type DailyNoteTodayPlugin from '@/index';
+// import * as serverApi from '@/serverApi';
 
 
 let ContextMenuListener: EventListener;
 let UpdateDailyNoteStatusListener: EventListener;
 export class ToolbarMenuItem {
-    plugin: Plugin;
+    plugin: DailyNoteTodayPlugin;
     ele: HTMLElement;
     iconStatus: Map<string, string>;
 
-    private onProtyleLoadedBindThis = this.onProtyleLoaded.bind(this);
-
-    constructor(plugin: Plugin) {
+    constructor(plugin: DailyNoteTodayPlugin) {
         this.plugin = plugin;
         ContextMenuListener = (event: MouseEvent) => this.contextMenu(event);
         UpdateDailyNoteStatusListener = () => this.updateDailyNoteStatus();
@@ -41,32 +40,11 @@ export class ToolbarMenuItem {
         
     }
 
-    /**
-     * #TODO: 将这个函数重构放到 reservation.ts 下
-     * #TODO: 2.10.16 版本之后 SiYuan 的 createDailyNote 返回 doc id, 所以可以不需要再使用监听了
-     * 根据预约情况, 监听日记本的加载, 如果是今天的日记本, 则更新预约状态
-     * @returns 
-     */
-    startMonitorDailyNoteForReservation() {
-        if (!reservation.isTodayReserved) {
-            return
-        }
-        this.plugin.eventBus.on("loaded-protyle-static", this.onProtyleLoadedBindThis);
-        // 3分钟后, 取消监听, 防止不必要的性能损耗
-        setTimeout(
-            () => {
-                this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
-            }, 
-            1000 * 60 * 2
-        );
-    }
-
     release() {
         this.ele.removeEventListener('contextmenu', ContextMenuListener);
         eventBus.unSubscribe('moveBlocks', UpdateDailyNoteStatusListener);
         this.ele.remove();
         this.ele = null;
-        this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
         debug('TopBarIcon released');
     }
 
@@ -152,57 +130,18 @@ export class ToolbarMenuItem {
             let item: IMenuItemOption = {
                 label: notebook.name,
                 icon: this.iconStatus.get(notebook.id),
-                click: async () => openDiary(notebook),
+                click: async () => {
+                    if (notebook.id === notebooks.default.id) {
+                        await openDiary(notebook);
+                        this.plugin.routineHandler.tryAutoInsertResv();
+                    } else {
+                        openDiary(notebook);
+                    }
+                }
             }
             menuItems.push(item);
         }
         return menuItems;
-    }
-
-    /**
-     * 监听自动打开日记后，插入当天预约用
-     */
-    private async onProtyleLoaded({ detail }) {
-        console.debug(detail);
-        const protyle = detail.protyle;
-        const block_ = protyle.block;
-        if (block_.id != block_.rootID) {
-            return;
-        }
-        //是否为文档
-        const headElement: HTMLElement = protyle?.model?.headElement;
-        if (!headElement) {
-            return;
-        }
-        //笔记本是否是默认笔记本
-        const notebookId = protyle.notebookId;
-        if (notebookId !== notebooks.default.id) {
-            return;
-        }
-
-
-        const CheckReservation = async (blockId: BlockId, cnt: number =1) => {
-            if (cnt > 3) {
-                return;
-            }
-            debug("检查", blockId);
-            const block: Block = await serverApi.getBlockByID(blockId);
-            if (block === undefined) {
-                console.warn(`New opened docId ${blockId} undefined`);
-                //能调用这个函数，说明这个文档一定存在，查不到就继续等继续差
-                setTimeout(() => CheckReservation(blockId, cnt++), 1000 * cnt);
-                return
-            }
-            // console.log(block.hpath);
-            if (notebooks.default.dailynoteHpath === block.hpath) {
-                debug('Got Today\'s daily note');
-                this.plugin.eventBus.off("loaded-protyle-static", this.onProtyleLoadedBindThis);
-                await updateTodayReservation(notebooks.default, true);
-            }
-        }
-        debug("打开新的文档, 2s后检查",  block_.id);
-        //如果是新创建的日记，那么在这一刻后端是拿不到对应的块的，所以需要先等一下
-        setTimeout(() => CheckReservation(block_.id), 1000 * 2);
     }
 
     async updateDailyNoteStatus() {

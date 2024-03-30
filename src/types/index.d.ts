@@ -46,6 +46,7 @@ type Notebook = {
     icon: string;
     sort: number;
     closed: boolean;
+    dailyNoteDocId?: DocumentId;
     dailynoteSprig?: string;
     dailynoteHpath?: string;
 }

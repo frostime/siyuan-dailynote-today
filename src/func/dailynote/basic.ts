@@ -3,7 +3,7 @@
  * @Author       : Yp Z
  * @Date         : 2023-11-12 18:06:46
  * @FilePath     : /src/func/dailynote/basic.ts
- * @LastEditTime : 2023-11-12 18:15:30
+ * @LastEditTime : 2024-03-30 21:57:20
  * @Description  : 
  */
 import * as serverApi from '@/serverApi';
@@ -29,6 +29,20 @@ export async function getDailynoteSprig(notebookId: string): Promise<string> {
     let conf = await serverApi.getNotebookConf(notebookId);
     let sprig: string = conf.conf.dailyNoteSavePath;
     return sprig;
+}
+
+/**
+ * 
+ */
+export async function queryTodayDailyNoteDoc(notebookId: NotebookId): Promise<Block[]> {
+    let td = formatDate(new Date());
+    const sql = `
+    select distinct B.* from blocks as B join attributes as A
+    on B.id = A.block_id
+    where A.name = 'custom-dailynote-${td}' and B.box = '${notebookId}'
+    `;
+    const blocks: Block[] = await serverApi.sql(sql);
+    return blocks;
 }
 
 /**

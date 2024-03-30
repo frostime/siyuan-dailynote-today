@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-11-12 19:53:10
  * @FilePath     : /src/func/dailynote/open-dn.ts
- * @LastEditTime : 2023-12-04 20:30:15
+ * @LastEditTime : 2024-03-29 21:27:13
  * @Description  : 
  */
 import { showMessage, confirm, openTab, openMobileFileById } from 'siyuan';
@@ -23,6 +23,9 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
     info(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
     setCustomDNAttr(doc_id);
+
+    notebook.dailyNoteDocId = doc_id;
+
     return doc_id;
 }
 
@@ -33,6 +36,9 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
 export async function openDiary(notebook: Notebook) {
     let appId = utils.app.appId;
     let dailynote = await serverApi.createDailyNote(notebook.id, appId);
+    if (dailynote) {
+        notebook.dailyNoteDocId = dailynote?.id;
+    }
     showMessage(`${i18n.Open}: ${notebook.name}`, 2000, 'info');
     //打开文档
     if (isMobile === true) {

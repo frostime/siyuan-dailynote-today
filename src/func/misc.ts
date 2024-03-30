@@ -1,9 +1,9 @@
-import { openTab } from 'siyuan';
+import { openTab, showMessage } from 'siyuan';
 
 import { warn, error, debug, app } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { settings } from '@/global-status';
-import { getDailynoteSprig, renderDailynotePath } from './dailynote';
+import { getDailynoteSprig, queryTodayDailyNoteDoc } from './dailynote';
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
@@ -35,13 +35,17 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         for (let notebook of all_notebooks) {
             let sprig = await getDailynoteSprig(notebook.id);
             notebook.dailynoteSprig = sprig != "" ? sprig : default_sprig;
-            notebook.dailynoteHpath = await renderDailynotePath(notebook.dailynoteSprig);
+            notebook.dailynoteHpath = "";
 
-            //防止出现不符合规范的 sprig, 不过根据 debug 情况看似乎不会出现这种情况
-            if (notebook.dailynoteHpath == "") {
-                warn(`Invalid daily note srpig of ${notebook.name}`);
-                notebook.dailynoteSprig = default_sprig;
-                notebook.dailynoteHpath = await renderDailynotePath(default_sprig);
+            const docs = await queryTodayDailyNoteDoc(notebook.id);
+            if (docs.length > 0) {
+                const doc = docs[0];
+                notebook.dailyNoteDocId = doc.id;
+                notebook.dailynoteHpath = doc.hpath;
+            }
+
+            if (docs.length > 1) {
+                showMessage(`Warning: More than one daily-notes are founded in ${notebook.name}`, 5, "error");
             }
 
             if (notebook.icon == "") {
