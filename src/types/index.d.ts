@@ -106,7 +106,7 @@ type SettingKey = (
     'PluginVersion' | "EnableMove" | 'EnableReserve' | 
     "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
     'RetvType' | 'EnableResvDock' | 'DisableAutoCreateOnMobile' |
-    'NotebookBlacklist' | 'AutoOpenAfterSync'
+    'NotebookBlacklist' | 'AutoOpenAfterSync' | 'HighlightResv';
 );
 
 interface ISettingItem {

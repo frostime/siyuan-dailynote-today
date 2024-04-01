@@ -75,6 +75,10 @@
                 name: "RetvType",
                 type: "select",
             },
+            {
+                name: "HighlightResv",
+                type: "checkbox"
+            }
         ]
     };
 

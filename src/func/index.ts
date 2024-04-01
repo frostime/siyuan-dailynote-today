@@ -104,6 +104,9 @@ export class RoutineEventHandler {
      * 如果今天有预约，就在 head 中插入特殊的样式
      */
     public updateResvIconStyle() {
+        const HighlightResv = settings.get('HighlightResv');
+        if (!HighlightResv) return;
+
         if (reservation.isTodayReserved()) {
             updateStyleSheet(`
                 span[data-type="siyuan-dailynote-todaydock_tab"][data-title="${this.plugin.i18n.DockReserve.arial}"] {

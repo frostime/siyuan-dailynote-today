@@ -35,6 +35,7 @@ class SettingManager {
         ResvEmbedAt: 'top' as RetvPosition, //Retrieved 块嵌入位置
         RetvType: 'embed' as RetvType, //Retrieved 块的类型
         NotebookBlacklist: {}, //笔记本黑名单
+        HighlightResv: true as boolean, //高亮显示预约块
     };
 
     constructor() {
