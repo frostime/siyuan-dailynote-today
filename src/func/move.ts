@@ -100,12 +100,13 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
  * 大无语，V姐在新的 2.9 版本把 emoji 的解析大改
  */
 function parseEmoji(code: string) {
-    try {
-        let emoji = String.fromCodePoint(parseInt(code, 16));
+    let codePoint = parseInt(code, 16);
+    if (!Number.isNaN(codePoint)) {
+        let emoji = String.fromCodePoint(codePoint);
         return `<span class="b3-menu__icon">${emoji}</span>`;
-    } catch (error) {
-        return `<span class="b3-menu__icon"> </span>`;
     }
+
+    return `<span class="b3-menu__icon"> <img class="" src="/emojis/${code}"> </span>`;
 }
 
 export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'block') {
