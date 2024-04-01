@@ -1,9 +1,8 @@
 import { openTab, showMessage } from 'siyuan';
 
-import { warn, error, debug, app } from "@/utils";
+import { error, debug, app } from "@/utils";
 import * as serverApi from '@/serverApi';
-import { settings } from '@/global-status';
-import { getDailynoteSprig, queryTodayDailyNoteDoc } from './dailynote';
+import { getDailynoteSprig, queryTodayDailyNoteDoc, renderDailynotePath } from './dailynote';
 
 const default_sprig = `/daily note/{{now | date "2006/01"}}/{{now | date "2006-01-02"}}`
 const hiddenNotebook: Set<string> = new Set(["思源笔记用户指南", "SiYuan User Guide"]);
@@ -35,7 +34,7 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
         for (let notebook of all_notebooks) {
             let sprig = await getDailynoteSprig(notebook.id);
             notebook.dailynoteSprig = sprig != "" ? sprig : default_sprig;
-            notebook.dailynoteHpath = "";
+            notebook.dailynoteHpath = await renderDailynotePath(notebook.dailynoteSprig);
 
             const docs = await queryTodayDailyNoteDoc(notebook.id);
             if (docs.length > 0) {
