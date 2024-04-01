@@ -87,6 +87,10 @@
             "title": "Add document attribute to past daily notes",
             "text": "✨ Adding the custom-dailynote attribute to past daily notes for compatibility with <span style=\"color: var(--b3-theme-primary)\">SiYuan versions prior to 2.11.1</span>.<br/>If you don't understand what this button is for, it is recommended that you press it, and it won't bring you any extra trouble!<br/> Note: Clicking this button once is enough.",
             "button": "GO!"
+        },
+        "HighlightResv": {
+            "title": "Highlight reservation icon",
+            "text": "Highlight reservation icon in dock bar when there is a reservation on the day"
         }
     },
     "SettingGroups": {

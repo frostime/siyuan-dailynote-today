@@ -1,3 +1,9 @@
+### [2024-04-01] v1.4.1: Bug 修复
+
+1. 修复 v1.4.0 重构导致的 Move 功能异常 Bug
+2. 修复移动菜单中，自定义图标无法显示的 Bug
+3. feat: 增加设置，决定是否在有预约的当天高亮预约侧边栏 icon
+
 ### [2024-03-29] v1.4.0: 优化预约功能
 
 - 重构了预约插入功能，[#184](https://github.com/frostime/siyuan-dailynote-today/issues/184)
