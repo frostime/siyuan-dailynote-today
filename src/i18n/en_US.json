@@ -4,8 +4,8 @@
     "Setting": {
         "name": "Setting",
         "OpenOnStart": {
-            "title": "Open Today's Diary Automatically",
-            "text": "Open Today's Diary automatically when the plugin is loaded"
+            "title": "Auto-open Daily Note",
+            "text": "Open Today's daily note automatically when the plugin is loaded"
         },
         "AutoOpenAfterSync": {
             "title": "Auto create DN only after synchronization <span style=\"font-weight: bold; color: color: var(--b3-theme-primary)\">🧪Experimental Features</span>",
@@ -154,22 +154,23 @@
     },
     "ConflictDiary": {
         "part1": [
-            "#### Note: Duplicate diary detected",
-            "Conflict files are listed below:",
+            "#### Note: Duplicate daily notes detected",
+            "Conflict files are listed below, the last line, indicated in bold, represents the earliest dailynote and will be treated as the main dailynote for auto-handeling",
             "| Document ID | Title | Created | Updated | Notebook |",
             "| --- | --- | --- | --- | --- |"
         ],
         "part2": [
             "- Why does this happen?",
-            "    You may have created a diary on another device before and then created a diary on this device, resulting in a synchronization conflict.",
-            "    Please merge and delete redundant diaries manually: Open today's diary, locate the diary document, and the conflicting document will be nearby."
+            "    You may have created a daily note on another device before and then created a daily note on this device, resulting in a synchronization conflict.",
+            "- How to solve?",
+            "    Please merge and delete redundant diaries manually: Open today's daily note, locate the daily note document, and the conflicting document will be nearby."
         ],
         "part3": [
-            "<p style=\"font-weight: bold; color: red\">",
-            "We found that in addition to the dailynote document conflict, the parent document at the upper level seems to be in conflict as well, and \"Auto Merge\" cannot handle this complexity of merging document trees.",
+            "<p style=\"color: red\">",
+            "We found that in addition to the dailynote document conflict, the parent document at the upper level seems to be in conflict as well, the \"Auto Handler\" <b>cannot handle this complexity of merging document trees</b>.",
             "</p>",
-            "<p style=\"font-weight: bold; color: red\">",
-            "Of course, <u>you can still to use the \"Auto Merge\" feature</u> to merge dailynote, but it is recommended that you manually deal with duplicate parent documents after auto-merging.",
+            "<p style=\"color: red\">",
+            "<u>You can still to use the \"Auto Handler\" feature</u>, while it is <b>recommended</b> that you <b>manually deal with duplicate parent documents</b> after auto-handling.",
             "</p>"
         ],
         "AutoMerge": "Auto merge",

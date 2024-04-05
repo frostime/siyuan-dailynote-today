@@ -54,7 +54,7 @@ async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> 
     showMessage("Deleting", 1000, "info");
     let allPromise = [];
     for (let doc of others) {
-        allPromise.push(serverApi.deleteBlock(doc.id));
+        allPromise.push(serverApi.removeDoc(doc.box, doc.path));
     }
     await Promise.all(allPromise);
     showMessage(i18n.ConflictDiary.success, 2000, "info");
@@ -91,7 +91,7 @@ async function moveToTrashBin(main: DocBlock, others: DocBlock[]) {
 
 const HandleMethods: { [key: string]: TDuplicateHandler } = {
     'AllMerge': mergeDocs,
-    'AllDelete': deleteDocs,
+    'DeleteDup': deleteDocs,
     'SmartMerge': smartMergeDocs,
     'TrashDup': moveToTrashBin,
 };
@@ -99,15 +99,20 @@ const HandleMethods: { [key: string]: TDuplicateHandler } = {
 function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook, ansestorDup?: boolean): string {
 
     let confilctTable = [];
-    for (let doc of docs) {
+    docs.forEach((doc, index) => {
         let id = doc.id;
         let created = doc.created;
-        created = `${created.slice(0, 4)}-${created.slice(4, 6)}-${created.slice(6, 8)} ${created.slice(8, 10)}:${created.slice(10, 12)}:${created.slice(12, 14)}`
+        created = `${created.slice(0, 4)}-${created.slice(4, 6)}-${created.slice(6, 8)} ${created.slice(8, 10)}:${created.slice(10, 12)}:${created.slice(12, 14)}`;
         let updated = doc.updated;
-        updated = `${updated.slice(0, 4)}-${updated.slice(4, 6)}-${updated.slice(6, 8)} ${updated.slice(8, 10)}:${updated.slice(10, 12)}:${updated.slice(12, 14)}`
-        let row = `| ${id} | ${doc.content} | ${created} | ${updated} | ${notebook.name} |\n`;
+        updated = `${updated.slice(0, 4)}-${updated.slice(4, 6)}-${updated.slice(6, 8)} ${updated.slice(8, 10)}:${updated.slice(10, 12)}:${updated.slice(12, 14)}`;
+        let list = [id, doc.content, created, updated, notebook.name];
+        if (index === docs.length - 1) {
+            list = list.map((item) => `**${item}**`);
+        }
+
+        let row = list.join(" | ") + " |\n";
         confilctTable.push(row);
-    }
+    });
 
     let content: string = i18n.ConflictDiary.part1.join("\n") + "\n";
     for (let row of confilctTable) {
@@ -115,19 +120,24 @@ function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook, ansestorDup
     }
     content += "\n" + i18n.ConflictDiary.part2.join("\n");
     content = lute.Md2HTML(content);
+    const MethodOptions = i18n.Setting.AutoHandleDuplicateMethod.options;
     let html = `
         <div class="b3-typography typofont-1rem"
-            style="margin: 0.5rem;"
+            style="margin: 0.5rem; flex: 1;"
         >
             ${content}
             ${ansestorDup ? i18n.ConflictDiary.part3.join("\n") : ""}
         </div>
-        <div class="fn__flex b3-label" style="border-top: 1px solid var(--b3-theme-surface-lighter);">
-            <div class="fn__flex-1"></div>
+        <div class="b3-dialog__action">
+            <button class="b3-button b3-button--cancel">${window.siyuan.languages.cancel}</button>
             <span class="fn__space"></span>
-            <button class="b3-button b3-button--outline fn__flex-center fn__size200" id="merge">
-                ${i18n.ConflictDiary.AutoMerge}
-            </button>
+            <button class="b3-button b3-button--text" data-method="AllMerge">${MethodOptions.AllMerge}</button>
+            <span class="fn__space"></span>
+            <button class="b3-button b3-button--text" data-method="DeleteDup">${MethodOptions.DeleteDup}</button>
+            <span class="fn__space"></span>
+            <button class="b3-button b3-button--text" data-method="SmartMerge">${MethodOptions.SmartMerge}</button>
+            <span class="fn__space"></span>
+            <button class="b3-button b3-button--text" data-method="TrashDup">${MethodOptions.TrashDup}</button>
         </div>
         `;
     return html;
@@ -151,13 +161,13 @@ function ifAncestorDiff(docs: DocBlock[]): boolean {
     return !identical;
 }
 
-const handleDuplicateDiary = async (docs: DocBlock[]) => {
+const handleDuplicateDiary = async (docs: DocBlock[], method?: TDuplicateHandleMethod) => {
     docs = docs.sort((a, b) => {
         return a.created >= b.created ? -1 : 1;
     });
     //选择最早的日记, 认为是主日记
     let earliestDoc = docs.pop();
-    let method = settings.get('AutoHandleDuplicateMethod');
+    method = method || settings.get('AutoHandleDuplicateMethod');
     console.log(`Handle duplicate method: ${method}`);
     const handler = HandleMethods?.[method] || ((...args: any[]) => console.error(`No such method: ${method}`));
     handler(earliestDoc, docs);
@@ -193,6 +203,11 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         return false;
     }
 
+    //排序为从新到旧
+    docs = docs.sort((a, b) => {
+        return a.created >= b.created ? -1 : 1;
+    });
+
     // ==================== 检查顶部文档树是否也有重复 ====================
     const ascendantDiff = ifAncestorDiff(docs); //如果为 true，说明祖先的文档树也不同
 
@@ -202,10 +217,21 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     let dialog = new Dialog({
         title: i18n.Name,
         content: html,
-        width: isMobile ? "80%" : "50%",
+        width: isMobile ? "90%" : "47rem",
     });
-    dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
-        await handleDuplicateDiary(docs);
+    dialog.element.querySelector(".b3-dialog__action")?.addEventListener("click", async (event: MouseEvent) => {
+        let target = event.target as HTMLElement;
+        if (!target || !target.classList.contains("b3-button")) {
+            return;
+        }
+
+        if (target.classList.contains("b3-button--cancel")) {
+            dialog.destroy();
+            return;
+        }
+
+        let method = target.dataset.method;
+        await handleDuplicateDiary(docs, method as TDuplicateHandleMethod);
         dialog.destroy();
     });
     return true;
