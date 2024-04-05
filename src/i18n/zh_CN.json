@@ -179,7 +179,7 @@
         "AutoMerge": "自动合并",
         "HeadingMarkdown": "# 以下为其他重复的日记",
         "success": "自动处理成功",
-        "fail": "由于未知原因, 自动合并失败, 请手动合并"
+        "fail": "由于未知原因, 自动处理失败, 请手动处理"
     },
     "DockReserve": {
         "arial": "今日笔记预约",

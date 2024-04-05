@@ -178,7 +178,7 @@
         "AutoMerge": "Auto merge",
         "HeadingMarkdown": "# Duplicate diaries are listed below",
         "success": "Success",
-        "fail": "Merge fail due to unknown reason, please merge them manually"
+        "fail": "Fail due to unknown reason, please merge them manually"
     },
     "DockReserve": {
         "arial": "Daily Note Today Reservations",

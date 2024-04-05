@@ -162,12 +162,18 @@ const checkTrashBinDoc = async (dn: DocBlock) => {
 async function moveToTrashBin(main: DocBlock, others: DocBlock[]) {
     let trashbin: Block = await checkTrashBinDoc(main);
 
+    if (!trashbin) {
+        showMessage(i18n.ConflictDiary.fail, 2000, "error");
+        return false;
+    }
+
     let fromPaths = [];
     others.forEach((doc) => {
         fromPaths.push(doc.path);
         removeAttr(doc, /custom-dailynote-\d+/); //移除自定义属性
     });
     serverApi.moveDocs(fromPaths, trashbin.box, trashbin.path);
+    return true;
 }
 
 
