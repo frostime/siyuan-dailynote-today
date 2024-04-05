@@ -100,7 +100,7 @@
             "title": "自动处理重复日记的方式",
             "text": "当检测到重复的日记时，自动处理的方式",
             "options": {
-                "AllMerge": "全部合并 (默认)",
+                "AllMerge": "全部合并",
                 "TrashDup": "移动到回收站",
                 "SmartMerge": "智能合并",
                 "DeleteDup": "直接删除"

@@ -64,7 +64,52 @@ async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> 
  * 智能合并
  */
 async function smartMergeDocs(main: DocBlock, others: DocBlock[]) {
-    showMessage(`Smart Merge: Not implemented`, 1000, "error");
+    showMessage("Smart Merging", 1000, "info");
+
+    let result = await serverApi.appendBlock(main.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
+    let lastChildBlockID = result?.[0]?.doOperations[0].id;
+    if (lastChildBlockID === undefined) {
+        error(`无法获取最新日记的最后一个 block id`);
+        showMessage(i18n.ConflictDiary.fail, 2000, "error");
+        // dialog.destroy();
+        return false;
+    }
+
+    for (let doc of others) {
+        let id = doc.id;
+        let created: string = doc.created;
+        let updated: string = doc.updated;
+        let stat = await serverApi.getTreeStat(id);
+        //if all value is 0
+        let empty = true;
+        Object.keys(stat).forEach(key => {
+            if (stat[key] != 0) {
+                empty = false;
+            }
+        });
+
+        //空白日记, 直接删除
+        if (empty) {
+            await serverApi.removeDoc(doc.box, doc.path);
+            console.log(`Remove empty doc ${id}`);
+            continue;
+        }
+
+        const noRefLink = stat.refCount == 0 && stat.linkCount == 0;
+
+        //如果无链接, 且创建时间和更新时间相差超过 5 秒, 大概率是模板日记, 可以直接删除
+        if (noRefLink && parseInt(created) + 5 >= parseInt(updated)) {
+            await serverApi.removeDoc(doc.box, doc.path);
+            console.log(`Remove not modified doc ${id} ${created} ${updated}`);
+        } else {
+            let time = formatBlockTime(created);
+            await serverApi.renameDoc(doc.box, doc.path, `${doc.content} [${time}]`);
+            await serverApi.doc2Heading(id, lastChildBlockID, true);
+            console.log(`Merge doc ${id}`);
+        }
+    }
+    // dialog.destroy();
+    return true;
 }
 
 
@@ -170,9 +215,9 @@ function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook, ansestorDup
             <span class="fn__space"></span>
             <button class="b3-button b3-button--text" data-method="AllMerge">${MethodOptions.AllMerge}</button>
             <span class="fn__space"></span>
-            <button class="b3-button b3-button--text" data-method="DeleteDup">${MethodOptions.DeleteDup}</button>
-            <span class="fn__space"></span>
             <button class="b3-button b3-button--text" data-method="SmartMerge">${MethodOptions.SmartMerge}</button>
+            <span class="fn__space"></span>
+            <button class="b3-button b3-button--text" data-method="DeleteDup">${MethodOptions.DeleteDup}</button>
             <span class="fn__space"></span>
             <button class="b3-button b3-button--text" data-method="TrashDup">${MethodOptions.TrashDup}</button>
         </div>

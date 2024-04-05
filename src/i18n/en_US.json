@@ -100,7 +100,7 @@
             "title": "Auto-handle duplicates' method",
             "text": "When detected duplicate daily notes, how to handle with them",
             "options": {
-                "AllMerge": "Merge all (Default)",
+                "AllMerge": "Merge all",
                 "TrashDup": "Move to trash",
                 "SmartMerge": "Merge smartly",
                 "DeleteDup": "Delete directly"
