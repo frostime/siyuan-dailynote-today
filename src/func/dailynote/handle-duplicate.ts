@@ -97,8 +97,8 @@ async function smartMergeDocs(main: DocBlock, others: DocBlock[]) {
 
         const noRefLink = stat.refCount == 0 && stat.linkCount == 0;
 
-        //如果无链接, 且创建时间和更新时间相差超过 5 秒, 大概率是模板日记, 可以直接删除
-        if (noRefLink && parseInt(created) + 5 >= parseInt(updated)) {
+        //如果无链接, 且创建时间和更新时间相差超过 3 秒, 大概率是模板日记, 可以直接删除
+        if (noRefLink && parseInt(created) + 3 >= parseInt(updated)) {
             await serverApi.removeDoc(doc.box, doc.path);
             console.log(`Remove not modified doc ${id} ${created} ${updated}`);
         } else {
