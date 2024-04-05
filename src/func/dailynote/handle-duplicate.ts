@@ -9,8 +9,14 @@ import { settings } from "@/global-status";
 
 type TDuplicateHandler = (main: DocBlock, others: DocBlock[]) => void | boolean | Promise<any>;
 
+/**
+ * 将所有其他的日记合并到主日记中
+ * @param mergeTo 
+ * @param otherDocs 
+ * @returns 
+ */
 async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<boolean> {
-    showMessage("Merge", 1000, "info");
+    showMessage("Merging", 1000, "info");
 
     // let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
     // let lastChildBlockID = childs[childs.length - 1].id;
@@ -38,9 +44,56 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
     return true;
 }
 
+/**
+ * 除了主日记外，其他的重复的日记都删除
+ * @param main 
+ * @param others 
+ * @returns 
+ */
+async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> {
+    showMessage("Deleting", 1000, "info");
+    let allPromise = [];
+    for (let doc of others) {
+        allPromise.push(serverApi.deleteBlock(doc.id));
+    }
+    await Promise.all(allPromise);
+    showMessage(i18n.ConflictDiary.success, 2000, "info");
+    // dialog.destroy();
+    return true;
+}
+
+/**
+ * 智能合并
+ */
+async function smartMergeDocs(main: DocBlock, others: DocBlock[]) {
+    showMessage(`Smart Merge: Not implemented`, 1000, "error");
+}
+
+
+const removeAttr = async (block: Block, attr: RegExp) => {
+    let attrs = await serverApi.getBlockAttrs(block.id);
+    let attr_to_modify = {};
+    for (let key in attrs) {
+        if (attr.test(key)) {
+            attr_to_modify[key] = '';
+        }
+    }
+    serverApi.setBlockAttrs(block.id, attr_to_modify);
+}
+
+/**
+ * 将其他的日记移动到回收站
+ */
+async function moveToTrashBin(main: DocBlock, others: DocBlock[]) {
+    showMessage(`Move to bin: Not implemented`, 1000, "error");
+}
+
 
 const HandleMethods: { [key: string]: TDuplicateHandler } = {
     'AllMerge': mergeDocs,
+    'AllDelete': deleteDocs,
+    'SmartMerge': smartMergeDocs,
+    'TrashDup': moveToTrashBin,
 };
 
 function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook, ansestorDup?: boolean): string {
