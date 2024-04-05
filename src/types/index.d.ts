@@ -21,7 +21,7 @@ type ParentID = BlockId | DocumentId;
 
 type markdown = string;
 
-type TDuplicateHandleMethod = 'DeleteDup' | 'AllMerge' | 'SmartMerge';
+type TDuplicateHandleMethod = 'DeleteDup' | 'AllMerge' | 'SmartMerge' | 'TrashDup';
 
 type ResvBlock = Block;
 type ResvBlockIds = BlockId[];

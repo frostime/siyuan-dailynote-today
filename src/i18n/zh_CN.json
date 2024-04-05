@@ -91,6 +91,20 @@
         "HighlightResv": {
             "title": "高亮当日预约",
             "text": "如果当日存在预约，则高亮预约列表的侧边栏图标"
+        },
+        "AutoHandleDuplicate": {
+            "title": "自动处理重复日记",
+            "text": "当检测到重复的日记时，不弹出提示框直接自动处理"
+        },
+        "AutoHandleDuplicateMethod": {
+            "title": "自动处理重复日记的方式",
+            "text": "当检测到重复的日记时，自动处理的方式",
+            "options": {
+                "DeleteDup": "直接删除",
+                "AllMerge": "全部合并",
+                "SmartMerge": "智能合并",
+                "TrashDup": "移动到回收站"
+            }
         }
     },
     "SettingGroups": {
@@ -161,7 +175,7 @@
         ],
         "AutoMerge": "自动合并",
         "HeadingMarkdown": "# 以下为其他重复的日记",
-        "success": "自动合并成功",
+        "success": "自动处理成功",
         "fail": "由于未知原因, 自动合并失败, 请手动合并"
     },
     "DockReserve": {

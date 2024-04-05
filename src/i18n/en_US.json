@@ -91,6 +91,20 @@
         "HighlightResv": {
             "title": "Highlight reservation icon",
             "text": "Highlight reservation icon in dock bar when there is a reservation on the day"
+        },
+        "AutoHandleDuplicate": {
+            "title": "Auto-handle duplicates",
+            "text": "Automatically handel with duplicate daily notes while detected, without popup dialog"
+        },
+        "AutoHandleDuplicateMethod": {
+            "title": "Auto-handle duplicates' method",
+            "text": "When detected duplicate daily notes, how to handle with them",
+            "options": {
+                "DeleteDup": "Delete directly",
+                "AllMerge": "Merge all",
+                "SmartMerge": "Merge smartly",
+                "TrashDup": "Move to trash"
+            }
         }
     },
     "SettingGroups": {
@@ -159,7 +173,7 @@
         ],
         "AutoMerge": "Auto merge",
         "HeadingMarkdown": "# Duplicate diaries are listed below",
-        "success": "Merge success",
+        "success": "Success",
         "fail": "Merge fail due to unknown reason, please merge them manually"
     },
     "DockReserve": {
