@@ -1,27 +1,15 @@
-import zh_Hans from "./i18n/zh_CN.json";
-import en_US from "./i18n/en_US.json";
+// import zh_Hans from "./i18n/zh_CN.json";
+// // import en_US from "./i18n/en_US.json";
+import zh_Hans from '../dev/i18n/zh_CN.json';
+
+
 import { App, Plugin } from "siyuan";
 
 //@ts-ignore
 export const lute = window.Lute!.New();
 export type I18N = typeof zh_Hans;
+// export type I18N = any;
 
-export function checkI18n(): boolean {
-    function checkKeys(obj1: any, obj2: any): boolean {
-        if (typeof obj1 !== typeof obj2) return false;
-        if (typeof obj1 === "object") {
-            for (const key in obj1) {
-                if (!checkKeys(obj1[key], obj2[key])) return false;
-            }
-        }
-        return true;
-    }
-    return checkKeys(zh_Hans, en_US);
-}
-
-// if (!checkI18n()) {
-//     showMessage('i18n check failed', 5000, 'error');
-// }
 
 export function debug(...msg: any[]): void {
     console.debug(`[DailyNoteToday][DEBUG] ${msg}`);

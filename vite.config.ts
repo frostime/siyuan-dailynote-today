@@ -7,10 +7,12 @@ import { svelte } from "@sveltejs/vite-plugin-svelte"
 import zipPack from "vite-plugin-zip-pack";
 import fg from 'fast-glob';
 
+import vitePluginYamlI18n from './yaml-plugin';
+
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
-const devDistDir = "./dev"
-const distDir = isWatch ? devDistDir : "./dist"
+const devDistDir = "dev"
+const distDir = isWatch ? devDistDir : "dist"
 
 console.log("isWatch=>", isWatch)
 console.log("distDir=>", distDir)
@@ -43,6 +45,11 @@ export default defineConfig({
 
     plugins: [
         svelte(),
+
+        vitePluginYamlI18n({
+            inDir: 'src/i18n',
+            outDir: isWatch ? 'dev/i18n' : 'dist/i18n',
+        }),
 
         viteStaticCopy({
             targets: [
@@ -77,7 +84,11 @@ export default defineConfig({
                     dest: "./",
                 },
                 {
-                    src: "./src/i18n/**",
+                    src: "./src/i18n/*.json",
+                    dest: "./i18n/"
+                },
+                {
+                    src: "./src/i18n/*.md",
                     dest: "./i18n/",
                     transform: transformMdFile
                 },
@@ -105,7 +116,8 @@ export default defineConfig({
         // 或是用来指定是应用哪种混淆器
         // boolean | 'terser' | 'esbuild'
         // 不压缩，用于调试
-        minify: !isWatch,
+        // minify: !isWatch,
+        minify: false,
 
         lib: {
             // Could also be a dictionary or array of multiple entry points
@@ -126,6 +138,7 @@ export default defineConfig({
                                 console.log('watch-external buildStart');
                                 const files = await fg([
                                     'src/i18n/*.json',
+                                    'src/i18n/*.yaml',
                                     './README.md',
                                     './plugin.json'
                                 ]);
