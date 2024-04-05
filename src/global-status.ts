@@ -36,6 +36,8 @@ class SettingManager {
         RetvType: 'embed' as RetvType, //Retrieved 块的类型
         NotebookBlacklist: {}, //笔记本黑名单
         HighlightResv: true as boolean, //高亮显示预约块
+        AutoHandleDuplicate: false, // 是否自动处理重复日记
+        AutoHandleDuplicateMethod: 'AllMerge' as TDuplicateHandleMethod // 自动处理重复日记的方法
     };
 
     constructor() {

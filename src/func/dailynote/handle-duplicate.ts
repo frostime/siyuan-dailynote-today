@@ -5,28 +5,26 @@ import notebooks from '@/global-notebooks';
 import { error, i18n, lute, isMobile, formatBlockTime } from "@/utils";
 
 import { getDocsByHpath } from '@/func/misc';
+import { settings } from "@/global-status";
 
-async function mergeDocs(docs: DocBlock[], callback?: () => void) {
+type TDuplicateHandler = (main: DocBlock, others: DocBlock[]) => void | boolean | Promise<any>;
+
+async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<boolean> {
     showMessage("Merge", 1000, "info");
-    docs = docs.sort((a, b) => {
-        return a.created >= b.created ? -1 : 1;
-    });
-    //选择最早的日记
-    let latestDoc = docs.pop();
+
     // let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
     // let lastChildBlockID = childs[childs.length - 1].id;
-    let result = await serverApi.appendBlock(latestDoc.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
+    let result = await serverApi.appendBlock(mergeTo.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
     let lastChildBlockID = result?.[0]?.doOperations[0].id;
     if (lastChildBlockID === undefined) {
         error(`无法获取最新日记的最后一个 block id`);
         showMessage(i18n.ConflictDiary.fail, 2000, "error");
         // dialog.destroy();
-        callback();
-        return latestDoc;
+        return false;
     }
 
     //将其他的日记合并到最新的日记中
-    for (let doc of docs) {
+    for (let doc of otherDocs) {
         let id = doc.id;
         let created: string = doc.created;
 
@@ -37,9 +35,13 @@ async function mergeDocs(docs: DocBlock[], callback?: () => void) {
     }
     showMessage(i18n.ConflictDiary.success, 2000, "info");
     // dialog.destroy();
-    callback();
-    return latestDoc;
+    return true;
 }
+
+
+const HandleMethods: { [key: string]: TDuplicateHandler } = {
+    'AllMerge': mergeDocs,
+};
 
 function buildShowDuplicateDocDom(docs: Block[], notebook: Notebook, ansestorDup?: boolean): string {
 
@@ -96,6 +98,18 @@ function ifAncestorDiff(docs: DocBlock[]): boolean {
     return !identical;
 }
 
+const handleDuplicateDiary = async (docs: DocBlock[]) => {
+    docs = docs.sort((a, b) => {
+        return a.created >= b.created ? -1 : 1;
+    });
+    //选择最早的日记, 认为是主日记
+    let earliestDoc = docs.pop();
+    let method = settings.get('AutoHandleDuplicateMethod');
+    console.log(`Handle duplicate method: ${method}`);
+    const handler = HandleMethods?.[method] || ((...args: any[]) => console.error(`No such method: ${method}`));
+    handler(earliestDoc, docs);
+}
+
 /**
  * 由于同步的问题，默认的笔记本中可能出现重复的日记，这里检查下是否有重复的日记
  * @param notebook 
@@ -138,12 +152,18 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         width: isMobile ? "80%" : "50%",
     });
     dialog.element.querySelector("#merge")?.addEventListener("click", async () => {
-        mergeDocs(docs, () => { 
-            dialog.destroy();
-            if (ascendantDiff) {
-                showMessage("祖先", 10000, "info");
-            }
-        });
+        await handleDuplicateDiary(docs);
+        dialog.destroy();
     });
     return true;
 }
+
+//TODO: 测试用，记得删除
+globalThis.checkDuplicateDiary = async () => {
+    let flag = await checkDuplicateDiary();
+    if (flag) {
+        showMessage('有重复日记');
+    } else {
+        showMessage('没有重复日记');
+    }
+};
