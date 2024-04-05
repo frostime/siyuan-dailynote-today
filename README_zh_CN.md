@@ -7,7 +7,6 @@
 - 提交 Issue 请访问[Github](https://github.com/frostime/siyuan-dailynote-today)
 - **如果使用的过程中有问题，可以先阅读 [常见问题](#常见问题) 一节；如果还有问题，再到 Github 上提 Issue**
 - 有问题尽量在 Github 上提，在群里问我不一定看得见
-- 如果你发现文档中的图片没有加载出来（最直观的表现就是看不到图），可以访问这个项目在 [Gitlab 上的托管](https://gitlab.com/ypz-open/siyuan/siyuan-dailynote-today)
 
 > 文档中「日记」「笔记」「daily note」几个词可能会交替使用，不用在意，他们都表示一个含义.
 
