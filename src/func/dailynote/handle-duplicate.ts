@@ -39,7 +39,6 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
         await serverApi.doc2Heading(id, lastChildBlockID, true);
         console.log(`Merge doc ${id}`);
     }
-    showMessage(i18n.ConflictDiary.success, 2000, "info");
     // dialog.destroy();
     return true;
 }
@@ -57,7 +56,6 @@ async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> 
         allPromise.push(serverApi.removeDoc(doc.box, doc.path));
     }
     await Promise.all(allPromise);
-    showMessage(i18n.ConflictDiary.success, 2000, "info");
     // dialog.destroy();
     return true;
 }
@@ -81,11 +79,50 @@ const removeAttr = async (block: Block, attr: RegExp) => {
     serverApi.setBlockAttrs(block.id, attr_to_modify);
 }
 
+const checkTrashBinDoc = async (dn: DocBlock) => {
+    const sql = `
+    select B.* from blocks as B join attributes as A
+    on A.block_id = B.id
+    where B.box = '${dn.box}' and B.type = 'd' and A.name = 'custom-dn-trash-bin'
+    `;
+    let result: Block[] = await serverApi.sql(sql);
+    let trashBinDoc: BlockId;
+    if (result.length === 0) {
+        let trashBinHpath;
+        let dnPathPart = dn.hpath.split("/").filter((item) => item !== "");
+        console.log(dnPathPart);
+        if (dnPathPart.length === 0) {
+            error(`无法获取回收站日记本的路径`);
+            return;
+        } else if (dnPathPart.length === 1) {
+            trashBinHpath = `/trash-bin`;
+        } else {
+            trashBinHpath = `/${dnPathPart[0]}/trash-bin`;
+        }
+        trashBinDoc = await serverApi.createDocWithMd(
+            dn.box, trashBinHpath, i18n.TrashBinDocContent
+        )
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await serverApi.setBlockAttrs(trashBinDoc, {'custom-dn-trash-bin': 'true'});
+    } else {
+        trashBinDoc = result[0].id;
+    }
+    let doc: DocBlock = await serverApi.getBlockByID(trashBinDoc);
+    return doc;
+}
+
 /**
  * 将其他的日记移动到回收站
  */
 async function moveToTrashBin(main: DocBlock, others: DocBlock[]) {
-    showMessage(`Move to bin: Not implemented`, 1000, "error");
+    let trashbin: Block = await checkTrashBinDoc(main);
+
+    let fromPaths = [];
+    others.forEach((doc) => {
+        fromPaths.push(doc.path);
+        removeAttr(doc, /custom-dailynote-\d+/); //移除自定义属性
+    });
+    serverApi.moveDocs(fromPaths, trashbin.box, trashbin.path);
 }
 
 
@@ -170,7 +207,9 @@ const handleDuplicateDiary = async (docs: DocBlock[], method?: TDuplicateHandleM
     method = method || settings.get('AutoHandleDuplicateMethod');
     console.log(`Handle duplicate method: ${method}`);
     const handler = HandleMethods?.[method] || ((...args: any[]) => console.error(`No such method: ${method}`));
-    handler(earliestDoc, docs);
+    await handler(earliestDoc, docs);
+    // showMessage(i18n.ConflictDiary.success, 2000, "info");
+    showMessage(i18n.ConflictDiary.success, 2000, "info");
 }
 
 /**

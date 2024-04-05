@@ -113,7 +113,7 @@
         "dailynote": "Daily Note",
         "reservation": "Reservation"
     },
-    "TrashBinDocContent": "- This is the trash document for your daily notes, created by the 'Daily Note Today' plugin.\n- You are seeing this document because you have set the 'Auto-handle duplicates' method' option in the plugin settings to 'Move to Trash'.\n- All the documents under this document are the daily notes that were detected as duplicates by the 'Daily Note Today' plugin.\n- If you feel they are not needed, you can delete all the duplicate documents.\n- If you find this trash document bothersome, you can also delete it, and the plugin will recreate it when needed.",
+    "TrashBinDocContent": "- This is a trash bin document created by the \"Daily Note Today\" plugin.\n- The reason you see this document is that you used the \"Move to Trash\" feature in the plugin to automatically handle duplicate daily note documents.\n- All documents under this document are daily notes that were previously detected as duplicate documents by the \"Daily Note Today\" plugin.\n- If you find this trash bin document bothersome, you can delete it entirely. The plugin will recreate the trash bin document when needed.",
     "Open": "Open daily note",
     "Create": "Create daily note",
     "UpdateAll": "Notebook status updated",
