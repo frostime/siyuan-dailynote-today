@@ -3,8 +3,8 @@
  * @Author       : frostime
  * @Date         : 2024-04-05 21:27:55
  * @FilePath     : /yaml-plugin.js
- * @LastEditTime : 2024-04-05 21:58:22
- * @Description  : 去妮玛的 json i18n，我就是要用 yaml
+ * @LastEditTime : 2024-04-05 22:15:49
+ * @Description  : 去妮玛的 json 格式，我就是要用 yaml 写 i18n
  */
 // plugins/vite-plugin-parse-yaml.js
 import fs from 'fs';
@@ -23,7 +23,7 @@ export default function vitePluginYamlI18n(options = {}) {
     return {
         name: 'vite-plugin-yaml-i18n',
         buildStart() {
-            console.log('🌈 解析 I18n: YAML to JSON..');
+            console.log('🌈 Parse I18n: YAML to JSON..');
             const i18nPath = finalOptions.inDir;
             const outputPath = finalOptions.outDir
 
@@ -39,7 +39,7 @@ export default function vitePluginYamlI18n(options = {}) {
                     const jsonFile = file.replace(/\.(yaml|yml)$/, '.json');
                     if (files.includes(jsonFile)) {
                         console.log(`---- File ${jsonFile} already exists, skipping...`);
-                        // continue;
+                        continue;
                     }
                     try {
                         const filePath = resolve(i18nPath, file);
@@ -50,7 +50,7 @@ export default function vitePluginYamlI18n(options = {}) {
                         console.log(`---- Writing to ${outputFilePath}`);
                         fs.writeFileSync(outputFilePath, jsonContent);
                     } catch (error) {
-                        this.error(`Error parsing YAML file ${file}: ${error.message}`);
+                        this.error(`---- Error parsing YAML file ${file}: ${error.message}`);
                     }
                 }
             }
