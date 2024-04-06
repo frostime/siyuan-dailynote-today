@@ -60,7 +60,7 @@
 - If you don't need it, you can turn off this feature in the settings panel
 - The custom paths and templates set in the notebook settings page are still valid
 
-> If you have enabled multi-device synchronization, duplicate daily notes may occur. For more details, please refer to [FAQ](#q-why-are-there-duplicateconflict-daily-notes)
+> If you have enabled multi-device synchronization, duplicate daily notes may occur. For more details, please refer to section `[Special Issues | Duplicate DailyNotes]`
 
 #### 1.1 I have multiple notebooks, which notebook will be used to create notes by default?
 
