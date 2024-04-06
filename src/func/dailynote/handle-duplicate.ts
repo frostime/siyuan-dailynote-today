@@ -54,6 +54,7 @@ async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> 
     let allPromise = [];
     for (let doc of others) {
         allPromise.push(serverApi.removeDoc(doc.box, doc.path));
+        console.debug(`Remove doc ${doc.id}`);
     }
     await Promise.all(allPromise);
     // dialog.destroy();

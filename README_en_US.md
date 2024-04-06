@@ -10,6 +10,35 @@
 
 > See changelog in: [CHANGELOG.md](CHANGELOG.md)
 
+* Do I need this plugin?
+* What can this plugin to
+
+  * 1. Auto-create daily note for today
+
+    * 1.1 I have multiple notebooks, which notebook will be used to create notes by default?
+    * 1.2 Blacklist
+  * 2. Left lick the icon, quickly creating/opening today's note.
+
+    * 2.1 Update with date
+  * 3. Right click the icon, quickly configuration.
+  * 4. Reserve a block
+
+    * Hot key
+    * 4.1 View scheduled appointments
+    * 4.2 Currently supported date templates
+    * 4.2 Notice
+  * 5. Move blocks into today's daily note
+  * 6. Setting pannel
+* Compatibel function | Add document attribute to past Daily Notes
+* Special Issues | Duplicate DailyNotes
+* FAQ
+
+  * Q: I don't want to create a diary automatically.
+  * Q: Is the dropdown box used for selecting the default notebook?
+  * Q: How to query all reservation blocks by SQL?
+  * Q: When do I need to "Update" status
+
+
 ## Do I need this plugin?
 
 - This plugin** is mainly for people who use daily note workflow**, so if you're used to making notes in the document tree rather than in your daily notes, then this plugin may not be for you
@@ -320,15 +349,4 @@ on(
 - When "Alt + right click" can note bring up moving menu, try updating.
 - Manual update of the day's reservation block
 
-### Q: Why did you design the 'moving blocks' feature for the daily note workflow?
 
-Siyuan is different from Logseq, it has the concept of notebooks. The way to use 'move block' is to write in the main notebook and then assign it to the corresponding notebook with one click through the move block function. This is done with the following considerations in mind:
-
-1. logically, it allows the content of a specific notebook's topic to stay entirely in its own notebook, rather than having all the content in the main notebook with only topic nodes under the topic notebook
-2. data management-wise, spreading the blocks within other notebooks helps optimise performance; so that when you may not need the notebook in the future, you can close it without any worries.
-    Whereas if all notes are stacked in the same notebook, even if you close other notebooks, it won't help much to alleviate performance problems - because the content blocks are all in the main notebook.
-
-
-## CHANGELOG
-
-[CHANGELOG](CHANGELOG.md)
