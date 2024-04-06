@@ -2,7 +2,7 @@ import * as serverApi from "@/serverApi";
 
 import { showMessage, Dialog } from 'siyuan';
 import notebooks from '@/global-notebooks';
-import { i18n, lute, isMobile, formatBlockTime } from "@/utils";
+import { i18n, lute, isMobile, formatBlockTime, repeatRun } from "@/utils";
 
 import { getDocsByHpath } from '@/func/misc';
 import { settings } from "@/global-status";
@@ -37,7 +37,7 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
         let time = formatBlockTime(created);
         await serverApi.renameDoc(doc.box, doc.path, `${doc.content} [${time}]`);
         await serverApi.doc2Heading(id, lastChildBlockID, true);
-        console.log(`Merge doc ${id}`);
+        console.debug(`Merge doc ${id}`);
     }
     // dialog.destroy();
     return true;
@@ -91,7 +91,7 @@ async function smartMergeDocs(main: DocBlock, others: DocBlock[]): Promise<boole
         //空白日记, 直接删除
         if (empty) {
             await serverApi.removeDoc(doc.box, doc.path);
-            console.log(`Remove empty doc ${id}`);
+            console.debug(`Remove empty doc ${id}`);
             continue;
         }
 
@@ -100,12 +100,12 @@ async function smartMergeDocs(main: DocBlock, others: DocBlock[]): Promise<boole
         //如果无链接, 且创建时间和更新时间相差超过 3 秒, 大概率是模板日记, 可以直接删除
         if (noRefLink && parseInt(created) + 3 >= parseInt(updated)) {
             await serverApi.removeDoc(doc.box, doc.path);
-            console.log(`Remove not modified doc ${id} ${created} ${updated}`);
+            console.debug(`Remove not modified doc ${id} ${created} ${updated}`);
         } else {
             let time = formatBlockTime(created);
             await serverApi.renameDoc(doc.box, doc.path, `${doc.content} [${time}]`);
             await serverApi.doc2Heading(id, lastChildBlockID, true);
-            console.log(`Merge doc ${id}`);
+            console.debug(`Merge doc ${id}`);
         }
     }
     // dialog.destroy();
@@ -135,7 +135,7 @@ const checkTrashBinDoc = async (dn: DocBlock): Promise<DocBlock|null> => {
     if (result.length === 0) {
         let trashBinHpath;
         let dnPathPart = dn.hpath.split("/").filter((item) => item !== "");
-        console.log(dnPathPart);
+        // console.debug(dnPathPart);
         if (dnPathPart.length === 0) {
             console.error(`无法获取回收站日记本的路径`);
             return null;
@@ -146,13 +146,19 @@ const checkTrashBinDoc = async (dn: DocBlock): Promise<DocBlock|null> => {
         }
         trashBinDoc = await serverApi.createDocWithMd(
             dn.box, trashBinHpath, i18n.TrashBinDocContent
-        )
+        );
         await new Promise((resolve) => setTimeout(resolve, 1000));
         await serverApi.setBlockAttrs(trashBinDoc, { 'custom-dn-trash-bin': 'true' });
     } else {
         trashBinDoc = result[0].id;
     }
-    let doc: DocBlock | null = await serverApi.getBlockByID(trashBinDoc);
+
+    console.debug(`Get trash bin doc, id=${trashBinDoc}`)
+
+    //由于创建文档后，需要一定时间才能获取到文档，这里重试获取文档
+    let doc: DocBlock | null = null;
+    let GetTrashbin = async () => serverApi.request('/api/block/getBlockInfo', {id: trashBinDoc});
+    doc = await repeatRun(GetTrashbin, 1000, 5);
     return doc;
 }
 
@@ -256,7 +262,7 @@ const handleDuplicateDiary = async (docs: DocBlock[], method?: TDuplicateHandleM
     //选择最早的日记, 认为是主日记
     let earliestDoc = docs.pop();
     method = method || settings.get('AutoHandleDuplicateMethod');
-    console.log(`Handle duplicate method: ${method}`);
+    console.debug(`Handle duplicate method: ${method}`);
     const handler = HandleMethods?.[method] || ((...args: any[]) => {
         console.error(`No such method: ${method}`);
         return false;

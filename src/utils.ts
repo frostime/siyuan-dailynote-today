@@ -27,6 +27,30 @@ export type I18N = typeof zh_Hans;
 //     console.warn(`[DailyNoteToday][WARN] ${msg}`);
 // }
 
+/**
+ * 重复执行一个函数，直到返回值不为 null 或达到最大次数
+ * @param fn 需要执行的函数, 无参数, 返回某个值
+ * @param wait (ms), 重复执行的间隔时间
+ * @param maxTimes 最大重复次数
+ * @returns 返回 fn 的返回值
+ */
+export async function repeatRun(fn: Function, wait: number, maxTimes: number): Promise<any> {
+    let times = 1;
+    let res = null;
+    while (times <= maxTimes) {
+        res = await fn();
+        if (res) {
+            console.debug(`[${times} / ${maxTimes}] Success ${fn.name}`)
+            return res;
+        }
+        console.debug(`[${times} / ${maxTimes}] Wait ${wait}ms and retry ${fn.name}`)
+        await new Promise(resolve => setTimeout(resolve, wait));
+        times++;
+    }
+    console.warn(`[${times} / ${maxTimes}] Reach max times ${fn.name}`)
+    return res;
+}
+
 export let i18n: I18N;
 export function setI18n(i18n_: any) {
     i18n = i18n_;
