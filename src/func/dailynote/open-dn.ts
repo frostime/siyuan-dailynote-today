@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-11-12 19:53:10
  * @FilePath     : /src/func/dailynote/open-dn.ts
- * @LastEditTime : 2024-03-29 21:27:13
+ * @LastEditTime : 2024-04-06 17:10:37
  * @Description  : 
  */
 import { showMessage, confirm, openTab, openMobileFileById } from 'siyuan';
@@ -14,14 +14,14 @@ import { settings } from '@/global-status';
 
 import * as serverApi from '@/serverApi';
 import * as utils from '@/utils';
-import { info, i18n, isMobile, debug } from '@/utils';
+import { i18n, isMobile } from '@/utils';
 
 import { setCustomDNAttr } from './dn-attr';
 
 
 export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
-    info(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
+    console.log(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
     setCustomDNAttr(doc_id);
 
     notebook.dailyNoteDocId = doc_id;
@@ -61,7 +61,7 @@ export async function openDiary(notebook: Notebook) {
  * 初始化的时候，加载所有的笔记本
  */
 export async function autoOpenDailyNote() {
-    debug('自动开启日记');
+    console.debug('自动开启日记');
     if (isMobile && settings.get('DisableAutoCreateOnMobile') === true) {
         // showMessage('移动端不开放');
         return;
@@ -70,7 +70,7 @@ export async function autoOpenDailyNote() {
     const url = new URL(window.location.href);
     // showMessage(url.pathname);
     if (url.pathname.startsWith('/stage/build/app/window.html')) {
-        debug('小窗模式, 无需自动打开日记');
+        console.debug('小窗模式, 无需自动打开日记');
         return;
     }
 

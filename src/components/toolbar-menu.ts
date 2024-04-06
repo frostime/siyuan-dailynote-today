@@ -2,7 +2,7 @@ import { IMenuItemOption, Menu, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { reservation, settings } from "../global-status";
-import { i18n, isMobile, debug } from "../utils";
+import { i18n, isMobile } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
 
@@ -45,7 +45,7 @@ export class ToolbarMenuItem {
         eventBus.unSubscribe('moveBlocks', UpdateDailyNoteStatusListener);
         this.ele.remove();
         this.ele = null;
-        debug('TopBarIcon released');
+        console.debug('TopBarIcon released');
     }
 
     //等到设置加载完毕后, 重新更新图标位置

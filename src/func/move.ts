@@ -1,6 +1,6 @@
 import notebooks from "@/global-notebooks";
 import { eventBus } from "@/event-bus";
-import { debug, info, error, i18n } from "@/utils";
+import { i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDocsByHpath, createDiary } from "@/func";
 import { showMessage } from "siyuan";
@@ -10,7 +10,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
     let block: Block = await serverApi.getBlockByID(srcBlockId);
 
     if (block == null) {
-        error(`Block ${srcBlockId} not found`);
+        console.error(`Block ${srcBlockId} not found`);
         return;
     }
 
@@ -25,7 +25,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
         showMessage(`${i18n.Create}: ${notebook.name}`, 2500, 'info');
     }
 
-    debug(`Call 移动块: ${block.id} --> ${doc_id}`)
+    console.debug(`Call 移动块: ${block.id} --> ${doc_id}`)
 
     //列表项需要额外特殊处理
 
@@ -35,7 +35,7 @@ export async function moveBlocksToDailyNote(srcBlockId: BlockId, notebook: Noteb
         let ans = await serverApi.prependBlock(doc_id, '* ', 'markdown');
         let newListId = ans[0].doOperations[0].id;
         await serverApi.moveBlock(block.id, null, newListId);
-        debug(`移动列表项 ${block.id} --> ${newListId}`);
+        console.debug(`移动列表项 ${block.id} --> ${newListId}`);
         //获取新的列表的子项
         let allChild = await serverApi.getChildBlocks(newListId);
         let blankItem = allChild[1]; // 上述行为会导致出现一个额外的多余列表项
@@ -63,7 +63,7 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
     let srcBlock: Block = await serverApi.getBlockByID(srcDocId);
 
     if (srcBlock === null) {
-        error(`Document ${srcDocId} not found`);
+        console.error(`Document ${srcDocId} not found`);
         return;
     }
 
@@ -74,7 +74,7 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
 
     for (let notebook of notebooks) {
         if (notebook.dailynoteHpath === srcDocHpath) {
-            error(`不可以移动日记!`);
+            console.error(`不可以移动日记!`);
             showMessage(i18n.MoveMenu.NotMoveDiary, 2500, 'error');
             return;
         }
@@ -124,7 +124,7 @@ export function createMenuItems(data_id: string, srcBlock: 'block' | 'doc' = 'bl
             iconHTML: parseEmoji(notebook.icon),
             click: async () => {
                 if (srcBlock === 'block') {
-                    info(`Move block ${data_id} to ${notebook.id} [${notebook.name}]`);
+                    console.log(`Move block ${data_id} to ${notebook.id} [${notebook.name}]`);
                     await moveBlocksToDailyNote(data_id, notebook);
                     eventBus.publish('moveBlocks', '');
                 } else {

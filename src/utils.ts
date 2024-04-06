@@ -11,21 +11,21 @@ export type I18N = typeof zh_Hans;
 // export type I18N = any;
 
 
-export function debug(...msg: any[]): void {
-    console.debug(`[DailyNoteToday][DEBUG] ${msg}`);
-}
+// export function debug(...msg: any[]): void {
+//     console.debug(`[DailyNoteToday][DEBUG] ${msg}`);
+// }
 
-export function info(...msg: any[]): void {
-    console.log(`[DailyNoteToday][INFO] ${msg}`);
-}
+// export function info(...msg: any[]): void {
+//     console.log(`[DailyNoteToday][INFO] ${msg}`);
+// }
 
-export function error(...msg: any[]): void {
-    console.error(`[DailyNoteToday][ERROR] ${msg}`);
-}
+// export function error(...msg: any[]): void {
+//     console.error(`[DailyNoteToday][ERROR] ${msg}`);
+// }
 
-export function warn(...msg: any[]): void {
-    console.warn(`[DailyNoteToday][WARN] ${msg}`);
-}
+// export function warn(...msg: any[]): void {
+//     console.warn(`[DailyNoteToday][WARN] ${msg}`);
+// }
 
 export let i18n: I18N;
 export function setI18n(i18n_: any) {

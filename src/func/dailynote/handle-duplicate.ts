@@ -2,7 +2,7 @@ import * as serverApi from "@/serverApi";
 
 import { showMessage, Dialog } from 'siyuan';
 import notebooks from '@/global-notebooks';
-import { error, i18n, lute, isMobile, formatBlockTime } from "@/utils";
+import { i18n, lute, isMobile, formatBlockTime } from "@/utils";
 
 import { getDocsByHpath } from '@/func/misc';
 import { settings } from "@/global-status";
@@ -23,7 +23,7 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
     let result = await serverApi.appendBlock(mergeTo.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
     let lastChildBlockID = result?.[0]?.doOperations[0].id;
     if (lastChildBlockID === undefined) {
-        error(`无法获取最新日记的最后一个 block id`);
+        console.error(`无法获取最新日记的最后一个 block id`);
         // showMessage(i18n.ConflictDiary.fail, 2000, "error");
         // dialog.destroy();
         return false;
@@ -69,7 +69,7 @@ async function smartMergeDocs(main: DocBlock, others: DocBlock[]): Promise<boole
     let result = await serverApi.appendBlock(main.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
     let lastChildBlockID = result?.[0]?.doOperations[0].id;
     if (lastChildBlockID === undefined) {
-        error(`无法获取最新日记的最后一个 block id`);
+        console.error(`无法获取最新日记的最后一个 block id`);
         // showMessage(i18n.ConflictDiary.fail, 2000, "error");
         // dialog.destroy();
         return false;
@@ -137,7 +137,7 @@ const checkTrashBinDoc = async (dn: DocBlock): Promise<DocBlock|null> => {
         let dnPathPart = dn.hpath.split("/").filter((item) => item !== "");
         console.log(dnPathPart);
         if (dnPathPart.length === 0) {
-            error(`无法获取回收站日记本的路径`);
+            console.error(`无法获取回收站日记本的路径`);
             return null;
         } else if (dnPathPart.length === 1) {
             trashBinHpath = `/trash-bin`;

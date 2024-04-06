@@ -1,6 +1,6 @@
 import { openTab, showMessage } from 'siyuan';
 
-import { error, debug, app } from "@/utils";
+import { app } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { getDailynoteSprig, queryTodayDailyNoteDoc, renderDailynotePath } from './dailynote';
 
@@ -52,10 +52,10 @@ export async function queryNotebooks(): Promise<Array<Notebook> | null> {
             }
         }
 
-        debug(`Read all notebooks: ${all_notebook_names}`);
+        console.debug(`Read all notebooks: ${all_notebook_names}`);
         return all_notebooks;
     } catch (err) {
-        error(err);
+        console.error(err);
         return null;
     }
 }

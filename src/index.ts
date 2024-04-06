@@ -11,7 +11,7 @@ import { RoutineEventHandler } from './func';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
 import { updateStyleSheet, removeStyleSheet } from './func';
 
-import { debug, info, setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
+import { setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
 import notebooks from './global-notebooks';
 
@@ -36,7 +36,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     routineHandler: RoutineEventHandler;
 
     async onload() {
-        debug('Plugin load');
+        console.debug('Plugin load');
         let start = performance.now();
 
         const frontEnd = getFrontend();
@@ -69,7 +69,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.routineHandler.onPluginLoad();
 
         let end = performance.now();
-        debug(`启动耗时: ${end - start} ms`);
+        console.debug(`启动耗时: ${end - start} ms`);
 
         let ans = await changelog(this, 'i18n/CHANGELOG.md');
         if (ans?.Dialog) {
@@ -124,7 +124,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
     private initBlockIconClickEvent() {
         if (settings.get("EnableMove") === true || settings.get("EnableReserve") === true) {
             // console.log(settings.get("EnableMove"));
-            debug('添加块菜单项目');
+            console.debug('添加块菜单项目');
             this.enableBlockIconClickEvent = true;
             this.gutterMenu = new GutterMenu(this.eventBus);
         }
@@ -162,7 +162,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
 
     private async updateAll() {
-        debug('updateAll');
+        console.debug('updateAll');
         await notebooks.update(); // 更新笔记本状态
         this.toolbarItem.updateDailyNoteStatus(); // 更新下拉框中的日记存在状态
         updateTodayReservation(notebooks.default, true);
@@ -206,7 +206,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         //等 0 点的时候，就更新状态
         this.upToDate = setTimeout(this.updateOnNewDay.bind(this), millisTill24);
-        info(`当前时间: ${now}, 下次更新时间: ${tomorrow}, ${millisTill24} ms 后更新`);
+        console.log(`当前时间: ${now}, 下次更新时间: ${tomorrow}, ${millisTill24} ms 后更新`);
     }
 
     private async updateOnNewDay() {
@@ -225,11 +225,11 @@ export default class DailyNoteTodayPlugin extends Plugin {
     }
 
     onunload() {
-        debug('Plugin unload')
+        console.debug('Plugin unload')
         removeStyleSheet();
         this.toolbarItem.release();
         if (this.upToDate) {
-            debug(`清理定时器 ${this.upToDate}`);
+            console.debug(`清理定时器 ${this.upToDate}`);
             clearTimeout(this.upToDate);
             this.upToDate = null;
         }
