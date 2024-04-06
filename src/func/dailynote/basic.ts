@@ -3,12 +3,11 @@
  * @Author       : Yp Z
  * @Date         : 2023-11-12 18:06:46
  * @FilePath     : /src/func/dailynote/basic.ts
- * @LastEditTime : 2024-03-30 21:57:20
+ * @LastEditTime : 2024-04-06 17:10:01
  * @Description  : 
  */
 import * as serverApi from '@/serverApi';
 import notebooks from "@/global-notebooks";
-import { info } from '@/utils';
 import { getDocsByHpath } from '@/func/misc';
 
 
@@ -83,6 +82,6 @@ export async function currentDiaryStatus() {
             count_diary += notebook_with_diary.length;
         }
     }
-    info(`更新日记状态: 当前日记共 ${count_diary} 篇`);
+    console.log(`更新日记状态: 当前日记共 ${count_diary} 篇`);
     return diaryStatus;
 }

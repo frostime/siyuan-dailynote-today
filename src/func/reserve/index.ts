@@ -1,10 +1,10 @@
 import { confirm } from 'siyuan';
-import { i18n, debug } from "@/utils";
+import { i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { reservation, settings } from '@/global-status';
 import { Retrieve, RetvFactory } from './retrieve';
 
-import { getDocsByHpath } from '../misc';
+// import { getDocsByHpath } from '../misc';
 
 export * from './retrieve';
 export * from './reserve';
@@ -22,7 +22,7 @@ export * from './reserve';
 //     while (retry < MAX_RETRY) {
 //         //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
 //         let docs = await getDocsByHpath(todayDiaryPath!, notebook);
-//         debug(`In initResrv, retry: ${retry}`);
+//         console.debug(`In initResrv, retry: ${retry}`);
 //         if (docs[0]?.id !== undefined) {
 //             docId = docs[0].id;
 //             break;
@@ -31,7 +31,7 @@ export * from './reserve';
 //         retry++;
 //     }
 //     if (docId === undefined) {
-//         error(`无法获取今日日记的 docId`);
+//         console.error(`无法获取今日日记的 docId`);
 //         return;
 //     }
 //     updateDocReservation(docId, false);
@@ -68,7 +68,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
     const hasInserted = retvBlocks.length > 0;
 
     if (hasInserted && !refresh) {
-        debug(`今日已经插入过预约了`);
+        console.debug(`今日已经插入过预约了`);
         return;
     } else {
         resvBlockIds = resvBlockIds.map((id) => `"${id}"`);

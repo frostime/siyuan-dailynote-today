@@ -2,7 +2,6 @@
  * Copyright (c) 2023 frostime. All rights reserved.
  */
 import { Plugin } from 'siyuan';
-import { info, error } from './utils';
 import { eventBus } from './event-bus';
 import { filterExistsBlocks } from './func';
 import { retrieveResvFromBlocks } from '@/func/reserve';
@@ -56,9 +55,9 @@ class SettingManager {
     }
 
     set(key: any, value: any) {
-        // info(`Setting update: ${key} = ${value}`)
+        // console.log(`Setting update: ${key} = ${value}`)
         if (!(key in this.settings)) {
-            error(`"${key}" is not a setting`);
+            console.error(`"${key}" is not a setting`);
             return;
         }
 
@@ -77,11 +76,11 @@ class SettingManager {
         let loaded = await this.plugin.loadData(SettingFile);
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
-            info(`没有配置文件，使用默认配置`)
+            console.debug(`没有配置文件，使用默认配置`)
             this.save();
         } else {
             //如果有配置文件，则使用配置文件
-            info(`读入配置文件: ${SettingFile}`)
+            console.log(`读入配置文件: ${SettingFile}`)
             console.log(loaded);
             //Docker 和  Windows 不知为何行为不一致, 一个读入字符串，一个读入对象
             //为了兼容，这里做一下判断
@@ -93,7 +92,7 @@ class SettingManager {
                     this.set(key, loaded[key]);
                 }
             } catch (error_msg) {
-                error(`Setting load error: ${error_msg}`);
+                console.error(`Setting load error: ${error_msg}`);
             }
             this.save();
         }
@@ -112,7 +111,7 @@ class SettingManager {
         }
 
         let json = JSON.stringify(this.settings);
-        info(`写入配置文件: ${json}`);
+        console.debug(`写入配置文件: ${json}`);
         this.plugin.saveData(SettingFile, json);
     }
 }
@@ -178,10 +177,10 @@ class ReservationManger {
         let loaded = await this.plugin.loadData(ReserveFile);
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
-            info(`没有预约文件，使用默认配置`)
+            console.debug(`没有预约文件，使用默认配置`)
         } else {
             //如果有配置文件，则使用配置文件
-            info(`读入预约文件: ${ReserveFile}`)
+            console.log(`读入预约文件: ${ReserveFile}`)
             console.log(loaded);
             if (typeof loaded === 'string') {
                 loaded = JSON.parse(loaded);
@@ -191,7 +190,7 @@ class ReservationManger {
                     this.reservations[key] = loaded[key];
                 }
             } catch (error_msg) {
-                error(`Setting load error: ${error_msg}`);
+                console.error(`Setting load error: ${error_msg}`);
             }
         }
         await this.syncWithBlock();
@@ -217,19 +216,19 @@ class ReservationManger {
 
     save() {
         let json = JSON.stringify(this.reservations);
-        info(`写入预约文件: ${json}`);
+        console.debug(`写入预约文件: ${json}`);
         this.plugin.saveData(ReserveFile, json);
     }
 
     //添加预约
     doReserve(date: Date, blockId: string) {
         // YYYYMMDD
-        info(`预约: ${blockId} 到 ${date}`);
+        console.debug(`预约: ${blockId} 到 ${date}`);
 
         let reserved = this.findReserved(blockId);
         if (reserved) {
             this.removeReservation(reserved, blockId);
-            info(`已经预约到 ${reserved} 的 ${blockId} , 现在删除原来的预约`);
+            console.debug(`已经预约到 ${reserved} 的 ${blockId} , 现在删除原来的预约`);
         }
         let date_str = this.dateTemplate(date);
         //如果没有这个日期的预约，则创建
@@ -286,7 +285,7 @@ class ReservationManger {
         for (const date of Object.keys(OnDate)) {
             const before = OnDate[date];
             OnDate[date] = OnDate[date].filter(blockId => existsBlockIds.has(blockId));
-            console.log(`Filter ${date}: [${before}] --> [${OnDate[date]}]`)
+            console.debug(`Filter ${date}: [${before}] --> [${OnDate[date]}]`)
         }
         this.save();
     }

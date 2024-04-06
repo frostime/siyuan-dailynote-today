@@ -4,7 +4,6 @@ import * as api from "@/serverApi";
 import { formatDate } from './basic';
 import { getDocsByHpath } from '@/func/misc';
 import { setCustomDNAttr } from "./dn-attr";
-import { info } from "@/utils";
 
 export async function getPastDNHPath(notebook: NotebookId | Notebook, date: Date): Promise<string> {
     if (typeof notebook === 'string') {
@@ -116,7 +115,7 @@ export async function findoutEarliestDN(notebook: Notebook): Promise<Date> {
         }
         pathPrefix += `/${part}`;
     }
-    info(`${notebook.name} PathPrefix`, pathPrefix);
+    // console.debug(`${notebook.name} PathPrefix`, pathPrefix);
 
     //获取最先创建的文档的日期
     let sql = `

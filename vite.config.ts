@@ -116,8 +116,8 @@ export default defineConfig({
         // 或是用来指定是应用哪种混淆器
         // boolean | 'terser' | 'esbuild'
         // 不压缩，用于调试
-        // minify: !isWatch,
-        minify: false,
+        minify: !isWatch,
+        // minify: false,
 
         lib: {
             // Could also be a dictionary or array of multiple entry points

@@ -79,7 +79,7 @@ export class RoutineEventHandler {
     }
 
     async onSyncEnd({ detail }) {
-        console.debug('sync-end', detail);
+        console.debug('on-sync-end');
 
         if (this.flag.hasOpened === false && this.flag.autoOpenAfterSync === true) {
             this.tryAutoOpenDN();

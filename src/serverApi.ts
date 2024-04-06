@@ -1,8 +1,8 @@
 import { fetchSyncPost, IWebSocketData } from "siyuan";
 
 
-async function request(url: string, data: any) {
-    // info(`Request: ${url}; data = ${JSON.stringify(data)}`);
+export async function request(url: string, data: any) {
+    // console.log(`Request: ${url}; data = ${JSON.stringify(data)}`);
     let response: IWebSocketData = await fetchSyncPost(url, data);
     // console.log(response);
     let res = response.code === 0 ? response.data : null;

@@ -39,7 +39,7 @@ export class GutterMenu {
         let reservation: Attr = protype.attributes.getNamedItem('custom-reservation');
         let menuList = [];
 
-        console.log(detail)
+        // console.log(detail)
 
         if (settings.get("EnableReserve") === true) {
             //存在预约, 可以用于取消
@@ -86,7 +86,7 @@ export class GutterMenu {
     }
 
     onDocGutterClicked({ detail }: any) {
-        console.log(detail);
+        // console.log(detail);
 
         let docId = detail.data.id;
         if (docId === undefined) {
