@@ -2,8 +2,8 @@
  * Copyright (c) 2023 by Yp Z (frostime). All Rights Reserved.
  * @Author       : Yp Z
  * @Date         : 2023-06-17 13:55:54
- * @FilePath     : /src/func/reserve/reserve.ts
- * @LastEditTime : 2023-11-12 18:27:58
+ * @FilePath     : /src/func/reserve/retrieve.ts
+ * @LastEditTime : 2024-04-06 18:02:54
  * @Description  : 
  */
 import * as serverApi from '@/serverApi';
@@ -75,7 +75,7 @@ export abstract class Retrieve {
         let retrieveRes = [];
         for (let id of this.resvBlockIds) {
             let block: Block = await serverApi.getBlockByID(id);
-            console.log(id, '-->', block);
+            // console.log(id, '-->', block);
             if (block) {
                 retrieveRes.push({
                     id: block.id,
@@ -182,6 +182,6 @@ export async function retrieveResvFromBlocks(time: 'today' | 'future'): Promise<
     let sql = `select B.id, B.content, A.value as date from blocks as B inner join attributes as A
         on(A.block_id = B.id and  A.name = 'custom-reservation' and ${cond}) order by A.value;`;
     let results: Reservation[] = await serverApi.sql(sql);
-    console.log(results);
+    console.debug(results);
     return results;
 }

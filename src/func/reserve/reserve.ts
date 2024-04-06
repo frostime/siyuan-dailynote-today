@@ -30,7 +30,7 @@ export const DatePatternRules = [
     {
         pattern: /(?<prefix>明|大?后)天/,
         parse(match: RegExpMatchArray): [string, string, string] {
-            console.log(match);
+            // console.log(match);
             let today = new Date();
             if (match.groups.prefix === '明') {
                 today.setDate(today.getDate() + 1);
@@ -48,7 +48,7 @@ export const DatePatternRules = [
     {
         pattern: /今[天日]/,
         parse(match: RegExpMatchArray): [string, string, string] {
-            console.log(match);
+            // console.log(match);
             let today = new Date();
             let year = today.getFullYear().toString();
             let month = (today.getMonth() + 1).toString();
@@ -219,7 +219,7 @@ export async function dereserveBlock(blockId: BlockId) {
 }
 
 function doReserveBlock(blockId, date: Date) {
-    console.log(blockId, date);
+    console.debug('Do reservation', blockId, date);
     reservation.doReserve(date, blockId);
     reservation.save();
     let dateStr = reservation.dateTemplate(date);

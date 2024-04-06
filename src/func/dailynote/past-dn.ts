@@ -115,7 +115,7 @@ export async function findoutEarliestDN(notebook: Notebook): Promise<Date> {
         }
         pathPrefix += `/${part}`;
     }
-    console.log(`${notebook.name} PathPrefix`, pathPrefix);
+    // console.debug(`${notebook.name} PathPrefix`, pathPrefix);
 
     //获取最先创建的文档的日期
     let sql = `

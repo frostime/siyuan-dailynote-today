@@ -76,7 +76,7 @@ class SettingManager {
         let loaded = await this.plugin.loadData(SettingFile);
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
-            console.log(`没有配置文件，使用默认配置`)
+            console.debug(`没有配置文件，使用默认配置`)
             this.save();
         } else {
             //如果有配置文件，则使用配置文件
@@ -111,7 +111,7 @@ class SettingManager {
         }
 
         let json = JSON.stringify(this.settings);
-        console.log(`写入配置文件: ${json}`);
+        console.debug(`写入配置文件: ${json}`);
         this.plugin.saveData(SettingFile, json);
     }
 }
@@ -177,7 +177,7 @@ class ReservationManger {
         let loaded = await this.plugin.loadData(ReserveFile);
         if (loaded == null || loaded == undefined || loaded == '') {
             //如果没有配置文件，则使用默认配置，并保存
-            console.log(`没有预约文件，使用默认配置`)
+            console.debug(`没有预约文件，使用默认配置`)
         } else {
             //如果有配置文件，则使用配置文件
             console.log(`读入预约文件: ${ReserveFile}`)
@@ -216,19 +216,19 @@ class ReservationManger {
 
     save() {
         let json = JSON.stringify(this.reservations);
-        console.log(`写入预约文件: ${json}`);
+        console.debug(`写入预约文件: ${json}`);
         this.plugin.saveData(ReserveFile, json);
     }
 
     //添加预约
     doReserve(date: Date, blockId: string) {
         // YYYYMMDD
-        console.log(`预约: ${blockId} 到 ${date}`);
+        console.debug(`预约: ${blockId} 到 ${date}`);
 
         let reserved = this.findReserved(blockId);
         if (reserved) {
             this.removeReservation(reserved, blockId);
-            console.log(`已经预约到 ${reserved} 的 ${blockId} , 现在删除原来的预约`);
+            console.debug(`已经预约到 ${reserved} 的 ${blockId} , 现在删除原来的预约`);
         }
         let date_str = this.dateTemplate(date);
         //如果没有这个日期的预约，则创建
@@ -285,7 +285,7 @@ class ReservationManger {
         for (const date of Object.keys(OnDate)) {
             const before = OnDate[date];
             OnDate[date] = OnDate[date].filter(blockId => existsBlockIds.has(blockId));
-            console.log(`Filter ${date}: [${before}] --> [${OnDate[date]}]`)
+            console.debug(`Filter ${date}: [${before}] --> [${OnDate[date]}]`)
         }
         this.save();
     }

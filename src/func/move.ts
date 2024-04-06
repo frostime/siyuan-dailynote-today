@@ -81,7 +81,7 @@ export async function moveDocUnderDailyNote(srcDocId: DocumentId, notebook: Note
     }
 
     let dstDocs = await getDocsByHpath(dstDiaryPath!, notebook);
-    console.log("日记路径:", dstDocs);
+    console.debug("日记路径:", dstDocs);
     // let dstDocId: DocumentId;
     if (dstDocs != null && dstDocs.length > 0) {
         // dstDocId = dstDocs[0].id;

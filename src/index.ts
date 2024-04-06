@@ -151,9 +151,6 @@ export default class DailyNoteTodayPlugin extends Plugin {
                     new ShowReserve({
                         target: this.element.querySelector('#ShowResv')
                     });
-                },
-                destroy() {
-                    console.log("destroy dock:");
                 }
             });
         }
@@ -176,9 +173,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             content: `<div id="SettingPanel" style="height: 100%"></div>`,
             width: '50%',
             height: '27rem',
-            destroyCallback: (options) => {
-                console.log("destroyCallback", options);
-                //You'd better destroy the component when the dialog is closed
+            destroyCallback: () => {
                 pannel.$destroy();
             }
         });

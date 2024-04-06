@@ -50,7 +50,7 @@ export class ToolbarMenuItem {
 
     //等到设置加载完毕后, 重新更新图标位置
     addTopBarIcon() {
-        console.log('addTopBarIcon');
+        // console.log('addTopBarIcon');
         // this.ele.remove();
         this.ele = this.plugin.addTopBar({
             icon: iconDiary.icon32,
