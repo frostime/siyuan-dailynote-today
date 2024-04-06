@@ -257,7 +257,7 @@ While you need to have the corresponding document attributes set in your daily n
 
 ## Special Issues | Duplicate DailyNotes
 
-Sometimes you might find the plugin suddenly pops up a window, telling you that the content of the DailyNote has been duplicated:
+Sometimes you might find the plugin suddenly pops up a dialog, telling you that the content of the DailyNote has been duplicated:
 
 ![](asset/DupDN-EN.png)
 
@@ -275,13 +275,21 @@ Currently, there is no good solution to prevent this problem. Therefore, the plu
 
 First, the **principle for automatic processing is: the earliest created DailyNote is considered the main DailyNote, and all others are duplicates**. Based on this principle, four automatic processing methods are provided:
 
-1. 🤲 Merge All: Merge all other duplicate documents into the main DailyNote document (safe)
-2. ❌ Delete Directly: Directly delete all other duplicate DailyNotes (little risky)
-3. 🗑️ Move to Trash Bin: Under the `daily note` root path, a `trash-bin` document is created, all duplicate DailyNotes will be moved to this document and the `custom-dailynote-yymmdd` property will be deleted (safe)
-4. 🤔 Smart Merge: According to certain rules, documents are either deleted or merged into the main DailyNote (little risky)
+1. 🤲 Merge All: Merge all other duplicate documents into the main DailyNote document
+2. ❌ Delete Directly: Directly delete all other duplicate DailyNotes
+3. 🗑️ Move to Trash Bin: Under the `daily note` root path, a `trash-bin` document is created, all duplicate DailyNotes will be moved to this document and the `custom-dailynote-yymmdd` property will be deleted
+4. 🤔 Smart Merge: According to certain rules, documents are either deleted or merged into the main DailyNote
     - Documents that are empty, with no references or links, are directly deleted
     - Documents that are not empty, but whose update time does not exceed three seconds from the creation time (for example, DailyNotes using a template), are directly deleted
     - Other documents are merged into the main DailyNote document
+
+
+Duplicate Document Prompt Dialog:
+
+- **After the first data synchronization of the day**, a check is performed for duplicate documents. If duplicate entries are found, a duplicate document prompt dialog will appear (there is no risk of document duplication in other cases).
+  - You can choose the four auto-solution mentioned above in the dialog.
+  - Alternatively, you can close the dialog and manually handle the duplicates as instructed.
+- The dialog will **only run once** when it is launched **each day**. After closing it, you will need to manually handle the duplicates yourself.
 
 ## FAQ
 

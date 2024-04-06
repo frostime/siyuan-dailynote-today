@@ -1,6 +1,6 @@
 ## V1.5.0 重复日记处理 | Duplicate daily note handling
 
-> **注意: 本次更新对「重复日记自动处理」改动较大，建议去阅读一下插件文档**
+> **注意: 本次更新对「重复日记自动处理」改动较大，建议去阅读一下插件文档 {## 特殊问题 | 重复的日记}**
 
 优化重复日记处理方案，提供多种处理重复日记的方法。
 
@@ -11,7 +11,7 @@
 
 ---
 
-> **Note: This update has made significant changes to the "automatic handling of duplicate DailyNotes". It is recommended to read the plugin documentation.**
+> **Note: This update has made significant changes to the "automatic handling of duplicate DailyNotes". It is recommended to read the plugin documentation {## Special Issues | Duplicate DailyNotes}.**
 
 Optimizing the solution for handling repeated daily notes, multiple methods are provided to address duplicate entries.
 
