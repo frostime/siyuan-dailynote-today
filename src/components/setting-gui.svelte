@@ -61,14 +61,10 @@
                 name: "AutoOpenAfterSync",
                 type: "checkbox"
             },
-            // {
-            //     name: "AutoHandleDuplicate",
-            //     type: "checkbox"
-            // },
-            // {
-            //     name: "AutoHandleDuplicateMethod",
-            //     type: "select"
-            // }
+            {
+                name: "AutoHandleDuplicateMethod",
+                type: "select"
+            }
         ],
         reservation: [
             {

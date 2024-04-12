@@ -104,15 +104,14 @@ Setting:
     text:
       Highlight reservation icon in dock bar when there is a reservation on the
       day
-  AutoHandleDuplicate:
-    title: Auto-handle duplicates
-    text:
-      Automatically handel with duplicate daily notes while detected, without
-      popup dialog
   AutoHandleDuplicateMethod:
     title: Auto-handle duplicates' method
-    text: When detected duplicate daily notes, how to handle with them
+    text: |-
+      Automatically handel with duplicate daily notes while detected, without popup dialog
+      Default: Popup dialog and let user mannually choose the method.
+      If not 'Mannually handle', auto-handle with the duplicate daily notes with the selected method.
     options:
+      None: Mannually handle
       AllMerge: Merge all
       TrashDup: Move to trash
       SmartMerge: Merge smartly

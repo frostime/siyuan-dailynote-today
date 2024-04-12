@@ -21,7 +21,7 @@ type ParentID = BlockId | DocumentId;
 
 type markdown = string;
 
-type TDuplicateHandleMethod = 'DeleteDup' | 'AllMerge' | 'SmartMerge' | 'TrashDup';
+type TDuplicateHandleMethod = 'DeleteDup' | 'AllMerge' | 'SmartMerge' | 'TrashDup' | 'None';
 
 type ResvBlock = Block;
 type ResvBlockIds = BlockId[];
@@ -109,7 +109,7 @@ type SettingKey = (
     "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
     'RetvType' | 'EnableResvDock' | 'DisableAutoCreateOnMobile' |
     'NotebookBlacklist' | 'AutoOpenAfterSync' | 'HighlightResv' |
-    'AutoHandleDuplicate' | 'AutoHandleDuplicateMethod'
+    'AutoHandleDuplicateMethod'
 );
 
 interface ISettingItem {
