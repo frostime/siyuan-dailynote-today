@@ -10,6 +10,7 @@ interface Window {
         ws: any;
         languages: any;
     };
+    Lute: any;
 }
 
 

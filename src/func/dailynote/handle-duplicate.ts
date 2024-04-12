@@ -317,6 +317,13 @@ export async function checkDuplicateDiary(): Promise<boolean> {
 
     // ==================== 合并今天的日记 ====================
     console.warn(`Conflict daily note: ${notebook.name} ${hpath}`);
+
+    const method: TDuplicateHandleMethod = settings.get('AutoHandleDuplicateMethod');
+    if (method !== 'None') {
+        await handleDuplicateDiary(docs, method);
+        return true;
+    }
+
     const html = buildShowDuplicateDocDom(docs, notebook, ascendantDiff);
     let dialog = new Dialog({
         title: i18n.Name,
