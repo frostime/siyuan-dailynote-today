@@ -152,6 +152,11 @@ ConflictDiary:
   HeadingMarkdown: "# 以下为其他重复的日记"
   success: 自动处理成功
   fail: 由于未知原因, 自动处理失败, 请手动处理
+  CompleteMsg:
+      AllMerge: 将重复日记全部合并到主日记中
+      TrashDup: 将重复的日记移动到回收站
+      SmartMerge: 将重复日记智能合并到主日记中
+      DeleteDup: 删除了所有重复的日记
 DockReserve:
   arial: 今日笔记预约
   title: 预约

@@ -193,6 +193,11 @@ ConflictDiary:
   HeadingMarkdown: "# Duplicate diaries are listed below"
   success: Success
   fail: Fail due to unknown reason, please merge them manually
+CompleteMsg:
+    AllMerge: All duplicate diaries have been merged into the main diary
+    TrashDup: Duplicate diaries have been moved to the trash bin
+    SmartMerge: Duplicate diaries have been smartly merged into the main diary
+    DeleteDup: All duplicate diaries have been deleted
 DockReserve:
   arial: Daily Note Today Reservations
   title: Reservations

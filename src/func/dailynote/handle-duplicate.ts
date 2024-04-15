@@ -16,7 +16,7 @@ type TDuplicateHandler = (main: DocBlock, others: DocBlock[]) => boolean | Promi
  * @returns 
  */
 async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<boolean> {
-    showMessage("Merging", 1000, "info");
+    // showMessage(i18n.ConflictDiary.CompleteMsg, 1000, "info");
 
     // let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
     // let lastChildBlockID = childs[childs.length - 1].id;
@@ -50,7 +50,7 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
  * @returns 
  */
 async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> {
-    showMessage("Deleting", 1000, "info");
+    // showMessage("Deleting", 1000, "info");
     let allPromise = [];
     for (let doc of others) {
         allPromise.push(serverApi.removeDoc(doc.box, doc.path));
@@ -65,7 +65,7 @@ async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> 
  * 智能合并
  */
 async function smartMergeDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> {
-    showMessage("Smart Merging", 1000, "info");
+    // showMessage("Smart Merging", 1000, "info");
 
     let result = await serverApi.appendBlock(main.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
     let lastChildBlockID = result?.[0]?.doOperations[0].id;
@@ -268,6 +268,10 @@ const handleDuplicateDiary = async (docs: DocBlock[], method?: TDuplicateHandleM
         console.error(`No such method: ${method}`);
         return false;
     });
+    const msg = i18n.ConflictDiary.CompleteMsg?.[method];
+    if (msg) {
+        showMessage(msg, 3000, "info");
+    }
     let flag = await handler(earliestDoc, docs);
 
     if (flag) {
