@@ -107,11 +107,11 @@ Setting:
   AutoHandleDuplicateMethod:
     title: Auto-handle duplicates' method
     text: |-
-      Automatically handel with duplicate daily notes while detected, without popup dialog
-      Default: Popup dialog and let user mannually choose the method.
-      If not 'Mannually handle', auto-handle with the duplicate daily notes with the selected method.
+      Automatically handel with duplicate daily notes while detected, without popup dialog<br/>
+      Default: Popup dialog and let user manually choose the method.<br/>
+      <b>If not 'Manually  handle'</b>, auto-handle with the duplicate daily notes with the selected method.
     options:
-      None: Mannually handle
+      None: Manually  handle
       AllMerge: Merge all
       TrashDup: Move to trash
       SmartMerge: Merge smartly
