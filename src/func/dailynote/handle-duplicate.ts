@@ -342,30 +342,3 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     });
     return true;
 }
-
-
-//TODO: 测试用，记得删除
-const addTestBtn = () => {
-    let btn = document.createElement('button');
-    Object.assign(btn.style, {
-        position: 'fixed',
-        bottom: '50px',
-        right: '50px',
-        zIndex: '1000',
-    });
-    btn.classList.add('b3-button', 'b3-button--primary');
-    btn.innerText = '检查重复日记';
-    btn.onclick = async () => {
-        let flag = await checkDuplicateDiary();
-        if (flag) {
-            showMessage('Debug: 有重复日记');
-        } else {
-            showMessage('Debug: 没有重复日记');
-        }
-    };
-    document.body.appendChild(btn);
-}
-
-if (process.env.DEV_MODE === "true") {
-    addTestBtn();
-}
