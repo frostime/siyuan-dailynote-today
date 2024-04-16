@@ -75,13 +75,14 @@ Setting:
   HighlightResv:
     title: 高亮当日预约
     text: 如果当日存在预约，则高亮预约列表的侧边栏图标
-  AutoHandleDuplicate:
-    title: 自动处理重复日记
-    text: 当检测到重复的日记时，不弹出提示框直接自动处理
   AutoHandleDuplicateMethod:
-    title: 自动处理重复日记的方式
-    text: 当检测到重复的日记时，自动处理的方式
+    title: 自动处理重复日记方案
+    text: |-
+      当检测到重复的日记时，不弹出合并对话框，而是直接指定某个默认处理方案自动处理<br/>
+      默认选项为：不进行任何处理，即弹出对话框由用户手动处理<br/>
+      当前选择<b>除了「手动处理」之外</b>的选项时，在检测到重复日记的时候将采用指定的处理方案自动处理
     options:
+      None: 手动处理
       AllMerge: 全部合并
       TrashDup: 移动到回收站
       SmartMerge: 智能合并
@@ -151,6 +152,11 @@ ConflictDiary:
   HeadingMarkdown: "# 以下为其他重复的日记"
   success: 自动处理成功
   fail: 由于未知原因, 自动处理失败, 请手动处理
+  CompleteMsg:
+      AllMerge: 将重复日记全部合并到主日记中
+      TrashDup: 将重复的日记移动到回收站
+      SmartMerge: 将重复日记智能合并到主日记中
+      DeleteDup: 删除了所有重复的日记
 DockReserve:
   arial: 今日笔记预约
   title: 预约

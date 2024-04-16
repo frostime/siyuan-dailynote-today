@@ -104,15 +104,14 @@ Setting:
     text:
       Highlight reservation icon in dock bar when there is a reservation on the
       day
-  AutoHandleDuplicate:
-    title: Auto-handle duplicates
-    text:
-      Automatically handel with duplicate daily notes while detected, without
-      popup dialog
   AutoHandleDuplicateMethod:
     title: Auto-handle duplicates' method
-    text: When detected duplicate daily notes, how to handle with them
+    text: |-
+      Automatically handel with duplicate daily notes while detected, without popup dialog<br/>
+      Default: Popup dialog and let user manually choose the method.<br/>
+      <b>If not 'Manually  handle'</b>, auto-handle with the duplicate daily notes with the selected method.
     options:
+      None: Manually  handle
       AllMerge: Merge all
       TrashDup: Move to trash
       SmartMerge: Merge smartly
@@ -194,6 +193,11 @@ ConflictDiary:
   HeadingMarkdown: "# Duplicate diaries are listed below"
   success: Success
   fail: Fail due to unknown reason, please merge them manually
+CompleteMsg:
+    AllMerge: All duplicate diaries have been merged into the main diary
+    TrashDup: Duplicate diaries have been moved to the trash bin
+    SmartMerge: Duplicate diaries have been smartly merged into the main diary
+    DeleteDup: All duplicate diaries have been deleted
 DockReserve:
   arial: Daily Note Today Reservations
   title: Reservations

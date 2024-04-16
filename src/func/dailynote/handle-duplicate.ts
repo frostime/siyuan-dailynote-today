@@ -16,7 +16,6 @@ type TDuplicateHandler = (main: DocBlock, others: DocBlock[]) => boolean | Promi
  * @returns 
  */
 async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<boolean> {
-    showMessage("Merging", 1000, "info");
 
     // let childs: Block[] = await serverApi.getChildBlocks(latestDoc.id);
     // let lastChildBlockID = childs[childs.length - 1].id;
@@ -24,8 +23,6 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
     let lastChildBlockID = result?.[0]?.doOperations[0].id;
     if (lastChildBlockID === undefined) {
         console.error(`无法获取最新日记的最后一个 block id`);
-        // showMessage(i18n.ConflictDiary.fail, 2000, "error");
-        // dialog.destroy();
         return false;
     }
 
@@ -39,7 +36,6 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
         await serverApi.doc2Heading(id, lastChildBlockID, true);
         console.debug(`Merge doc ${id}`);
     }
-    // dialog.destroy();
     return true;
 }
 
@@ -50,14 +46,12 @@ async function mergeDocs(mergeTo: DocBlock, otherDocs: DocBlock[]): Promise<bool
  * @returns 
  */
 async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> {
-    showMessage("Deleting", 1000, "info");
     let allPromise = [];
     for (let doc of others) {
         allPromise.push(serverApi.removeDoc(doc.box, doc.path));
         console.debug(`Remove doc ${doc.id}`);
     }
     await Promise.all(allPromise);
-    // dialog.destroy();
     return true;
 }
 
@@ -65,14 +59,11 @@ async function deleteDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> 
  * 智能合并
  */
 async function smartMergeDocs(main: DocBlock, others: DocBlock[]): Promise<boolean> {
-    showMessage("Smart Merging", 1000, "info");
 
     let result = await serverApi.appendBlock(main.id, i18n.ConflictDiary.HeadingMarkdown, "markdown");
     let lastChildBlockID = result?.[0]?.doOperations[0].id;
     if (lastChildBlockID === undefined) {
         console.error(`无法获取最新日记的最后一个 block id`);
-        // showMessage(i18n.ConflictDiary.fail, 2000, "error");
-        // dialog.destroy();
         return false;
     }
 
@@ -268,12 +259,16 @@ const handleDuplicateDiary = async (docs: DocBlock[], method?: TDuplicateHandleM
         console.error(`No such method: ${method}`);
         return false;
     });
+    const msg = i18n.ConflictDiary.CompleteMsg?.[method];
+    if (msg) {
+        showMessage(msg, 5000, "info");
+    }
     let flag = await handler(earliestDoc, docs);
 
     if (flag) {
-        showMessage(i18n.ConflictDiary.success, 2000, "info");
+        showMessage(i18n.ConflictDiary.success, 5000, "info");
     } else {
-        showMessage(i18n.ConflictDiary.fail, 2000, "error");
+        showMessage(i18n.ConflictDiary.fail, 5000, "error");
     }
 }
 
@@ -317,6 +312,13 @@ export async function checkDuplicateDiary(): Promise<boolean> {
 
     // ==================== 合并今天的日记 ====================
     console.warn(`Conflict daily note: ${notebook.name} ${hpath}`);
+
+    const method: TDuplicateHandleMethod = settings.get('AutoHandleDuplicateMethod');
+    if (method !== 'None') {
+        await handleDuplicateDiary(docs, method);
+        return true;
+    }
+
     const html = buildShowDuplicateDocDom(docs, notebook, ascendantDiff);
     let dialog = new Dialog({
         title: i18n.Name,
@@ -341,3 +343,29 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     return true;
 }
 
+
+//TODO: 测试用，记得删除
+const addTestBtn = () => {
+    let btn = document.createElement('button');
+    Object.assign(btn.style, {
+        position: 'fixed',
+        bottom: '50px',
+        right: '50px',
+        zIndex: '1000',
+    });
+    btn.classList.add('b3-button', 'b3-button--primary');
+    btn.innerText = '检查重复日记';
+    btn.onclick = async () => {
+        let flag = await checkDuplicateDiary();
+        if (flag) {
+            showMessage('Debug: 有重复日记');
+        } else {
+            showMessage('Debug: 没有重复日记');
+        }
+    };
+    document.body.appendChild(btn);
+}
+
+if (process.env.DEV_MODE === "true") {
+    addTestBtn();
+}
