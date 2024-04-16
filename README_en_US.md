@@ -291,6 +291,12 @@ Duplicate Document Prompt Dialog:
   - Alternatively, you can close the dialog and manually handle the duplicates as instructed.
 - The dialog will **only run once** when it is launched **each day**. After closing it, you will need to manually handle the duplicates yourself.
 
+If you don't want to handle it manually every time, you can choose the default processing method in the settings. This way, the plugin will automatically handle repetitive entries for you.
+
+> The default setting is "Manually handle," which means a dialog box will pop up every time, allowing the user to choose a processing option.
+
+![](asset/AutoHandle-EN.png)
+
 ## FAQ
 
 
