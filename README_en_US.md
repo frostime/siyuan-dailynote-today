@@ -277,7 +277,7 @@ First, the **principle for automatic processing is: the earliest created DailyNo
 
 1. 🤲 Merge All: Merge all other duplicate documents into the main DailyNote document
 2. ❌ Delete Directly: Directly delete all other duplicate DailyNotes
-3. 🗑️ Move to Trash Bin: Under the `daily note` root path, a `trash-bin` document is created, all duplicate DailyNotes will be moved to this document and the `custom-dailynote-yymmdd` property will be deleted
+3. 🗑️ Move to Trash Bin: Under the `daily note` root path, a `trash-bin` document is created, all duplicate DailyNotes will be moved to this document and the `custom-dailynote-yymmdd` property will be deleted  (Author Prefered)
 4. 🤔 Smart Merge: According to certain rules, documents are either deleted or merged into the main DailyNote
     - Documents that are empty, with no references or links, are directly deleted
     - Documents that are not empty, but whose update time does not exceed three seconds from the creation time (for example, DailyNotes using a template), are directly deleted

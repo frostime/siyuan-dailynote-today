@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-11-12 19:53:10
  * @FilePath     : /src/func/dailynote/open-dn.ts
- * @LastEditTime : 2024-04-06 17:10:37
+ * @LastEditTime : 2024-04-19 12:38:15
  * @Description  : 
  */
 import { showMessage, confirm, openTab, openMobileFileById } from 'siyuan';
@@ -27,6 +27,21 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
     notebook.dailyNoteDocId = doc_id;
 
     return doc_id;
+}
+
+export async function openDoc(docId: DocumentId) {
+    //打开文档
+    if (isMobile === true) {
+        openMobileFileById(utils.app, docId, ['cb-get-all']);
+    } else {
+        openTab({
+            app: utils.app,
+            doc: {
+                id: docId,
+                zoomIn: false
+            }
+        });
+    }
 }
 
 /**

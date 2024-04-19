@@ -7,6 +7,8 @@ import { i18n, lute, isMobile, formatBlockTime, repeatRun } from "@/utils";
 import { getDocsByHpath } from '@/func/misc';
 import { settings } from "@/global-status";
 
+import { openDoc } from './open-dn';
+
 type TDuplicateHandler = (main: DocBlock, others: DocBlock[]) => boolean | Promise<boolean>;
 
 /**
@@ -116,7 +118,7 @@ const removeAttr = async (block: Block, attr: RegExp) => {
     serverApi.setBlockAttrs(block.id, attr_to_modify);
 }
 
-const checkTrashBinDoc = async (dn: DocBlock): Promise<DocBlock|null> => {
+const checkTrashBinDoc = async (dn: DocBlock): Promise<DocBlock | null> => {
     const sql = `
     select B.* from blocks as B join attributes as A
     on A.block_id = B.id
@@ -149,7 +151,7 @@ const checkTrashBinDoc = async (dn: DocBlock): Promise<DocBlock|null> => {
 
     //由于创建文档后，需要一定时间才能获取到文档，这里重试获取文档
     let doc: DocBlock | null = null;
-    let GetTrashbin = async () => serverApi.request('/api/block/getBlockInfo', {id: trashBinDoc});
+    let GetTrashbin = async () => serverApi.request('/api/block/getBlockInfo', { id: trashBinDoc });
     doc = await repeatRun(GetTrashbin, 1000, 5);
     return doc;
 }
@@ -255,7 +257,7 @@ const handleDuplicateDiary = async (docs: DocBlock[], method?: TDuplicateHandleM
     let earliestDoc = docs.pop();
     method = method || settings.get('AutoHandleDuplicateMethod');
     console.debug(`Handle duplicate method: ${method}`);
-    const handler = HandleMethods?.[method] || ((...args: any[]) => {
+    const handler = HandleMethods?.[method] || (() => {
         console.error(`No such method: ${method}`);
         return false;
     });
@@ -270,6 +272,9 @@ const handleDuplicateDiary = async (docs: DocBlock[], method?: TDuplicateHandleM
     } else {
         showMessage(i18n.ConflictDiary.fail, 5000, "error");
     }
+
+    //Open main daily note
+    openDoc(earliestDoc.id);
 }
 
 /**
@@ -315,6 +320,8 @@ export async function checkDuplicateDiary(): Promise<boolean> {
 
     const method: TDuplicateHandleMethod = settings.get('AutoHandleDuplicateMethod');
     if (method !== 'None') {
+        let msg = i18n.ConflictDiary.part1[0].replaceAll('#', '').trim();
+        showMessage(msg, 5000, 'info');
         await handleDuplicateDiary(docs, method);
         return true;
     }
@@ -341,4 +348,24 @@ export async function checkDuplicateDiary(): Promise<boolean> {
         dialog.destroy();
     });
     return true;
+}
+
+//For Debug
+if (process.env.DEV_MODE === "true") {
+    const addTestBtn = () => {
+        let btn = document.createElement('button');
+        Object.assign(btn.style, {
+            position: 'fixed',
+            bottom: '50px',
+            right: '50px',
+            zIndex: '1000',
+        });
+        btn.classList.add('b3-button', 'b3-button--primary');
+        btn.innerText = '检查重复日记';
+        btn.onclick = async () => {
+            await checkDuplicateDiary();
+        };
+        document.body.appendChild(btn);
+    }
+    addTestBtn();
 }
