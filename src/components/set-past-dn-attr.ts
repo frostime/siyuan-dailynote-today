@@ -3,12 +3,13 @@
  * @Author       : frostime
  * @Date         : 2023-12-04 18:48:59
  * @FilePath     : /src/components/set-past-dn-attr.ts
- * @LastEditTime : 2023-12-09 19:51:05
+ * @LastEditTime : 2024-04-26 21:42:04
  * @Description  : 
  */
-import { Dialog } from "siyuan";
+import { Dialog, showMessage } from "siyuan";
 import { searchAndSetAllDNAttr, findoutEarliestDN, formatDate } from '@/func';
 import notebooks from "@/global-notebooks";
+import { i18n, render } from "@/utils";
 
 /**
  * 帮用户设置过去的日记的属性
@@ -44,6 +45,11 @@ export const setDNAttrDialog = async () => {
             continue;
         }
         let start: Date = await findoutEarliestDN(notebook);
+        if (start === null) {
+            let msg = render(i18n.Setting.SetPastDailyNoteAttr.empty, { notebook: notebook.name });
+            showMessage(msg, 5000, 'error');
+            continue;
+        }
         let tr: HTMLTableRowElement = document.createElement('tr');
         tr.innerHTML = `<tr style="text-align: left;">
             <td>${notebook.name}</td>

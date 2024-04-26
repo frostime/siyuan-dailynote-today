@@ -99,6 +99,7 @@ Setting:
       it, and it won''t bring you any extra trouble!<br/> Note: Clicking this button
       once is enough.'
     button: GO!
+    empty: 'Can not find daily notes under notebook: {{notebook}}'
   HighlightResv:
     title: Highlight reservation icon
     text:

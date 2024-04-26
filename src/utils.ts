@@ -142,6 +142,17 @@ export function getFocusedBlock(): HTMLElement | null | undefined {
 }
 
 
+export const render = (template: string, data: any) => {
+    let re = /{{\s*([^}]+)?\s*}}/g, match;
+    while (match = re.exec(template)) {
+        const key = match[1].trim();
+        const value = data[key];
+        template = template.replace(match[0], value);
+    }
+    return template;
+}
+
+
 class Debouncer {
     Timer: { [key: string]: any } = {};
     DefaultTimer: any = null;
