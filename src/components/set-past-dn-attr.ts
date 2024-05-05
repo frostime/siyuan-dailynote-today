@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-04 18:48:59
  * @FilePath     : /src/components/set-past-dn-attr.ts
- * @LastEditTime : 2024-05-05 20:29:28
+ * @LastEditTime : 2024-05-05 20:36:56
  * @Description  : 
  */
 import { Dialog, confirm, showMessage } from "siyuan";
@@ -25,7 +25,7 @@ export const setDNAttrDialog = async () => {
                 <tr style="text-align: left;">
                     <th>Notebook</th>
                     <th>开始日期<span style="font-size: 0.8em;">(点击可手动设置)</span></th>
-                    <th>Daily Notes</th>
+                    <th>日记数量</th>
                 </tr>
             </thead>
             <tbody>
@@ -85,24 +85,32 @@ export const setDNAttrDialog = async () => {
                 try {
                     let date = new Date(newDate);
                     tdDate.innerText = formatDate(date, '-');
+                    let obj = ealiestDoc.get(notebook.id);
+                    obj.start = date;
                 } catch (e) {
                     showMessage('日期格式错误!', 3000, 'error');
                 }
             });
         });
-        // let ans = await searchAndSetAllDNAttr(notebook, start);
-        // (tr.querySelector('td:nth-child(3)') as HTMLTableCellElement).innerText = `${ans.length}`;
         ealiestDoc.set(notebook.id, {start, notebook, tr});
     }
     let btnStart = dialog.element.querySelector("button[data-method='Start']");
     btnStart.addEventListener('click', async () => {
+        btnStart.setAttribute('disabled', 'true');
         let hint = dialog.element.querySelector('.hint') as HTMLDivElement;
         hint.style.color = 'var(--b3-theme-primary)';
         hint.style.fontWeight = 'bold';
         hint.innerText = '🕑 设置中...';
-
+        for (let {start, notebook, tr} of ealiestDoc.values()) {
+            let ans = await searchAndSetAllDNAttr(notebook, start);
+            (tr.querySelector('.td-dn-cnt') as HTMLTableCellElement).innerText = `${ans.length}`;
+        }
         hint.innerText = '✅ 全部设置完成!';
-        
+        btnStart.innerHTML = '🎉 退出!';
+        btnStart.removeAttribute('disabled');
+        btnStart.addEventListener('click', () => {
+            dialog.destroy();
+        });
     });
     dialog.element.querySelector("button.b3-button--cancel").addEventListener("click", () => {
         dialog.destroy();
