@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-04 18:48:59
  * @FilePath     : /src/components/set-past-dn-attr.ts
- * @LastEditTime : 2024-05-05 20:36:56
+ * @LastEditTime : 2024-05-05 20:43:12
  * @Description  : 
  */
 import { Dialog, confirm, showMessage } from "siyuan";
@@ -26,6 +26,7 @@ export const setDNAttrDialog = async () => {
                     <th>Notebook</th>
                     <th>开始日期<span style="font-size: 0.8em;">(点击可手动设置)</span></th>
                     <th>日记数量</th>
+                    <th>启用</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,6 +68,7 @@ export const setDNAttrDialog = async () => {
             <td>${notebook.name}</td>
             <td class="td-start-date" style="color: var(--b3-theme-primary);">${formatDate(start, '-')}</td>
             <td class="td-dn-cnt">...</td>
+            <td class="td-enable"><input class="b3-switch fn__flex-center" type="checkbox" checked/></td>
         </tr>`;
         table.appendChild(tr);
         tr.querySelector('.td-start-date').addEventListener('click', async (e) => {
@@ -102,6 +104,9 @@ export const setDNAttrDialog = async () => {
         hint.style.fontWeight = 'bold';
         hint.innerText = '🕑 设置中...';
         for (let {start, notebook, tr} of ealiestDoc.values()) {
+            if ((tr.querySelector('.td-enable input') as HTMLInputElement).checked === false) {
+                continue;
+            }
             let ans = await searchAndSetAllDNAttr(notebook, start);
             (tr.querySelector('.td-dn-cnt') as HTMLTableCellElement).innerText = `${ans.length}`;
         }
