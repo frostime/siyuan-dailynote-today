@@ -1,5 +1,14 @@
-## [2024-04-20] v1.5.2: 自动处理重复日记，优化交互
+## [2024-05-05] v1.6.1
 
-- 稍微优化了一下自动处理重复日记时候的交互
-  - 消息提醒
-  - 自动打开主日记
+### 优化了为过去日记补充文档属性对话框的界面和交互
+
+- ✨ feat: 允许用户手动设置最开始的日期 [#182](https://github.com/frostime/siyuan-dailynote-today/issues/182)
+- 🎨 优化界面显示和交互体感
+
+---
+
+### Improved the interface and interaction of the dialog for adding document attributes to past daily notes
+
+- ✨ feat: Allow users to manually set the earliest date [#182](https://github.com/frostime/siyuan-dailynote-today/issues/182)
+- 🎨 Improved interface display and interaction experience
+

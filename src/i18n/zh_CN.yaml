@@ -171,3 +171,23 @@ Blacklist:
   name: 黑名单
   toggle: 加入黑名单
   update: 更新黑名单
+SetPastDN:
+  title: 为过去的 Daily Note 补充文档属性
+  thead:
+    - 笔记本
+    - '开始日期<span style="font-size: 0.8em;">(点击可手动设置)</span>'
+    - 日记数量
+    - 启用
+  hint:
+    initial: >-
+      📚 插件已经自动探寻到所有笔记本中最早的日记的日期。<br/>
+      🚀 你现在可以点击「开始」按钮来为所有在这个时间范围内的日记添加自定义属性。<br/>
+      ⚙️ 如果你认为自动探查到的开始日期不正确，你可以点击「开始日期」列中的单元手动进行设置。
+    going: 🕑 设置中...
+    end: ✅ 全部设置完成!
+  button:
+    start: 🚀 开始设置!
+    end: 🎉 退出!
+  setdate:
+    title: 手动设置开始日期
+    error: 日期格式错误

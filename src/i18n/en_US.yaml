@@ -212,3 +212,23 @@ Blacklist:
   name: Blacklist
   toggle: Add to blacklist
   update: Update blacklist
+SetPastDN:
+  title: Add document attribute to past daily notes
+  thead:
+    - Notebook
+    - 'Start Date<span style="font-size: 0.8em;">(click to set manually)</span>'
+    - Number of DNs
+    - Enable
+  hint:
+    initial: >-
+      📚 The plugin has automatically detected the earliest date of the diaries in all notebooks.<br/>
+      🚀 You can now click the 'Start' button to add custom attributes to all diaries within this time range.<br/>
+      ⚙️ If you think the automatically detected start date is incorrect, you can manually set it by clicking on the cell in the 'Start Date' column.
+    going: 🕑 Setting in progress...
+    end: ✅ All settings complete!
+  button:
+    start: 🚀 Start setting!
+    end: 🎉 Exit!
+  setdate:
+    title: Manually set the start date
+    error: Incorrect date format
