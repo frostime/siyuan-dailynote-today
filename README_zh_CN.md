@@ -258,6 +258,13 @@ order by A.value desc;
 - 打开插件设置-日记
 - 点击「为过去的 Daily Note 补充文档属性」按钮
 
+然后就会弹出对话框，用于为过去的 Daily Note 补充文档属性。
+
+> - 🔔 关于开始日期的问题
+>   - 插件会尝试读取日记路径下最早创建的文档的创建日期，然后查找这个日期之后的所有日记，为这些日记补充文档属性
+>   - 特殊情况下（例如后续将更早的日期手动补充到日记路径下—），可能会出现插件无法正确识别出最早的日记文档的情况；这种情况下，请手动点击「开始日期」并手动设置（格式为 `yyyy-mm-dd`）
+
+
 ![](https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/-/raw/main/asset/OldDNAttr.png)
 
 

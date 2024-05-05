@@ -251,6 +251,12 @@ While you need to have the corresponding document attributes set in your daily n
 - Open the plugin settings - Daily Notes
 - Click the "Add document attribute to past Daily Notes" button
 
+Then a dialog box will pop up to add document properties to past Daily Notes.
+
+> - 🔔 About the start date issue:
+>   - The plugin will try to read the creation date of the earliest document created under the diary path, and then find all diaries after this date to supplement document properties for these diaries.
+>   - In special cases (for example, if an earlier date is manually added to the diary path later), it may happen that the plugin cannot correctly identify the earliest diary document; in this case, please manually click on 'Start Date' and set it manually (format `yyyy-mm-dd`).
+
 ![](asset/OldDNAttr.png)
 
 
