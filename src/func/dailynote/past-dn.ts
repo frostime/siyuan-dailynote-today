@@ -5,6 +5,8 @@ import { formatDate } from './basic';
 import { getDocsByHpath } from '@/func/misc';
 import { setCustomDNAttr } from "./dn-attr";
 
+import pLimit from "p-limit";
+
 export async function getPastDNHPath(notebook: NotebookId | Notebook, date: Date): Promise<string> {
     if (typeof notebook === 'string') {
         notebook = notebooks.find(notebook);
@@ -88,6 +90,8 @@ export async function searchDailyNotesBetween(notebook: Notebook, begin: Date, e
         }
         return ans;
     });
+    const limit = pLimit(32);
+    allDnDocs = allDnDocs.map((dnDoc) => limit(() => dnDoc));
     let ansDNDocs = await Promise.all(allDnDocs);
     ansDNDocs = ansDNDocs.filter((dnDoc) => {
         return dnDoc.docs !== null;

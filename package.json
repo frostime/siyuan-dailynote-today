@@ -32,5 +32,8 @@
     "vite": "^4.5.2",
     "vite-plugin-static-copy": "^0.15.0",
     "vite-plugin-zip-pack": "^1.0.5"
+  },
+  "dependencies": {
+    "p-limit": "^5.0.0"
   }
 }
