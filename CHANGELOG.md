@@ -1,3 +1,8 @@
+## [2024-05-14] v1.6.3
+
+- ⚡ 补充属性功能添加 plimit [#192](https://github.com/frostime/siyuan-dailynote-today/issues/192)
+
+
 ## [2024-05-08] v1.6.2: 快捷键
 
 - 🎨 设置快捷键的 langText
