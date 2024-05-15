@@ -71,6 +71,17 @@ export async function openDiary(notebook: Notebook) {
 }
 
 
+export const openDefaultDailyNote = async () => {
+    let notebookId: string = settings.get('DefaultNotebook');
+    let notebook: Notebook = notebooks.default;
+    if (notebook) {
+        await openDiary(notebook);
+    } else {
+        confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
+        return
+    }
+}
+
 
 /**
  * 初始化的时候，加载所有的笔记本
@@ -91,15 +102,7 @@ export async function autoOpenDailyNote() {
 
     if (notebooks.notebooks.length > 0) {
         if (settings.settings.OpenOnStart === true) {
-            let notebookId: string = settings.get('DefaultNotebook');
-            let notebook: Notebook = notebooks.default;
-            if (notebook) {
-                await openDiary(notebook);
-                // initTodayReservation(notebook);
-            } else {
-                confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`)
-                return
-            }
+            openDefaultDailyNote();
         }
     }
 }

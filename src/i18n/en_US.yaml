@@ -130,11 +130,10 @@ TrashBinDocContent: |-
 Open: Open daily note
 Create: Create daily note
 UpdateAll: Notebook status updated
-InvalidDefaultNotebook:
-  "<p>Sorry, but the plugin can not find a notebook that corresponds
-  to this ID; perhaps it is an illegitimate ID, or the corresponding notebook has
-  been closed by yourself. </p><p>We suggest that you double-check the plugin's settings.
-  </p"
+InvalidDefaultNotebook: |-
+  <p>Sory, but the plugin was unable to find the default notebook; it may be due to an incorrect ID configuration, or the corresponding notebook has been closed by you.</p>
+  <p>We suggest that you carefully check the settings of the plugin.</p>
+
 ContextMenu:
   PruneResv: Prune bad reservation
 MoveMenu:

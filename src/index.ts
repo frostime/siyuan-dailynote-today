@@ -9,7 +9,7 @@ import { GutterMenu } from './components/gutter-menu';
 
 import { RoutineEventHandler } from './func';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
-import { updateStyleSheet, removeStyleSheet, toggleGeneralDailynoteKeymap } from './func';
+import { updateStyleSheet, removeStyleSheet, toggleGeneralDailynoteKeymap, openDefaultDailyNote } from './func';
 
 import { setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
@@ -127,9 +127,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 langKey: 'open-dn',
                 langText: `打开日记`,
                 hotkey: '⌥5',
-                callback: () => {
-                    showMessage('打开日记');
-                }
+                callback: openDefaultDailyNote
             });
             toggleGeneralDailynoteKeymap(false);
         } else {
