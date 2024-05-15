@@ -104,10 +104,12 @@
 
 ![](https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/-/raw/main/asset/UpToDate.gif)
 
+
 #### 快捷键触发
 
 - 思源内置的快捷键 Alt+5 可以快速打开日记文档，但是打开的日记对应的笔记本会随着用户的操作而变化
 - 插件在设置中提供了选项，开启后会覆盖默认的快捷键行为：按下 Alt+5 之后，只打开插件设置的默认笔记本的日记
+
 
 ### 3. 右键点击图标，快速配置插件
 

@@ -17,7 +17,7 @@ import notebooks from './global-notebooks';
 
 import { eventBus } from './event-bus';
 
-// import { changelog } from 'sy-plugin-changelog';
+import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
 
@@ -73,12 +73,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let end = performance.now();
         console.debug(`启动耗时: ${end - start} ms`);
 
-        // let ans = await changelog(this, 'i18n/CHANGELOG.md');
-        // if (ans?.Dialog) {
-        //     let dialog = ans.Dialog;
-        //     dialog.setSize({ width: '50rem', height: '35rem' });
-        //     dialog.setFont('1.1rem');
-        // }
+        let ans = await changelog(this, 'i18n/CHANGELOG.md');
+        if (ans?.Dialog) {
+            let dialog = ans.Dialog;
+            dialog.setSize({ width: '50rem', height: '25rem' });
+            dialog.setFont('1.1rem');
+        }
     }
 
     private initPluginUI() {
