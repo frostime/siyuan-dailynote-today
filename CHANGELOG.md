@@ -1,3 +1,8 @@
+## [2024-05-15] v1.6.4
+
+- 增加设置，允许插件覆盖 Alt+5 快捷键，启用后只打开默认笔记本的日记
+
+
 ## [2024-05-14] v1.6.3
 
 - ⚡ 补充属性功能添加 plimit [#192](https://github.com/frostime/siyuan-dailynote-today/issues/192)
