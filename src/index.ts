@@ -9,7 +9,7 @@ import { GutterMenu } from './components/gutter-menu';
 
 import { RoutineEventHandler } from './func';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
-import { updateStyleSheet, removeStyleSheet } from './func';
+import { updateStyleSheet, removeStyleSheet, toggleGeneralDailynoteKeymap } from './func';
 
 import { setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
@@ -115,6 +115,31 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
+    }
+
+    /**
+     * 打开日记的 hotkey
+     * @param enable 
+     */
+    toggleDnHotkey(enable: boolean) {
+        if (enable === true) {
+            this.addCommand({
+                langKey: 'open-dn',
+                langText: `打开日记`,
+                hotkey: '⌥5',
+                callback: () => {
+                    showMessage('打开日记');
+                }
+            });
+            toggleGeneralDailynoteKeymap(false);
+        } else {
+            this.commands = this.commands.filter((cmd) => cmd.langKey !== 'open-dn');
+            const siyuanKeymap = window.siyuan.config.keymap.plugin['siyuan-dailynote-today'];
+            if (siyuanKeymap && siyuanKeymap['open-dn']) {
+                delete siyuanKeymap['open-dn'];
+            }
+            toggleGeneralDailynoteKeymap(true);
+        }
     }
 
     private initUpToDate() {
@@ -232,6 +257,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         if (this.enableBlockIconClickEvent) {
             this.gutterMenu.release();
         }
+        toggleGeneralDailynoteKeymap(true);
     }
 }
 
