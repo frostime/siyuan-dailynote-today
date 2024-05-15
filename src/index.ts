@@ -57,6 +57,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         //初始化数据
         await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
 
+        this.toggleDnHotkey(settings.get('ReplaceAlt5Hotkey'));
+
         this.initBlockIconClickEvent();  //绑定点击块图标事件
 
         this.initUpToDate();  //更新计时器
@@ -125,15 +127,15 @@ export default class DailyNoteTodayPlugin extends Plugin {
         if (enable === true) {
             this.addCommand({
                 langKey: 'open-dn',
-                langText: `打开日记`,
+                langText: this.i18n.Open,
                 hotkey: '⌥5',
                 callback: openDefaultDailyNote
             });
             toggleGeneralDailynoteKeymap(false);
         } else {
             this.commands = this.commands.filter((cmd) => cmd.langKey !== 'open-dn');
-            const siyuanKeymap = window.siyuan.config.keymap.plugin['siyuan-dailynote-today'];
-            if (siyuanKeymap && siyuanKeymap['open-dn']) {
+            const siyuanKeymap = window.siyuan.config.keymap.plugin[this.name];
+            if (siyuanKeymap && siyuanKeymap?.['open-dn']) {
                 delete siyuanKeymap['open-dn'];
             }
             toggleGeneralDailynoteKeymap(true);

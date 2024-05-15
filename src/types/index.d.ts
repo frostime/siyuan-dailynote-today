@@ -110,7 +110,7 @@ type SettingKey = (
     "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
     'RetvType' | 'EnableResvDock' | 'DisableAutoCreateOnMobile' |
     'NotebookBlacklist' | 'AutoOpenAfterSync' | 'HighlightResv' |
-    'AutoHandleDuplicateMethod'
+    'AutoHandleDuplicateMethod' | 'ReplaceAlt5Hotkey'
 );
 
 interface ISettingItem {

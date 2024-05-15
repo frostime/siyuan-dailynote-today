@@ -39,6 +39,10 @@
                 name: "ExpandGutterMenu",
                 type: "checkbox",
             },
+            {
+                name: "ReplaceAlt5Hotkey",
+                type: "checkbox"
+            }
         ],
         dailynote: [
             {
