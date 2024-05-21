@@ -3,7 +3,7 @@
  * @Author       : Yp Z
  * @Date         : 2023-11-12 18:06:46
  * @FilePath     : /src/func/dailynote/basic.ts
- * @LastEditTime : 2024-04-06 17:10:01
+ * @LastEditTime : 2024-05-15 15:18:28
  * @Description  : 
  */
 import * as serverApi from '@/serverApi';
@@ -84,4 +84,18 @@ export async function currentDiaryStatus() {
     }
     console.log(`更新日记状态: 当前日记共 ${count_diary} 篇`);
     return diaryStatus;
+}
+
+
+/**
+ * 启用或者禁用默认的 Alt+5 日记快捷键
+ * @param enable 是否启用
+ */
+export function toggleGeneralDailynoteKeymap(enable: boolean) {
+    const config = window.siyuan.config.keymap.general.dailyNote;
+    if (enable) {
+        config.custom = config.default;
+    } else {
+        config.custom = '';
+    }
 }

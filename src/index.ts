@@ -9,7 +9,7 @@ import { GutterMenu } from './components/gutter-menu';
 
 import { RoutineEventHandler } from './func';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
-import { updateStyleSheet, removeStyleSheet } from './func';
+import { updateStyleSheet, removeStyleSheet, toggleGeneralDailynoteKeymap, openDefaultDailyNote } from './func';
 
 import { setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
 import { settings, reservation } from './global-status';
@@ -17,7 +17,7 @@ import notebooks from './global-notebooks';
 
 import { eventBus } from './event-bus';
 
-// import { changelog } from 'sy-plugin-changelog';
+import { changelog } from 'sy-plugin-changelog';
 
 import "./index.scss";
 
@@ -57,6 +57,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
         //初始化数据
         await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
 
+        this.toggleDnHotkey(settings.get('ReplaceAlt5Hotkey'));
+
         this.initBlockIconClickEvent();  //绑定点击块图标事件
 
         this.initUpToDate();  //更新计时器
@@ -71,12 +73,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let end = performance.now();
         console.debug(`启动耗时: ${end - start} ms`);
 
-        // let ans = await changelog(this, 'i18n/CHANGELOG.md');
-        // if (ans?.Dialog) {
-        //     let dialog = ans.Dialog;
-        //     dialog.setSize({ width: '50rem', height: '35rem' });
-        //     dialog.setFont('1.1rem');
-        // }
+        let ans = await changelog(this, 'i18n/CHANGELOG.md');
+        if (ans?.Dialog) {
+            let dialog = ans.Dialog;
+            dialog.setSize({ width: '50rem', height: '25rem' });
+            dialog.setFont('1.1rem');
+        }
     }
 
     private initPluginUI() {
@@ -115,6 +117,29 @@ export default class DailyNoteTodayPlugin extends Plugin {
 
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));
         eventBus.subscribe('OpenSetting', this.openSetting.bind(this));
+    }
+
+    /**
+     * 打开日记的 hotkey
+     * @param enable 
+     */
+    toggleDnHotkey(enable: boolean) {
+        if (enable === true) {
+            this.addCommand({
+                langKey: 'open-dn',
+                langText: this.i18n.Open,
+                hotkey: '⌥5',
+                callback: openDefaultDailyNote
+            });
+            toggleGeneralDailynoteKeymap(false);
+        } else {
+            this.commands = this.commands.filter((cmd) => cmd.langKey !== 'open-dn');
+            const siyuanKeymap = window.siyuan.config.keymap.plugin[this.name];
+            if (siyuanKeymap && siyuanKeymap?.['open-dn']) {
+                delete siyuanKeymap['open-dn'];
+            }
+            toggleGeneralDailynoteKeymap(true);
+        }
     }
 
     private initUpToDate() {
@@ -232,6 +257,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         if (this.enableBlockIconClickEvent) {
             this.gutterMenu.release();
         }
+        toggleGeneralDailynoteKeymap(true);
     }
 }
 

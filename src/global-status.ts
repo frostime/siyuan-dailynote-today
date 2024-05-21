@@ -1,11 +1,12 @@
 /**
  * Copyright (c) 2023 frostime. All rights reserved.
  */
-import { Plugin } from 'siyuan';
 import { eventBus } from './event-bus';
 import { filterExistsBlocks } from './func';
 import { retrieveResvFromBlocks } from '@/func/reserve';
 import notebooks from './global-notebooks';
+
+import type DailyNoteTodayPlugin from '@/index';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -18,7 +19,7 @@ interface Item {
 const SettingFile = 'DailyNoteToday.json.txt';
 
 class SettingManager {
-    plugin: Plugin;
+    plugin: DailyNoteTodayPlugin;
 
     settings: any = {
         OpenOnStart: true as boolean, //启动的时候自动打开日记
@@ -35,17 +36,22 @@ class SettingManager {
         RetvType: 'embed' as RetvType, //Retrieved 块的类型
         NotebookBlacklist: {}, //笔记本黑名单
         HighlightResv: true as boolean, //高亮显示预约块
-        AutoHandleDuplicateMethod: 'None' as TDuplicateHandleMethod // 自动处理重复日记的方法
+        AutoHandleDuplicateMethod: 'None' as TDuplicateHandleMethod, // 自动处理重复日记的方法
+        ReplaceAlt5Hotkey: false as boolean, //替换 Alt+5 快捷键
     };
 
     constructor() {
         eventBus.subscribe(eventBus.EventSetting, (data: Item) => {
             this.set(data.key, data.value);
             this.save();
+
+            if (data.key === 'ReplaceAlt5Hotkey') {
+                this.plugin.toggleDnHotkey(data.value);
+            }
         });
     }
 
-    setPlugin(plugin: Plugin) {
+    setPlugin(plugin: DailyNoteTodayPlugin) {
         this.plugin = plugin;
     }
 
@@ -120,9 +126,9 @@ export const settings: SettingManager = new SettingManager();
 const ReserveFile = 'Reservation.json';
 
 class ReservationManger {
-    plugin: Plugin;
+    plugin: DailyNoteTodayPlugin;
     reserved: Map<string, string>;
-    reservations: { "OnDate": {[date: string]: string[]} } = { "OnDate": {}};
+    reservations: { "OnDate": { [date: string]: string[] } } = { "OnDate": {} };
 
     constructor() {
         this.reserved = new Map<string, string>();
@@ -144,7 +150,7 @@ class ReservationManger {
      * @param blockId 预约块的 ID
      * @returns 返回预约的日期，如果没有预约，则返回 undefined
      */
-    findReserved(blockId: string): string|undefined {
+    findReserved(blockId: string): string | undefined {
         return this.reserved.get(blockId);
     }
 
@@ -168,7 +174,7 @@ class ReservationManger {
         return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
     }
 
-    setPlugin(plugin: Plugin) {
+    setPlugin(plugin: DailyNoteTodayPlugin) {
         this.plugin = plugin;
     }
 

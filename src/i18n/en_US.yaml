@@ -117,6 +117,10 @@ Setting:
       TrashDup: Move to trash
       SmartMerge: Merge smartly
       DeleteDup: Delete directly
+  ReplaceAlt5Hotkey:
+    title: Override Alt+5 hotKey
+    text: The plugin will override the default Alt+5 hotKey behavior in SiYuan, fixing it to open only the daily note of the default notebook set by the plugin.
+
 SettingGroups:
   enable: Enable
   interact: Interact
@@ -130,11 +134,10 @@ TrashBinDocContent: |-
 Open: Open daily note
 Create: Create daily note
 UpdateAll: Notebook status updated
-InvalidDefaultNotebook:
-  "<p>Sorry, but the plugin can not find a notebook that corresponds
-  to this ID; perhaps it is an illegitimate ID, or the corresponding notebook has
-  been closed by yourself. </p><p>We suggest that you double-check the plugin's settings.
-  </p"
+InvalidDefaultNotebook: |-
+  <p>Sory, but the plugin was unable to find the default notebook; it may be due to an incorrect ID configuration, or the corresponding notebook has been closed by you.</p>
+  <p>We suggest that you carefully check the settings of the plugin.</p>
+
 ContextMenu:
   PruneResv: Prune bad reservation
 MoveMenu:

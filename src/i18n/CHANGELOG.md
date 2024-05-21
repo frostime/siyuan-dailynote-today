@@ -1,14 +1,10 @@
-## [2024-05-05] v1.6.1
+## v1.6.4 Alt+5快捷键 | Alt+5 Shortcut Key
 
-### 优化了为过去日记补充文档属性对话框的界面和交互
-
-- ✨ feat: 允许用户手动设置最开始的日期 [#182](https://github.com/frostime/siyuan-dailynote-today/issues/182)
-- 🎨 优化界面显示和交互体感
+- 增加设置，允许插件覆盖默认 Alt+5 快捷键，启用后只打开默认笔记本的日记
+- 在插件 readme 文档中添加了相关的说明
 
 ---
 
-### Improved the interface and interaction of the dialog for adding document attributes to past daily notes
-
-- ✨ feat: Allow users to manually set the earliest date [#182](https://github.com/frostime/siyuan-dailynote-today/issues/182)
-- 🎨 Improved interface display and interaction experience
+- Added a setting to allow the plugin to override the default Alt+5 shortcut key, enabling it will only open the daily note of the default notebook.
+- Included relevant instructions in the plugin's readme documentation.
 

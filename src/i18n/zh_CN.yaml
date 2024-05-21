@@ -88,6 +88,9 @@ Setting:
       TrashDup: 移动到回收站
       SmartMerge: 智能合并
       DeleteDup: 直接删除
+  ReplaceAlt5Hotkey:
+    title: 覆盖 Alt+5 快捷键
+    text: 插件将覆盖思源默认的 Alt+5 快捷键行为，固定只打开插件设置的默认笔记本的日记
 SettingGroups:
   enable: 启用
   interact: 交互
@@ -101,7 +104,9 @@ TrashBinDocContent: |-
 Open: 打开日记
 Create: 创建日记
 UpdateAll: 笔记本状态已更新
-InvalidDefaultNotebook: "<p>很抱歉, 插件没有找对应这个 ID 的笔记本; 可能这是一个不合法的 ID, 或对应的笔记本被你关闭了。</p><p>建议你仔细检查插件的设置。</p>"
+InvalidDefaultNotebook: |-
+  <p>很抱歉, 插件没有找默认的笔记本; 可能是 ID 配置不正确, 或对应的笔记本被你关闭了。</p>
+  <p>建议你仔细检查插件的设置。</p>
 ContextMenu:
   PruneResv: 清理无效预约
 MoveMenu:

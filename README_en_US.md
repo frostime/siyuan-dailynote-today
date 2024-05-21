@@ -19,11 +19,12 @@
     * 1.2 Blacklist
   * 2. Left lick the icon, quickly creating/opening today's note.
 
-    * 2.1 Update with date
+    * Update with date
+    * Hotkey
   * 3. Right click the icon, quickly configuration.
   * 4. Reserve a block
 
-    * Hot key
+    * Hotkey
     * 4.1 View scheduled appointments
     * 4.2 Currently supported date templates
     * 4.2 Notice
@@ -93,12 +94,16 @@ If you have too many notebooks, you can choose to add some notebooks to the blac
 
 > - **Note: Don't misunderstand**, this drop-down box is not for selecting the default notebook, but for opening the diary quickly! For more details, see [FAQ-Q: Is the dropdown box used...](#q-is-the-dropdown-box-is-used-for-selecting-the-default-notebook)
 
-#### 2.1 Update with date
+#### Update with date
 
 At 0 o'clock the plug-in will automatically chime in and update the status of your diary, at which point you can click on the top bar menu to open the diary for the new day. However, it does not automatically create a diary for you.
 
 ![](asset/UpToDate.gif)
 
+#### Hotkey
+
+- SiYuan's built-in hotkey Alt+5 allows for quick access to the daily note document, but the notebook corresponding to the opened daily note may change with user operations.
+- The plugin provides an option in the settings that, when enabled, overrides the default hotkey behavior: after pressing Alt+5, it will only open the daily note of the default notebook set by the plugin.
 
 ### 3. Right click the icon, quickly configuration.
 
@@ -158,7 +163,7 @@ You can customize the CSS styles to display these reservation blocks. Here is an
 
 With custom attributes, you can use SQL to query all reservation blocks. For more information, see [FAQs](#q-how-to-view-all-reservation-blocks).
 
-#### Hot key
+#### Hotkey
 
 Press `Shift+Alt+R` to trigger the reservation quickly.
 
