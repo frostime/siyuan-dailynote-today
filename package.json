@@ -1,6 +1,6 @@
 {
   "name": "siyuan-dailynote-today",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "",
   "main": ".src/index.js",
   "keywords": [],
@@ -14,24 +14,24 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.0.3",
-    "@tsconfig/svelte": "^4.0.1",
-    "@types/node": "^20.2.0",
+    "@sveltejs/vite-plugin-svelte": "^3.1.0",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/node": "^20.11.29",
     "chrono-node": "^2.6.3",
-    "fast-glob": "^3.2.12",
+    "fast-glob": "^3.3.2",
     "glob": "^7.2.3",
     "js-yaml": "^4.1.0",
     "minimist": "^1.2.8",
     "rollup-plugin-livereload": "^2.0.5",
-    "sass": "^1.62.1",
-    "siyuan": "^0.9.7",
-    "svelte": "^3.57.0",
+    "sass": "^1.72.0",
+    "siyuan": "0.9.9",
+    "svelte": "^4.2.17",
     "sy-plugin-changelog": "^0.0.7",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4",
-    "vite": "^4.5.2",
-    "vite-plugin-static-copy": "^0.15.0",
-    "vite-plugin-zip-pack": "^1.0.5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2",
+    "vite": "^5.2.11",
+    "vite-plugin-static-copy": "^1.0.5",
+    "vite-plugin-zip-pack": "^1.2.2"
   },
   "dependencies": {
     "p-limit": "^5.0.0"
