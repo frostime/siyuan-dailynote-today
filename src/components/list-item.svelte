@@ -59,26 +59,22 @@
 
         const atRight = rect.right > width / 2; // list-item 是否在页面右侧
 
+        const panelWidth = 750;
+        let x = 10;
+        if (atRight) {
+            x = width - panelWidth - 10;
+        }
+
         plugin.addFloatLayer({
             ids: blocks.map((block) => block.id),
-            x: 0,
-            y: 0
+            x: x,
+            y: rect.bottom + 10
         });
 
-        //@ts-ignore
         const blockPanels: any[] = window.siyuan.blockPanels;
         const panel = blockPanels[blockPanels.length - 1];
         const ele: HTMLElement = panel?.element;
-
-        if (atRight) {
-            //将弹出框移动到 list-item 的下方
-            ele.style.top = `${rect.bottom + 10}px`; // 将 y 坐标设为 list-item 下方
-            ele.style.left = '';
-            ele.style.right = `${width - rect.right}px`;
-        } else {
-            ele.style.top = `${rect.bottom + 10}px`;
-        }
-
+        ele.style.width = `${panelWidth}px`;
     }
 </script>
 
@@ -141,6 +137,9 @@
                     class="b3-list-item__arrow"
                     ><use xlink:href="#iconRight" /></svg
                 >
+            </span>
+            <span data-defids="[&quot;&quot;]" class="b3-list-item__graphic popover__block" data-id={block.id}>
+                <svg class="b3-list-item__graphic"><use xlink:href="#iconSparkles" /></svg>
             </span>
             <span class="b3-list-item__text">{block.content}</span>
 

@@ -4,38 +4,9 @@ import * as serverApi from '@/serverApi';
 import { reservation, settings } from '@/global-status';
 import { Retrieve, RetvFactory } from './retrieve';
 
-// import { getDocsByHpath } from '../misc';
-
 export * from './retrieve';
 export * from './reserve';
 
-
-/**
- * @Deprecated 目前不再使用, 只使用 updateTodayReservation
- */
-// export async function initTodayReservation(notebook: Notebook) {
-//     let todayDiaryPath = notebook.dailynoteHpath;
-//     let docId;
-//     let retry = 0;
-//     const MAX_RETRY = 5;
-//     const INTERVAL = 2500;
-//     while (retry < MAX_RETRY) {
-//         //插件自动创建日记的情况下可能会出现第一次拿不到的情况, 需要重试几次
-//         let docs = await getDocsByHpath(todayDiaryPath!, notebook);
-//         console.debug(`In initResrv, retry: ${retry}`);
-//         if (docs[0]?.id !== undefined) {
-//             docId = docs[0].id;
-//             break;
-//         }
-//         await new Promise(resolve => setTimeout(resolve, INTERVAL));
-//         retry++;
-//     }
-//     if (docId === undefined) {
-//         console.error(`无法获取今日日记的 docId`);
-//         return;
-//     }
-//     updateDocReservation(docId, false);
-// }
 
 /**
  * 给定笔记本，将今日的预约块插入笔记本的 daily note 中
