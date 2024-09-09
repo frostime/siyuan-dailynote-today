@@ -1,5 +1,10 @@
-/**
- * Copyright (c) 2023 frostime. All rights reserved.
+/*
+ * Copyright (c) 2024 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Date         : 2024-05-21 14:14:08
+ * @FilePath     : /src/global-status.ts
+ * @LastEditTime : 2024-09-09 21:46:44
+ * @Description  : 
  */
 import { eventBus } from './event-bus';
 import { filterExistsBlocks } from './func';
@@ -128,6 +133,7 @@ const ReserveFile = 'Reservation.json';
 class ReservationManger {
     plugin: DailyNoteTodayPlugin;
     reserved: Map<string, string>;
+    //@deprecated 后期把内置的缓存删掉，完全基于块属性来
     reservations: { "OnDate": { [date: string]: string[] } } = { "OnDate": {} };
 
     constructor() {
@@ -246,15 +252,15 @@ class ReservationManger {
         this.reserved.set(blockId, date_str);
     }
 
-    isTodayReserved(): boolean {
-        return this.getTodayReservations().length > 0;
+    async isTodayReserved(): Promise<boolean> {
+        let resv = await this.getTodayReservations();
+        return resv.length > 0;
     }
 
     //获取今天的预约
-    getTodayReservations(): string[] {
-        let date = new Date();
-        let date_str = this.dateTemplate(date);
-        return this.reservations.OnDate[date_str] || [];
+    async getTodayReservations(): Promise<string[]> {
+        let reservations: Reservation[] = await retrieveResvFromBlocks('today');
+        return reservations.map(r => r.id);
     }
 
     //清理已经过期的预约

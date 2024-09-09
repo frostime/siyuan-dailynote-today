@@ -1,5 +1,5 @@
 import { confirm } from 'siyuan';
-import { i18n } from "@/utils";
+import { DebugKit, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
 import { reservation, settings } from '@/global-status';
 import { Retrieve, RetvFactory } from './retrieve';
@@ -29,7 +29,10 @@ export async function updateTodayReservation(notebook: Notebook, refresh: boolea
  * @returns 
  */
 export async function updateDocReservation(docId: string, refresh: boolean = false) {
-    let resvBlockIds = reservation.getTodayReservations();
+
+    DebugKit.info('调用 updateDocReservation', ...arguments);
+
+    let resvBlockIds = await reservation.getTodayReservations();
     if (resvBlockIds.length == 0) {
         return;
     }

@@ -110,7 +110,7 @@ export default defineConfig({
         emptyOutDir: false,
 
         // 构建后是否生成 source map 文件
-        sourcemap: false,
+        sourcemap: isWatch ? 'inline' : false,
 
         // 设置为 false 可以禁用最小化混淆
         // 或是用来指定是应用哪种混淆器

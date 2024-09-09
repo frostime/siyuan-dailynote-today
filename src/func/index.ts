@@ -107,15 +107,17 @@ export class RoutineEventHandler {
         const HighlightResv = settings.get('HighlightResv');
         if (!HighlightResv) return;
 
-        if (reservation.isTodayReserved()) {
+        reservation.isTodayReserved().then(yes => {
+            if (!yes) {
+                updateStyleSheet('');
+                return;
+            }
             updateStyleSheet(`
                 span[data-type="siyuan-dailynote-todaydock_tab"][data-title="${this.plugin.i18n.DockReserve.arial}"] {
                     background-color: var(--b3-theme-primary-lightest);
                 }
             `);
-        } else {
-            updateStyleSheet('');
-        }
+        })
     }
 
     /********** Duplicate **********/
@@ -153,11 +155,12 @@ export class RoutineEventHandler {
      * 尝试自动插入今天的预约
      */
     public async tryAutoInsertResv() {
-        //如果已经插入过了，就不再插入
+        //TODO 允许用户配置是否每次打开都尝试更新预约
         if (this.flag.hasAutoInsertResv === true) return;
 
         //如果今天没有预约，就不插入
-        if (!reservation.isTodayReserved()) return;
+        let hasResv = await reservation.isTodayReserved();
+        if (!hasResv) return;
 
         let succeed = updateTodayReservation(notebooks.default);
 
