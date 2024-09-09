@@ -31,23 +31,22 @@
         */
         "allowJs": true,
         "checkJs": true,
+        "moduleDetection": "force",
         "types": [
             "node",
             "vite/client",
             "svelte"
         ],
-        "baseUrl": "./src",
         "paths": {
-            "@/*": ["*"],
-            "@/components/*": ["components/*"],
+            "@/*": ["./src/*"],
+            "@/components/*": ["./src/components/*"],
         }
     },
     "include": [
         "tools/**/*.ts",
         "src/**/*.ts",
         "src/**/*.d.ts",
-        "src/**/*.tsx",
-        "src/**/*.vue"
+        "src/**/*.svelte"
     ],
     "references": [
         {
