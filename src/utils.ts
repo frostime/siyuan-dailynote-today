@@ -10,22 +10,15 @@ export const lute = window.Lute!.New();
 export type I18N = typeof zh_Hans;
 // export type I18N = any;
 
-
-// export function debug(...msg: any[]): void {
-//     console.debug(`[DailyNoteToday][DEBUG] ${msg}`);
-// }
-
-// export function info(...msg: any[]): void {
-//     console.log(`[DailyNoteToday][INFO] ${msg}`);
-// }
-
-// export function error(...msg: any[]): void {
-//     console.error(`[DailyNoteToday][ERROR] ${msg}`);
-// }
-
-// export function warn(...msg: any[]): void {
-//     console.warn(`[DailyNoteToday][WARN] ${msg}`);
-// }
+const _fn = (fn: Function, ...args: any[]) => {
+    if (process.env.DEV_MODE === 'true') {
+        fn(...args);
+    }
+}
+export const DebugKit = {
+    debug: (...msg: any[]) => _fn(console.debug, ...['[DN::Debug]', ...msg]),
+    info: (...msg: any[]) => _fn(console.log, ...['[DN::Info]', ...msg]),
+}
 
 /**
  * 重复执行一个函数，直到返回值不为 null 或达到最大次数
@@ -157,7 +150,7 @@ class Debouncer {
     Timer: { [key: string]: any } = {};
     DefaultTimer: any = null;
 
-    getTimer(key?: string) { 
+    getTimer(key?: string) {
         return key ? this.Timer[key] : this.DefaultTimer;
     }
 

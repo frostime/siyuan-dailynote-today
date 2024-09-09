@@ -1,3 +1,7 @@
+## [2024-09-09] v1.6.7
+
+- 🐛 fix: 修复打开日记却没有正确插入预约块的问题
+
 ## [2024-06-08] v1.6.6
 
 - ✨ feat: 为 Reservation Tree Item 添加 popover icon
