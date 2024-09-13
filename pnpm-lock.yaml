@@ -45,6 +45,9 @@ importers:
       siyuan:
         specifier: 1.0.2
         version: 1.0.2
+      siyuan-plugin-cli:
+        specifier: ^1.2.0
+        version: 1.2.0
       svelte:
         specifier: ^4.2.19
         version: 4.2.19
@@ -696,6 +699,10 @@ packages:
 
   setimmediate@1.0.5:
     resolution: {integrity: sha512-MATJdZp8sLqDl/68LfQmbP8zKPLQNV6BIZoIgrscFDQ+RsvK/BxeDQOgyxKKoh0y/8h3BqVFnCqQ/gd+reiIXA==}
+
+  siyuan-plugin-cli@1.2.0:
+    resolution: {integrity: sha512-8Xg42Jd0zvfnwkVsPUCNbcAEZnyllT1JGaKzNGXNMwM0R/qdClJuoBiPmSrj5M03EHVGwhSzEYRRO0qc1uMr4g==}
+    hasBin: true
 
   siyuan@1.0.2:
     resolution: {integrity: sha512-78qonqi/X+VC5HBtqmkm6HZho6GVcXTBYvdWfu3uB3WkWzYeu3PqKw2514PZn2uZpydljjZ4DP5aSV9w9IlBbA==}
@@ -1401,6 +1408,8 @@ snapshots:
       source-map-js: 1.0.2
 
   setimmediate@1.0.5: {}
+
+  siyuan-plugin-cli@1.2.0: {}
 
   siyuan@1.0.2: {}
 

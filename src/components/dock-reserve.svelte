@@ -1,12 +1,12 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import ListItem from "./list-item.svelte";
-    import { reservation } from "@/global-status";
     import * as api from "@/serverApi";
     import { i18n } from "@/utils";
+    import { retrieveResvFromBlocks } from "@/func";
 
     let expandStatus = [];
-    let allResvs = [];
+    let allResvs: { date: string; blocks: Block[] }[] = [];
     let _i18n = i18n.DockReserve;
 
     function allExpand() {
@@ -23,9 +23,28 @@
         }
     }
 
+    type DateString = string;
     async function updateWithReservations() {
         //[ [date, [blockIds]] ]
-        let entries = Object.entries(reservation.reservations.OnDate);
+
+        let reservations: {
+            id: BlockId;
+            content: string;
+            date: DateString;
+        }[] = await retrieveResvFromBlocks("datetime", "-2 day");
+
+        const resvDates: Record<DateString, BlockId[]> = reservations.reduce(
+            (acc, resv) => {
+                if (!acc[resv.date]) {
+                    acc[resv.date] = [];
+                }
+                acc[resv.date].push(resv.id);
+                return acc;
+            },
+            {} as Record<DateString, BlockId[]>,
+        );
+
+        let entries = Object.entries(resvDates);
         let dateCnt = entries.length;
         let allBlockIds = [];
         for (let i = 0; i < dateCnt; i++) {
@@ -68,7 +87,7 @@
             newResvs.push({
                 date: `${entry[0].slice(0, 4)}-${entry[0].slice(
                     4,
-                    6
+                    6,
                 )}-${entry[0].slice(6, 8)}`,
                 blocks: blocks,
             });
@@ -86,7 +105,8 @@
 <div class="fn__flex-1 fn__flex-column file-tree layout__tab">
     <div class="block__icons">
         <div class="block__logo">
-            <svg class="block__logoicon"><use xlink:href="#iconBookmark" /></svg>
+            <svg class="block__logoicon"><use xlink:href="#iconBookmark" /></svg
+            >
             {_i18n.title}
         </div>
         <span class="fn__flex-1" />

@@ -3,7 +3,7 @@
  * @Author       : Yp Z
  * @Date         : 2023-06-17 13:55:54
  * @FilePath     : /src/func/reserve/retrieve.ts
- * @LastEditTime : 2024-04-06 18:02:54
+ * @LastEditTime : 2024-09-13 11:48:53
  * @Description  : 
  */
 import * as serverApi from '@/serverApi';
@@ -172,16 +172,26 @@ export function RetvFactory(type: RetvType, position: RetvPosition, resvBlockIds
 }
 
 
-export async function retrieveResvFromBlocks(time: 'today' | 'future'): Promise<Reservation[]> {
+/**
+ * 查询所有的预约块，并返回预约内容
+ * @param time 'today' | 'future' | TAfterDateTime
+ *  - 'today' 查询今天的预约
+ *  - 'future' 查询未来的预约
+ *  - 'datetime': 将 datetimeArgs 传入 `strftime` 函数的日期字符串，查询该日期之后的预约
+ *      `A.value > strftime('%Y%m%d', datetime('now', ...datetimeArgs))`;
+ * @returns Promise<Reservation[]>
+ */
+export async function retrieveResvFromBlocks(time: 'today' | 'future' | 'datetime', ...datetimeArgs: string[]): Promise<Reservation[]> {
     let cond = '';
     if (time === 'today') {
         cond = `A.value = strftime('%Y%m%d', datetime('now'))`;
     } else if (time === 'future') {
         cond = `A.value >= strftime('%Y%m%d', datetime('now'))`;
+    } else if (time === 'datetime') {
+        cond = `A.value >= strftime('%Y%m%d', datetime('now', ${datetimeArgs.map((arg) => `'${arg}'`).join(',')}))`;
     }
     let sql = `select B.id, B.content, A.value as date from blocks as B inner join attributes as A
         on(A.block_id = B.id and  A.name = 'custom-reservation' and ${cond}) order by A.value;`;
     let results: Reservation[] = await serverApi.sql(sql);
-    console.debug(results);
     return results;
 }
