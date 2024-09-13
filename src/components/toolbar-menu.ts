@@ -1,7 +1,7 @@
-import { IMenuItemOption, Menu, showMessage } from "siyuan";
+import { IMenuItemOption, Menu } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
-import { reservation, settings } from "../global-status";
+import { settings } from "../global-status";
 import { i18n, isMobile } from "../utils";
 import { eventBus } from "../event-bus";
 import { iconDiary } from "./svg";
@@ -25,19 +25,8 @@ export class ToolbarMenuItem {
         //注册事件总线，以防 moveBlocks 完成后新的日记被创建，而状态没有更新
         eventBus.subscribe('moveBlocks', UpdateDailyNoteStatusListener);
 
-        //1. 由于 SiYuan 要求 topbar 必须在 await 前, 所以这里姑且放一个 dummy icon
-        //实测发现不需要提前创建, 也可以
-        // this.ele = this.plugin.addTopBar({
-        //     icon: iconDiary.icon32,
-        //     title: i18n.Name,
-        //     position: 'left',
-        //     callback: () => { }
-        // });
-        // this.ele.style.display = 'none'; // FW icon, 不显示
-
         // setting 异步加载完成后, 发送 event bus
         eventBus.subscribe(eventBus.EventSettingLoaded, () => { this.addTopBarIcon(); });
-        
     }
 
     release() {
@@ -69,17 +58,13 @@ export class ToolbarMenuItem {
         menu.addItem({
             label: i18n.Setting.name,
             icon: 'iconSettings',
-            click: () => {eventBus.publish('OpenSetting', '');}
+            click: () => { eventBus.publish('OpenSetting', ''); }
         });
-        menu.addItem({
-            label: i18n.ContextMenu.PruneResv,
-            icon: 'iconTrashcan',
-            click: async () => {await reservation.doPrune(); showMessage(i18n.Msg.PruneResv);}
-        });
+
         menu.addItem({
             label: i18n.Setting.update.title,
             icon: 'iconRefresh',
-            click: () => {eventBus.publish(eventBus.EventUpdateAll, '');}
+            click: () => { eventBus.publish(eventBus.EventUpdateAll, ''); }
         });
 
         let rect = this.ele.getBoundingClientRect();

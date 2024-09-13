@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-05-21 14:14:08
  * @FilePath     : /src/global-status.ts
- * @LastEditTime : 2024-09-09 21:46:44
+ * @LastEditTime : 2024-09-13 11:59:51
  * @Description  : 
  */
 import { eventBus } from './event-bus';
@@ -250,17 +250,6 @@ class ReservationManger {
             this.reservations.OnDate[date_str].push(blockId);
         }
         this.reserved.set(blockId, date_str);
-    }
-
-    async isTodayReserved(): Promise<boolean> {
-        let resv = await this.getTodayReservations();
-        return resv.length > 0;
-    }
-
-    //获取今天的预约
-    async getTodayReservations(): Promise<string[]> {
-        let reservations: Reservation[] = await retrieveResvFromBlocks('today');
-        return reservations.map(r => r.id);
     }
 
     //清理已经过期的预约

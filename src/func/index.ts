@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2023 frostime all rights reserved.
  */
-import { reservation, settings } from '@/global-status';
+import { settings } from '@/global-status';
 import { autoOpenDailyNote, checkDuplicateDiary } from './dailynote';
 
 import type DailyNoteTodayPlugin from '@/index';
 import type { EventBus } from 'siyuan';
 import { debouncer } from '@/utils';
-import { updateTodayReservation } from './reserve';
+import { isTodayReserved, updateTodayReservation } from './reserve';
 import { updateStyleSheet } from './style';
 import notebooks from '@/global-notebooks';
 
@@ -107,7 +107,7 @@ export class RoutineEventHandler {
         const HighlightResv = settings.get('HighlightResv');
         if (!HighlightResv) return;
 
-        reservation.isTodayReserved().then(yes => {
+        isTodayReserved().then(yes => {
             if (!yes) {
                 updateStyleSheet('');
                 return;
@@ -159,7 +159,7 @@ export class RoutineEventHandler {
         if (this.flag.hasAutoInsertResv === true) return;
 
         //如果今天没有预约，就不插入
-        let hasResv = await reservation.isTodayReserved();
+        let hasResv = await isTodayReserved();
         if (!hasResv) return;
 
         let succeed = updateTodayReservation(notebooks.default);

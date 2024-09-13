@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2024 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Date         : 2024-09-09 22:18:54
+ * @FilePath     : /src/func/reserve/index.ts
+ * @LastEditTime : 2024-09-13 11:55:40
+ * @Description  : 
+ */
 import { confirm } from 'siyuan';
 import { DebugKit, i18n } from "@/utils";
 import * as serverApi from '@/serverApi';
-import { reservation, settings } from '@/global-status';
-import { Retrieve, RetvFactory } from './retrieve';
+import { settings } from '@/global-status';
+import { Retrieve, retrieveResvFromBlocks, RetvFactory } from './retrieve';
 
 export * from './retrieve';
 export * from './reserve';
@@ -32,7 +40,7 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
 
     DebugKit.info('调用 updateDocReservation', ...arguments);
 
-    let resvBlockIds = await reservation.getTodayReservations();
+    let resvBlockIds = await getTodayReservations();
     if (resvBlockIds.length == 0) {
         return;
     }
@@ -62,4 +70,18 @@ export async function updateDocReservation(docId: string, refresh: boolean = fal
             retv.insert();
         }
     }
+}
+
+
+/**
+ * @returns 获取今天的预约块 ID 列表
+ */
+export const getTodayReservations = async (): Promise<BlockId[]> => {
+    let reservations: Reservation[] = await retrieveResvFromBlocks('today');
+    return reservations.map(r => r.id);
+}
+
+export const isTodayReserved = async (): Promise<boolean> => {
+    let resv = await getTodayReservations();
+    return resv.length > 0;
 }
