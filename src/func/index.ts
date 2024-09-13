@@ -156,7 +156,9 @@ export class RoutineEventHandler {
      */
     public async tryAutoInsertResv() {
         //TODO 允许用户配置是否每次打开都尝试更新预约
-        if (this.flag.hasAutoInsertResv === true) return;
+        // v1.6.8 Note: 把这里的限制去掉，让每次打开的时候都尝试插入预约
+        // 后期看看要不要优化一下
+        // if (this.flag.hasAutoInsertResv === true) return;
 
         //如果今天没有预约，就不插入
         let hasResv = await isTodayReserved();

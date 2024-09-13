@@ -129,7 +129,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
                 langKey: 'open-dn',
                 langText: this.i18n.Open,
                 hotkey: '⌥5',
-                callback: openDefaultDailyNote
+                callback: () => {
+                    //v1.6.8 Note: 在快捷键打开日记之后，同样检查预约情况
+                    openDefaultDailyNote().then(() => {
+                        this.routineHandler.tryAutoInsertResv();
+                    });
+                }
             });
             toggleGeneralDailynoteKeymap(false);
         } else {

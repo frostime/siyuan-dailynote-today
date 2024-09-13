@@ -2,6 +2,7 @@
 
 - 🔨 refactor: Dock 栏改为基于查询的方案获取预约信息
 - 🔥 rm: 去掉一些基于 reservation 对象的代码，为后面弃用 reservation 对象做准备
+- ✨ feat: 使用 Alt+5 打开日记之后，检查预约情况
 
 ## [2024-09-09] v1.6.7
 
