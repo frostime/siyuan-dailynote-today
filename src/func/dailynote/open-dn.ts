@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-11-12 19:53:10
  * @FilePath     : /src/func/dailynote/open-dn.ts
- * @LastEditTime : 2024-04-19 12:38:15
+ * @LastEditTime : 2024-09-26 16:04:39
  * @Description  : 
  */
 import { showMessage, confirm, openTab, openMobileFileById } from 'siyuan';
@@ -21,10 +21,10 @@ import { setCustomDNAttr } from './dn-attr';
 
 export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
     let doc_id = await serverApi.createDocWithMd(notebook.id, todayDiaryHpath, "");
-    console.log(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
-    setCustomDNAttr(doc_id);
-
     notebook.dailyNoteDocId = doc_id;
+
+    console.log(`创建日记: ${notebook.name} ${todayDiaryHpath}`);
+    await setCustomDNAttr(doc_id);
 
     return doc_id;
 }
