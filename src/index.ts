@@ -12,7 +12,7 @@ import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/res
 import { updateStyleSheet, removeStyleSheet, toggleGeneralDailynoteKeymap, openDefaultDailyNote } from './func';
 
 import { setApp, setI18n, setIsMobile, setPlugin, getFocusedBlock } from './utils';
-import { settings, reservation } from './global-status';
+import { settings } from './global-status';
 import notebooks from './global-notebooks';
 
 import { eventBus } from './event-bus';
@@ -49,13 +49,12 @@ export default class DailyNoteTodayPlugin extends Plugin {
         setPlugin(this); //设置全局 plugin
 
         settings.setPlugin(this);
-        reservation.setPlugin(this);
 
         //初始化 UI
         this.initPluginUI();
 
         //初始化数据
-        await Promise.all([reservation.load(), settings.load(), notebooks.init()]);
+        await Promise.all([settings.load(), notebooks.init()]);
 
         this.toggleDnHotkey(settings.get('ReplaceAlt5Hotkey'));
 

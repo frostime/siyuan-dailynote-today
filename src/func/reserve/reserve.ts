@@ -2,8 +2,9 @@ import { i18n, lute } from "@/utils";
 import { showMessage, confirm } from "siyuan";
 import * as serverApi from "@/serverApi";
 import { confirmDialog } from "@/components/libs/dialogs";
-import { reservation, settings } from "@/global-status";
+import { settings } from "@/global-status";
 import { parse, ParsedResult } from 'chrono-node';
+import { reservationAttrVal } from ".";
 
 
 const Zh1to9 = '一二三四五六七八九';
@@ -207,22 +208,15 @@ export async function reserveBlock(blockId) {
  * @param blockId 块ID
  */
 export async function dereserveBlock(blockId: BlockId) {
-    let date = reservation.findReserved(blockId);
-    if (date) {
-        reservation.removeReservation(date, blockId);
-    }
-    reservation.save();
     serverApi.setBlockAttrs(blockId, {
         'custom-reservation': null, 'memo': null
     });
     showMessage(i18n.DeReserveMenu.Success, 3000, 'info');
 }
 
-function doReserveBlock(blockId, date: Date) {
+function doReserveBlock(blockId: BlockId, date: Date) {
     console.debug('Do reservation', blockId, date);
-    reservation.doReserve(date, blockId);
-    reservation.save();
-    let dateStr = reservation.dateTemplate(date);
+    let dateStr = reservationAttrVal(date);
     serverApi.setBlockAttrs(blockId, {
         'custom-reservation': dateStr, 'memo': `${i18n.ReserveMenu.name} ${dateStr}`
     });

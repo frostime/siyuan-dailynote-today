@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-09-09 22:18:54
  * @FilePath     : /src/func/reserve/index.ts
- * @LastEditTime : 2024-09-13 11:55:40
+ * @LastEditTime : 2024-09-25 22:59:24
  * @Description  : 
  */
 import { confirm } from 'siyuan';
@@ -15,6 +15,13 @@ import { Retrieve, retrieveResvFromBlocks, RetvFactory } from './retrieve';
 export * from './retrieve';
 export * from './reserve';
 
+export function reservationAttrVal(date: Date) {
+    //确保日期格式为 YYYYMMDD
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    return `${year}${month < 10 ? '0' + month : month}${day < 10 ? '0' + day : day}`;
+}
 
 /**
  * 给定笔记本，将今日的预约块插入笔记本的 daily note 中
