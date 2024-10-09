@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2024 by frostime. All Rights Reserved.
+ * @Author       : frostime
+ * @Date         : 2023-05-28 18:05:39
+ * @FilePath     : /src/event-bus.ts
+ * @LastEditTime : 2024-10-09 17:07:56
+ * @Description  : For old time compatibility.
+ */
 
 class EventBus {
     events: { [key: string]: Function[] } = {};
