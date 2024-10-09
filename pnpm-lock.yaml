@@ -43,8 +43,8 @@ importers:
         specifier: ^1.72.0
         version: 1.77.4
       siyuan:
-        specifier: 1.0.2
-        version: 1.0.2
+        specifier: 1.0.3
+        version: 1.0.3
       siyuan-plugin-cli:
         specifier: ^1.2.0
         version: 1.2.0
@@ -704,8 +704,8 @@ packages:
     resolution: {integrity: sha512-8Xg42Jd0zvfnwkVsPUCNbcAEZnyllT1JGaKzNGXNMwM0R/qdClJuoBiPmSrj5M03EHVGwhSzEYRRO0qc1uMr4g==}
     hasBin: true
 
-  siyuan@1.0.2:
-    resolution: {integrity: sha512-78qonqi/X+VC5HBtqmkm6HZho6GVcXTBYvdWfu3uB3WkWzYeu3PqKw2514PZn2uZpydljjZ4DP5aSV9w9IlBbA==}
+  siyuan@1.0.3:
+    resolution: {integrity: sha512-AbaIcts3BosLyEnxF+Pq+H2z41Qy6UNbr/RIvdleZ9Ay1tN2ZTRIFG7Wo7USZTsXKL4/D0CjUJ9G9FzG1yg+2A==}
 
   source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
@@ -1411,7 +1411,7 @@ snapshots:
 
   siyuan-plugin-cli@1.2.0: {}
 
-  siyuan@1.0.2: {}
+  siyuan@1.0.3: {}
 
   source-map-js@1.0.2: {}
 
