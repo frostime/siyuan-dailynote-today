@@ -369,8 +369,7 @@ on(
 
 ### Q: When do I need to "Update" status
 
-- When there is an update to a notebook (such as opening/closing/creating/moving a notebook), press the keyboard shortcut "ctrl+alt+u" to update the status.
-    - The plugin can automatically track the creation status of the note, but it will not track the status of the notebooks.
+- You want to manually update the status of notebooks
 - When "Alt + right click" can note bring up moving menu, try updating.
 - Manual update of the day's reservation block
 
