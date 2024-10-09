@@ -262,6 +262,9 @@ export default class DailyNoteTodayPlugin extends Plugin {
             this.gutterMenu.release();
         }
         toggleGeneralDailynoteKeymap(true);
+
+        //TODO 后面把这些乱七八糟的事件绑定全都放到这里面去
+        this.routineHandler.onPluginUnload();
     }
 }
 

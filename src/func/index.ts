@@ -5,7 +5,7 @@ import { settings } from '@/global-status';
 import { autoOpenDailyNote, checkDuplicateDiary } from './dailynote';
 
 import type DailyNoteTodayPlugin from '@/index';
-import type { EventBus } from 'siyuan';
+import type { EventBus, IEventBusMap } from 'siyuan';
 import { debouncer } from '@/utils';
 import { isTodayReserved, updateTodayReservation } from './reserve';
 import { updateStyleSheet } from './style';
@@ -28,6 +28,7 @@ export class RoutineEventHandler {
     eventBus: EventBus;
 
     onSyncEndBindThis = this.onSyncEnd.bind(this);
+    onNotebookChangedBindThis = this.onNotebookChanged.bind(this);
 
     flag = {
         hasOpened: false,
@@ -53,15 +54,17 @@ export class RoutineEventHandler {
         );  // 防抖, 避免频繁检查
     }
 
-    bindSyncEvent() {
+    private bindSyncEvent() {
         this.eventBus.on('sync-end', this.onSyncEndBindThis);
     }
 
-    unbindSyncEvent() {
+    private unbindSyncEvent() {
         this.eventBus.off('sync-end', this.onSyncEndBindThis);
     }
 
-    async onPluginLoad() {
+    public async onPluginLoad() {
+        this.plugin.eventBus.on('opened-notebook', this.onNotebookChangedBindThis);
+        this.plugin.eventBus.on('closed-notebook', this.onNotebookChangedBindThis);
 
         this.updateResvIconStyle();
         const SYNC_ENABLED = window.siyuan.config.sync.enabled;
@@ -77,6 +80,10 @@ export class RoutineEventHandler {
             this.bindSyncEvent();
         }
     }
+    public onPluginUnload() {
+        this.plugin.eventBus.off('opened-notebook', this.onNotebookChangedBindThis);
+        this.plugin.eventBus.off('closed-notebook', this.onNotebookChangedBindThis);
+    }
 
     async onSyncEnd({ detail }) {
         console.debug('on-sync-end');
@@ -88,6 +95,11 @@ export class RoutineEventHandler {
         if (!this.flag.isSyncChecked) {
             this.checkDuplicateDiary_Debounce();
         }
+    }
+
+    async onNotebookChanged(e: CustomEvent<IEventBusMap['opened-notebook'] | IEventBusMap['closed-notebook']>) {
+        console.debug('on-notebook-changed', e.detail);
+        await notebooks.update();
     }
 
 
