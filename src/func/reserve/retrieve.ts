@@ -3,7 +3,7 @@
  * @Author       : Yp Z
  * @Date         : 2023-06-17 13:55:54
  * @FilePath     : /src/func/reserve/retrieve.ts
- * @LastEditTime : 2024-09-13 11:48:53
+ * @LastEditTime : 2024-11-10 13:01:21
  * @Description  : 
  */
 import * as serverApi from '@/serverApi';
@@ -184,11 +184,12 @@ export function RetvFactory(type: RetvType, position: RetvPosition, resvBlockIds
 export async function retrieveResvFromBlocks(time: 'today' | 'future' | 'datetime', ...datetimeArgs: string[]): Promise<Reservation[]> {
     let cond = '';
     if (time === 'today') {
-        cond = `A.value = strftime('%Y%m%d', datetime('now'))`;
+        cond = `A.value = strftime('%Y%m%d', datetime('now', 'localtime'))`;
     } else if (time === 'future') {
-        cond = `A.value >= strftime('%Y%m%d', datetime('now'))`;
+        cond = `A.value >= strftime('%Y%m%d', datetime('now', 'localtime'))`;
     } else if (time === 'datetime') {
-        cond = `A.value >= strftime('%Y%m%d', datetime('now', ${datetimeArgs.map((arg) => `'${arg}'`).join(',')}))`;
+        // 假设 datetimeArgs 包含时间偏移量，例如 '-7 days'
+        cond = `A.value >= strftime('%Y%m%d', datetime('now', 'localtime', ${datetimeArgs.map((arg) => `'${arg}'`).join(',')}))`;
     }
     let sql = `select B.id, B.content, A.value as date from blocks as B inner join attributes as A
         on(A.block_id = B.id and  A.name = 'custom-reservation' and ${cond}) order by A.value;`;

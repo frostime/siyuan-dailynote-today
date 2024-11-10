@@ -6,7 +6,7 @@
     "en_US": "Daily Note Today"
   },
   "url": "https://github.com/frostime/siyuan-dailynote-today",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "minAppVersion": "3.1.7",
   "description": {
     "zh_CN": "自动创建日记 + 快速打开日记 + 日程 TODO 管理 + 移动块功能",
