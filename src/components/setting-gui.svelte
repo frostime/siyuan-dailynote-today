@@ -14,8 +14,8 @@
     let groups = {
         enable: [
             {
-            name: "OpenOnStart",
-            type: "checkbox",
+                name: "OpenOnStart",
+                type: "checkbox",
             },
             {
                 name: "EnableMove",
@@ -28,7 +28,7 @@
             {
                 name: "EnableResvDock",
                 type: "checkbox",
-            }
+            },
         ],
         interact: [
             {
@@ -41,8 +41,8 @@
             },
             {
                 name: "ReplaceAlt5Hotkey",
-                type: "checkbox"
-            }
+                type: "checkbox",
+            },
         ],
         dailynote: [
             {
@@ -51,24 +51,24 @@
             },
             {
                 name: "NotebookBlacklist",
-                type: "button"
+                type: "button",
             },
             {
                 name: "DisableAutoCreateOnMobile",
-                type: "checkbox"
+                type: "checkbox",
             },
             {
                 name: "SetPastDailyNoteAttr",
-                type: "button"
+                type: "button",
             },
-            {
-                name: "AutoOpenAfterSync",
-                type: "checkbox"
-            },
+            // {
+            //     name: "AutoOpenAfterSync",
+            //     type: "checkbox",
+            // },
             {
                 name: "AutoHandleDuplicateMethod",
-                type: "select"
-            }
+                type: "select",
+            },
         ],
         reservation: [
             {
@@ -85,9 +85,9 @@
             },
             {
                 name: "HighlightResv",
-                type: "checkbox"
-            }
-        ]
+                type: "checkbox",
+            },
+        ],
     };
 
     let allSettingPanels: {
@@ -123,7 +123,7 @@
     function onClick({ detail }) {
         console.log(detail);
         let key = detail.key;
-        if (key === 'NotebookBlacklist') {
+        if (key === "NotebookBlacklist") {
             let dialog = new Dialog({
                 title: i18n.Blacklist.name,
                 content: `<div id="blacklist" style="height: 100%;"></div>`,
@@ -138,7 +138,7 @@
                     },
                 },
             });
-        } else if (key === 'SetPastDailyNoteAttr') {
+        } else if (key === "SetPastDailyNoteAttr") {
             setDNAttrDialog();
         }
     }
@@ -146,4 +146,4 @@
 
 <!-- <SettingPanel dataname="global" {settingItems} />
  -->
-<SettingPanels panels={allSettingPanels} on:click={onClick}/>
+<SettingPanels panels={allSettingPanels} on:click={onClick} />

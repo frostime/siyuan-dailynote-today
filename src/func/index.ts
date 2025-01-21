@@ -34,7 +34,7 @@ export class RoutineEventHandler {
         hasOpened: false,
 
         openOnStart: false,
-        autoOpenAfterSync: false,
+        // autoOpenAfterSync: false,
 
         isSyncChecked: false,
         hasCheckSyncFor: 0,
@@ -47,7 +47,7 @@ export class RoutineEventHandler {
         this.eventBus = plugin.eventBus;
 
         this.flag.openOnStart = settings.get('OpenOnStart');
-        this.flag.autoOpenAfterSync = settings.get('AutoOpenAfterSync');
+        // this.flag.autoOpenAfterSync = settings.get('AutoOpenAfterSync');
 
         this.checkDuplicateDiary_Debounce = debouncer.debounce(
             this.checkDuplicateDiary.bind(this), 2000, 'CheckDuplicateDiary'
@@ -71,13 +71,10 @@ export class RoutineEventHandler {
         if (!SYNC_ENABLED) {
             //Case 1: 如果思源没有开启同步, 就直接创建, 并无需绑定同步事件
             await this.tryAutoOpenDN();
-        } else if (this.flag.autoOpenAfterSync === false) {
-            //Case 2: 如果思源开启了同步, 但是用户没有设置在同步后打开, 就直接创建
+        } else {
+            //Case 2: 如果思源开启了同步, 就直接创建并绑定同步事件
             this.bindSyncEvent();
             await this.tryAutoOpenDN();
-        } else {
-            //Case 3: 如果思源开启了同步, 并且用户设置了在同步后打开, 就绑定同步事件
-            this.bindSyncEvent();
         }
     }
     public onPluginUnload() {
@@ -85,12 +82,10 @@ export class RoutineEventHandler {
         this.plugin.eventBus.off('closed-notebook', this.onNotebookChangedBindThis);
     }
 
-    async onSyncEnd({ detail }) {
-        console.debug('on-sync-end');
-
-        if (this.flag.hasOpened === false && this.flag.autoOpenAfterSync === true) {
-            this.tryAutoOpenDN();
-        }
+    async onSyncEnd() {
+        // if (this.flag.hasOpened === false && this.flag.autoOpenAfterSync === true) {
+        //     this.tryAutoOpenDN();
+        // }
 
         if (!this.flag.isSyncChecked) {
             this.checkDuplicateDiary_Debounce();

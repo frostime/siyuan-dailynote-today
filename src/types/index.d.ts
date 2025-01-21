@@ -104,14 +104,35 @@ type doOperation = {
     retData: null;
 }
 
-type SettingKey = (
-    'OpenOnStart' | 'DefaultNotebook' | 'IconPosition' |
-    'PluginVersion' | "EnableMove" | 'EnableReserve' | 
-    "ExpandGutterMenu" | 'PopupReserveDialog' | 'ResvEmbedAt' |
-    'RetvType' | 'EnableResvDock' | 'DisableAutoCreateOnMobile' |
-    'NotebookBlacklist' | 'AutoOpenAfterSync' | 'HighlightResv' |
-    'AutoHandleDuplicateMethod' | 'ReplaceAlt5Hotkey'
-);
+type SettingKey =
+    // App behavior settings
+    | 'OpenOnStart'
+    // | 'AutoOpenAfterSync'
+    | 'DisableAutoCreateOnMobile'
+
+    // Notebook settings
+    | 'DefaultNotebook'
+    | 'NotebookBlacklist'
+
+    // UI settings
+    | 'IconPosition'
+    | 'ExpandGutterMenu'
+    | 'PopupReserveDialog'
+    | 'HighlightResv'
+
+    // Feature toggles
+    | 'EnableMove'
+    | 'EnableReserve'
+    | 'EnableResvDock'
+
+    // Reservation settings
+    | 'ResvEmbedAt'
+    | 'RetvType'
+
+    // System settings
+    | 'PluginVersion'
+    | 'ReplaceAlt5Hotkey'
+    | 'AutoHandleDuplicateMethod';
 
 interface ISettingItem {
     type: string;
