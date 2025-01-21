@@ -1,237 +1,231 @@
----
+Blacklist:
+  name: Blacklist
+  toggle: Add to blacklist
+  update: Update blacklist
+ChangeLog:
+  file: CHANGELOG_en_US
+  name: ChangeLog
+CompleteMsg:
+  AllMerge: All duplicate diaries have been merged into the main diary
+  DeleteDup: All duplicate diaries have been deleted
+  SmartMerge: Duplicate diaries have been smartly merged into the main diary
+  TrashDup: Duplicate diaries have been moved to the trash bin
+ConflictDiary:
+  AutoMerge: Auto merge
+  CompleteMsg:
+    AllMerge: Merge all duplicate diaries into the main diary
+    DeleteDup: Deleted all duplicate diaries
+    SmartMerge: Intelligently merge duplicate diaries into the main diary
+    TrashDup: Moved the duplicate diaries to the recycle bin
+  HeadingMarkdown: '# Duplicate diaries are listed below'
+  fail: Fail due to unknown reason, please merge them manually
+  part1:
+  - '#### Note: Duplicate daily notes detected'
+  - Conflict files are listed below, the last line, indicated in bold, represents
+    the earliest dailynote and will be treated as the main dailynote for auto-handeling
+  - '| Document ID | Title | Created | Updated | Notebook |'
+  - '| --- | --- | --- | --- | --- |'
+  part2:
+  - '- **Why does this happen?**'
+  - '    You may have created a daily note on another device before and then created
+    a daily note on this device, resulting in a synchronization conflict.'
+  - '- **How to solve it manually?**'
+  - '    Please merge and delete redundant diaries manually: Open today''s daily note,
+    locate the daily note document, and the conflicting document will be nearby.'
+  - '- **What do the following buttons mean?**'
+  - '    Auto-handeling method, please refer to the plugin documentation for details.'
+  part3:
+  - '<p style="color: red">'
+  - We found that in addition to the dailynote document conflict, the parent document
+    at the upper level seems to be in conflict as well, the "Auto Handler" <b>cannot
+    handle this complexity of merging document trees</b>.
+  - </p>
+  - '<p style="color: red">'
+  - <u>You can still to use the "Auto Handler" feature</u>, while it is <b>recommended</b>
+    that you <b>manually deal with duplicate parent documents</b> after auto-handling.
+  - </p>
+  success: Success
+ContextMenu:
+  PruneResv: Prune bad reservation
+Create: Create daily note
+DeReserveMenu:
+  Success: Cancel reservation success!
+  name: Cancel Reservation
+DockReserve:
+  PopupResv: Inspect reservations
+  arial: Daily Note Today Reservations
+  collapse: collapse
+  emptyContent: No related content found
+  expand: expand
+  min: minimize
+  refresh: refresh
+  title: Reservations
+InvalidDefaultNotebook: |-
+  <p>Sory, but the plugin was unable to find the default notebook; it may be due to an incorrect ID configuration, or the corresponding notebook has been closed by you.</p>
+  <p>We suggest that you carefully check the settings of the plugin.</p>
+MoveMenu:
+  Move: Move to
+  NotLi: Only support moving entrie list, instead of signle list item!
+  NotMoveDiary: Don't move daily note itself!
+  VerIssue: Current version dose not support "Move Blocks" function (≥ 2.8.8))
+Msg:
+  PruneResv: Pruned
+  Resv404: <h3>Ooops!??</h3><p>It should have been reservation blocks here, but the
+    blocks are not found</p><p>Maybe they were deleted or the notebook is closed</p>
 Name: Daily Note Today
-NewVer: " new version"
+NewDay:
+- 'Today is '
+- plugin up to date
+NewVer: ' new version'
+Open: Open daily note
+ReserveMenu:
+  Date404: No date time found for reserving!
+  DateInvalid: is not a valid date!
+  DatePast: Can not reserve for past time!
+  Match: Matched date
+  Success: Reservation success!
+  Title: Reserve this block to
+  name: Reserve this block
+SetPastDN:
+  button:
+    end: 🎉 Exit!
+    start: 🚀 Start setting!
+  hint:
+    end: ✅ All settings complete!
+    going: 🕑 Setting in progress...
+    initial: 📚 The plugin has automatically detected the earliest date of the diaries
+      in all notebooks.<br/> 🚀 You can now click the 'Start' button to add custom
+      attributes to all diaries within this time range.<br/> ⚙️ If you think the automatically
+      detected start date is incorrect, you can manually set it by clicking on the
+      cell in the 'Start Date' column.
+  setdate:
+    error: Incorrect date format
+    title: Manually set the start date
+  thead:
+  - Notebook
+  - 'Start Date<span style="font-size: 0.8em;">(click to set manually)</span>'
+  - Number of DNs
+  - Enable
+  title: Add document attribute to past daily notes
 Setting:
-  name: Setting
-  OpenOnStart:
-    title: Auto-open Daily Note
-    text: Open Today's daily note automatically when the plugin is loaded
-  AutoOpenAfterSync:
-    title:
-      "Auto create DN only after synchronization <span style=\"font-weight: bold;
-      color: color: var(--b3-theme-primary)\">\U0001F9EAExperimental Features</span>"
-    text:
-      To solve the document conflict problem caused by synchronization + automatic
-      opening of DN, try opening DN automatically after synchronization.<br/>This
-      feature is <b>experimental</b> and <del>lacks sufficient testing, so please
-      use it at your discretion.</del><br/><b>Practical tests shown it not very useful,
-      not recommended </b>
-  DefaultNotebook:
-    title: Default Notebook ID
-    text:
-      The notebook where the daily note is created by default, use the first notebook
-      if blank
-    placeholder: Please copy from notebook's ID
-  DisableAutoCreateOnMobile:
-    title: Disable Auto Create Diary On Mobile
-    text:
-      This feature is mainly to avoid the problem of inconvenient handling when
-      generating conflict diaries in mobile; if this option is turned on, "Open Today's
-      Diary Automatically" will not work on mobile.
-  NotebookBlacklist:
-    title: Notebook Blacklist
-    text:
-      Notebook in the blacklist will not be shown in the dropdown menu. Default
-      notebook can not be in the blacklist
-    button: Set it
-  update:
-    title: Update Status
-    text: Update the status of the notebook when the notebook configuration changes
-    button: Update
-  NotebookSort:
-    title: Notebook Sorting Scheme
-    text:
-      1. Same what document tree shows 2. Same the order defined in custom sorting
-      mode
-    options:
-      doc-tree: Same as document tree
-      custom-sort: Same as custom sorting
-  IconPosition:
-    title: Icon Position
-    text: Take effect after reloading
-    options:
-      left: Topbar left
-      right: Topbar right
-  EnableMove:
-    title: Enable "Move Block" in menu
-    text:
-      When enabled, the "Move Block" item will be added to the menu after clicking
-      on the block icon
-  EnableReserve:
-    title: Enable "Reserve Block" in menu
-    text:
-      When enabled, the "Reserve Block" item will be added to the menu after clicking
-      on the block icon
-  EnableResvDock:
-    title: Enable "Show reservations" in dock menu
-    text:
-      When enabled, the "Show reservations" pannel will be added to the dock menu
-      at the right bottom side of the dock bar
-  ExpandGutterMenu:
-    title: Expand all block menu items
-    text:
-      When enabled, the plugin's block menu items are expanded to appear as a
-      separate secondary menu under the plugin menu
-  PopupReserveDialog:
-    title: Popup Confirmation Window When Reserving a Block
-    text:
-      Automatically displays a confirmation window when reserving a block to ensure
-      the date is correct.
-  ResvEmbedAt:
-    title: Insert reservations at
-    text: Insert reservations at top or bottom of today's daily note
-    options:
-      top: Top of the document
-      bottom: Bottom of the document
-  RetvType:
-    title: Insert reservations as
-    text: Target block's type for reservations, could be embed block, link, or reference
-    options:
-      embed: Embed
-      link: Link
-      ref: Ref
-  SetPastDailyNoteAttr:
-    title: Add document attribute to past daily notes
-    text:
-      '✨ Adding the custom-dailynote attribute to past daily notes for compatibility
-      with <span style="color: var(--b3-theme-primary)">SiYuan versions prior to 2.11.1</span>.<br/>If
-      you don''t understand what this button is for, it is recommended that you press
-      it, and it won''t bring you any extra trouble!<br/> Note: Clicking this button
-      once is enough.'
-    button: GO!
-    empty: 'Can not find daily notes under notebook: {{notebook}}'
-  HighlightResv:
-    title: Highlight reservation icon
-    text:
-      Highlight reservation icon in dock bar when there is a reservation on the
-      day
   AutoHandleDuplicateMethod:
-    title: Auto-handle duplicates' method
+    options:
+      AllMerge: Merge all
+      DeleteDup: Delete directly
+      None: Manually  handle
+      SmartMerge: Merge smartly
+      TrashDup: Move to trash
     text: |-
       Automatically handel with duplicate daily notes while detected, without popup dialog<br/>
       Default: Popup dialog and let user manually choose the method.<br/>
       <b>If not 'Manually  handle'</b>, auto-handle with the duplicate daily notes with the selected method.
+    title: Auto-handle duplicates' method
+  AutoOpenAfterSync:
+    text: To solve the document conflict problem caused by synchronization + automatic
+      opening of DN, try opening DN automatically after synchronization.<br/>This
+      feature is <b>experimental</b> and <del>lacks sufficient testing, so please
+      use it at your discretion.</del><br/><b>Practical tests shown it not very useful,
+      not recommended </b>
+    title: 'Auto create DN only after synchronization <span style="font-weight: bold;
+      color: color: var(--b3-theme-primary)">🧪Experimental Features</span>'
+  DefaultNotebook:
+    placeholder: Please copy from notebook's ID
+    text: The notebook where the daily note is created by default, use the first notebook
+      if blank
+    title: Default Notebook ID
+  DisableAutoCreateOnMobile:
+    text: This feature is mainly to avoid the problem of inconvenient handling when
+      generating conflict diaries in mobile; if this option is turned on, "Open Today's
+      Diary Automatically" will not work on mobile.
+    title: Disable Auto Create Diary On Mobile
+  EnableMove:
+    text: When enabled, the "Move Block" item will be added to the menu after clicking
+      on the block icon
+    title: Enable "Move Block" in menu
+  EnableReserve:
+    text: When enabled, the "Reserve Block" item will be added to the menu after clicking
+      on the block icon
+    title: Enable "Reserve Block" in menu
+  EnableResvDock:
+    text: When enabled, the "Show reservations" pannel will be added to the dock menu
+      at the right bottom side of the dock bar
+    title: Enable "Show reservations" in dock menu
+  ExpandGutterMenu:
+    text: When enabled, the plugin's block menu items are expanded to appear as a
+      separate secondary menu under the plugin menu
+    title: Expand all block menu items
+  HighlightResv:
+    text: Highlight reservation icon in dock bar when there is a reservation on the
+      day
+    title: Highlight reservation icon
+  IconPosition:
     options:
-      None: Manually  handle
-      AllMerge: Merge all
-      TrashDup: Move to trash
-      SmartMerge: Merge smartly
-      DeleteDup: Delete directly
+      left: Topbar left
+      right: Topbar right
+    text: Take effect after reloading
+    title: Icon Position
+  NotebookBlacklist:
+    button: Set it
+    text: Notebook in the blacklist will not be shown in the dropdown menu. Default
+      notebook can not be in the blacklist
+    title: Notebook Blacklist
+  NotebookSort:
+    options:
+      custom-sort: Same as custom sorting
+      doc-tree: Same as document tree
+    text: 1. Same what document tree shows 2. Same the order defined in custom sorting
+      mode
+    title: Notebook Sorting Scheme
+  OpenOnStart:
+    text: Open Today's daily note automatically when the plugin is loaded
+    title: Auto-open Daily Note
+  PopupReserveDialog:
+    text: Automatically displays a confirmation window when reserving a block to ensure
+      the date is correct.
+    title: Popup Confirmation Window When Reserving a Block
   ReplaceAlt5Hotkey:
+    text: The plugin will override the default Alt+5 hotKey behavior in SiYuan, fixing
+      it to open only the daily note of the default notebook set by the plugin.
     title: Override Alt+5 hotKey
-    text: The plugin will override the default Alt+5 hotKey behavior in SiYuan, fixing it to open only the daily note of the default notebook set by the plugin.
-
+  ResvEmbedAt:
+    options:
+      bottom: Bottom of the document
+      top: Top of the document
+    text: Insert reservations at top or bottom of today's daily note
+    title: Insert reservations at
+  RetvType:
+    options:
+      embed: Embed
+      link: Link
+      ref: Ref
+    text: Target block's type for reservations, could be embed block, link, or reference
+    title: Insert reservations as
+  SetPastDailyNoteAttr:
+    button: GO!
+    empty: 'Can not find daily notes under notebook: {{notebook}}'
+    text: '✨ Adding the custom-dailynote attribute to past daily notes for compatibility
+      with <span style="color: var(--b3-theme-primary)">SiYuan versions prior to 2.11.1</span>.<br/>If
+      you don''t understand what this button is for, it is recommended that you press
+      it, and it won''t bring you any extra trouble!<br/> Note: Clicking this button
+      once is enough.'
+    title: Add document attribute to past daily notes
+  name: Setting
+  update:
+    button: Update
+    text: Update the status of the notebook when the notebook configuration changes
+    title: Update Status
 SettingGroups:
+  dailynote: Daily Note
   enable: Enable
   interact: Interact
-  dailynote: Daily Note
   reservation: Reservation
 TrashBinDocContent: |-
   - This is a trash bin document created by the "Daily Note Today" plugin.
   - The reason you see this document is that you used the "Move to Trash" feature in the plugin to automatically handle duplicate daily note documents.
   - All documents under this document are daily notes that were previously detected as duplicate documents by the "Daily Note Today" plugin.
   - If you find this trash bin document bothersome, you can delete it entirely. The plugin will recreate the trash bin document when needed.
-Open: Open daily note
-Create: Create daily note
 UpdateAll: Notebook status updated
-InvalidDefaultNotebook: |-
-  <p>Sory, but the plugin was unable to find the default notebook; it may be due to an incorrect ID configuration, or the corresponding notebook has been closed by you.</p>
-  <p>We suggest that you carefully check the settings of the plugin.</p>
-
-ContextMenu:
-  PruneResv: Prune bad reservation
-MoveMenu:
-  Move: Move to
-  NotLi: Only support moving entrie list, instead of signle list item!
-  VerIssue: Current version dose not support "Move Blocks" function (≥ 2.8.8))
-  NotMoveDiary: Don't move daily note itself!
-ReserveMenu:
-  name: Reserve this block
-  Match: Matched date
-  Title: Reserve this block to
-  Date404: No date time found for reserving!
-  DateInvalid: is not a valid date!
-  DatePast: Can not reserve for past time!
-  Success: Reservation success!
-DeReserveMenu:
-  name: Cancel Reservation
-  Success: Cancel reservation success!
-NewDay:
-  - "Today is "
-  - plugin up to date
-ChangeLog:
-  name: ChangeLog
-  file: CHANGELOG_en_US
-Msg:
-  PruneResv: Pruned
-  Resv404:
-    "<h3>Ooops!??</h3><p>It should have been reservation blocks here, but the
-    blocks are not found</p><p>Maybe they were deleted or the notebook is closed</p>"
-ConflictDiary:
-  part1:
-    - "#### Note: Duplicate daily notes detected"
-    - Conflict files are listed below, the last line, indicated in bold, represents
-      the earliest dailynote and will be treated as the main dailynote for auto-handeling
-    - "| Document ID | Title | Created | Updated | Notebook |"
-    - "| --- | --- | --- | --- | --- |"
-  part2:
-    - "- **Why does this happen?**"
-    - "    You may have created a daily note on another device before and then created
-      a daily note on this device, resulting in a synchronization conflict."
-    - "- **How to solve it manually?**"
-    - "    Please merge and delete redundant diaries manually: Open today's daily note,
-      locate the daily note document, and the conflicting document will be nearby."
-    - "- **What do the following buttons mean?**"
-    - "    Auto-handeling method, please refer to the plugin documentation for details."
-  part3:
-    - '<p style="color: red">'
-    - We found that in addition to the dailynote document conflict, the parent document
-      at the upper level seems to be in conflict as well, the "Auto Handler" <b>cannot
-      handle this complexity of merging document trees</b>.
-    - "</p>"
-    - '<p style="color: red">'
-    - <u>You can still to use the "Auto Handler" feature</u>, while it is <b>recommended</b>
-      that you <b>manually deal with duplicate parent documents</b> after auto-handling.
-    - "</p>"
-  AutoMerge: Auto merge
-  HeadingMarkdown: "# Duplicate diaries are listed below"
-  success: Success
-  fail: Fail due to unknown reason, please merge them manually
-CompleteMsg:
-    AllMerge: All duplicate diaries have been merged into the main diary
-    TrashDup: Duplicate diaries have been moved to the trash bin
-    SmartMerge: Duplicate diaries have been smartly merged into the main diary
-    DeleteDup: All duplicate diaries have been deleted
-DockReserve:
-  arial: Daily Note Today Reservations
-  title: Reservations
-  refresh: refresh
-  expand: expand
-  collapse: collapse
-  min: minimize
-  emptyContent: No related content found
-  PopupResv: Inspect reservations
-Blacklist:
-  name: Blacklist
-  toggle: Add to blacklist
-  update: Update blacklist
-SetPastDN:
-  title: Add document attribute to past daily notes
-  thead:
-    - Notebook
-    - 'Start Date<span style="font-size: 0.8em;">(click to set manually)</span>'
-    - Number of DNs
-    - Enable
-  hint:
-    initial: >-
-      📚 The plugin has automatically detected the earliest date of the diaries in all notebooks.<br/>
-      🚀 You can now click the 'Start' button to add custom attributes to all diaries within this time range.<br/>
-      ⚙️ If you think the automatically detected start date is incorrect, you can manually set it by clicking on the cell in the 'Start Date' column.
-    going: 🕑 Setting in progress...
-    end: ✅ All settings complete!
-  button:
-    start: 🚀 Start setting!
-    end: 🎉 Exit!
-  setdate:
-    title: Manually set the start date
-    error: Incorrect date format
+global_notebooks_ts:
+  invalid_notebook_id_config: You wrongly configured the notebook ID as the ID {1}
+    of block "{0}""; the plugin has automatically adjusted the default notebook
+    to the notebook where the block is located {2}

@@ -3,12 +3,14 @@
  * @Author       : Yp Z
  * @Date         : 2023-06-03 23:36:46
  * @FilePath     : /src/global-notebooks.ts
- * @LastEditTime : 2023-08-06 18:07:20
+ * @LastEditTime : 2024-11-28 23:05:56
  * @Description  : 
  */
+import { confirm } from 'siyuan';
 import { queryNotebooks } from './func';
 import { settings } from './global-status';
-
+import { getBlockByID } from './serverApi';
+import { i18n } from './utils';
 
 class Notebooks {
     notebooks: Array<Notebook>;
@@ -76,10 +78,32 @@ class Notebooks {
             } else {
                 // confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`);
                 this.default = undefined;
+                this.checkCorrectNotebookId(notebookId).then(notebook => {
+                    if (notebook) {
+                        this.default = notebook;
+                        settings.set('DefaultNotebook', notebook.id);
+                    } else {
+                        confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`);
+                    }
+                });
             }
         } else {
             this.default = this.get(0);
         }
+    }
+
+    private async checkCorrectNotebookId(notebookId: string) {
+        const block: Block = await getBlockByID(notebookId);
+        if (!block) {
+            return null;
+        }
+
+        let notebook = this.find(block.box);
+        if (notebook) {
+            confirm(`${i18n.Name} Warning`, i18n.global_notebooks_ts.invalid_notebook_id_config.replace('{0}', block.content).replace('{1}', notebookId).replace('{2}', block.box));
+            return notebook;
+        }
+        return null;
     }
 
 }
