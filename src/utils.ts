@@ -1,13 +1,13 @@
 // import zh_Hans from "./i18n/zh_CN.json";
 // // import en_US from "./i18n/en_US.json";
-import zh_Hans from '../dev/i18n/zh_CN.json';
+// import zh_Hans from '../dev/i18n/zh_CN.json';
 
 
 import { App, Plugin } from "siyuan";
 
 //@ts-ignore
 export const lute = window.Lute!.New();
-export type I18N = typeof zh_Hans;
+// export type I18N = typeof zh_Hans;
 // export type I18N = any;
 
 const _fn = (fn: Function, ...args: any[]) => {
@@ -44,7 +44,7 @@ export async function repeatRun(fn: Function, wait: number, maxTimes: number): P
     return res;
 }
 
-export let i18n: I18N;
+export let i18n: I18n;
 export function setI18n(i18n_: any) {
     i18n = i18n_;
 }
