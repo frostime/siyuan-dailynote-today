@@ -201,8 +201,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
             //@ts-ignore
             title: `${this.i18n.Name}`,
             content: `<div id="SettingPanel" style="height: 100%"></div>`,
-            width: '50%',
-            height: '27rem',
+            width: this.isMobile ? '100%' : '50%',
+            height: this.isMobile ? '100%' : '27rem',
             destroyCallback: () => {
                 pannel.$destroy();
             }

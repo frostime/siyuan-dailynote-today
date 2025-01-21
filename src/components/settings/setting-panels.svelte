@@ -53,9 +53,41 @@
 
 <style>
     .config__panel {
-        height: 100%;
+      height: 100%;
     }
-    .config__panel>ul>li {
-        padding-left: 1rem;
+  
+    .config__panel > .b3-tab-bar {
+      width: 150px;
+      flex-shrink: 0;
+      min-width: 60px; /** at least 2 chars */
     }
-</style>
+    
+    /* mobile opt */
+    @media screen and (max-width: 768px) {
+      .config__panel > .b3-tab-bar {
+        width: 100px;
+      }
+  
+      :global(.b3-list-item__text) {
+        font-size: 12px;
+      }
+  
+      :global(.b3-list-item__text) {
+        font-size: 14px;
+        overflow: visible !important; /* non chinese opt */
+        text-overflow: clip !important; /* non chinese opt */
+        white-space: normal !important; /* non chinese opt */
+        word-wrap: break-word !important;
+        display: block !important;
+      }
+  
+      /* tab div */
+      :global(.b3-list-item) {
+        height: 40px !important; /* at least finger can touch */
+        line-height: 40px !important;
+        padding: 0 0.5rem !important; 
+        white-space: normal !important; 
+        word-break: break-word !important; 
+      }
+    }
+  </style>
