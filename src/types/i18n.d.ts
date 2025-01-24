@@ -201,4 +201,7 @@ interface I18n {
     global_notebooks_ts: {
         invalid_notebook_id_config: string;
     };
+    toolbar_menu_ts: {
+        err_get_user_notebook: string;
+    };
 }

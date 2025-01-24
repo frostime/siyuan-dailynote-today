@@ -1,4 +1,4 @@
-import { IMenuItemOption, Menu } from "siyuan";
+import { IMenuItemOption, Menu, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-status";
@@ -81,6 +81,14 @@ export class ToolbarMenuItem {
         await this.updateDailyNoteStatus();
         let menu = new Menu("dntoday-menu");
         let menuItems = this.createMenuItems();
+        if (menuItems.length === 0) {
+            showMessage(i18n.toolbar_menu_ts.err_get_user_notebook, 2500, 'error');
+            return;
+        } else if (menuItems.length === 1) {
+            menuItems[0].click();
+            return;
+        }
+
         for (let item of menuItems) {
             menu.addItem(item);
         }

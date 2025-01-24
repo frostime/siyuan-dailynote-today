@@ -350,22 +350,3 @@ export async function checkDuplicateDiary(): Promise<boolean> {
     return true;
 }
 
-//For Debug
-if (process.env.DEV_MODE === "true") {
-    const addTestBtn = () => {
-        let btn = document.createElement('button');
-        Object.assign(btn.style, {
-            position: 'fixed',
-            bottom: '50px',
-            right: '50px',
-            zIndex: '1000',
-        });
-        btn.classList.add('b3-button', 'b3-button--primary');
-        btn.innerText = '检查重复日记';
-        btn.onclick = async () => {
-            await checkDuplicateDiary();
-        };
-        document.body.appendChild(btn);
-    }
-    addTestBtn();
-}
