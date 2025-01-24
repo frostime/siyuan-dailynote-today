@@ -1,11 +1,12 @@
 import { i18n, lute } from "@/utils";
 import { showMessage, confirm } from "siyuan";
 import * as serverApi from "@/serverApi";
-import { confirmDialog } from "@/components/libs/dialogs";
+// import { confirmDialog } from "@/components/libs/dialogs";
 import { settings } from "@/global-status";
 import { parse, ParsedResult } from 'chrono-node';
 import { reservationAttrVal } from ".";
 
+import { confirmDialog, html2ele, isMobile } from "@frostime/siyuan-plugin-kits";
 
 const Zh1to9 = '一二三四五六七八九';
 const Zh1to10 = '一二三四五六七八九十';
@@ -131,6 +132,52 @@ export const DatePatternRules = [
 ]
 
 
+function createConfirmDialog(initialDate: Date | null, kramdown: string, matchText: MatchedText | null, datePicked: (date: Date) => void): HTMLElement {
+    function hightLightStr(text: string, beg: number, len: number) {
+        let before = text.substring(0, beg);
+        let middle = text.substring(beg, beg + len);
+        let after = text.substring(beg + len);
+        return `${before}<span data-type="mark">${middle}</span>${after}`;
+    }
+
+    if (matchText) {
+        kramdown = hightLightStr(kramdown, matchText.index, matchText.text.length);
+    }
+    let html = lute.Md2HTML(kramdown);
+    html = `
+    <div>
+        <div class="fn__flex" style="justify-content: space-between; align-items: center;">
+            <p>${((`将块预约到`))}</p>
+            <input type="date" id="datepicker" class="b3-text-field fn__size200" />
+        </div>
+        <div class="b3-typography typofont-1rem"
+            style="margin: 0.5rem 0px; box-shadow: 0px 0px 5px var(--b3-theme-on-background);"
+        >
+            ${html}
+        </div>
+    </div>
+    `;
+    const ele = html2ele(html);
+
+    let datePicker = ele.querySelector('#datepicker') as HTMLInputElement;
+    // Format date in local timezone
+    if (initialDate) {
+        const year = initialDate.getFullYear();
+        const month = String(initialDate.getMonth() + 1).padStart(2, '0');
+        const day = String(initialDate.getDate()).padStart(2, '0');
+        datePicker.value = `${year}-${month}-${day}`;
+    }
+    datePicker.addEventListener('change', () => {
+        // Create date in local timezone
+        let [year, month, day] = datePicker.value.split('-').map(Number);
+        let date = new Date(year, month - 1, day);
+        datePicked(date);
+    });
+
+    return ele;
+}
+
+
 export async function reserveBlock(blockId) {
     let block = await serverApi.getBlockByID(blockId);
     let kram = await serverApi.getBlockKramdown(block.id);
@@ -141,7 +188,7 @@ export async function reserveBlock(blockId) {
 
     // let year: string, month: string, day: string = null;
     let resMatch: RegExpMatchArray = null;
-    let matchedTest: MatchedText = undefined;
+    let matchedText: MatchedText = undefined;
     let resDate: Date = null;
     let resIndex: number = Infinity;
     //匹配日期正则表达式
@@ -168,36 +215,65 @@ export async function reserveBlock(blockId) {
             let parseResult: ParsedResult = result[0];
             resDate = parseResult.start.date();
             resDate.setHours(0, 0, 0, 0);
-            matchedTest = {
+            matchedText = {
                 text: parseResult.text,
                 index: parseResult.index
             }
         }
     } else {
-        matchedTest = {
+        matchedText = {
             text: resMatch[0],
             index: resMatch.index
         }
     }
 
-    if (!resDate) {
-        showMessage(i18n.ReserveMenu.Date404, 3000, 'error');
-        return;
-    }
-    let [year, month, day] = [resDate.getFullYear(), resDate.getMonth() + 1, resDate.getDate()]
     //检查是不是过去
     let today = new Date();
     today.setHours(0, 0, 0, 0); //为了方便测试，今天也是可以预约的
+
+    if (!resDate) {
+        let fragment = createConfirmDialog(null, kramdown, null, (date: Date) => {
+            resDate = date;
+        });
+        confirmDialog({
+            title: ((`没有匹配到日期, 可以手动选择`)),
+            content: fragment,
+            confirm: () => {
+                if (!resDate) {
+                    return;
+                }
+                if (resDate < today) {
+                    confirm('Error', `${resDate.toLocaleDateString()}: ${i18n.ReserveMenu.DatePast}`);
+                    return;
+                }
+                doReserveBlock(blockId, resDate)
+            },
+            width: isMobile() ? "92vw" : "520px",
+        })
+        return;
+    }
+    let [year, month, day] = [resDate.getFullYear(), resDate.getMonth() + 1, resDate.getDate()]
     if (resDate < today) {
         confirm('Error', `${year}-${month}-${day}: ${i18n.ReserveMenu.DatePast}`);
         return;
     }
 
     if (settings.get('PopupReserveDialog')) {
-        let html = createConfirmDialog(kramdown, matchedTest);
-        confirmDialog(`${i18n.ReserveMenu.Title}: ${resDate.toLocaleDateString()}?`, html
-            , () => doReserveBlock(blockId, resDate)
-        );
+        let fragment = createConfirmDialog(resDate, kramdown, matchedText, (date: Date) => {
+            resDate = date;
+        });
+        confirmDialog({
+            title: `${i18n.ReserveMenu.Title}: ${resDate.toLocaleDateString()}?`,
+            content: fragment,
+            confirm: () => {
+                if (resDate < today) {
+                    confirm('Error', `${resDate.toLocaleDateString()}: ${i18n.ReserveMenu.DatePast}`);
+                    return;
+                }
+                doReserveBlock(blockId, resDate)
+            },
+            width: isMobile() ? "92vw" : "520px",
+        })
     } else {
         doReserveBlock(blockId, resDate);
     }
@@ -226,29 +302,4 @@ function doReserveBlock(blockId: BlockId, date: Date) {
 interface MatchedText {
     index: number;
     text: string;
-}
-
-function createConfirmDialog(srcKramdown: string, match?: MatchedText): string {
-
-    function hightLightStr(text: string, beg: number, len: number) {
-        let before = text.substring(0, beg);
-        let middle = text.substring(beg, beg + len);
-        let after = text.substring(beg + len);
-        return `${before}<span data-type="mark">${middle}</span>${after}`;
-    }
-    //用了 chrono 之后，可能 match 就没有了
-    let matched: string = match ? `<p>${i18n.ReserveMenu.Match}: ${match.text}</p>` : '';
-    if (match) {
-        srcKramdown = hightLightStr(srcKramdown, match.index, match.text.length);
-    }
-    let html = lute.Md2HTML(srcKramdown);
-    // console.log(html);
-    html = `
-    ${matched}
-    <div class="b3-typography typofont-1rem"
-        style="margin: 0.5rem; box-shadow: 0px 0px 5px var(--b3-theme-on-background);"
-    >
-        ${html}
-    </div>`;
-    return html;
 }

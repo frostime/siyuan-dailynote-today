@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@frostime/siyuan-plugin-kits':
+        specifier: ^1.5.3
+        version: 1.5.3
       p-limit:
         specifier: ^5.0.0
         version: 5.0.0
@@ -217,6 +220,9 @@ packages:
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
+
+  '@frostime/siyuan-plugin-kits@1.5.3':
+    resolution: {integrity: sha512-uSBQZfaGw5M2pwp7tRUoq+w0OV2hH4rdOyJMG3A4khB5/x9Xwi549ALGe29Y9w2xhprr2sAMjRbHjgzPbbkmDw==}
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
@@ -707,6 +713,9 @@ packages:
   siyuan@1.0.3:
     resolution: {integrity: sha512-AbaIcts3BosLyEnxF+Pq+H2z41Qy6UNbr/RIvdleZ9Ay1tN2ZTRIFG7Wo7USZTsXKL4/D0CjUJ9G9FzG1yg+2A==}
 
+  siyuan@1.0.8:
+    resolution: {integrity: sha512-m6IVT70n8yoNnabjwNn6D0w0s+Dz63JO4fCiyso09JZSGbsreuTrxb1xM9IrVXIEqm5IT7tkU9O0ks1cdHR6Cw==}
+
   source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
@@ -920,6 +929,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.20.2':
     optional: true
+
+  '@frostime/siyuan-plugin-kits@1.5.3':
+    dependencies:
+      siyuan: 1.0.8
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -1412,6 +1425,8 @@ snapshots:
   siyuan-plugin-cli@1.2.0: {}
 
   siyuan@1.0.3: {}
+
+  siyuan@1.0.8: {}
 
   source-map-js@1.0.2: {}
 

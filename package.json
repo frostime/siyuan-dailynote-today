@@ -37,6 +37,7 @@
     "vite-plugin-zip-pack": "^1.2.2"
   },
   "dependencies": {
+    "@frostime/siyuan-plugin-kits": "^1.5.3",
     "p-limit": "^5.0.0"
   }
 }
