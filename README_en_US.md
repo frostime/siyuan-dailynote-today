@@ -122,32 +122,32 @@ You can think of the reservation block as a simple schedule management or task r
 
 1. Click the block and select "Reserve this block".
 
-    <!-- ![](asset/Reserve1.png) -->
     ![](asset/Reserve1-en.png)
-    <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/69479868c4da8344.png) -->
 
 2. The plugin will automatically match the date and time in the block content, and after confirmation, the plugin will help you record the reservation.
 
     The matched time will be highlighted in the confirmation dialog;. As you can see below, the plug-in matches `06-24` and resolves to `2023-06-01`.
 
     ![](asset/Reserve2-en.png)
-    <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/2a30bad068dc534f.png) -->
 
-3. When the day arrives, the plugin will automatically insert the related reservations as embedded blocks into the diary entry.
+3. Update On 2025-01-24: After v1.8.0, you can manually select the desired reservation date in this dialog
+
+    ![image](asset/image-20250124221536-wal1qgl.png)
+
+4. When the day arrives, the plugin will automatically insert the related reservations as embedded blocks into the diary entry.
 
     ![](asset/Reserve3-en.png)
-    <!-- ![](https://s3.bmp.ovh/imgs/2023/05/28/f10c726b06042635.png) -->
 
-4. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
+5. If you find that the embedded block for the reservation is not inserted automatically, you can update the document by clicking on the 'Update' button in the icon menu
 
-5. After completing the reservation block, a custom attribute `custom-reservation` will be automatically added to the block and memo will be filled in, making it easier for users to identify which blocks have been reserved.
+6. After completing the reservation block, a custom attribute `custom-reservation` will be automatically added to the block and memo will be filled in, making it easier for users to identify which blocks have been reserved.
 
     ![](asset/R-memo-en.png)
 
     ![](asset/R-attr-en.png)
 
-6. Click again on a block that has already been reserved and you can choose to 'Cancel Reservation'
-7. By default, all reservations will be inserted as an embedded block at the beginning of the document. If you are not satisfied with the default behavior, you can change it in the settings.
+7. Click again on a block that has already been reserved and you can choose to 'Cancel Reservation'
+8. By default, all reservations will be inserted as an embedded block at the beginning of the document. If you are not satisfied with the default behavior, you can change it in the settings.
 
 
 You can customize the CSS styles to display these reservation blocks. Here is an example that you can add to your code snippet:

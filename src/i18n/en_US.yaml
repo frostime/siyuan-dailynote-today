@@ -229,6 +229,9 @@ global_notebooks_ts:
   invalid_notebook_id_config: You wrongly configured the notebook ID as the ID {1}
     of block "{0}""; the plugin has automatically adjusted the default notebook to
     the notebook where the block is located {2}
+reserve_ts:
+  block_reservation: Reserve the block to
+  no_matched_date: No matching date, you can select manually
 toolbar_menu_ts:
   err_get_user_notebook: 'Error: Unable to obtain the notebook of the user''s open
     daily note. Please keep at least one!'

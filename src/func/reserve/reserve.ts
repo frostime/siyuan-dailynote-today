@@ -147,7 +147,7 @@ function createConfirmDialog(initialDate: Date | null, kramdown: string, matchTe
     html = `
     <div>
         <div class="fn__flex" style="justify-content: space-between; align-items: center;">
-            <p>${((`将块预约到`))}</p>
+            <p>${i18n.reserve_ts.block_reservation}</p>
             <input type="date" id="datepicker" class="b3-text-field fn__size200" />
         </div>
         <div class="b3-typography typofont-1rem"
@@ -236,7 +236,7 @@ export async function reserveBlock(blockId) {
             resDate = date;
         });
         confirmDialog({
-            title: ((`没有匹配到日期, 可以手动选择`)),
+            title: i18n.reserve_ts.no_matched_date,
             content: fragment,
             confirm: () => {
                 if (!resDate) {
