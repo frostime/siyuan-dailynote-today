@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-05-21 14:14:08
  * @FilePath     : /src/global-status.ts
- * @LastEditTime : 2025-01-21 15:01:51
+ * @LastEditTime : 2025-01-24 18:07:54
  * @Description  : 
  */
 import { eventBus } from './event-bus';
@@ -119,7 +119,7 @@ class SettingManager {
         }
 
         let json = JSON.stringify(this.settings);
-        console.debug(`写入配置文件: ${json}`);
+        console.debug(`写入配置文件: ${JSON.stringify(this.settings, null, 2)}`);
         this.plugin.saveData(SettingFile, json);
     }
 }
