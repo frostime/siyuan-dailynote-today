@@ -3,7 +3,7 @@
  * @Author       : Yp Z
  * @Date         : 2023-06-03 23:36:46
  * @FilePath     : /src/global-notebooks.ts
- * @LastEditTime : 2024-11-28 23:05:56
+ * @LastEditTime : 2025-01-24 19:56:41
  * @Description  : 
  */
 import { confirm } from 'siyuan';
@@ -68,6 +68,14 @@ class Notebooks {
         this.updateDefault();
     }
 
+    checkNotebookId(notebookId: string) {
+        let notebook = this.find(notebookId);
+        if (notebook) {
+            return notebook;
+        }
+        return null;
+    }
+
     updateDefault() {
         let notebookId: string = settings.get('DefaultNotebook');
         notebookId = notebookId.trim();
@@ -76,23 +84,26 @@ class Notebooks {
             if (notebook) {
                 this.default = notebook;
             } else {
-                // confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`);
                 this.default = undefined;
-                this.checkCorrectNotebookId(notebookId).then(notebook => {
-                    if (notebook) {
-                        this.default = notebook;
-                        settings.set('DefaultNotebook', notebook.id);
-                    } else {
-                        confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`);
-                    }
-                });
+                // this.correctBlockId2BoxId(notebookId).then(notebook => {
+                //     if (notebook) {
+                //         this.default = notebook;
+                //         settings.set('DefaultNotebook', notebook.id);
+                //     } else {
+                //         if (warnUser) {
+                //             confirm(i18n.Name, `${notebookId} ${i18n.InvalidDefaultNotebook}`);
+                //         }
+                //     }
+                // });
+                return false;
             }
         } else {
             this.default = this.get(0);
         }
+        return this.default !== undefined;
     }
 
-    private async checkCorrectNotebookId(notebookId: string) {
+    private async correctBlockId2BoxId(notebookId: string) {
         const block: Block = await getBlockByID(notebookId);
         if (!block) {
             return null;
@@ -100,6 +111,7 @@ class Notebooks {
 
         let notebook = this.find(block.box);
         if (notebook) {
+            // 提示用户笔记本错误设置为块的 ID
             confirm(`${i18n.Name} Warning`, i18n.global_notebooks_ts.invalid_notebook_id_config.replace('{0}', block.content).replace('{1}', notebookId).replace('{2}', block.box));
             return notebook;
         }

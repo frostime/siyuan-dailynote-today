@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Dialog } from "siyuan";
+    import { Dialog, confirm } from "siyuan";
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
     import { DebugKit, i18n } from "../utils";
@@ -7,6 +7,7 @@
     import { FormPanel } from "./libs/Form";
     import Blacklist from "./blacklist.svelte";
     import { setDNAttrDialog } from "./set-past-dn-attr";
+    import notebooks from "@/global-notebooks";
 
     let I18n = i18n.Setting;
     let groups = [
@@ -203,8 +204,17 @@
     }
 
     function onChanged({ detail }) {
+        // console.log(detail);
         if (detail.key) {
             settings.set(detail.key, detail.value);
+            if (detail.key === "DefaultNotebook") {
+                if (detail.value !== '' && !notebooks.checkNotebookId(detail.value)) {
+                    confirm(
+                        i18n.Name,
+                        `${detail.value} ${i18n.InvalidDefaultNotebook}`,
+                    );
+                }
+            }
         }
     }
 </script>

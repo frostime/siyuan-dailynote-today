@@ -3,13 +3,15 @@
  * @Author       : frostime
  * @Date         : 2024-05-21 14:14:08
  * @FilePath     : /src/global-status.ts
- * @LastEditTime : 2025-01-24 18:07:54
+ * @LastEditTime : 2025-01-24 19:55:27
  * @Description  : 
  */
+// import { confirm } from 'siyuan';
 import { eventBus } from './event-bus';
 import notebooks from './global-notebooks';
 
 import type DailyNoteTodayPlugin from '@/index';
+// import { i18n } from './utils';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -74,7 +76,6 @@ class SettingManager {
         if (key === 'DefaultNotebook') {
             notebooks.updateDefault();
         }
-
     }
 
     /**
