@@ -13,7 +13,7 @@
     "en_US": "Automatically open today's notes + Quickly open today's notes + TODO mangagement for today + Move blocks"
   },
   "readme": {
-    "zh_CN": "README_zh_CN.md",
+    "zh_CN": "README.md",
     "en_US": "README_en_US.md"
   },
   "i18n": [
@@ -21,11 +21,8 @@
     "zh_CN"
   ],
   "funding": {
-    "openCollective": "",
-    "patreon": "",
-    "github": "",
     "custom": [
-      "https://afdian.net/a/frostime"
+      "https://afdian.com/a/frostime"
     ]
   },
   "keywords": [

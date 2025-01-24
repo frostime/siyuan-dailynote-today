@@ -10,8 +10,9 @@
   "scripts": {
     "make-link": "node --no-warnings ./scripts/make_dev_link.js",
     "make-link-win": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/elevate.ps1 -scriptPath ./scripts/make_dev_link.js",
-    "dev": "vite build --watch",
-    "build": "vite build",
+    "dev": "cross-env NODE_ENV=development VITE_SOURCEMAP=inline vite build --watch",
+    "build": "cross-env NODE_ENV=production vite build",
+    "build-no-minify": "cross-env NODE_ENV=production NO_MINIFY=true vite build",
     "update-version": "node --no-warnings ./scripts/update_version.js",
     "make-install": "vite build && node --no-warnings ./scripts/make_install.js"
   },
@@ -19,7 +20,7 @@
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^20.11.29",
-    "chrono-node": "^2.6.3",
+    "cross-env": "^7.0.3",
     "fast-glob": "^3.3.2",
     "glob": "^7.2.3",
     "js-yaml": "^4.1.0",
@@ -29,7 +30,6 @@
     "siyuan": "1.0.3",
     "siyuan-plugin-cli": "^1.2.0",
     "svelte": "^4.2.19",
-    "sy-plugin-changelog": "^0.0.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2",
     "vite": "^5.2.11",
@@ -37,6 +37,8 @@
     "vite-plugin-zip-pack": "^1.2.2"
   },
   "dependencies": {
+    "chrono-node": "^2.6.3",
+    "sy-plugin-changelog": "^0.0.7",
     "@frostime/siyuan-plugin-kits": "^1.5.3",
     "p-limit": "^5.0.0"
   }
