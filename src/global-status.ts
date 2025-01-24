@@ -3,13 +3,15 @@
  * @Author       : frostime
  * @Date         : 2024-05-21 14:14:08
  * @FilePath     : /src/global-status.ts
- * @LastEditTime : 2025-01-21 15:01:51
+ * @LastEditTime : 2025-01-24 19:55:27
  * @Description  : 
  */
+// import { confirm } from 'siyuan';
 import { eventBus } from './event-bus';
 import notebooks from './global-notebooks';
 
 import type DailyNoteTodayPlugin from '@/index';
+// import { i18n } from './utils';
 
 
 // type NotebookSorting = 'doc-tree' | 'custom-sort'
@@ -74,7 +76,6 @@ class SettingManager {
         if (key === 'DefaultNotebook') {
             notebooks.updateDefault();
         }
-
     }
 
     /**
@@ -119,7 +120,7 @@ class SettingManager {
         }
 
         let json = JSON.stringify(this.settings);
-        console.debug(`写入配置文件: ${json}`);
+        console.debug(`写入配置文件: ${JSON.stringify(this.settings, null, 2)}`);
         this.plugin.saveData(SettingFile, json);
     }
 }

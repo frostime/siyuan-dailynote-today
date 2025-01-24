@@ -134,12 +134,12 @@ type SettingKey =
     | 'ReplaceAlt5Hotkey'
     | 'AutoHandleDuplicateMethod';
 
-interface ISettingItem {
-    type: string;
-    key: string;
-    value: any;
-    content: any;
-}
+// interface ISettingItem {
+//     type: string;
+//     key: string;
+//     value: any;
+//     content: any;
+// }
 
 interface ITreeStat {
     imageCount: number;

@@ -1,149 +1,313 @@
 <script lang="ts">
-    import { Dialog } from "siyuan";
+    import { Dialog, confirm } from "siyuan";
     import { onDestroy, onMount } from "svelte";
     import { settings } from "../global-status";
-    import { i18n } from "../utils";
+    import { DebugKit, i18n } from "../utils";
 
-    import SettingPanels from "./settings/setting-panels.svelte";
+    import { FormPanel } from "./libs/Form";
     import Blacklist from "./blacklist.svelte";
-
     import { setDNAttrDialog } from "./set-past-dn-attr";
+    import notebooks from "@/global-notebooks";
 
-    let contents = i18n.Setting;
+    let I18n = i18n.Setting;
+    let groups = [
+        `✨ ${i18n.SettingGroups.enable}`,
+        `🎯 ${i18n.SettingGroups.interact}`,
+        `📝 ${i18n.SettingGroups.dailynote}`,
+        `🔖 ${i18n.SettingGroups.reservation}`,
+    ];
+    let focusGroup = groups[0];
 
-    let groups = {
-        enable: [
-            {
-                name: "OpenOnStart",
-                type: "checkbox",
-            },
-            {
-                name: "EnableMove",
-                type: "checkbox",
-            },
-            {
-                name: "EnableReserve",
-                type: "checkbox",
-            },
-            {
-                name: "EnableResvDock",
-                type: "checkbox",
-            },
-        ],
-        interact: [
-            {
-                name: "IconPosition",
-                type: "select",
-            },
-            {
-                name: "ExpandGutterMenu",
-                type: "checkbox",
-            },
-            {
-                name: "ReplaceAlt5Hotkey",
-                type: "checkbox",
-            },
-        ],
-        dailynote: [
-            {
-                name: "DefaultNotebook",
-                type: "input",
-            },
-            {
-                name: "NotebookBlacklist",
-                type: "button",
-            },
-            {
-                name: "DisableAutoCreateOnMobile",
-                type: "checkbox",
-            },
-            {
-                name: "SetPastDailyNoteAttr",
-                type: "button",
-            },
-            // {
-            //     name: "AutoOpenAfterSync",
-            //     type: "checkbox",
-            // },
-            {
-                name: "AutoHandleDuplicateMethod",
-                type: "select",
-            },
-        ],
-        reservation: [
-            {
-                name: "PopupReserveDialog",
-                type: "checkbox",
-            },
-            {
-                name: "ResvEmbedAt",
-                type: "select",
-            },
-            {
-                name: "RetvType",
-                type: "select",
-            },
-            {
-                name: "HighlightResv",
-                type: "checkbox",
-            },
-        ],
-    };
+    const enableItems: ISettingItem[] = [
+        {
+            type: "checkbox",
+            title: I18n.OpenOnStart.title,
+            description: I18n.OpenOnStart.text,
+            key: "OpenOnStart",
+            value: settings.get("OpenOnStart"),
+        },
+        {
+            type: "checkbox",
+            title: I18n.EnableMove.title,
+            description: I18n.EnableMove.text,
+            key: "EnableMove",
+            value: settings.get("EnableMove"),
+        },
+        {
+            type: "checkbox",
+            title: I18n.EnableReserve.title,
+            description: I18n.EnableReserve.text,
+            key: "EnableReserve",
+            value: settings.get("EnableReserve"),
+        },
+        {
+            type: "checkbox",
+            title: I18n.EnableResvDock.title,
+            description: I18n.EnableResvDock.text,
+            key: "EnableResvDock",
+            value: settings.get("EnableResvDock"),
+        },
+    ];
 
-    let allSettingPanels: {
-        name: string;
-        items: ISettingItem[];
-    }[] = [];
+    const interactItems: ISettingItem[] = [
+        {
+            type: "select",
+            title: I18n.IconPosition.title,
+            description: I18n.IconPosition.text,
+            key: "IconPosition",
+            value: settings.get("IconPosition"),
+            options: I18n.IconPosition.options,
+        },
+        {
+            type: "checkbox",
+            title: I18n.ExpandGutterMenu.title,
+            description: I18n.ExpandGutterMenu.text,
+            key: "ExpandGutterMenu",
+            value: settings.get("ExpandGutterMenu"),
+        },
+        {
+            type: "checkbox",
+            title: I18n.ReplaceAlt5Hotkey.title,
+            description: I18n.ReplaceAlt5Hotkey.text,
+            key: "ReplaceAlt5Hotkey",
+            value: settings.get("ReplaceAlt5Hotkey"),
+        },
+    ];
 
-    for (let key in groups) {
-        let items: ISettingItem[] = [];
-        for (let item of groups[key]) {
-            items.push({
-                type: item.type,
-                key: item.name,
-                value: settings.get(item.name),
-                content: contents[item.name],
-            });
-        }
-        allSettingPanels.push({
-            name: key,
-            items: items,
-        });
-    }
+    const dailynoteItems: ISettingItem[] = [
+        {
+            type: "textinput",
+            title: I18n.DefaultNotebook.title,
+            description: I18n.DefaultNotebook.text,
+            key: "DefaultNotebook",
+            value: settings.get("DefaultNotebook"),
+        },
+        {
+            type: "button",
+            title: I18n.NotebookBlacklist.title,
+            description: I18n.NotebookBlacklist.text,
+            key: "NotebookBlacklist",
+            value: "Configure",
+            button: {
+                label: I18n.NotebookBlacklist.button,
+                callback: () => {
+                    let dialog = new Dialog({
+                        title: i18n.Blacklist.name,
+                        content: `<div id="blacklist" style="height: 100%;"></div>`,
+                        height: "25rem",
+                        width: "30rem",
+                    });
+                    new Blacklist({
+                        target: dialog.element.querySelector("#blacklist"),
+                        props: {
+                            close: () => {
+                                dialog.destroy();
+                            },
+                        },
+                    });
+                },
+            },
+        },
+        {
+            type: "checkbox",
+            title: I18n.DisableAutoCreateOnMobile.title,
+            description: I18n.DisableAutoCreateOnMobile.text,
+            key: "DisableAutoCreateOnMobile",
+            value: settings.get("DisableAutoCreateOnMobile"),
+        },
+        {
+            type: "button",
+            title: I18n.SetPastDailyNoteAttr.title,
+            description: I18n.SetPastDailyNoteAttr.text,
+            key: "SetPastDailyNoteAttr",
+            value: "Configure",
+            button: {
+                label: I18n.SetPastDailyNoteAttr.button,
+                callback: () => {
+                    setDNAttrDialog();
+                },
+            },
+        },
+        {
+            type: "select",
+            title: I18n.AutoHandleDuplicateMethod.title,
+            description: I18n.AutoHandleDuplicateMethod.text,
+            key: "AutoHandleDuplicateMethod",
+            value: settings.get("AutoHandleDuplicateMethod"),
+            options: I18n.AutoHandleDuplicateMethod.options,
+        },
+    ];
+
+    const reservationItems: ISettingItem[] = [
+        {
+            type: "checkbox",
+            title: I18n.PopupReserveDialog.title,
+            description: I18n.PopupReserveDialog.text,
+            key: "PopupReserveDialog",
+            value: settings.get("PopupReserveDialog"),
+        },
+        {
+            type: "select",
+            title: I18n.ResvEmbedAt.title,
+            description: I18n.ResvEmbedAt.text,
+            key: "ResvEmbedAt",
+            value: settings.get("ResvEmbedAt"),
+            options: I18n.ResvEmbedAt.options,
+        },
+        {
+            type: "select",
+            title: I18n.RetvType.title,
+            description: I18n.RetvType.text,
+            key: "RetvType",
+            value: settings.get("RetvType"),
+            options: I18n.RetvType.options,
+        },
+        {
+            type: "checkbox",
+            title: I18n.HighlightResv.title,
+            description: I18n.HighlightResv.text,
+            key: "HighlightResv",
+            value: settings.get("HighlightResv"),
+        },
+    ];
 
     onMount(() => {
-        console.log("Setting Svelte Mounted");
+        DebugKit.info("Setting Svelte Mounted");
     });
 
     onDestroy(() => {
-        console.log("Setting Svelte Destroyed");
+        DebugKit.info("Setting Svelte Destroyed");
         settings.save();
     });
 
     function onClick({ detail }) {
-        console.log(detail);
-        let key = detail.key;
-        if (key === "NotebookBlacklist") {
-            let dialog = new Dialog({
-                title: i18n.Blacklist.name,
-                content: `<div id="blacklist" style="height: 100%;"></div>`,
-                height: "25rem",
-                width: "30rem",
-            });
-            new Blacklist({
-                target: dialog.element.querySelector("#blacklist"),
-                props: {
-                    close: () => {
-                        dialog.destroy();
-                    },
-                },
-            });
-        } else if (key === "SetPastDailyNoteAttr") {
-            setDNAttrDialog();
+        DebugKit.info(detail);
+        // let key = detail.key;
+        // if (key === "NotebookBlacklist") {
+        //     let dialog = new Dialog({
+        //         title: i18n.Blacklist.name,
+        //         content: `<div id="blacklist" style="height: 100%;"></div>`,
+        //         height: "25rem",
+        //         width: "30rem",
+        //     });
+        //     new Blacklist({
+        //         target: dialog.element.querySelector("#blacklist"),
+        //         props: {
+        //             close: () => {
+        //                 dialog.destroy();
+        //             },
+        //         },
+        //     });
+        // } else if (key === "SetPastDailyNoteAttr") {
+        //     setDNAttrDialog();
+        // }
+    }
+
+    function onChanged({ detail }) {
+        // console.log(detail);
+        if (detail.key) {
+            settings.set(detail.key, detail.value);
+            if (detail.key === "DefaultNotebook") {
+                if (detail.value !== '' && !notebooks.checkNotebookId(detail.value)) {
+                    confirm(
+                        i18n.Name,
+                        `${detail.value} ${i18n.InvalidDefaultNotebook}`,
+                    );
+                }
+            }
         }
     }
 </script>
 
-<!-- <SettingPanel dataname="global" {settingItems} />
- -->
-<SettingPanels panels={allSettingPanels} on:click={onClick} />
+<div class="fn__flex-1 fn__flex config__panel">
+    <ul class="b3-tab-bar b3-list b3-list--background">
+        {#each groups as group}
+            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+            <li
+                data-name="editor"
+                class:b3-list-item--focus={group === focusGroup}
+                class="b3-list-item"
+                on:click={() => {
+                    focusGroup = group;
+                }}
+                on:keydown={() => {}}
+            >
+                <span class="b3-list-item__text">{group}</span>
+            </li>
+        {/each}
+    </ul>
+    <div class="config__tab-wrap">
+        <FormPanel
+            group={groups[0]}
+            settingItems={enableItems}
+            display={focusGroup === groups[0]}
+            on:changed={onChanged}
+            on:click={onClick}
+        />
+        <FormPanel
+            group={groups[1]}
+            settingItems={interactItems}
+            display={focusGroup === groups[1]}
+            on:changed={onChanged}
+            on:click={onClick}
+        />
+        <FormPanel
+            group={groups[2]}
+            settingItems={dailynoteItems}
+            display={focusGroup === groups[2]}
+            on:changed={onChanged}
+            on:click={onClick}
+        />
+        <FormPanel
+            group={groups[3]}
+            settingItems={reservationItems}
+            display={focusGroup === groups[3]}
+            on:changed={onChanged}
+            on:click={onClick}
+        />
+    </div>
+</div>
+
+<style lang="scss">
+    .config__panel {
+        height: 100%;
+    }
+    .config__panel > ul > li {
+        padding-left: 1rem;
+    }
+
+    .config__panel > .b3-tab-bar {
+        width: 150px;
+        flex-shrink: 0;
+        min-width: 60px; /** at least 2 chars */
+    }
+
+    /* mobile opt */
+    @media screen and (max-width: 768px) {
+        .config__panel > .b3-tab-bar {
+            width: 100px;
+        }
+
+        :global(.b3-list-item__text) {
+            font-size: 12px;
+        }
+
+        :global(.b3-list-item__text) {
+            font-size: 14px;
+            overflow: visible !important; /* non chinese opt */
+            text-overflow: clip !important; /* non chinese opt */
+            white-space: normal !important; /* non chinese opt */
+            word-wrap: break-word !important;
+            display: block !important;
+        }
+
+        /* tab div */
+        :global(.b3-list-item) {
+            height: 40px !important; /* at least finger can touch */
+            line-height: 40px !important;
+            padding: 0 0.5rem !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+        }
+    }
+</style>

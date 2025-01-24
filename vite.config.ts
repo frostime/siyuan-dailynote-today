@@ -1,6 +1,5 @@
 import { resolve } from "path"
 import { defineConfig, loadEnv } from "vite"
-import minimist from "minimist"
 import { viteStaticCopy } from "vite-plugin-static-copy"
 import livereload from "rollup-plugin-livereload"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
@@ -9,31 +8,16 @@ import fg from 'fast-glob';
 
 import vitePluginYamlI18n from './yaml-plugin';
 
-const args = minimist(process.argv.slice(2))
-const isWatch = args.watch || args.w || false
-const devDistDir = "dev"
-const distDir = isWatch ? devDistDir : "dist"
+const env = process.env;
+const isSrcmap = env.VITE_SOURCEMAP === 'inline';
+const isDev = env.NODE_ENV === 'development';
+const minify = env.NO_MINIFY ? false : true;
 
-console.log("isWatch=>", isWatch)
-console.log("distDir=>", distDir)
+const outputDir = isDev ? "dev" : "dist";
 
-const imgbedPrefix = 'https://gitlab.com/ypz.open/siyuan/siyuan-dailynote-today/-/raw/main';
-/**
- * 更换图片链接
- */
-function transformMdFile(content: string, filename: string, prefix: string=imgbedPrefix): string {
-    //如果不是md文件，不做处理
-    if (!filename.endsWith(".md")) {
-        return content;
-    }
-
-    console.log("transform=>", filename);
-    let imgPat = /!\[.*?\]\(\.?\/?(.*?)\)/g
-    let imgurl = `${prefix}/$1`
-    let newReadme = content.replace(imgPat, `![](${imgurl})`);
-    // await fs.promises.writeFile(readmePath, newReadme)
-    return newReadme;
-}
+console.log("isDev=>", isDev);
+console.log("isSrcmap=>", isSrcmap);
+console.log("outputDir=>", outputDir);
 
 
 export default defineConfig({
@@ -48,76 +32,30 @@ export default defineConfig({
 
         vitePluginYamlI18n({
             inDir: 'src/i18n',
-            outDir: isWatch ? 'dev/i18n' : 'dist/i18n',
+            outDir: `${outputDir}/i18n`
         }),
 
         viteStaticCopy({
             targets: [
-                {
-                    //将 README 当中的图片路径替换为图床链接
-                    src: "./README.md",
-                    dest: "./",
-                    rename: "README_zh_CN.md", //替换到根目录方便 bazzar 获取
-                    transform: transformMdFile
-                },
-                {
-                    //将 README 当中的图片路径替换为图床链接
-                    src: "./README.md",
-                    dest: "../",
-                    rename: "README_zh_CN.md", //替换到根目录方便 bazzar 获取
-                    transform: transformMdFile
-                },
-                {
-                    src: ["./README.md", "./README_en_US.md"],
-                    dest: "./",
-                },
-                {
-                    src: "./icon.png",
-                    dest: "./",
-                },
-                {
-                    src: "./preview.png",
-                    dest: "./",
-                },
-                {
-                    src: "./plugin.json",
-                    dest: "./",
-                },
-                {
-                    src: "./src/i18n/*.json",
-                    dest: "./i18n/"
-                },
-                {
-                    src: "./src/i18n/*.md",
-                    dest: "./i18n/",
-                    transform: transformMdFile
-                },
+                { src: "./README*.md", dest: "./" },
+                { src: "./plugin.json", dest: "./" },
+                { src: "./preview.png", dest: "./" },
+                { src: "./icon.png", dest: "./" },
+                { src: "./src/i18n/*.json", dest: "./i18n/" }
             ],
         }),
     ],
 
-    // https://github.com/vitejs/vite/issues/1930
-    // https://vitejs.dev/guide/env-and-mode.html#env-files
-    // https://github.com/vitejs/vite/discussions/3058#discussioncomment-2115319
-    // 在这里自定义变量
     define: {
-        "process.env.DEV_MODE": `"${isWatch}"`,
+        "process.env.DEV_MODE": JSON.stringify(isDev),
+        "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV)
     },
 
     build: {
-        // 输出路径
-        outDir: distDir,
+        outDir: outputDir,
         emptyOutDir: false,
-
-        // 构建后是否生成 source map 文件
-        sourcemap: isWatch ? 'inline' : false,
-
-        // 设置为 false 可以禁用最小化混淆
-        // 或是用来指定是应用哪种混淆器
-        // boolean | 'terser' | 'esbuild'
-        // 不压缩，用于调试
-        minify: !isWatch,
-        // minify: false,
+        minify: minify ?? true,
+        sourcemap: isSrcmap ? 'inline' : false,
 
         lib: {
             // Could also be a dictionary or array of multiple entry points
@@ -129,8 +67,8 @@ export default defineConfig({
         rollupOptions: {
             plugins: [
                 ...(
-                    isWatch ? [
-                        livereload(devDistDir),
+                    isDev ? [
+                        livereload(outputDir),
                         {
                             //监听静态资源文件
                             name: 'watch-external',

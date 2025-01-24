@@ -192,4 +192,10 @@ TrashBinDocContent: |-
   - 如果你觉得这个回收站文档很碍眼，也完全可以将其删除，插件在需要的时候会重新创建回收站文档
 UpdateAll: 笔记本状态已更新
 global_notebooks_ts:
-  invalid_notebook_id_config: 你将笔记本 ID 错误地配置为了块 "{0}" 的 ID {1}; 插件已经自动将默认笔记本调整为块所在的笔记本 {2}
+  invalid_notebook_id_config: 你将笔记本 ID 错误地配置为了块 "{0}" 的 ID {1}; 插件已经自动将默认笔记本调整为块所在的笔记本
+    {2}
+reserve_ts:
+  block_reservation: 将块预约到
+  no_matched_date: 没有匹配到日期, 可以手动选择
+toolbar_menu_ts:
+  err_get_user_notebook: '错误: 无法获取用户打开日记的笔记本, 请至少保留一个!'
