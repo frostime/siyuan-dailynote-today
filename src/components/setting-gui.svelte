@@ -294,9 +294,9 @@
 
         .b3-list-item__text {
             font-size: 14px;
-            overflow: visible !important;
-            text-overflow: clip !important;
-            white-space: normal !important;
+            overflow: visible !important; /* non chinese opt */
+            text-overflow: clip !important; /* non chinese opt */
+            white-space: normal !important; /* non chinese opt */
             word-wrap: break-word !important;
             display: block !important;
         }
