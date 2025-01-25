@@ -303,8 +303,8 @@
 
         /* tab div */
         .b3-list-item {
-            height: 40px !important;
-            line-height: 40px !important; /* at least finger can touch */
+            height: 40px !important; /* at least finger can touch */
+            line-height: 40px !important;
             padding: 0 0.5rem !important;
             white-space: normal !important;
             word-break: break-word !important;
