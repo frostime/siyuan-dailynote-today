@@ -200,7 +200,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
         let dialog = new Dialog({
             //@ts-ignore
             title: `${this.i18n.Name}`,
-            content: `<div id="SettingPanel" class="dn-today-setting" style="height: 100%"></div>`,
+            content: `<div id="SettingPanel" style="height: 100%"></div>`,
             width: this.isMobile ? '100%' :'60rem',
             height: this.isMobile ? '100%' :'34rem',
             destroyCallback: () => {

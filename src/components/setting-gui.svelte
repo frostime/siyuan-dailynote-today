@@ -219,7 +219,7 @@
     }
 </script>
 
-<div class="fn__flex-1 fn__flex config__panel dn-today-setting">
+<div class="fn__flex-1 fn__flex config__panel">
     <ul class="b3-tab-bar b3-list b3-list--background">
         {#each groups as group}
             <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -284,32 +284,30 @@
 
     /* mobile opt */
     @media screen and (max-width: 768px) {
-        :global(.dn-today-setting) {
-        /* ^ needed it to touch b3-list-item and other subs, but also selected to this panel */
-            .config__panel > .b3-tab-bar {
-                width: 100px;
-            }
+        .config__panel > .b3-tab-bar {
+            width: 100px;
+        }
 
-            .b3-list-item__text {
-                font-size: 12px;
-            }
+        .b3-list-item__text {
+            font-size: 12px;
+        }
 
-            .b3-list-item__text {
-                font-size: 14px;
-                overflow: visible !important;
-                text-overflow: clip !important;
-                white-space: normal !important;
-                word-wrap: break-word !important;
-                display: block !important;
-            }
+        .b3-list-item__text {
+            font-size: 14px;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            display: block !important;
+        }
 
-            .b3-list-item {
-                height: 40px !important;
-                line-height: 40px !important;
-                padding: 0 0.5rem !important;
-                white-space: normal !important;
-                word-break: break-word !important;
-            }
+        /* tab div */
+        .b3-list-item {
+            height: 40px !important;
+            line-height: 40px !important; /* at least finger can touch */
+            padding: 0 0.5rem !important;
+            white-space: normal !important;
+            word-break: break-word !important;
         }
     }
 </style>
