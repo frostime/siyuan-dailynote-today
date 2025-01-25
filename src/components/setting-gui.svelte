@@ -288,11 +288,11 @@
             width: 100px;
         }
 
-        :global(.b3-list-item__text) {
+        .b3-list-item__text {
             font-size: 12px;
         }
 
-        :global(.b3-list-item__text) {
+        .b3-list-item__text {
             font-size: 14px;
             overflow: visible !important; /* non chinese opt */
             text-overflow: clip !important; /* non chinese opt */
@@ -302,7 +302,7 @@
         }
 
         /* tab div */
-        :global(.b3-list-item) {
+        .b3-list-item {
             height: 40px !important; /* at least finger can touch */
             line-height: 40px !important;
             padding: 0 0.5rem !important;
