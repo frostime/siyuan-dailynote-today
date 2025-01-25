@@ -285,7 +285,7 @@
     /* mobile opt */
     @media screen and (max-width: 768px) {
         :global(.dn-today-setting) {
-        /* ^ needed it to touch b3-list-item__text, but also selected to this panel */
+        /* ^ needed it to touch b3-list-item and other subs, but also selected to this panel */
             .config__panel > .b3-tab-bar {
                 width: 100px;
             }
