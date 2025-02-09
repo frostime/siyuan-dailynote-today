@@ -249,6 +249,7 @@ export async function reserveBlock(blockId) {
                 doReserveBlock(blockId, resDate)
             },
             width: isMobile() ? "92vw" : "520px",
+            maxHeight: "85%",
         })
         return;
     }

@@ -93,8 +93,15 @@ export default class DailyNoteTodayPlugin extends Plugin {
                     if (datatype === 'NodeParagraph') {
                         let parent = block?.parentElement;
                         datatype = parent?.getAttribute('data-type');
-                        if (datatype === 'NodeListItem') {
-                            block = parent;
+                        // Check if parent is one of the specified block types
+                        if (['NodeListItem', 'NodeSuperBlock', 'NodeBlockquote'].includes(datatype)) {
+                            // 获取直接子元素中带有 data-node-id 的元素
+                            const childrenWithId = Array.from(parent.children).filter(child => 
+                                child.hasAttribute('data-node-id')
+                            );
+                            if (childrenWithId?.[0] === block) {
+                                block = parent;
+                            }
                         }
                     }
 
@@ -267,5 +274,3 @@ export default class DailyNoteTodayPlugin extends Plugin {
         this.routineHandler.onPluginUnload();
     }
 }
-
-
