@@ -1,4 +1,4 @@
-import { IMenuItemOption, Menu, showMessage } from "siyuan";
+import { IMenu, Menu, showMessage } from "siyuan";
 import { currentDiaryStatus, openDiary } from "../func";
 import notebooks from "../global-notebooks";
 import { settings } from "../global-status";
@@ -120,11 +120,11 @@ export class ToolbarMenuItem {
                 continue;
             }
 
-            let item: IMenuItemOption = {
+            let item: IMenu = {
                 label: notebook.name,
                 icon: this.iconStatus.get(notebook.id),
                 click: async () => {
-                    if (notebook.id === notebooks.default.id) {
+                    if (notebook.id === notebooks.default?.id) {
                         await openDiary(notebook);
                         this.plugin.routineHandler.tryAutoInsertResv();
                     } else {

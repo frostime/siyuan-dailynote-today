@@ -192,6 +192,7 @@ TrashBinDocContent: |-
   - 如果你觉得这个回收站文档很碍眼，也完全可以将其删除，插件在需要的时候会重新创建回收站文档
 UpdateAll: 笔记本状态已更新
 global_notebooks_ts:
+  default_notebook_closed: '注意: 默认笔记本目前处于关闭状态!'
   invalid_notebook_id_config: 你将笔记本 ID 错误地配置为了块 "{0}" 的 ID {1}; 插件已经自动将默认笔记本调整为块所在的笔记本
     {2}
 reserve_ts:

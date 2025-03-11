@@ -199,6 +199,7 @@ interface I18n {
     TrashBinDocContent: string;
     UpdateAll: string;
     global_notebooks_ts: {
+        default_notebook_closed: string;
         invalid_notebook_id_config: string;
     };
     reserve_ts: {

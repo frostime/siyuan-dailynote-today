@@ -6,7 +6,7 @@
  * @LastEditTime : 2025-01-24 19:56:41
  * @Description  : 
  */
-import { confirm } from 'siyuan';
+import { confirm, showMessage } from 'siyuan';
 import { queryNotebooks } from './func';
 import { settings } from './global-status';
 import { getBlockByID } from './serverApi';
@@ -99,6 +99,9 @@ class Notebooks {
             }
         } else {
             this.default = this.get(0);
+        }
+        if (this.default?.closed === true) {
+            showMessage(i18n.Name + ((` | 注意: 默认笔记本目前处于关闭状态!`)))
         }
         return this.default !== undefined;
     }

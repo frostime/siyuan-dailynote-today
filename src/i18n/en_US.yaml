@@ -226,6 +226,7 @@ TrashBinDocContent: |-
   - If you find this trash bin document bothersome, you can delete it entirely. The plugin will recreate the trash bin document when needed.
 UpdateAll: Notebook status updated
 global_notebooks_ts:
+  default_notebook_closed: 'Note: The default notebook is currently closed!'
   invalid_notebook_id_config: You wrongly configured the notebook ID as the ID {1}
     of block "{0}""; the plugin has automatically adjusted the default notebook to
     the notebook where the block is located {2}
