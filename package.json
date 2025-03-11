@@ -1,6 +1,6 @@
 {
   "name": "siyuan-dailynote-today",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "",
   "main": ".src/index.js",
   "keywords": [],
@@ -27,7 +27,7 @@
     "minimist": "^1.2.8",
     "rollup-plugin-livereload": "^2.0.5",
     "sass": "^1.72.0",
-    "siyuan": "1.0.3",
+    "siyuan": "1.1.0",
     "siyuan-plugin-cli": "^1.2.0",
     "svelte": "^4.2.19",
     "ts-node": "^10.9.2",
@@ -37,9 +37,9 @@
     "vite-plugin-zip-pack": "^1.2.2"
   },
   "dependencies": {
-    "chrono-node": "^2.6.3",
-    "sy-plugin-changelog": "^0.0.7",
     "@frostime/siyuan-plugin-kits": "^1.5.3",
-    "p-limit": "^5.0.0"
+    "chrono-node": "^2.6.3",
+    "p-limit": "^5.0.0",
+    "sy-plugin-changelog": "^0.0.7"
   }
 }

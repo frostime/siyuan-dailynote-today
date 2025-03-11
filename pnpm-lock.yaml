@@ -52,8 +52,8 @@ importers:
         specifier: ^1.72.0
         version: 1.77.4
       siyuan:
-        specifier: 1.0.3
-        version: 1.0.3
+        specifier: 1.1.0
+        version: 1.1.0
       siyuan-plugin-cli:
         specifier: ^1.2.0
         version: 1.2.0
@@ -737,11 +737,8 @@ packages:
     resolution: {integrity: sha512-8Xg42Jd0zvfnwkVsPUCNbcAEZnyllT1JGaKzNGXNMwM0R/qdClJuoBiPmSrj5M03EHVGwhSzEYRRO0qc1uMr4g==}
     hasBin: true
 
-  siyuan@1.0.3:
-    resolution: {integrity: sha512-AbaIcts3BosLyEnxF+Pq+H2z41Qy6UNbr/RIvdleZ9Ay1tN2ZTRIFG7Wo7USZTsXKL4/D0CjUJ9G9FzG1yg+2A==}
-
-  siyuan@1.0.8:
-    resolution: {integrity: sha512-m6IVT70n8yoNnabjwNn6D0w0s+Dz63JO4fCiyso09JZSGbsreuTrxb1xM9IrVXIEqm5IT7tkU9O0ks1cdHR6Cw==}
+  siyuan@1.1.0:
+    resolution: {integrity: sha512-XZqoA+kiVSTJ/6LHcHenzMGzWJ1WfDvy/0DJEPLzj1sazGnrW5lwkuDIpR1LfEemUEf6jf0KUJgSUif2phEHPQ==}
 
   source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
@@ -964,7 +961,7 @@ snapshots:
 
   '@frostime/siyuan-plugin-kits@1.5.3':
     dependencies:
-      siyuan: 1.0.8
+      siyuan: 1.1.0
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -1476,9 +1473,7 @@ snapshots:
 
   siyuan-plugin-cli@1.2.0: {}
 
-  siyuan@1.0.3: {}
-
-  siyuan@1.0.8: {}
+  siyuan@1.1.0: {}
 
   source-map-js@1.0.2: {}
 

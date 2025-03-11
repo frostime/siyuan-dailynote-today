@@ -3,10 +3,10 @@
  * @Author       : frostime
  * @Date         : 2023-11-12 19:53:10
  * @FilePath     : /src/func/dailynote/open-dn.ts
- * @LastEditTime : 2024-09-26 16:04:39
+ * @LastEditTime : 2025-03-08 20:20:43
  * @Description  : 
  */
-import { showMessage, confirm, openTab, openMobileFileById } from 'siyuan';
+import { showMessage, confirm, openTab, openMobileFileById, Constants } from 'siyuan';
 
 
 import notebooks from "@/global-notebooks";
@@ -32,7 +32,8 @@ export async function createDiary(notebook: Notebook, todayDiaryHpath: string) {
 export async function openDoc(docId: DocumentId) {
     //打开文档
     if (isMobile === true) {
-        openMobileFileById(utils.app, docId, ['cb-get-all']);
+        // @RefTo https://github.com/frostime/siyuan-dailynote-today/issues/211
+        openMobileFileById(utils.app, docId, [Constants.CB_GET_SCROLL]);
     } else {
         openTab({
             app: utils.app,

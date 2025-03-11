@@ -143,6 +143,13 @@ function createConfirmDialog(initialDate: Date | null, kramdown: string, matchTe
     if (matchText) {
         kramdown = hightLightStr(kramdown, matchText.index, matchText.text.length);
     }
+
+    // 如果有单行的内容为 `{{{row` `}}}` `{{{col` 的就去掉
+    const pat = ['{{{row', '{{{col', '}}}'];
+    const lines = kramdown.split('\n');
+    const filteredLines = lines.filter(line => !pat.some(p => line.trim() === p));
+    kramdown = filteredLines.join('\n');
+
     let html = lute.Md2HTML(kramdown);
     html = `
     <div>
