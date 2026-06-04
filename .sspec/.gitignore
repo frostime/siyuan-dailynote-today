@@ -1,0 +1,17 @@
+# By default, only active requests/changes/asks are tracked
+requests/archive
+changes/archive
+asks/archive
+# Temporary workspace drafts
+tmp/**
+
+# >>> sspec-managed skills >>>
+skills/sspec-align
+skills/sspec-clarify
+skills/sspec-design
+skills/sspec-implement
+skills/sspec-mdtoc
+skills/sspec-plan
+skills/sspec-review
+skills/write-spec-doc
+# <<< sspec-managed skills <<<
