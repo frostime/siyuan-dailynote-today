@@ -10,3 +10,4 @@ index.css
 index.js
 /i18n
 !src/i18n
+.pi-input.md
