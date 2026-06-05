@@ -48,6 +48,8 @@ DailyNoteView:
   Duplicate: 重复
   DuplicateHint: 这个日期和笔记本有多个 Daily Note，默认显示最早创建的文档
   Expand: 展开
+  Future: 未来日期
+  FutureHint: 未来日期不会自动创建 Daily Note
   Missing: 未创建
   MissingHint: 浏览不会创建文档；只有点击按钮才写入
   Month: 月

@@ -5,7 +5,7 @@
     export let lanes: DailyNoteLane[] = [];
 </script>
 
-<section class="dnt-view__lanes">
+<section class="dnt-view__lanes" style="--dnt-view-lane-count: {Math.max(lanes.length, 1)};">
     {#each lanes as lane (lane.key)}
         <DailyNoteLane {app} {lane} />
     {/each}

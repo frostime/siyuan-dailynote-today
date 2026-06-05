@@ -1,6 +1,6 @@
 ---
 change: "add-dailynote-view"
-updated: "2026-06-05T17:40+08:00"
+updated: "2026-06-05T19:36+08:00"
 ---
 
 # Tasks
@@ -48,6 +48,16 @@ updated: "2026-06-05T17:40+08:00"
 - [ ] Update `tasks.md` progress and `memory.md` before review.
 **Verification**: `pnpm build` succeeds; manual checklist passes; change status ready for Review.
 
+### Feedback Tasks (→ [001-review-ui-and-protyle-fixes](./revisions/001-review-ui-and-protyle-fixes.md)) ✅
+- [x] Add active visual state for the current view preset in `src/components/dailynote-view/view-toolbar.svelte`.
+- [x] Re-layout toolbar controls into context-aware groups and hide meaningless controls for current mode/axis.
+- [x] Change content lanes from fixed width to adaptive min-width grid in `src/components/dailynote-view/content-lanes.svelte` and `src/index.scss`.
+- [x] Prevent anchor date navigation beyond today while allowing future lanes in centered multi-day views.
+- [x] Add a non-writable future daily-note cell state instead of a create action for future cells.
+- [x] Fix lane resolution lifecycle so missing/single/duplicate states survive prop updates.
+- [x] Fix Protyle host lifecycle so it remounts when `docId` changes.
+**Verification**: `pnpm build` succeeds; user screenshots need re-check in SiYuan runtime.
+
 ---
 
 ## Progress
@@ -62,9 +72,11 @@ updated: "2026-06-05T17:40+08:00"
 | Phase 4 | 100% | ✅ |
 | Phase 5 | 100% | ✅ |
 | Phase 6 | 0% | ⏳ |
+| Feedback 001 | 100% | ✅ |
 
 **Recent**:
 - [2026-06-05T17:40+08:00] Plan initialized after design approval.
 - [2026-06-05T17:45+08:00] Phase 1 complete: dependency, types, i18n; `pnpm build` passes.
 - [2026-06-05T17:47+08:00] Phase 2 complete: state helpers and coordinate resolver; `pnpm build` passes.
 - [2026-06-05T17:55+08:00] Phases 3-5 complete: custom tab wiring, content lanes, calendar body, and styles; `pnpm build` passes.
+- [2026-06-05T19:36+08:00] Feedback 001 complete: toolbar state/layout, adaptive lanes, future cells, lane refresh, and Protyle remount; `pnpm build` passes.

@@ -20,6 +20,19 @@ export function normalizeDate(date: Date): Date {
     return normalized;
 }
 
+export function todayDate(): Date {
+    return normalizeDate(new Date());
+}
+
+export function isFutureDate(date: Date): boolean {
+    return normalizeDate(date).getTime() > todayDate().getTime();
+}
+
+export function clampToToday(date: Date): Date {
+    const normalized = normalizeDate(date);
+    return isFutureDate(normalized) ? todayDate() : normalized;
+}
+
 export function addDays(date: Date, days: number): Date {
     const next = normalizeDate(date);
     next.setDate(next.getDate() + days);
@@ -30,7 +43,7 @@ export function defaultDailyNoteViewState(): DailyNoteViewState {
     const notebook = notebooks.default || notebooks.get(0);
     return {
         mode: 'content',
-        anchorDate: normalizeDate(new Date()),
+        anchorDate: todayDate(),
         anchorNotebookId: notebook?.id,
         axis: 'time',
         count: 1,
@@ -59,7 +72,7 @@ export function shiftNotebook(notebookId: NotebookId, offset: number): NotebookI
 
 export function applyPreset(state: DailyNoteViewState, preset: 'today' | 'three-days' | 'notebooks' | 'week' | 'month'): DailyNoteViewState {
     if (preset === 'today') {
-        return { ...state, mode: 'content', axis: 'time', count: 1, anchorDate: normalizeDate(new Date()) };
+        return { ...state, mode: 'content', axis: 'time', count: 1, anchorDate: todayDate() };
     }
     if (preset === 'three-days') {
         return { ...state, mode: 'content', axis: 'time', count: 3 };

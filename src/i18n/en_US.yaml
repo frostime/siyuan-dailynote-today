@@ -59,6 +59,8 @@ DailyNoteView:
   Duplicate: Duplicate
   DuplicateHint: This date and notebook have multiple Daily Notes. The earliest-created document is shown by default
   Expand: Expand
+  Future: Future date
+  FutureHint: Future dates do not auto-create Daily Notes
   Missing: Missing
   MissingHint: Browsing does not create a document; only this button writes
   Month: Month

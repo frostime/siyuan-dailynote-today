@@ -39,6 +39,8 @@ interface I18n {
         Duplicate: string;
         DuplicateHint: string;
         Expand: string;
+        Future: string;
+        FutureHint: string;
         Missing: string;
         MissingHint: string;
         Month: string;

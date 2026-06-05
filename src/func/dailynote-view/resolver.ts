@@ -2,6 +2,7 @@ import { createDailynote, getDailynoteHpath, searchDailynote } from "@frostime/s
 
 import * as serverApi from "@/serverApi";
 import { app } from "@/utils";
+import { isFutureDate } from "./state";
 
 function sortDocsByCreated(docs: DocBlock[]): DocBlock[] {
     return docs.slice().sort((a, b) => a.created.localeCompare(b.created));
@@ -15,7 +16,9 @@ export async function resolveDailyNoteCell(notebook: Notebook, date: Date): Prom
 
     const docs = result || [];
     if (docs.length === 0) {
-        return { status: 'missing', hpath };
+        return isFutureDate(date)
+            ? { status: 'future', hpath }
+            : { status: 'missing', hpath };
     }
 
     const sorted = sortDocsByCreated(docs);

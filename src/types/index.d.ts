@@ -109,6 +109,7 @@ type DailyNoteViewState = {
 
 type DailyNoteCell =
     | { status: 'missing'; hpath: string }
+    | { status: 'future'; hpath: string }
     | { status: 'single'; doc: DocBlock; hpath: string }
     | { status: 'duplicate'; primary: DocBlock; docs: DocBlock[]; hpath: string };
 

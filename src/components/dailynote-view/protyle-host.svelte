@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy, tick } from "svelte";
     import { Protyle } from "siyuan";
 
     export let app: any;
@@ -7,8 +7,14 @@
 
     let target: HTMLDivElement;
     let protyle: Protyle;
+    let loadedDocId: DocumentId;
 
-    onMount(() => {
+    async function load() {
+        if (!target || loadedDocId === docId) {
+            return;
+        }
+        unload();
+        await tick();
         protyle = new Protyle(app, target, {
             mode: "wysiwyg",
             action: ["cb-get-all"],
@@ -22,12 +28,20 @@
                 breadcrumbDocName: false,
             },
         });
-    });
+        loadedDocId = docId;
+    }
 
-    onDestroy(() => {
+    function unload() {
         protyle?.destroy();
         protyle = null;
-    });
+        loadedDocId = null;
+    }
+
+    $: if (target && docId) {
+        load();
+    }
+
+    onDestroy(unload);
 </script>
 
 <div class="dnt-view__protyle" bind:this={target}></div>

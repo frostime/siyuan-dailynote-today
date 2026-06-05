@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { applyPreset, buildLaneSeeds, defaultDailyNoteViewState, findNotebook, normalizeDate } from "@/func/dailynote-view/state";
+    import { applyPreset, buildLaneSeeds, clampToToday, defaultDailyNoteViewState, findNotebook } from "@/func/dailynote-view/state";
     import ViewToolbar from "./view-toolbar.svelte";
     import ContentLanes from "./content-lanes.svelte";
     import CalendarGrid from "./calendar-grid.svelte";
@@ -14,7 +14,7 @@
     function setState(next: DailyNoteViewState) {
         state = {
             ...next,
-            anchorDate: normalizeDate(next.anchorDate),
+            anchorDate: clampToToday(next.anchorDate),
             count: next.axis === 'time' && next.count === 'all' ? 1 : next.count,
         };
     }

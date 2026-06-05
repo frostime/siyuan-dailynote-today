@@ -7,6 +7,9 @@ reference:
 - source: .sspec/requests/26-06-04T18-02_add-dailynote-view.md
   type: request
   note: Linked from request
+- source: .sspec/changes/26-06-05T17-01_add-dailynote-view/revisions/001-review-ui-and-protyle-fixes.md
+  type: revision
+  note: Review feedback: toolbar, lane sizing, future-date, and Protyle lifecycle fixes
 ---
 <!-- MUST follow frontmatter schema:
 status: PLANNING | DOING | REVIEW | DONE | BLOCKED

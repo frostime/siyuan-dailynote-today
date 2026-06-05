@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { createDailyNoteCell, resolveDailyNoteCell } from "@/func/dailynote-view";
     import { dateKey } from "@/func/dailynote-view/state";
     import { i18n } from "@/utils";
@@ -11,24 +10,46 @@
     export let lane: DailyNoteLane;
 
     let loading = true;
+    let cell: DailyNoteCell | null = null;
+    let resolvedKey = '';
+    let resolvingKey = '';
 
-    async function refresh() {
+    async function refresh(force = false) {
+        const key = lane.key;
+        if (!force && (key === resolvedKey || key === resolvingKey)) {
+            return;
+        }
+
+        resolvingKey = key;
         loading = true;
-        lane = {
-            ...lane,
-            cell: await resolveDailyNoteCell(lane.notebook, lane.date),
-        };
+        const resolved = await resolveDailyNoteCell(lane.notebook, lane.date);
+        if (lane.key !== key) {
+            return;
+        }
+
+        cell = resolved;
+        resolvedKey = key;
+        resolvingKey = '';
         loading = false;
     }
 
     async function createDailyNote() {
         const doc = await createDailyNoteCell(lane.notebook, lane.date);
         if (doc) {
-            await refresh();
+            await refresh(true);
         }
     }
 
-    onMount(refresh);
+    function statusText(cell: DailyNoteCell) {
+        if (cell.status === 'single') return i18n.DailyNoteView.exists;
+        if (cell.status === 'missing') return i18n.DailyNoteView.Missing;
+        if (cell.status === 'future') return i18n.DailyNoteView.Future;
+        return i18n.DailyNoteView.Duplicate;
+    }
+
+    $: if (lane?.key && lane.key !== resolvedKey && lane.key !== resolvingKey) {
+        refresh();
+    }
 </script>
 
 <article class="dnt-view__lane">
@@ -37,20 +58,24 @@
             <div class="dnt-view__lane-date">{dateKey(lane.date)}</div>
             <div class="dnt-view__lane-notebook">{lane.notebook.name}</div>
         </div>
-        {#if lane.cell}
-            <span class="dnt-view__status dnt-view__status--{lane.cell.status}">
-                {lane.cell.status === 'single' ? i18n.DailyNoteView.exists : lane.cell.status === 'missing' ? i18n.DailyNoteView.Missing : i18n.DailyNoteView.Duplicate}
-            </span>
+        {#if cell}
+            <span class="dnt-view__status dnt-view__status--{cell.status}">{statusText(cell)}</span>
         {/if}
     </header>
 
     {#if loading}
         <div class="dnt-view__empty">Loading...</div>
-    {:else if lane.cell?.status === 'missing'}
-        <MissingDailyNote cell={lane.cell} on:create={createDailyNote} />
-    {:else if lane.cell?.status === 'single'}
-        <ProtyleHost {app} docId={lane.cell.doc.id} />
-    {:else if lane.cell?.status === 'duplicate'}
-        <DuplicateDailyNote {app} cell={lane.cell} />
+    {:else if cell?.status === 'missing'}
+        <MissingDailyNote cell={cell} on:create={createDailyNote} />
+    {:else if cell?.status === 'future'}
+        <div class="dnt-view__empty">
+            <strong>{i18n.DailyNoteView.Future}</strong>
+            <code>{cell.hpath}</code>
+            <span>{i18n.DailyNoteView.FutureHint}</span>
+        </div>
+    {:else if cell?.status === 'single'}
+        <ProtyleHost {app} docId={cell.doc.id} />
+    {:else if cell?.status === 'duplicate'}
+        <DuplicateDailyNote {app} cell={cell} />
     {/if}
 </article>
