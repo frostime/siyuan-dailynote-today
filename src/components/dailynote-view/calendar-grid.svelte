@@ -1,17 +1,21 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher } from "svelte";
     import { listDailynote } from "@frostime/siyuan-plugin-kits";
-    import { dateKey, normalizeDate } from "@/func/dailynote-view/state";
+    import { dateKey, normalizeDate, visibleNotebooks } from "@/func/dailynote-view/state";
     import { i18n } from "@/utils";
+
+    type CalendarStatus = 'single' | 'duplicate';
+    type CalendarStatusMap = Map<string, Map<NotebookId, CalendarStatus>>;
 
     export let mode: Extract<DailyNoteViewMode, 'week' | 'month'>;
     export let anchorDate: Date;
     export let notebook: Notebook;
 
-    const dispatch = createEventDispatcher<{ selectDate: Date }>();
+    const dispatch = createEventDispatcher<{ selectDate: { date: Date; notebookId: NotebookId } }>();
 
     let cells: Date[] = [];
-    let status = new Map<string, 'single' | 'duplicate'>();
+    let notebooks: Notebook[] = [];
+    let status: CalendarStatusMap = new Map();
 
     function startOfWeek(date: Date): Date {
         const start = normalizeDate(date);
@@ -40,56 +44,112 @@
         });
     }
 
+    function groupDocs(docs: any[]): CalendarStatusMap {
+        const grouped = new Map<string, Map<NotebookId, number>>();
+        docs.forEach((doc) => {
+            if (!doc.value || !notebooks.some((notebook) => notebook.id === doc.box)) return;
+            const key = `${doc.value.slice(0, 4)}-${doc.value.slice(4, 6)}-${doc.value.slice(6, 8)}`;
+            if (!grouped.has(key)) {
+                grouped.set(key, new Map());
+            }
+            const dateGroup = grouped.get(key);
+            dateGroup.set(doc.box, (dateGroup.get(doc.box) || 0) + 1);
+        });
+
+        const result: CalendarStatusMap = new Map();
+        grouped.forEach((byNotebook, key) => {
+            result.set(key, new Map(Array.from(byNotebook.entries()).map(([box, count]) => [box, count > 1 ? 'duplicate' : 'single'])));
+        });
+        return result;
+    }
+
     async function refreshStatus() {
-        if (!notebook || cells.length === 0) {
+        notebooks = visibleNotebooks();
+        if (cells.length === 0 || notebooks.length === 0) {
+            status = new Map();
             return;
         }
         const docs = await listDailynote({
-            boxId: notebook.id,
             after: cells[0],
             before: cells[cells.length - 1],
-            limit: 512,
+            limit: 2048,
         });
-        const grouped = new Map<string, number>();
-        docs.forEach((doc: any) => {
-            if (!doc.value) return;
-            const key = `${doc.value.slice(0, 4)}-${doc.value.slice(4, 6)}-${doc.value.slice(6, 8)}`;
-            grouped.set(key, (grouped.get(key) || 0) + 1);
-        });
-        status = new Map(Array.from(grouped.entries()).map(([key, count]) => [key, count > 1 ? 'duplicate' : 'single']));
+        status = groupDocs(docs);
     }
 
-    $: if (mode && anchorDate && notebook) {
+    function selectDate(date: Date, notebookId?: NotebookId) {
+        dispatch('selectDate', { date, notebookId: notebookId || notebook?.id || notebooks[0]?.id });
+    }
+
+    function notebookStatus(date: Date, notebookId: NotebookId): CalendarStatus | undefined {
+        return status.get(dateKey(date))?.get(notebookId);
+    }
+
+    function notebooksWithDailyNote(date: Date): Array<{ notebook: Notebook; status: CalendarStatus }> {
+        const byNotebook = status.get(dateKey(date));
+        if (!byNotebook) return [];
+        return notebooks
+            .filter((notebook) => byNotebook.has(notebook.id))
+            .map((notebook) => ({ notebook, status: byNotebook.get(notebook.id) }));
+    }
+
+    $: if (mode && anchorDate) {
         buildCells();
         refreshStatus();
     }
-
-    onMount(() => {
-        buildCells();
-        refreshStatus();
-    });
 </script>
 
-<section class="dnt-view__calendar">
+<section class="dnt-view__calendar dnt-view__calendar--{mode}">
     <header class="dnt-view__calendar-head">
         <strong>{mode === 'week' ? i18n.DailyNoteView.Week : i18n.DailyNoteView.Month}</strong>
-        <span>{i18n.DailyNoteView.Notebook}: {notebook?.name}</span>
+        <span>{i18n.DailyNoteView.Notebooks}: {notebooks.length}</span>
     </header>
-    <div class="dnt-view__calendar-grid">
-        {#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as day}
-            <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{day}</div>
-        {/each}
-        {#each cells as date}
-            {@const key = dateKey(date)}
-            {@const cellStatus = status.get(key)}
-            <button class="dnt-view__calendar-cell" on:click={() => dispatch('selectDate', date)}>
-                <span>{date.getDate()}</span>
-                {#if cellStatus === 'single'}
-                    <span class="dnt-view__calendar-marker">● DN</span>
-                {:else if cellStatus === 'duplicate'}
-                    <span class="dnt-view__calendar-marker dnt-view__calendar-marker--duplicate">⚠ dup</span>
-                {/if}
-            </button>
-        {/each}
-    </div>
+
+    {#if mode === 'week'}
+        <div class="dnt-view__calendar-week-grid">
+            <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{i18n.DailyNoteView.Notebook}</div>
+            {#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as day, index}
+                <div class="dnt-view__calendar-cell dnt-view__calendar-dow">
+                    {day} {cells[index]?.getDate()}
+                </div>
+            {/each}
+            {#each notebooks as rowNotebook}
+                <div class="dnt-view__calendar-cell dnt-view__calendar-notebook">{rowNotebook.name}</div>
+                {#each cells as date}
+                    {@const cellStatus = notebookStatus(date, rowNotebook.id)}
+                    <button class="dnt-view__calendar-cell" on:click={() => selectDate(date, rowNotebook.id)}>
+                        {#if cellStatus === 'single'}
+                            <span class="dnt-view__calendar-marker">●</span>
+                        {:else if cellStatus === 'duplicate'}
+                            <span class="dnt-view__calendar-marker dnt-view__calendar-marker--duplicate">⚠</span>
+                        {:else}
+                            <span class="dnt-view__calendar-empty">—</span>
+                        {/if}
+                    </button>
+                {/each}
+            {/each}
+        </div>
+    {:else}
+        <div class="dnt-view__calendar-grid">
+            {#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as day}
+                <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{day}</div>
+            {/each}
+            {#each cells as date}
+                {@const dateNotebooks = notebooksWithDailyNote(date)}
+                <div class="dnt-view__calendar-cell" on:click={() => selectDate(date)} on:keydown={() => {}}>
+                    <span>{date.getDate()}</span>
+                    <div class="dnt-view__calendar-notebook-list">
+                        {#each dateNotebooks.slice(0, 4) as item}
+                            <button class="dnt-view__calendar-notebook-label" on:click|stopPropagation={() => selectDate(date, item.notebook.id)}>
+                                {item.status === 'duplicate' ? '⚠ ' : '● '}{item.notebook.name}
+                            </button>
+                        {/each}
+                        {#if dateNotebooks.length > 4}
+                            <span class="dnt-view__calendar-more">+{dateNotebooks.length - 4}</span>
+                        {/if}
+                    </div>
+                </div>
+            {/each}
+        </div>
+    {/if}
 </section>

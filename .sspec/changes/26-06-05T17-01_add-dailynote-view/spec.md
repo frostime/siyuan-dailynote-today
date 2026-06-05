@@ -10,6 +10,9 @@ reference:
 - source: .sspec/changes/26-06-05T17-01_add-dailynote-view/revisions/001-review-ui-and-protyle-fixes.md
   type: revision
   note: Review feedback: toolbar, lane sizing, future-date, and Protyle lifecycle fixes
+- source: .sspec/changes/26-06-05T17-01_add-dailynote-view/revisions/002-calendar-cross-notebook-status.md
+  type: revision
+  note: Review feedback: Week/Month calendar should show cross-notebook daily-note status
 ---
 <!-- MUST follow frontmatter schema:
 status: PLANNING | DOING | REVIEW | DONE | BLOCKED

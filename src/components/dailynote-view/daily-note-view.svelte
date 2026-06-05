@@ -23,11 +23,14 @@
         setState(applyPreset(state, event.detail));
     }
 
-    function selectCalendarDate(event: CustomEvent<Date>) {
+    function selectCalendarDate(event: CustomEvent<{ date: Date; notebookId: NotebookId }>) {
         setState({
             ...state,
             mode: 'content',
-            anchorDate: event.detail,
+            anchorDate: event.detail.date,
+            anchorNotebookId: event.detail.notebookId,
+            axis: 'time',
+            count: 1,
         });
     }
 </script>

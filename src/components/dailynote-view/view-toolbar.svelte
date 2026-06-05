@@ -27,7 +27,7 @@
         return isAnchorToday ? i18n.DailyNoteView.Today : dateKey(state.anchorDate);
     })();
     $: canShiftDateForward = !isFutureDate(addDays(state.anchorDate, 1));
-    $: showNotebookNav = state.mode !== 'content' || state.axis !== 'notebook';
+    $: showNotebookNav = state.mode === 'content' && state.axis === 'time';
     $: showContentOptions = state.mode === 'content';
 
     function presetClass(preset: string) {
@@ -76,7 +76,7 @@
             {#if showNotebookNav}
                 <button class="b3-button b3-button--outline" on:click={() => shiftNotebookBy(-1)}>‹</button>
             {/if}
-            <span class="dnt-view__chip">{state.mode === 'content' && state.axis === 'notebook' ? i18n.DailyNoteView.Notebooks : notebook?.name || '-'}</span>
+            <span class="dnt-view__chip">{state.mode !== 'content' || state.axis === 'notebook' ? i18n.DailyNoteView.Notebooks : notebook?.name || '-'}</span>
             {#if showNotebookNav}
                 <button class="b3-button b3-button--outline" on:click={() => shiftNotebookBy(1)}>›</button>
             {/if}
