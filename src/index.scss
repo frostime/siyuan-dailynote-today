@@ -141,8 +141,15 @@
 .dnt-view__protyle,
 .dnt-view__duplicate {
     flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
     min-height: 0;
     overflow-y: auto;
+}
+
+.dnt-view__protyle > .protyle {
+    width: 100%;
+    min-width: 0;
 }
 
 .dnt-view__empty {
@@ -220,6 +227,11 @@
     text-align: left;
 }
 
+.dnt-view__calendar-cell--today {
+    box-shadow: inset 0 0 0 2px var(--b3-theme-primary-light);
+    background: var(--b3-theme-primary-lightest);
+}
+
 button.dnt-view__calendar-cell {
     cursor: pointer;
 }
@@ -236,6 +248,27 @@ button.dnt-view__calendar-cell {
     position: sticky;
     left: 0;
     z-index: 1;
+}
+
+.dnt-view__calendar-date {
+    font-weight: 600;
+}
+
+.dnt-view__calendar-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.2rem;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--b3-theme-primary-lightest);
+    color: var(--b3-theme-primary);
+    font-size: 0.85rem;
+}
+
+.dnt-view__calendar-pill--duplicate {
+    background: var(--b3-card-warning-background);
+    color: var(--b3-card-warning-color);
 }
 
 .dnt-view__calendar-marker {
@@ -261,14 +294,20 @@ button.dnt-view__calendar-cell {
 
 .dnt-view__calendar-notebook-label {
     overflow: hidden;
-    padding: 0;
+    padding: 2px 6px;
     border: 0;
-    background: transparent;
+    border-radius: 6px;
+    background: var(--b3-theme-primary-lightest);
     color: var(--b3-theme-primary);
     text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
+}
+
+.dnt-view__calendar-notebook-label--duplicate {
+    background: var(--b3-card-warning-background);
+    color: var(--b3-card-warning-color);
 }
 
 .dnt-view__calendar-more {

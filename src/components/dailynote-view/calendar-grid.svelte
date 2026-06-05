@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount, tick } from "svelte";
     import { listDailynote } from "@frostime/siyuan-plugin-kits";
-    import { dateKey, normalizeDate, visibleNotebooks } from "@/func/dailynote-view/state";
+    import { dateKey, normalizeDate, todayDate, visibleNotebooks } from "@/func/dailynote-view/state";
     import { i18n } from "@/utils";
 
     type CalendarStatus = 'single' | 'duplicate';
@@ -16,12 +16,21 @@
     let cells: Date[] = [];
     let notebooks: Notebook[] = [];
     let status: CalendarStatusMap = new Map();
+    let refreshKey = '';
 
     function startOfWeek(date: Date): Date {
         const start = normalizeDate(date);
         const day = start.getDay() || 7;
         start.setDate(start.getDate() - day + 1);
         return start;
+    }
+
+    function shortDate(date: Date): string {
+        return `${date.getMonth() + 1}/${date.getDate()}`;
+    }
+
+    function isToday(date?: Date): boolean {
+        return date ? dateKey(date) === dateKey(todayDate()) : false;
     }
 
     function buildCells() {
@@ -77,16 +86,27 @@
         status = groupDocs(docs);
     }
 
+    async function refreshCalendar(force = false) {
+        const key = `${mode}:${dateKey(anchorDate)}`;
+        if (!force && key === refreshKey) {
+            return;
+        }
+        refreshKey = key;
+        buildCells();
+        await tick();
+        await refreshStatus();
+    }
+
     function selectDate(date: Date, notebookId?: NotebookId) {
         dispatch('selectDate', { date, notebookId: notebookId || notebook?.id || notebooks[0]?.id });
     }
 
-    function notebookStatus(date: Date, notebookId: NotebookId): CalendarStatus | undefined {
-        return status.get(dateKey(date))?.get(notebookId);
+    function notebookStatus(statusMap: CalendarStatusMap, date: Date, notebookId: NotebookId): CalendarStatus | undefined {
+        return statusMap.get(dateKey(date))?.get(notebookId);
     }
 
-    function notebooksWithDailyNote(date: Date): Array<{ notebook: Notebook; status: CalendarStatus }> {
-        const byNotebook = status.get(dateKey(date));
+    function notebooksWithDailyNote(statusMap: CalendarStatusMap, date: Date): Array<{ notebook: Notebook; status: CalendarStatus }> {
+        const byNotebook = statusMap.get(dateKey(date));
         if (!byNotebook) return [];
         return notebooks
             .filter((notebook) => byNotebook.has(notebook.id))
@@ -94,9 +114,12 @@
     }
 
     $: if (mode && anchorDate) {
-        buildCells();
-        refreshStatus();
+        refreshCalendar();
     }
+
+    onMount(() => {
+        refreshCalendar(true);
+    });
 </script>
 
 <section class="dnt-view__calendar dnt-view__calendar--{mode}">
@@ -109,19 +132,20 @@
         <div class="dnt-view__calendar-week-grid">
             <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{i18n.DailyNoteView.Notebook}</div>
             {#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as day, index}
-                <div class="dnt-view__calendar-cell dnt-view__calendar-dow">
-                    {day} {cells[index]?.getDate()}
+                <div class:dnt-view__calendar-cell--today={isToday(cells[index])} class="dnt-view__calendar-cell dnt-view__calendar-dow">
+                    <span>{day}</span>
+                    <span class="dnt-view__calendar-date">{cells[index] ? shortDate(cells[index]) : ''}</span>
                 </div>
             {/each}
             {#each notebooks as rowNotebook}
                 <div class="dnt-view__calendar-cell dnt-view__calendar-notebook">{rowNotebook.name}</div>
                 {#each cells as date}
-                    {@const cellStatus = notebookStatus(date, rowNotebook.id)}
-                    <button class="dnt-view__calendar-cell" on:click={() => selectDate(date, rowNotebook.id)}>
+                    {@const cellStatus = notebookStatus(status, date, rowNotebook.id)}
+                    <button class:dnt-view__calendar-cell--today={isToday(date)} class="dnt-view__calendar-cell" on:click={() => selectDate(date, rowNotebook.id)}>
                         {#if cellStatus === 'single'}
-                            <span class="dnt-view__calendar-marker">●</span>
+                            <span class="dnt-view__calendar-pill">{i18n.DailyNoteView.exists}</span>
                         {:else if cellStatus === 'duplicate'}
-                            <span class="dnt-view__calendar-marker dnt-view__calendar-marker--duplicate">⚠</span>
+                            <span class="dnt-view__calendar-pill dnt-view__calendar-pill--duplicate">{i18n.DailyNoteView.Duplicate}</span>
                         {:else}
                             <span class="dnt-view__calendar-empty">—</span>
                         {/if}
@@ -135,13 +159,13 @@
                 <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{day}</div>
             {/each}
             {#each cells as date}
-                {@const dateNotebooks = notebooksWithDailyNote(date)}
-                <div class="dnt-view__calendar-cell" on:click={() => selectDate(date)} on:keydown={() => {}}>
-                    <span>{date.getDate()}</span>
+                {@const dateNotebooks = notebooksWithDailyNote(status, date)}
+                <div class:dnt-view__calendar-cell--today={isToday(date)} class="dnt-view__calendar-cell" on:click={() => selectDate(date)} on:keydown={() => {}}>
+                    <span class="dnt-view__calendar-date">{date.getDate()}</span>
                     <div class="dnt-view__calendar-notebook-list">
                         {#each dateNotebooks.slice(0, 4) as item}
-                            <button class="dnt-view__calendar-notebook-label" on:click|stopPropagation={() => selectDate(date, item.notebook.id)}>
-                                {item.status === 'duplicate' ? '⚠ ' : '● '}{item.notebook.name}
+                            <button class:dnt-view__calendar-notebook-label--duplicate={item.status === 'duplicate'} class="dnt-view__calendar-notebook-label" on:click|stopPropagation={() => selectDate(date, item.notebook.id)}>
+                                {item.status === 'duplicate' ? '⚠ ' : ''}{item.notebook.name}
                             </button>
                         {/each}
                         {#if dateNotebooks.length > 4}

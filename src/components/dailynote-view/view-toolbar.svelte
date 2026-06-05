@@ -11,7 +11,61 @@
         state: DailyNoteViewState;
     }>();
 
+    function startOfWeek(date: Date): Date {
+        const start = new Date(date);
+        start.setHours(0, 0, 0, 0);
+        const day = start.getDay() || 7;
+        start.setDate(start.getDate() - day + 1);
+        return start;
+    }
+
+    function endOfWeek(date: Date): Date {
+        return addDays(startOfWeek(date), 6);
+    }
+
+    function startOfMonth(date: Date): Date {
+        return new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+
+    function addMonths(date: Date, months: number): Date {
+        return new Date(date.getFullYear(), date.getMonth() + months, 1);
+    }
+
+    function monthKey(date: Date): string {
+        return `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, '0')}`;
+    }
+
+    function periodStartAfterShift(offset: number): Date {
+        if (state.mode === 'week') {
+            return startOfWeek(addDays(state.anchorDate, offset * 7));
+        }
+        if (state.mode === 'month') {
+            return startOfMonth(addMonths(state.anchorDate, offset));
+        }
+        return addDays(state.anchorDate, offset);
+    }
+
+    function periodTargetAfterShift(offset: number): Date {
+        if (state.mode === 'week') {
+            return addDays(state.anchorDate, offset * 7);
+        }
+        if (state.mode === 'month') {
+            return addMonths(state.anchorDate, offset);
+        }
+        return addDays(state.anchorDate, offset);
+    }
+
     $: isAnchorToday = dateKey(state.anchorDate) === dateKey(todayDate());
+    $: isCurrentPeriod = (() => {
+        if (state.mode === 'week') return dateKey(startOfWeek(state.anchorDate)) === dateKey(startOfWeek(todayDate()));
+        if (state.mode === 'month') return monthKey(state.anchorDate) === monthKey(todayDate());
+        return isAnchorToday;
+    })();
+    $: periodLabel = (() => {
+        if (state.mode === 'week') return `${dateKey(startOfWeek(state.anchorDate))} ~ ${dateKey(endOfWeek(state.anchorDate))}`;
+        if (state.mode === 'month') return monthKey(state.anchorDate);
+        return dateKey(state.anchorDate);
+    })();
     $: activePreset = (() => {
         if (state.mode === 'week') return 'week';
         if (state.mode === 'month') return 'month';
@@ -26,7 +80,17 @@
         if (state.count === 3) return i18n.DailyNoteView.ThreeDays;
         return isAnchorToday ? i18n.DailyNoteView.Today : dateKey(state.anchorDate);
     })();
-    $: canShiftDateForward = !isFutureDate(addDays(state.anchorDate, 1));
+    $: canShiftDateForward = (() => {
+        const mode = state.mode;
+        const anchorDate = state.anchorDate;
+        if (mode === 'week') {
+            return !isFutureDate(startOfWeek(addDays(anchorDate, 7)));
+        }
+        if (mode === 'month') {
+            return !isFutureDate(startOfMonth(addMonths(anchorDate, 1)));
+        }
+        return !isFutureDate(addDays(anchorDate, 1));
+    })();
     $: showNotebookNav = state.mode === 'content' && state.axis === 'time';
     $: showContentOptions = state.mode === 'content';
 
@@ -34,12 +98,11 @@
         return `b3-button b3-button--outline ${activePreset === preset ? 'dnt-view__button--active' : ''}`;
     }
 
-    function shiftDate(days: number) {
-        const date = addDays(state.anchorDate, days);
-        if (isFutureDate(date)) {
+    function shiftDate(offset: number) {
+        if (offset > 0 && !canShiftDateForward) {
             return;
         }
-        dispatch('state', { ...state, anchorDate: date });
+        dispatch('state', { ...state, anchorDate: periodTargetAfterShift(offset) });
     }
 
     function setToday() {
@@ -66,9 +129,9 @@
     <div class="dnt-view__controls">
         <div class="dnt-view__control-group">
             <button class="b3-button b3-button--outline" on:click={() => shiftDate(-1)}>‹</button>
-            <span class="dnt-view__chip">{dateKey(state.anchorDate)}</span>
+            <span class="dnt-view__chip">{periodLabel}</span>
             <button class="b3-button b3-button--outline" disabled={!canShiftDateForward} on:click={() => shiftDate(1)}>›</button>
-            <button class="b3-button b3-button--outline" disabled={isAnchorToday} on:click={setToday}>{i18n.DailyNoteView.Today}</button>
+            <button class="b3-button b3-button--outline" disabled={isCurrentPeriod} on:click={setToday}>{i18n.DailyNoteView.Today}</button>
         </div>
 
         <div class="dnt-view__control-group">
