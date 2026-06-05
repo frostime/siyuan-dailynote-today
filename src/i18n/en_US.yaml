@@ -155,6 +155,11 @@ Setting:
     text: The notebook where the daily note is created by default, use the first notebook
       if blank
     title: Default Notebook ID
+  DailyNoteViewLaneMinWidth:
+    invalid: Please enter a valid CSS length, e.g. 24rem, 360px, 30em, 50vw, 80%
+    placeholder: e.g. 24rem or 360px
+    text: Minimum width for each lane in Daily Note View multi-lane note mode. Supports px, rem, em, vw, %
+    title: Daily Note View lane min width
   DisableAutoCreateOnMobile:
     text: This feature is mainly to avoid the problem of inconvenient handling when
       generating conflict diaries in mobile; if this option is turned on, "Open Today's

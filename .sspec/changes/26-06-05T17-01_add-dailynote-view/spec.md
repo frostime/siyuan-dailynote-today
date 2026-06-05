@@ -13,6 +13,9 @@ reference:
 - source: .sspec/changes/26-06-05T17-01_add-dailynote-view/revisions/002-calendar-cross-notebook-status.md
   type: revision
   note: Review feedback: Week/Month calendar should show cross-notebook daily-note status
+- source: .sspec/changes/26-06-05T17-01_add-dailynote-view/revisions/003-configurable-lane-min-width.md
+  type: revision
+  note: Review feedback: Daily Note View lane minimum width should be configurable
 ---
 <!-- MUST follow frontmatter schema:
 status: PLANNING | DOING | REVIEW | DONE | BLOCKED

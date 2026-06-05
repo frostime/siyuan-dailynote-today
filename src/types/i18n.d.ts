@@ -126,6 +126,12 @@ interface I18n {
             text: string;
             title: string;
         };
+        DailyNoteViewLaneMinWidth: {
+            invalid: string;
+            placeholder: string;
+            text: string;
+            title: string;
+        };
         DisableAutoCreateOnMobile: {
             text: string;
             title: string;

@@ -144,6 +144,7 @@ type SettingKey =
     | 'ExpandGutterMenu'
     | 'PopupReserveDialog'
     | 'HighlightResv'
+    | 'DailyNoteViewLaneMinWidth'
 
     // Feature toggles
     | 'EnableMove'

@@ -1,6 +1,6 @@
 ---
 change: "add-dailynote-view"
-updated: "2026-06-05T20:34+08:00"
+updated: "2026-06-05T22:27+08:00"
 ---
 
 # Tasks
@@ -66,6 +66,14 @@ updated: "2026-06-05T20:34+08:00"
 - [x] Update calendar and toolbar styling so calendar modes do not imply filtering to one notebook.
 **Verification**: `pnpm build` succeeds; Week/Month runtime behavior needs user re-check in SiYuan.
 
+### Feedback Tasks (→ [003-configurable-lane-min-width](./revisions/003-configurable-lane-min-width.md)) ✅
+- [x] Add persisted `DailyNoteViewLaneMinWidth` setting with `24rem` default.
+- [x] Add Settings → Daily Note free-text input for lane minimum width.
+- [x] Reject invalid CSS length input in the settings UI without overwriting the persisted value.
+- [x] Bind content-lane CSS variable to the validated setting and update open lanes on setting changes.
+- [x] Keep month cell overflow visible with the existing `+N` marker instead of adding a new limit setting.
+**Verification**: `pnpm build` succeeds; settings UI/runtime width change needs user re-check in SiYuan.
+
 ---
 
 ## Progress
@@ -82,6 +90,7 @@ updated: "2026-06-05T20:34+08:00"
 | Phase 6 | 0% | ⏳ |
 | Feedback 001 | 100% | ✅ |
 | Feedback 002 | 100% | ✅ |
+| Feedback 003 | 100% | ✅ |
 
 **Recent**:
 - [2026-06-05T17:40+08:00] Plan initialized after design approval.
@@ -90,3 +99,4 @@ updated: "2026-06-05T20:34+08:00"
 - [2026-06-05T17:55+08:00] Phases 3-5 complete: custom tab wiring, content lanes, calendar body, and styles; `pnpm build` passes.
 - [2026-06-05T19:36+08:00] Feedback 001 complete: toolbar state/layout, adaptive lanes, future cells, lane refresh, and Protyle remount; `pnpm build` passes.
 - [2026-06-05T20:34+08:00] Feedback 002 complete: Week/Month calendar views now show cross-notebook status; `pnpm build` passes.
+- [2026-06-05T22:27+08:00] Feedback 003 complete: lane minimum width setting with CSS length validation added; `pnpm build` passes.
