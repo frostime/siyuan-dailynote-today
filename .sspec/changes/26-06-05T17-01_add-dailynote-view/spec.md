@@ -1,6 +1,6 @@
 ---
 name: add-dailynote-view
-status: PLANNING
+status: DOING
 change-type: single
 created: 2026-06-05 17:01:37
 reference:

@@ -1,6 +1,6 @@
 # Memory: add-dailynote-view
 
-**Updated**: 2026-06-05T17:02+08:00
+**Updated**: 2026-06-05T17:56+08:00
 
 ## Git Baseline (Immutable)
 <!-- Captured during `sspec change new` before any change files are written.
@@ -23,7 +23,7 @@ A  .sspec/requests/26-06-04T18-02_add-dailynote-view.md
 <!-- Where we are and what's next — one to three lines.
 This is the resume entry point; the first section an agent reads on cold start. -->
 
-Design revision in progress. User rejected the prototype showing calendar and note lanes simultaneously; next: ensure spec/design/prototype present content and calendar as mutually exclusive body modes, then run @align gate again.
+Implementation is in progress. Phases 1-5 are complete and `pnpm build` passes; next: run/manual SiYuan acceptance for direct-open behavior, Daily Note View presets, create-missing-DN, duplicate display, then finish Phase 6 and move to Review.
 
 ## Key Files
 <!-- Files critical to understanding/continuing this change.
@@ -55,3 +55,5 @@ CLI treats the last valid bullet as the latest milestone.
 - [2026-06-05T17:02+08:00] Design: Created change, drafted spec/design, and added static Daily Note View prototype for alignment.
 - [2026-06-05T17:03+08:00] Design gate: User requested design revision before Plan.
 - [2026-06-05T17:04+08:00] Design revision: Calendar and note lanes must be mutually exclusive body modes in UI/prototype.
+- [2026-06-05T17:40+08:00] Commit: design artifacts committed as `d51e952 📝 docs(sspec): design daily note view`.
+- [2026-06-05T17:56+08:00] Implement: Phases 1-5 complete; dependency bumped, custom tab/UI/resolver implemented, and `pnpm build` passes.

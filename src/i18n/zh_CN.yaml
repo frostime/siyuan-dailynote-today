@@ -40,6 +40,26 @@ Create: 创建日记
 DeReserveMenu:
   Success: 成功取消预约!
   name: 取消预约
+DailyNoteView:
+  CalendarMode: 日历视图
+  ContentMode: 笔记视图
+  Count: 展开数
+  CreateDailyNote: 创建 Daily Note
+  Duplicate: 重复
+  DuplicateHint: 这个日期和笔记本有多个 Daily Note，默认显示最早创建的文档
+  Expand: 展开
+  Missing: 未创建
+  MissingHint: 浏览不会创建文档；只有点击按钮才写入
+  Month: 月
+  Notebook: 笔记本
+  Notebooks: 笔记本
+  OpenDuplicateDocs: 打开重复文档
+  OpenView: 打开 Daily Note View
+  ThreeDays: 三日
+  Today: 今日
+  Week: 周
+  exists: 已创建
+  title: Daily Note View
 DockReserve:
   PopupResv: 查看当日预约
   arial: 今日笔记预约

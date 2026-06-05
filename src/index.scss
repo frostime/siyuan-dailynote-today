@@ -3,3 +3,189 @@
         font-size: 1rem !important;
     }
 }
+
+.dnt-view-tab,
+.dnt-view {
+    height: 100%;
+    min-height: 0;
+    background: var(--b3-theme-background);
+}
+
+.dnt-view__toolbar {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--b3-theme-surface-lighter);
+    background: var(--b3-theme-background);
+}
+
+.dnt-view__title {
+    font-weight: 600;
+}
+
+.dnt-view__presets,
+.dnt-view__controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dnt-view__controls {
+    grid-column: 1 / -1;
+}
+
+.dnt-view__chip {
+    padding: 4px 8px;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 6px;
+    background: var(--b3-theme-surface);
+}
+
+.dnt-view__lanes {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.dnt-view__lane {
+    flex: 0 0 min(42rem, 88vw);
+    min-width: 360px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 8px;
+    background: var(--b3-theme-background);
+}
+
+.dnt-view__lane-head {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--b3-theme-surface-lighter);
+}
+
+.dnt-view__lane-date {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.dnt-view__lane-notebook {
+    color: var(--b3-theme-on-surface-light);
+}
+
+.dnt-view__status {
+    align-self: flex-start;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--b3-theme-surface);
+    color: var(--b3-theme-on-surface-light);
+}
+
+.dnt-view__status--single {
+    color: var(--b3-font-color8);
+}
+
+.dnt-view__status--duplicate {
+    color: var(--b3-font-color13);
+}
+
+.dnt-view__protyle,
+.dnt-view__duplicate {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.dnt-view__empty {
+    flex: 1 1 auto;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 10px;
+    padding: 24px;
+    color: var(--b3-theme-on-surface-light);
+    text-align: center;
+}
+
+.dnt-view__empty code {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: var(--b3-theme-surface);
+}
+
+.dnt-view__warning,
+.dnt-view__duplicate-actions {
+    padding: 8px 12px;
+}
+
+.dnt-view__warning {
+    color: var(--b3-font-color13);
+}
+
+.dnt-view__duplicate-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--b3-theme-surface-lighter);
+}
+
+.dnt-view__calendar {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 12px;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--b3-theme-background);
+}
+
+.dnt-view__calendar-head {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--b3-theme-surface-lighter);
+}
+
+.dnt-view__calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(7rem, 1fr));
+}
+
+.dnt-view__calendar-cell {
+    min-height: 72px;
+    padding: 8px;
+    border: 0;
+    border-right: 1px solid var(--b3-theme-surface-lighter);
+    border-bottom: 1px solid var(--b3-theme-surface-lighter);
+    background: transparent;
+    color: var(--b3-theme-on-background);
+    text-align: left;
+}
+
+.dnt-view__calendar-dow {
+    min-height: auto;
+    font-weight: 600;
+    color: var(--b3-theme-on-surface-light);
+    background: var(--b3-theme-surface);
+}
+
+.dnt-view__calendar-marker {
+    display: block;
+    margin-top: 18px;
+    color: var(--b3-theme-primary);
+}
+
+.dnt-view__calendar-marker--duplicate {
+    color: var(--b3-font-color13);
+}

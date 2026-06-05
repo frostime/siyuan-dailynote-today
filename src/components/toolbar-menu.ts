@@ -84,11 +84,14 @@ export class ToolbarMenuItem {
         if (menuItems.length === 0) {
             showMessage(i18n.toolbar_menu_ts.err_get_user_notebook, 2500, 'error');
             return;
-        } else if (menuItems.length === 1) {
-            menuItems[0].click();
-            return;
         }
 
+        menu.addItem({
+            label: i18n.DailyNoteView.OpenView,
+            icon: 'iconCalendar',
+            click: () => this.plugin.dailyNoteViewHub.open(),
+        });
+        menu.addSeparator();
         for (let item of menuItems) {
             menu.addItem(item);
         }
