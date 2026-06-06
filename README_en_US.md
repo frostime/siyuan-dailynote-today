@@ -21,15 +21,16 @@
 
     * Update with date
     * Hotkey
-  * 3. Right click the icon, quickly configuration.
-  * 4. Reserve a block
+  * 3. Daily Note View: browse notes by date × notebook
+  * 4. Right click the icon, quickly configuration.
+  * 5. Reserve a block
 
     * Hotkey
-    * 4.1 View scheduled appointments
-    * 4.2 Currently supported date templates
-    * 4.2 Notice
-  * 5. Move blocks into today's daily note
-  * 6. Setting pannel
+    * 5.1 View scheduled appointments
+    * 5.2 Currently supported date templates
+    * 5.3 Notice
+  * 6. Move blocks into today's daily note
+  * 7. Setting pannel
 * Compatibel function | Add document attribute to past Daily Notes
 * Special Issues | Duplicate DailyNotes
 * FAQ
@@ -45,8 +46,7 @@
 - This plugin** is mainly for people who use daily note workflow**, so if you're used to making notes in the document tree rather than in your daily notes, then this plugin may not be for you
 - You can use this plugin simply as a tool to **automatically create a diary**, just like logseq who create today's diary on start up.
 - If you **use multiple notebooks** and have the need to write multiple diaries in those notebooks at the same time, you can use this plugin to **quickly open the diary** of a specific notebook
-    - Note: you can only open today's diary (after all, it's called "Daily Note Today")
-    - If you need to quickly open the diary of any notebook at any time, please use the calendar plugin (not yet available, but will in future)
+- If you need to browse past Daily Notes by `date × notebook`, use **Daily Note View**. It checks whether a note exists first, so browsing a missing date does not create a document.
 - If you have the need to take notes in more than one notebook, and feel that it is troublesome to frequently open multiple diaries, you can use the **Move Blocks** feature provided by this plugin to quickly move the blocks in a document to the diary in the specified notebook, avoiding frequent manual switching of notebooks
 - You can also use this plugin as a simple **schedule management** tool. This plugin provides the function of "reservation block", hich can be used as a tool to manage today's errands
 
@@ -105,7 +105,18 @@ At 0 o'clock the plug-in will automatically chime in and update the status of yo
 - SiYuan's built-in hotkey Alt+5 allows for quick access to the daily note document, but the notebook corresponding to the opened daily note may change with user operations.
 - The plugin provides an option in the settings that, when enabled, overrides the default hotkey behavior: after pressing Alt+5, it will only open the daily note of the default notebook set by the plugin.
 
-### 3. Right click the icon, quickly configuration.
+### 3. Daily Note View: browse notes by date × notebook
+
+Click "Open Daily Note View" from the top-bar menu to open a dedicated view for Daily Notes across dates and notebooks.
+
+- Supports Today, Three days, Notebooks, Week, and Month views.
+- Multi-lane note mode shows multiple dates or notebooks horizontally inside one tab, avoiding repeated normal document tabs.
+- Week/Month are status views: Week shows notebook × date status; Month lists notebooks with daily notes inside date cells.
+- Browsing a missing daily note does not create a document; only the "Create Daily Note" button writes.
+- Duplicate daily notes for the same date and notebook are marked, with entries to open duplicate documents.
+- The Daily Note View lane minimum width can be configured in Settings → Daily Note.
+
+### 4. Right click the icon, quickly configuration.
 
 
 ![](asset/IconRightClick-en.png)
@@ -116,7 +127,7 @@ At 0 o'clock the plug-in will automatically chime in and update the status of yo
 - Click "Update" to update the global status
     - Read[FAQ](#q-when-do-i-need-to-update-status) for details
 
-### 4. Reserve a block
+### 5. Reserve a block
 
 You can think of the reservation block as a simple schedule management or task reminder tool. We often encounter such requirements: we need to complete a specific task on a future date. In this case, you can use the reservation block feature:
 
@@ -167,7 +178,7 @@ With custom attributes, you can use SQL to query all reservation blocks. For mor
 
 Press `Shift+Alt+R` to trigger the reservation quickly.
 
-#### 4.1 View scheduled appointments
+#### 5.1 View scheduled appointments
 
 There is a panel provided in the Dock to view scheduled appointments.
 
@@ -180,7 +191,7 @@ Click the counter to the right side of the date, you can view all the reservatio
 Note that only future appointments can be viewed here, and due to the limitation of data query from SiYuan, up to 32 appointments can be viewed at most. If you want to view all appointments more freely, please refer to [FAQs](#q-how-to-view-all-reservation-blocks).
 
 
-#### 4.2 Currently supported date templates
+#### 5.2 Currently supported date templates
 
 - Standard year, month and day
     - `2020-04-01`, `2020/04/01`, `2020.04.01`
@@ -204,7 +215,7 @@ Note that only future appointments can be viewed here, and due to the limitation
 Translated with www.DeepL.com/Translator (free version)
 
 
-####  4.2 Notice
+####  5.3 Notice
 
 1. The embeded block for reservations will be insert automatically only when the diary is created/opened automatically by the plugin
 2. You can use the 'Update' button to manually insert appointment blocks into the diary
@@ -217,7 +228,7 @@ Translated with www.DeepL.com/Translator (free version)
 
 > It's a pity that this version does not support English date mode very well, while it will be improved in later versions.
 
-### 5. Move blocks into today's daily note
+### 6. Move blocks into today's daily note
 
 <!-- ![](asset/MoveBlock.png) -->
 ![](asset/MoveBlock-en.png)
@@ -231,7 +242,7 @@ Translated with www.DeepL.com/Translator (free version)
 
 ![](asset/MoveBlocks.gif)
 
-### 6. Setting pannel
+### 7. Setting pannel
 
 <!-- ![](asset/Setting.png) -->
 ![](asset/Setting-en.png)

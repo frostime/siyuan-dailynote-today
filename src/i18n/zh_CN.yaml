@@ -40,6 +40,28 @@ Create: 创建日记
 DeReserveMenu:
   Success: 成功取消预约!
   name: 取消预约
+DailyNoteView:
+  CalendarMode: 日历视图
+  ContentMode: 笔记视图
+  Count: 展开数
+  CreateDailyNote: 创建 Daily Note
+  Duplicate: 重复
+  DuplicateHint: 这个日期和笔记本有多个 Daily Note，默认显示最早创建的文档
+  Expand: 展开
+  Future: 未来日期
+  FutureHint: 未来日期不会自动创建 Daily Note
+  Missing: 未创建
+  MissingHint: 浏览不会创建文档；只有点击按钮才写入
+  Month: 月
+  Notebook: 笔记本
+  Notebooks: 笔记本
+  OpenDuplicateDocs: 打开重复文档
+  OpenView: 打开 Daily Note View
+  ThreeDays: 三日
+  Today: 今日
+  Week: 周
+  exists: 已创建
+  title: Daily Note View
 DockReserve:
   PopupResv: 查看当日预约
   arial: 今日笔记预约
@@ -113,6 +135,11 @@ Setting:
     placeholder: 请复制笔记本 ID
     text: 设置默认的笔记本 ID, 留空时表示选择排位第一的笔记本
     title: 设置默认笔记本 ID
+  DailyNoteViewLaneMinWidth:
+    invalid: 请输入合法 CSS 长度，例如 30rem、360px、30em、50vw、80%
+    placeholder: 例如 30rem 或 360px
+    text: 设置 Daily Note View 多栏笔记视图中每一栏的最小宽度；支持 px、rem、em、vw、%
+    title: Daily Note View 多栏最小宽度
   DisableAutoCreateOnMobile:
     text: 本功能主要为了避免在移动端遇到生成冲突日记的时候不方便处理的问题; 如果将本选项关闭，则「自动打开 Daily Note」在移动端将不会生效
     title: 移动端强制关闭「自动打开日记」功能

@@ -31,6 +31,29 @@ interface I18n {
         Success: string;
         name: string;
     };
+    DailyNoteView: {
+        CalendarMode: string;
+        ContentMode: string;
+        Count: string;
+        CreateDailyNote: string;
+        Duplicate: string;
+        DuplicateHint: string;
+        Expand: string;
+        Future: string;
+        FutureHint: string;
+        Missing: string;
+        MissingHint: string;
+        Month: string;
+        Notebook: string;
+        Notebooks: string;
+        OpenDuplicateDocs: string;
+        OpenView: string;
+        ThreeDays: string;
+        Today: string;
+        Week: string;
+        exists: string;
+        title: string;
+    };
     DockReserve: {
         PopupResv: string;
         arial: string;
@@ -99,6 +122,12 @@ interface I18n {
             title: string;
         };
         DefaultNotebook: {
+            placeholder: string;
+            text: string;
+            title: string;
+        };
+        DailyNoteViewLaneMinWidth: {
+            invalid: string;
             placeholder: string;
             text: string;
             title: string;

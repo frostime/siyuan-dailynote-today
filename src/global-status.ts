@@ -4,7 +4,7 @@
  * @Date         : 2024-05-21 14:14:08
  * @FilePath     : /src/global-status.ts
  * @LastEditTime : 2025-01-24 19:55:27
- * @Description  : 
+ * @Description  :
  */
 // import { confirm } from 'siyuan';
 import { eventBus } from './event-bus';
@@ -43,6 +43,7 @@ class SettingManager {
         HighlightResv: true as boolean, //高亮显示预约块
         AutoHandleDuplicateMethod: 'None' as TDuplicateHandleMethod, // 自动处理重复日记的方法
         ReplaceAlt5Hotkey: false as boolean, //替换 Alt+5 快捷键
+        DailyNoteViewLaneMinWidth: '30rem' as string, // Daily Note View 多栏最小宽度
     };
 
     constructor() {
@@ -126,4 +127,3 @@ class SettingManager {
 }
 
 export const settings: SettingManager = new SettingManager();
-

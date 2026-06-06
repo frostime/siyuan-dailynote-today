@@ -95,6 +95,31 @@ type DocBlock = Block & {
     type: 'd'
 }
 
+type DailyNoteViewMode = 'content' | 'week' | 'month';
+type DailyNoteViewAxis = 'time' | 'notebook';
+type DailyNoteViewCount = 1 | 3 | 5 | 'all';
+
+type DailyNoteViewState = {
+    mode: DailyNoteViewMode;
+    anchorDate: Date;
+    anchorNotebookId: NotebookId;
+    axis: DailyNoteViewAxis;
+    count: DailyNoteViewCount;
+}
+
+type DailyNoteCell =
+    | { status: 'missing'; hpath: string }
+    | { status: 'future'; hpath: string }
+    | { status: 'single'; doc: DocBlock; hpath: string }
+    | { status: 'duplicate'; primary: DocBlock; docs: DocBlock[]; hpath: string };
+
+type DailyNoteLane = {
+    key: string;
+    date: Date;
+    notebook: Notebook;
+    cell?: DailyNoteCell;
+}
+
 type doOperation = {
     action: string;
     data: string;
@@ -119,6 +144,7 @@ type SettingKey =
     | 'ExpandGutterMenu'
     | 'PopupReserveDialog'
     | 'HighlightResv'
+    | 'DailyNoteViewLaneMinWidth'
 
     // Feature toggles
     | 'EnableMove'

@@ -1,6 +1,8 @@
 <script lang="ts">
-    import { Dialog, confirm } from "siyuan";
+    import { Dialog, confirm, showMessage } from "siyuan";
     import { onDestroy, onMount } from "svelte";
+    import { eventBus } from "@/event-bus";
+    import { dailyNoteViewLaneMinWidth, isDailyNoteViewLaneMinWidth } from "@/func/dailynote-view/settings";
     import { settings } from "../global-status";
     import { DebugKit, i18n } from "../utils";
 
@@ -74,13 +76,21 @@
         },
     ];
 
-    const dailynoteItems: ISettingItem[] = [
+    let dailynoteItems: ISettingItem[] = [
         {
             type: "textinput",
             title: I18n.DefaultNotebook.title,
             description: I18n.DefaultNotebook.text,
             key: "DefaultNotebook",
             value: settings.get("DefaultNotebook"),
+        },
+        {
+            type: "textinput",
+            title: I18n.DailyNoteViewLaneMinWidth.title,
+            description: I18n.DailyNoteViewLaneMinWidth.text,
+            key: "DailyNoteViewLaneMinWidth",
+            value: dailyNoteViewLaneMinWidth(),
+            placeholder: I18n.DailyNoteViewLaneMinWidth.placeholder,
         },
         {
             type: "button",
@@ -203,9 +213,29 @@
         // }
     }
 
+    function resetSettingItemValue(key: string, value: any) {
+        const item = dailynoteItems.find((item) => item.key === key);
+        if (item) {
+            item.value = value;
+            dailynoteItems = dailynoteItems;
+        }
+    }
+
     function onChanged({ detail }) {
         // console.log(detail);
         if (detail.key) {
+            if (detail.key === "DailyNoteViewLaneMinWidth") {
+                const value = `${detail.value}`.trim();
+                if (!isDailyNoteViewLaneMinWidth(value)) {
+                    resetSettingItemValue(detail.key, dailyNoteViewLaneMinWidth());
+                    showMessage(I18n.DailyNoteViewLaneMinWidth.invalid, 3000, 'error');
+                    return;
+                }
+                resetSettingItemValue(detail.key, value);
+                eventBus.publish(eventBus.EventSetting, { key: detail.key, value });
+                return;
+            }
+
             settings.set(detail.key, detail.value);
             if (detail.key === "DefaultNotebook") {
                 if (detail.value !== '' && !notebooks.checkNotebookId(detail.value)) {

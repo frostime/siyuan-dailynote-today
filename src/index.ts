@@ -8,6 +8,7 @@ import { ToolbarMenuItem } from './components/toolbar-menu';
 import { GutterMenu } from './components/gutter-menu';
 
 import { RoutineEventHandler } from './func';
+import { DailyNoteViewHub } from './func/dailynote-view/tab';
 import { updateTodayReservation, reserveBlock, dereserveBlock } from './func/reserve';
 import { updateStyleSheet, removeStyleSheet, toggleGeneralDailynoteKeymap, openDefaultDailyNote } from './func';
 
@@ -34,6 +35,8 @@ export default class DailyNoteTodayPlugin extends Plugin {
     gutterMenu: GutterMenu;
 
     routineHandler: RoutineEventHandler;
+
+    dailyNoteViewHub: DailyNoteViewHub;
 
     async onload() {
         console.debug('Plugin load');
@@ -119,6 +122,7 @@ export default class DailyNoteTodayPlugin extends Plugin {
             }
         });
 
+        this.dailyNoteViewHub = new DailyNoteViewHub(this);
         this.toolbarItem = new ToolbarMenuItem(this);
 
         eventBus.subscribe(eventBus.EventSettingLoaded, this.onSettingLoaded.bind(this));

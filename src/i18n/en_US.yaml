@@ -51,6 +51,28 @@ Create: Create daily note
 DeReserveMenu:
   Success: Cancel reservation success!
   name: Cancel Reservation
+DailyNoteView:
+  CalendarMode: Calendar view
+  ContentMode: Note view
+  Count: Count
+  CreateDailyNote: Create Daily Note
+  Duplicate: Duplicate
+  DuplicateHint: This date and notebook have multiple Daily Notes. The earliest-created document is shown by default
+  Expand: Expand
+  Future: Future date
+  FutureHint: Future dates do not auto-create Daily Notes
+  Missing: Missing
+  MissingHint: Browsing does not create a document; only this button writes
+  Month: Month
+  Notebook: Notebook
+  Notebooks: Notebooks
+  OpenDuplicateDocs: Open duplicate docs
+  OpenView: Open Daily Note View
+  ThreeDays: Three days
+  Today: Today
+  Week: Week
+  exists: Exists
+  title: Daily Note View
 DockReserve:
   PopupResv: Inspect reservations
   arial: Daily Note Today Reservations
@@ -133,6 +155,11 @@ Setting:
     text: The notebook where the daily note is created by default, use the first notebook
       if blank
     title: Default Notebook ID
+  DailyNoteViewLaneMinWidth:
+    invalid: Please enter a valid CSS length, e.g. 30rem, 360px, 30em, 50vw, 80%
+    placeholder: e.g. 30rem or 360px
+    text: Minimum width for each lane in Daily Note View multi-lane note mode. Supports px, rem, em, vw, %
+    title: Daily Note View lane min width
   DisableAutoCreateOnMobile:
     text: This feature is mainly to avoid the problem of inconvenient handling when
       generating conflict diaries in mobile; if this option is turned on, "Open Today's
