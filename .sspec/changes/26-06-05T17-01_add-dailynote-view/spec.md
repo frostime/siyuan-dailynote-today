@@ -16,6 +16,9 @@ reference:
 - source: .sspec/changes/26-06-05T17-01_add-dailynote-view/revisions/003-configurable-lane-min-width.md
   type: revision
   note: Review feedback: Daily Note View lane minimum width should be configurable
+- source: .sspec/changes/26-06-05T17-01_add-dailynote-view/revisions/004-notebook-priority-and-compact-toolbar.md
+  type: revision
+  note: Review feedback: notebook lanes should prioritize existing notes and toolbar should be compact
 ---
 <!-- MUST follow frontmatter schema:
 status: PLANNING | DOING | REVIEW | DONE | BLOCKED

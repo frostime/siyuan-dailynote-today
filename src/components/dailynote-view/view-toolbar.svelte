@@ -1,10 +1,9 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { i18n } from "@/utils";
-    import { addDays, dateKey, isFutureDate, shiftNotebook, todayDate } from "@/func/dailynote-view/state";
+    import { addDays, dateKey, isFutureDate, todayDate, visibleNotebooks } from "@/func/dailynote-view/state";
 
     export let state: DailyNoteViewState;
-    export let notebook: Notebook;
 
     const dispatch = createEventDispatcher<{
         preset: 'today' | 'three-days' | 'notebooks' | 'week' | 'month';
@@ -91,7 +90,8 @@
         }
         return !isFutureDate(addDays(anchorDate, 1));
     })();
-    $: showNotebookNav = state.mode === 'content' && state.axis === 'time';
+    $: notebookOptions = visibleNotebooks();
+    $: showNotebookSelector = state.mode === 'content' && state.axis === 'time';
     $: showContentOptions = state.mode === 'content';
 
     function presetClass(preset: string) {
@@ -109,8 +109,8 @@
         dispatch('state', { ...state, anchorDate: todayDate() });
     }
 
-    function shiftNotebookBy(offset: number) {
-        dispatch('state', { ...state, anchorNotebookId: shiftNotebook(state.anchorNotebookId, offset) });
+    function selectNotebook(event: Event) {
+        dispatch('state', { ...state, anchorNotebookId: (event.currentTarget as HTMLSelectElement).value });
     }
 </script>
 
@@ -134,16 +134,16 @@
             <button class="b3-button b3-button--outline" disabled={isCurrentPeriod} on:click={setToday}>{i18n.DailyNoteView.Today}</button>
         </div>
 
-        <div class="dnt-view__control-group">
-            <span>{i18n.DailyNoteView.Notebook}</span>
-            {#if showNotebookNav}
-                <button class="b3-button b3-button--outline" on:click={() => shiftNotebookBy(-1)}>‹</button>
-            {/if}
-            <span class="dnt-view__chip">{state.mode !== 'content' || state.axis === 'notebook' ? i18n.DailyNoteView.Notebooks : notebook?.name || '-'}</span>
-            {#if showNotebookNav}
-                <button class="b3-button b3-button--outline" on:click={() => shiftNotebookBy(1)}>›</button>
-            {/if}
-        </div>
+        {#if showNotebookSelector}
+            <div class="dnt-view__control-group">
+                <span>{i18n.DailyNoteView.Notebook}</span>
+                <select class="b3-select" value={state.anchorNotebookId} on:change={selectNotebook}>
+                    {#each notebookOptions as option}
+                        <option value={option.id}>{option.name}</option>
+                    {/each}
+                </select>
+            </div>
+        {/if}
 
         {#if showContentOptions}
             <div class="dnt-view__control-group dnt-view__control-group--end">

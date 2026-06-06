@@ -1,4 +1,5 @@
 import { createDailynote, getDailynoteHpath, searchDailynote } from "@frostime/siyuan-plugin-kits";
+import type { Block as KitBlock } from "@frostime/siyuan-plugin-kits";
 
 import * as serverApi from "@/serverApi";
 import { app } from "@/utils";
@@ -8,13 +9,18 @@ function sortDocsByCreated(docs: DocBlock[]): DocBlock[] {
     return docs.slice().sort((a, b) => a.created.localeCompare(b.created));
 }
 
+function normalizeDailyNoteDocs(result: KitBlock | KitBlock[] | null | undefined): DocBlock[] {
+    const blocks = Array.isArray(result) ? result : result ? [result] : [];
+    return blocks.filter((block) => block.type === 'd') as unknown as DocBlock[];
+}
+
 export async function resolveDailyNoteCell(notebook: Notebook, date: Date): Promise<DailyNoteCell> {
     const [hpath, result] = await Promise.all([
         getDailynoteHpath(notebook.id, date),
-        searchDailynote(notebook.id, date, { returnAll: true }) as Promise<DocBlock[] | null>,
+        searchDailynote(notebook.id, date, { returnAll: true }),
     ]);
 
-    const docs = result || [];
+    const docs = normalizeDailyNoteDocs(result);
     if (docs.length === 0) {
         return isFutureDate(date)
             ? { status: 'future', hpath }

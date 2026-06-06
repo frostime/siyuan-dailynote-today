@@ -22,7 +22,7 @@ User requested a settings item for the minimum width of Daily Note View multi-la
 ### Design Impact
 
 - Add a Daily Note View settings helper to normalize and validate lane minimum width.
-- Persist `DailyNoteViewLaneMinWidth`, defaulting to `24rem`.
+- Persist `DailyNoteViewLaneMinWidth`, defaulting to `30rem`.
 - Inject the setting into `.dnt-view__lanes` through `--dnt-view-lane-min-width`.
 - Subscribe content lanes to setting updates so an open Daily Note View can react to setting changes without reopening the tab.
 

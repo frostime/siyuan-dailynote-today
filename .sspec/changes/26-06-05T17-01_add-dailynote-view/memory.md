@@ -1,6 +1,6 @@
 # Memory: add-dailynote-view
 
-**Updated**: 2026-06-05T22:27+08:00
+**Updated**: 2026-06-06T00:47+08:00
 
 ## Git Baseline (Immutable)
 <!-- Captured during `sspec change new` before any change files are written.
@@ -23,7 +23,7 @@ A  .sspec/requests/26-06-04T18-02_add-dailynote-view.md
 <!-- Where we are and what's next — one to three lines.
 This is the resume entry point; the first section an agent reads on cold start. -->
 
-Implementation is in progress. Feedback revisions 001, 002, and 003 are implemented and `pnpm build` passes; next: user retests Daily Note View UI/lane/Protyle/calendar/settings behavior in SiYuan, then run remaining Phase 6 manual acceptance.
+Implementation is in progress. Feedback revisions 001-004 are implemented; subagent review follow-up fixes are applied and `pnpm build` passes. Next: user retests Daily Note View UI/lane/Protyle/calendar/settings behavior in SiYuan, then run remaining Phase 6 manual acceptance.
 
 ## Key Files
 <!-- Files critical to understanding/continuing this change.
@@ -60,3 +60,5 @@ CLI treats the last valid bullet as the latest milestone.
 - [2026-06-05T19:36+08:00] Feedback 001: Implemented toolbar active/context layout, adaptive lane grid, future cell marker, lane refresh lifecycle, and Protyle remount; `pnpm build` passes.
 - [2026-06-05T20:34+08:00] Feedback 002: Implemented cross-notebook Week matrix and Month notebook labels; `pnpm build` passes.
 - [2026-06-05T22:27+08:00] Feedback 003: Implemented configurable Daily Note View lane minimum width with CSS length validation; `pnpm build` passes.
+- [2026-06-05T23:09+08:00] Review follow-up: Unified Daily Note View lane width default to `30rem` and added `searchDailynote` return normalization; `pnpm build` passes.
+- [2026-06-06T00:47+08:00] Feedback 004: Implemented existing-note-first notebook lanes and compact one-line toolbar; `pnpm build` passes.

@@ -1,6 +1,6 @@
 import { settings } from "@/global-status";
 
-export const DEFAULT_DAILY_NOTE_VIEW_LANE_MIN_WIDTH = '24rem';
+export const DEFAULT_DAILY_NOTE_VIEW_LANE_MIN_WIDTH = '30rem';
 export const DAILY_NOTE_VIEW_LANE_MIN_WIDTH_PATTERN = /^(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|vw|%)$/i;
 
 export function isDailyNoteViewLaneMinWidth(value: unknown): boolean {

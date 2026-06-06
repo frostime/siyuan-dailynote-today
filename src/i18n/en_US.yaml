@@ -156,8 +156,8 @@ Setting:
       if blank
     title: Default Notebook ID
   DailyNoteViewLaneMinWidth:
-    invalid: Please enter a valid CSS length, e.g. 24rem, 360px, 30em, 50vw, 80%
-    placeholder: e.g. 24rem or 360px
+    invalid: Please enter a valid CSS length, e.g. 30rem, 360px, 30em, 50vw, 80%
+    placeholder: e.g. 30rem or 360px
     text: Minimum width for each lane in Daily Note View multi-lane note mode. Supports px, rem, em, vw, %
     title: Daily Note View lane min width
   DisableAutoCreateOnMobile:

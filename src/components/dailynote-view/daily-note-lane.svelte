@@ -54,9 +54,10 @@
 
 <article class="dnt-view__lane">
     <header class="dnt-view__lane-head">
-        <div>
-            <div class="dnt-view__lane-date">{dateKey(lane.date)}</div>
-            <div class="dnt-view__lane-notebook">{lane.notebook.name}</div>
+        <div class="dnt-view__lane-title" title="{lane.notebook.name} / {dateKey(lane.date)}">
+            <span>{lane.notebook.name}</span>
+            <span class="dnt-view__lane-separator">/</span>
+            <span>{dateKey(lane.date)}</span>
         </div>
         {#if cell}
             <span class="dnt-view__status dnt-view__status--{cell.status}">{statusText(cell)}</span>
