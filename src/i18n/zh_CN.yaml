@@ -56,12 +56,12 @@ DailyNoteView:
   Notebook: 笔记本
   Notebooks: 笔记本
   OpenDuplicateDocs: 打开重复文档
-  OpenView: 打开 Daily Note View
+  OpenView: 打开日记视图
   ThreeDays: 三日
   Today: 今日
   Week: 周
   exists: 已创建
-  title: Daily Note View
+  title: 日记视图
 DockReserve:
   PopupResv: 查看当日预约
   arial: 今日笔记预约
