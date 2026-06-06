@@ -42,11 +42,13 @@ export function addDays(date: Date, days: number): Date {
 export function defaultDailyNoteViewState(): DailyNoteViewState {
     const notebook = notebooks.default || notebooks.get(0);
     return {
-        mode: 'content',
+        form: 'content',
         anchorDate: todayDate(),
         anchorNotebookId: notebook?.id,
         axis: 'time',
-        count: 1,
+        timeCount: 1,
+        notebookScope: 'all',
+        span: 'week',
     };
 }
 
@@ -70,35 +72,8 @@ export function shiftNotebook(notebookId: NotebookId, offset: number): NotebookI
     return list[next].id;
 }
 
-export function applyPreset(state: DailyNoteViewState, preset: 'today' | 'three-days' | 'notebooks' | 'week' | 'month'): DailyNoteViewState {
-    if (preset === 'today') {
-        return { ...state, mode: 'content', axis: 'time', count: 1, anchorDate: todayDate() };
-    }
-    if (preset === 'three-days') {
-        return { ...state, mode: 'content', axis: 'time', count: 3 };
-    }
-    if (preset === 'notebooks') {
-        return { ...state, mode: 'content', axis: 'notebook', count: 'all' };
-    }
-    return { ...state, mode: preset };
-}
-
-function numericCount(count: DailyNoteViewCount): 1 | 3 | 5 {
-    return typeof count === 'number' ? count : 1;
-}
-
-function centeredNotebookWindow(list: Notebook[], anchorNotebookId: NotebookId, count: 1 | 3 | 5): Notebook[] {
-    if (list.length <= count) {
-        return list;
-    }
-    const current = Math.max(0, list.findIndex((notebook) => notebook.id === anchorNotebookId));
-    let start = current - Math.floor((count - 1) / 2);
-    start = Math.max(0, Math.min(start, list.length - count));
-    return list.slice(start, start + count);
-}
-
 export function buildLaneSeeds(state: DailyNoteViewState): LaneSeed[] {
-    if (state.mode !== 'content') {
+    if (state.form !== 'content') {
         return [];
     }
 
@@ -107,7 +82,7 @@ export function buildLaneSeeds(state: DailyNoteViewState): LaneSeed[] {
         if (!notebook) {
             return [];
         }
-        const count = numericCount(state.count);
+        const count = state.timeCount;
         const startOffset = -Math.floor((count - 1) / 2);
         return Array.from({ length: count }, (_, index) => {
             const date = addDays(state.anchorDate, startOffset + index);
@@ -120,9 +95,10 @@ export function buildLaneSeeds(state: DailyNoteViewState): LaneSeed[] {
     }
 
     const list = visibleNotebooks();
-    const lanes = state.count === 'all'
-        ? list
-        : centeredNotebookWindow(list, state.anchorNotebookId, state.count);
+    const selected = list.find((notebook) => notebook.id === state.anchorNotebookId) ?? list[0];
+    const lanes = state.notebookScope === 'single'
+        ? selected ? [selected] : []
+        : list;
 
     return lanes.map((notebook) => ({
         key: `${dateKey(state.anchorDate)}:${notebook.id}`,

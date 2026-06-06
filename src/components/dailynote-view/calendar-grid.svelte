@@ -7,7 +7,7 @@
     type CalendarStatus = 'single' | 'duplicate';
     type CalendarStatusMap = Map<string, Map<NotebookId, CalendarStatus>>;
 
-    export let mode: Extract<DailyNoteViewMode, 'week' | 'month'>;
+    export let span: DailyNoteViewSpan;
     export let anchorDate: Date;
     export let notebook: Notebook;
 
@@ -34,7 +34,7 @@
     }
 
     function buildCells() {
-        if (mode === 'week') {
+        if (span === 'week') {
             const start = startOfWeek(anchorDate);
             cells = Array.from({ length: 7 }, (_, index) => {
                 const date = new Date(start);
@@ -87,7 +87,7 @@
     }
 
     async function refreshCalendar(force = false) {
-        const key = `${mode}:${dateKey(anchorDate)}`;
+        const key = `${span}:${dateKey(anchorDate)}`;
         if (!force && key === refreshKey) {
             return;
         }
@@ -113,7 +113,7 @@
             .map((notebook) => ({ notebook, status: byNotebook.get(notebook.id) }));
     }
 
-    $: if (mode && anchorDate) {
+    $: if (span && anchorDate) {
         refreshCalendar();
     }
 
@@ -122,13 +122,13 @@
     });
 </script>
 
-<section class="dnt-view__calendar dnt-view__calendar--{mode}">
+<section class="dnt-view__calendar dnt-view__calendar--{span}">
     <header class="dnt-view__calendar-head">
-        <strong>{mode === 'week' ? i18n.DailyNoteView.Week : i18n.DailyNoteView.Month}</strong>
+        <strong>{span === 'week' ? i18n.DailyNoteView.Week : i18n.DailyNoteView.Month}</strong>
         <span>{i18n.DailyNoteView.Notebooks}: {notebooks.length}</span>
     </header>
 
-    {#if mode === 'week'}
+    {#if span === 'week'}
         <div class="dnt-view__calendar-week-grid">
             <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{i18n.DailyNoteView.Notebook}</div>
             {#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as day, index}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { listDailynote } from "@frostime/siyuan-plugin-kits";
-    import { applyPreset, buildLaneSeeds, clampToToday, dateKey, defaultDailyNoteViewState, findNotebook } from "@/func/dailynote-view/state";
+    import { buildLaneSeeds, clampToToday, dateKey, defaultDailyNoteViewState, findNotebook } from "@/func/dailynote-view/state";
     import type { LaneSeed } from "@/func/dailynote-view/state";
     import ViewToolbar from "./view-toolbar.svelte";
     import ContentLanes from "./content-lanes.svelte";
@@ -20,12 +20,7 @@
         state = {
             ...next,
             anchorDate: clampToToday(next.anchorDate),
-            count: next.axis === 'time' && next.count === 'all' ? 1 : next.count,
         };
-    }
-
-    function setPreset(event: CustomEvent<'today' | 'three-days' | 'notebooks' | 'week' | 'month'>) {
-        setState(applyPreset(state, event.detail));
     }
 
     function sortNotebookLanesByExisting(lanes: LaneSeed[], existingNotebookIds: Set<NotebookId>): LaneSeed[] {
@@ -45,7 +40,7 @@
     }
 
     async function updateLanes(nextState: DailyNoteViewState, nextLanes: LaneSeed[]) {
-        if (nextState.mode !== 'content' || nextState.axis !== 'notebook') {
+        if (nextState.form !== 'content' || nextState.axis !== 'notebook') {
             notebookPriorityKey = '';
             lanes = nextLanes;
             return;
@@ -68,20 +63,20 @@
     function selectCalendarDate(event: CustomEvent<{ date: Date; notebookId: NotebookId }>) {
         setState({
             ...state,
-            mode: 'content',
+            form: 'content',
             anchorDate: event.detail.date,
             anchorNotebookId: event.detail.notebookId,
             axis: 'time',
-            count: 1,
+            timeCount: 1,
         });
     }
 </script>
 
 <div class="dnt-view fn__flex-1 fn__flex-column">
-    <ViewToolbar {state} on:preset={setPreset} on:state={(event) => setState(event.detail)} />
-    {#if state.mode === 'content'}
+    <ViewToolbar {state} on:state={(event) => setState(event.detail)} />
+    {#if state.form === 'content'}
         <ContentLanes {app} {lanes} />
     {:else}
-        <CalendarGrid mode={state.mode} anchorDate={state.anchorDate} {notebook} on:selectDate={selectCalendarDate} />
+        <CalendarGrid span={state.span} anchorDate={state.anchorDate} {notebook} on:selectDate={selectCalendarDate} />
     {/if}
 </div>

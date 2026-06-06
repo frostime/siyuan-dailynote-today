@@ -52,23 +52,27 @@ DeReserveMenu:
   Success: Cancel reservation success!
   name: Cancel Reservation
 DailyNoteView:
-  CalendarMode: Calendar view
-  ContentMode: Note view
-  Count: Count
+  Calendar: Calendar
+  Content: Content
   CreateDailyNote: Create Daily Note
+  Days: Days
   Duplicate: Duplicate
   DuplicateHint: This date and notebook have multiple Daily Notes. The earliest-created document is shown by default
-  Expand: Expand
   Future: Future date
   FutureHint: Future dates do not auto-create Daily Notes
   Missing: Missing
   MissingHint: Browsing does not create a document; only this button writes
   Month: Month
   Notebook: Notebook
+  NotebookAxis: By Notebook
   Notebooks: Notebooks
   OpenDuplicateDocs: Open duplicate docs
   OpenView: Open Daily Note View
-  ThreeDays: Three days
+  Scope: Scope
+  ScopeAll: All
+  ScopeSingle: Single
+  Span: Span
+  TimeAxis: By Date
   Today: Today
   Week: Week
   exists: Exists

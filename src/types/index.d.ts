@@ -95,16 +95,22 @@ type DocBlock = Block & {
     type: 'd'
 }
 
-type DailyNoteViewMode = 'content' | 'week' | 'month';
+type DailyNoteViewForm = 'content' | 'calendar';
 type DailyNoteViewAxis = 'time' | 'notebook';
-type DailyNoteViewCount = 1 | 3 | 5 | 'all';
+type DailyNoteViewTimeCount = 1 | 2 | 3 | 5;
+type DailyNoteViewNotebookScope = 'single' | 'all';
+type DailyNoteViewSpan = 'week' | 'month';
 
 type DailyNoteViewState = {
-    mode: DailyNoteViewMode;
+    form: DailyNoteViewForm;
     anchorDate: Date;
     anchorNotebookId: NotebookId;
+    // content-form sub-config (retained across form switches)
     axis: DailyNoteViewAxis;
-    count: DailyNoteViewCount;
+    timeCount: DailyNoteViewTimeCount;
+    notebookScope: DailyNoteViewNotebookScope;
+    // calendar-form sub-config
+    span: DailyNoteViewSpan;
 }
 
 type DailyNoteCell =
