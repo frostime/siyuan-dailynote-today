@@ -34,15 +34,15 @@
         return `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, '0')}`;
     }
 
-    function periodStartAfterShift(offset: number): Date {
-        if (state.mode === 'week') {
-            return startOfWeek(addDays(state.anchorDate, offset * 7));
-        }
-        if (state.mode === 'month') {
-            return startOfMonth(addMonths(state.anchorDate, offset));
-        }
-        return addDays(state.anchorDate, offset);
-    }
+    // function periodStartAfterShift(offset: number): Date {
+    //     if (state.mode === 'week') {
+    //         return startOfWeek(addDays(state.anchorDate, offset * 7));
+    //     }
+    //     if (state.mode === 'month') {
+    //         return startOfMonth(addMonths(state.anchorDate, offset));
+    //     }
+    //     return addDays(state.anchorDate, offset);
+    // }
 
     function periodTargetAfterShift(offset: number): Date {
         if (state.mode === 'week') {
@@ -155,6 +155,7 @@
                 <span>{i18n.DailyNoteView.Count}</span>
                 <select class="b3-select" bind:value={state.count} on:change={() => dispatch('state', state)}>
                     <option value={1}>1</option>
+                    <option value={2}>2</option>
                     <option value={3}>3</option>
                     <option value={5}>5</option>
                     <option value="all" disabled={state.axis !== 'notebook'}>All</option>

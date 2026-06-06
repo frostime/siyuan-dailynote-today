@@ -41,5 +41,11 @@
     "chrono-node": "^2.6.3",
     "p-limit": "^5.0.0",
     "sy-plugin-changelog": "^0.0.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild"
+    ]
   }
 }
