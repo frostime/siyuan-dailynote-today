@@ -11,6 +11,10 @@
     background: var(--b3-theme-background);
 }
 
+.dnt-view {
+    position: relative;
+}
+
 .dnt-view__toolbar {
     flex: 0 0 auto;
     display: flex;
@@ -19,7 +23,7 @@
     padding: 6px 12px;
     border-bottom: 1px solid var(--b3-theme-surface-lighter);
     background: var(--b3-theme-background);
-    overflow-x: auto;
+    overflow: visible;
 }
 
 .dnt-view__divider {
@@ -73,13 +77,6 @@
     cursor: not-allowed;
 }
 
-.dnt-view__ctx {
-    flex: 0 0 auto;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
 .dnt-view__ctx-label {
     color: var(--b3-theme-on-surface-light);
     font-size: 0.85rem;
@@ -119,36 +116,6 @@
 .dnt-view__seg--primary .dnt-view__seg-item--on {
     background: var(--b3-theme-primary) !important;
     color: var(--b3-theme-on-primary, #fff) !important;
-}
-
-.dnt-view__stepper {
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid var(--b3-theme-surface-lighter);
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-.dnt-view__stepper button {
-    width: 26px;
-    height: 26px;
-    border: 0;
-    background: var(--b3-theme-background);
-    color: var(--b3-theme-on-surface);
-    cursor: pointer;
-}
-
-.dnt-view__stepper button:hover {
-    background: var(--b3-theme-surface-light);
-}
-
-.dnt-view__stepper span {
-    min-width: 30px;
-    height: 26px;
-    line-height: 26px;
-    border-left: 1px solid var(--b3-theme-surface-lighter);
-    border-right: 1px solid var(--b3-theme-surface-lighter);
-    text-align: center;
 }
 
 .dnt-view__lanes {
@@ -212,10 +179,6 @@
     color: var(--b3-font-color13);
 }
 
-.dnt-view__status--future {
-    color: var(--b3-font-color4);
-}
-
 .dnt-view__protyle,
 .dnt-view__duplicate {
     flex: 1 1 auto;
@@ -264,12 +227,13 @@
 }
 
 .dnt-view__calendar {
+    position: relative;
     flex: 1 1 auto;
     min-height: 0;
     margin: 12px;
     border: 1px solid var(--b3-theme-surface-lighter);
     border-radius: 8px;
-    overflow: hidden;
+    overflow: auto;
     background: var(--b3-theme-background);
 }
 
@@ -280,18 +244,9 @@
     border-bottom: 1px solid var(--b3-theme-surface-lighter);
 }
 
-.dnt-view__calendar-grid,
-.dnt-view__calendar-week-grid {
-    display: grid;
-}
-
 .dnt-view__calendar-grid {
+    display: grid;
     grid-template-columns: repeat(7, minmax(7rem, 1fr));
-}
-
-.dnt-view__calendar-week-grid {
-    grid-template-columns: minmax(10rem, 14rem) repeat(7, minmax(5rem, 1fr));
-    overflow-x: auto;
 }
 
 .dnt-view__calendar-cell {
@@ -314,53 +269,15 @@ button.dnt-view__calendar-cell {
     cursor: pointer;
 }
 
-.dnt-view__calendar-dow,
-.dnt-view__calendar-notebook {
+.dnt-view__calendar-dow {
     min-height: auto;
     font-weight: 600;
     color: var(--b3-theme-on-surface-light);
     background: var(--b3-theme-surface);
 }
 
-.dnt-view__calendar-notebook {
-    position: sticky;
-    left: 0;
-    z-index: 1;
-}
-
 .dnt-view__calendar-date {
     font-weight: 600;
-}
-
-.dnt-view__calendar-pill {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 3.2rem;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: var(--b3-theme-primary-lightest);
-    color: var(--b3-theme-primary);
-    font-size: 0.85rem;
-}
-
-.dnt-view__calendar-pill--duplicate {
-    background: var(--b3-card-warning-background);
-    color: var(--b3-card-warning-color);
-}
-
-.dnt-view__calendar-marker {
-    display: block;
-    margin-top: 18px;
-    color: var(--b3-theme-primary);
-}
-
-.dnt-view__calendar-marker--duplicate {
-    color: var(--b3-font-color13);
-}
-
-.dnt-view__calendar-empty {
-    color: var(--b3-theme-on-surface-light);
 }
 
 .dnt-view__calendar-notebook-list {
@@ -390,4 +307,213 @@ button.dnt-view__calendar-cell {
 
 .dnt-view__calendar-more {
     color: var(--b3-theme-on-surface-light);
+}
+
+.dnt-view__notebook-picker {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.dnt-view__notebook-panel {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 8px);
+    right: 0;
+    display: flex;
+    width: min(380px, 80vw);
+    max-height: min(520px, 70vh);
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 8px;
+    background: var(--b3-theme-background);
+    box-shadow: var(--b3-dialog-shadow);
+}
+
+.dnt-view__notebook-panel-head,
+.dnt-view__notebook-panel-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.dnt-view__notebook-list,
+.dnt-view__dialog-list {
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.dnt-view__notebook-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--b3-theme-on-background);
+    text-align: left;
+    cursor: pointer;
+}
+
+.dnt-view__notebook-row:hover,
+.dnt-view__notebook-row--on {
+    background: var(--b3-theme-primary-lightest);
+}
+
+.dnt-view__notebook-mark {
+    width: 18px;
+    color: var(--b3-theme-primary);
+}
+
+.dnt-view__notebook-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dnt-view__notebook-panel-actions {
+    justify-content: flex-end;
+    padding-top: 8px;
+    border-top: 1px solid var(--b3-theme-surface-lighter);
+}
+
+.dnt-view__floating-control {
+    position: absolute;
+    z-index: 12;
+    right: 16px;
+    bottom: 16px;
+}
+
+.dnt-view__floating-button {
+    height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--b3-theme-primary-light);
+    border-radius: 18px;
+    background: var(--b3-theme-background);
+    color: var(--b3-theme-primary);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.dnt-view__floating-panel {
+    position: absolute;
+    right: 0;
+    bottom: 44px;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 8px;
+    background: var(--b3-theme-background);
+    box-shadow: var(--b3-dialog-shadow);
+}
+
+.dnt-view__calendar-cell--dim {
+    opacity: 0.45;
+}
+
+.dnt-view__calendar-day {
+    cursor: pointer;
+}
+
+.dnt-view__calendar-grid--week .dnt-view__calendar-cell {
+    min-height: 10rem;
+}
+
+.dnt-view__calendar-year {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(10rem, 1fr));
+    gap: 12px;
+    padding: 14px;
+}
+
+.dnt-view__calendar-year button {
+    min-height: 7rem;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 8px;
+    background: var(--b3-theme-background);
+    color: var(--b3-theme-on-background);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.dnt-view__calendar-year button:hover {
+    border-color: var(--b3-theme-primary-light);
+    background: var(--b3-theme-primary-lightest);
+    color: var(--b3-theme-primary);
+}
+
+.dnt-view__calendar-loading {
+    position: absolute;
+    top: 48px;
+    right: 12px;
+    color: var(--b3-theme-on-surface-light);
+}
+
+.dnt-view__dialog-backdrop {
+    position: absolute;
+    z-index: 18;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.18);
+}
+
+.dnt-view__dialog {
+    display: flex;
+    width: min(460px, 100%);
+    max-height: min(620px, 90%);
+    flex-direction: column;
+    padding: 14px;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 10px;
+    background: var(--b3-theme-background);
+    box-shadow: var(--b3-dialog-shadow);
+}
+
+.dnt-view__dialog > header,
+.dnt-view__dialog-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dnt-view__dialog > header {
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.dnt-view__dialog-row {
+    padding: 9px 0;
+    border-top: 1px solid var(--b3-theme-surface-lighter);
+}
+
+.dnt-view__dialog-row > span {
+    flex: 1 1 auto;
+}
+
+.dnt-view__dialog-row > small {
+    color: var(--b3-theme-on-surface-light);
+}
+
+@media (max-width: 900px) {
+    .dnt-view__toolbar {
+        flex-wrap: wrap;
+        overflow: visible;
+    }
+
+    .dnt-view__notebook-picker {
+        margin-left: auto;
+    }
+
+    .dnt-view__calendar-year {
+        grid-template-columns: repeat(2, minmax(9rem, 1fr));
+    }
 }

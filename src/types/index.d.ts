@@ -96,26 +96,26 @@ type DocBlock = Block & {
 }
 
 type DailyNoteViewForm = 'content' | 'calendar';
-type DailyNoteViewAxis = 'time' | 'notebook';
-type DailyNoteViewTimeCount = 1 | 2 | 3 | 5;
-type DailyNoteViewNotebookScope = 'single' | 'all';
-type DailyNoteViewSpan = 'week' | 'month';
+type DailyNoteViewContentMode = 'day' | 'timeline';
+type DailyNoteViewNotebookSelection = 'single' | 'multi';
+type DailyNoteViewTimelineCount = 1 | 2 | 3 | 5;
+type DailyNoteViewTimelineFilter = 'daily' | 'existing';
+type DailyNoteViewSpan = 'week' | 'month' | 'year';
 
 type DailyNoteViewState = {
     form: DailyNoteViewForm;
     anchorDate: Date;
-    anchorNotebookId: NotebookId;
-    // content-form sub-config (retained across form switches)
-    axis: DailyNoteViewAxis;
-    timeCount: DailyNoteViewTimeCount;
-    notebookScope: DailyNoteViewNotebookScope;
-    // calendar-form sub-config
+    contentMode: DailyNoteViewContentMode;
+    daySelection: DailyNoteViewNotebookSelection;
+    dayNotebookIds: NotebookId[];
+    timelineNotebookId: NotebookId;
+    timelineCount: DailyNoteViewTimelineCount;
+    timelineFilter: DailyNoteViewTimelineFilter;
     span: DailyNoteViewSpan;
 }
 
 type DailyNoteCell =
     | { status: 'missing'; hpath: string }
-    | { status: 'future'; hpath: string }
     | { status: 'single'; doc: DocBlock; hpath: string }
     | { status: 'duplicate'; primary: DocBlock; docs: DocBlock[]; hpath: string };
 
