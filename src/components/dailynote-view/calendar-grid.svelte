@@ -18,6 +18,7 @@
     let notebooks: Notebook[] = [];
     let docsByDate: CalendarDocs = new Map();
     let refreshKey = '';
+    let refreshGeneration = 0;
     let loading = false;
     let dialogDate: Date | null = null;
     let creatingNotebookId: NotebookId | null = null;
@@ -60,10 +61,10 @@
         });
     }
 
-    function groupDocs(docs: any[]): CalendarDocs {
+    function groupDocs(docs: any[], visibleNotebooks: Notebook[]): CalendarDocs {
         const result: CalendarDocs = new Map();
         docs.forEach((doc) => {
-            if (!doc.value || !notebooks.some((notebook) => notebook.id === doc.box)) return;
+            if (!doc.value || !visibleNotebooks.some((notebook) => notebook.id === doc.box)) return;
             const key = `${doc.value.slice(0, 4)}-${doc.value.slice(4, 6)}-${doc.value.slice(6, 8)}`;
             if (!result.has(key)) result.set(key, new Map());
             const byNotebook = result.get(key);
@@ -75,30 +76,34 @@
         return result;
     }
 
-    async function refreshCalendar(force = false) {
+    async function refreshCalendar() {
         const key = `${span}:${dateKey(anchorDate)}`;
-        if (!force && key === refreshKey) return;
+        if (key === refreshKey) return;
         refreshKey = key;
-        notebooks = visibleNotebooks();
-        cells = buildCells();
+        const generation = ++refreshGeneration;
+        const requestNotebooks = visibleNotebooks();
+        const requestCells = buildCells();
+
+        notebooks = requestNotebooks;
+        cells = requestCells;
+        docsByDate = new Map();
         dialogDate = null;
 
-        if (span === 'year' || cells.length === 0) {
-            docsByDate = new Map();
+        if (span === 'year' || requestCells.length === 0) {
             loading = false;
             return;
         }
 
         loading = true;
         try {
-            const docs = await listDailyNotesBetween(cells[0], cells[cells.length - 1]);
-            if (key !== refreshKey) return;
-            docsByDate = groupDocs(docs);
+            const docs = await listDailyNotesBetween(requestCells[0], requestCells[requestCells.length - 1]);
+            if (generation !== refreshGeneration) return;
+            docsByDate = groupDocs(docs, requestNotebooks);
         } catch (error) {
-            if (key === refreshKey) docsByDate = new Map();
+            if (generation === refreshGeneration) docsByDate = new Map();
             console.error(error);
         } finally {
-            if (key === refreshKey) loading = false;
+            if (generation === refreshGeneration) loading = false;
         }
     }
 
