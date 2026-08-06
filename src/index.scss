@@ -107,15 +107,9 @@
 .dnt-view__calendar-notebook-label { overflow: hidden; padding: 2px 6px; border: 0; border-radius: 5px; background: var(--b3-theme-primary-lightest); color: var(--b3-theme-primary); text-align: left; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
 .dnt-view__calendar-more { color: var(--b3-theme-on-surface-light); }
 
-.dnt-view__year-grid { display: grid; grid-template-columns: repeat(3, minmax(14rem, 1fr)); gap: 12px; padding: 12px; }
-.dnt-view__mini-month { padding: 10px; border: 1px solid var(--b3-theme-surface-lighter); border-radius: 8px; }
-.dnt-view__mini-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-top: 8px; }
-.dnt-view__mini-dow { color: var(--b3-theme-on-surface-light); font-size: .7rem; text-align: center; }
-.dnt-view__mini-day { position: relative; height: 24px; padding: 0; border: 0; border-radius: 4px; color: var(--b3-theme-on-surface); background: transparent; cursor: pointer; }
-.dnt-view__mini-day:hover { background: var(--b3-theme-primary-lightest); }
-.dnt-view__mini-day--outside { visibility: hidden; }
-.dnt-view__mini-day--today { color: var(--b3-theme-primary); font-weight: 700; }
-.dnt-view__mini-day--marked::after { position: absolute; right: 3px; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--b3-theme-primary); content: ""; }
+.dnt-view__year-grid { display: grid; grid-template-columns: repeat(3, minmax(12rem, 1fr)); gap: 12px; padding: 12px; }
+.dnt-view__year-month { min-height: 7rem; border: 1px solid var(--b3-theme-surface-lighter); border-radius: 8px; color: var(--b3-theme-on-background); background: var(--b3-theme-background); cursor: pointer; }
+.dnt-view__year-month:hover { border-color: var(--b3-theme-primary-light); color: var(--b3-theme-primary); background: var(--b3-theme-primary-lightest); }
 
 .dnt-view__context-fab { position: absolute; right: 16px; bottom: 16px; z-index: 6; width: 40px; height: 40px; border: 1px solid var(--b3-theme-primary-light); border-radius: 50%; color: var(--b3-theme-primary); background: var(--b3-theme-background); box-shadow: var(--b3-dialog-shadow); font-size: 18px; cursor: pointer; }
 .dnt-view__context-fab:hover, .dnt-view__context-fab--on { background: var(--b3-theme-primary-lightest); }

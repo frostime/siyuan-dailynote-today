@@ -11,6 +11,7 @@
 
     const dispatch = createEventDispatcher<{
         selectDate: { date: Date; notebookId?: NotebookId; docId?: DocumentId };
+        selectMonth: { date: Date };
     }>();
 
     let documentsByDate = new Map<string, DailyNoteDocument[]>();
@@ -28,9 +29,6 @@
             const start = startOfWeek(anchorDate);
             return [start, addDays(start, 6)];
         }
-        if (span === 'year') {
-            return [new Date(anchorDate.getFullYear(), 0, 1), new Date(anchorDate.getFullYear(), 11, 31)];
-        }
         const first = new Date(anchorDate.getFullYear(), anchorDate.getMonth(), 1);
         const start = startOfWeek(first);
         return [start, addDays(start, 41)];
@@ -47,6 +45,15 @@
         return documentsByDate.get(dateKey(date)) || [];
     }
 
+    function notebookEntriesFor(date: Date): Array<{ doc: DailyNoteDocument; duplicate: boolean }> {
+        const byNotebook = new Map<NotebookId, DailyNoteDocument[]>();
+        docsFor(date).forEach((doc) => byNotebook.set(doc.box, [...(byNotebook.get(doc.box) || []), doc]));
+        return Array.from(byNotebook.values()).map((docs) => {
+            const sorted = docs.slice().sort((a, b) => a.created.localeCompare(b.created));
+            return { doc: sorted[0], duplicate: sorted.length > 1 };
+        });
+    }
+
     function notebookName(id: NotebookId): string {
         return visibleNotebooks().find((item) => item.id === id)?.name || id;
     }
@@ -59,11 +66,20 @@
         return date.getMonth() !== month;
     }
 
+    function selectMonth(month: number) {
+        dispatch('selectMonth', { date: new Date(anchorDate.getFullYear(), month, 1) });
+    }
+
     function selectDate(date: Date, doc?: DailyNoteDocument) {
         dispatch('selectDate', { date, notebookId: doc?.box, docId: doc?.id });
     }
 
     async function refresh() {
+        if (span === 'year') {
+            refreshKey = `year:${anchorDate.getFullYear()}`;
+            documentsByDate = new Map();
+            return;
+        }
         const [after, before] = periodRange();
         const key = `${span}:${dateKey(after)}:${dateKey(before)}:${notebookScope}:${notebookId}`;
         if (key === refreshKey) return;
@@ -72,7 +88,7 @@
             boxId: notebookScope === 'single' ? notebookId : undefined,
             after,
             before,
-            limit: span === 'year' ? 4096 : 2048,
+            limit: 2048,
         }) as DailyNoteDocument[];
         if (key !== refreshKey) return;
         const visibleIds = new Set(visibleNotebooks().map((item) => item.id));
@@ -93,28 +109,15 @@
 <section class="dnt-view__calendar dnt-view__calendar--{span}">
     <header class="dnt-view__calendar-head">
         <strong>{span === 'week' ? i18n.DailyNoteView.Week : span === 'month' ? i18n.DailyNoteView.Month : i18n.DailyNoteView.Year}</strong>
-        <span>{i18n.DailyNoteView.CalendarHint}</span>
+        <span>{span === 'year' ? i18n.DailyNoteView.YearHint : i18n.DailyNoteView.CalendarHint}</span>
     </header>
 
     {#if span === 'year'}
         <div class="dnt-view__year-grid">
             {#each Array.from({ length: 12 }, (_, index) => index) as month}
-                <section class="dnt-view__mini-month">
+                <button class="dnt-view__year-month" on:click={() => selectMonth(month)}>
                     <strong>{month + 1} {i18n.DailyNoteView.Month}</strong>
-                    <div class="dnt-view__mini-grid">
-                        {#each ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as day}<span class="dnt-view__mini-dow">{day}</span>{/each}
-                        {#each monthCells(anchorDate.getFullYear(), month) as date}
-                            <button
-                                class:dnt-view__mini-day--outside={isOutsideMonth(date, month)}
-                                class:dnt-view__mini-day--today={isToday(date)}
-                                class:dnt-view__mini-day--marked={docsFor(date).length > 0}
-                                class="dnt-view__mini-day"
-                                disabled={isOutsideMonth(date, month)}
-                                on:click={() => selectDate(date)}
-                            >{date.getDate()}</button>
-                        {/each}
-                    </div>
-                </section>
+                </button>
             {/each}
         </div>
     {:else}
@@ -134,13 +137,13 @@
                 >
                     <span class="dnt-view__calendar-date">{date.getDate()}</span>
                     <div class="dnt-view__calendar-notebook-list">
-                        {#each docsFor(date).slice(0, 4) as doc}
-                            <button class="dnt-view__calendar-notebook-label" on:click|stopPropagation={() => selectDate(date, doc)}>
-                                {notebookName(doc.box)}
+                        {#each notebookEntriesFor(date).slice(0, 4) as entry}
+                            <button class="dnt-view__calendar-notebook-label" on:click|stopPropagation={() => selectDate(date, entry.doc)}>
+                                {entry.duplicate ? '⚠ ' : ''}{notebookName(entry.doc.box)}
                             </button>
                         {/each}
-                        {#if docsFor(date).length > 4}
-                            <span class="dnt-view__calendar-more">+{docsFor(date).length - 4}</span>
+                        {#if notebookEntriesFor(date).length > 4}
+                            <span class="dnt-view__calendar-more">+{notebookEntriesFor(date).length - 4}</span>
                         {/if}
                     </div>
                 </div>

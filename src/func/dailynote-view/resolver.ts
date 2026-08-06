@@ -2,7 +2,7 @@ import { createDailynote, getDailynoteHpath, searchDailynote } from "@frostime/s
 import type { Block as KitBlock } from "@frostime/siyuan-plugin-kits";
 
 import * as serverApi from "@/serverApi";
-import { app } from "@/utils";
+import { app, repeatRun } from "@/utils";
 import { isFutureDate } from "./state";
 
 function sortDocsByCreated(docs: DocBlock[]): DocBlock[] {
@@ -45,6 +45,6 @@ export async function createDailyNoteCell(notebook: Notebook, date: Date): Promi
     if (!docId) {
         return null;
     }
-    return await serverApi.getBlockByID(docId) as DocBlock;
+    return await repeatRun(() => serverApi.getBlockByID(docId), 500, 6) as DocBlock | null;
 }
 

@@ -14,7 +14,7 @@
 
     let state: DailyNoteViewState = defaultDailyNoteViewState();
     let queriedDocs: DailyNoteDocument[] = [];
-    let optimisticDocs: DailyNoteDocument[] = [];
+    let pendingCreatedDocs: DailyNoteDocument[] = [];
     let lanes: DailyNoteLane[] = [];
     let sequenceDates: Date[] = [];
     let loading = false;
@@ -26,9 +26,9 @@
         state = { ...next, anchorDate: normalizeDate(next.anchorDate) };
     }
 
-    function mergeOptimistic(docs: DailyNoteDocument[]): DailyNoteDocument[] {
-        const byId = new Map(docs.map((doc) => [doc.id, doc]));
-        optimisticDocs.forEach((doc) => byId.set(doc.id, doc));
+    function mergePendingCreatedDocs(docs: DailyNoteDocument[]): DailyNoteDocument[] {
+        const byId = new Map(pendingCreatedDocs.map((doc) => [doc.id, doc]));
+        docs.forEach((doc) => byId.set(doc.id, doc));
         return Array.from(byId.values());
     }
 
@@ -63,11 +63,13 @@
         if (key !== queryKey) return;
         const visibleIds = new Set(visibleNotebooks().map((notebook) => notebook.id));
         queriedDocs = docs.filter((doc) => visibleIds.has(doc.box));
+        const queriedIds = new Set(queriedDocs.map((doc) => doc.id));
+        pendingCreatedDocs = pendingCreatedDocs.filter((doc) => !queriedIds.has(doc.id));
         loading = false;
     }
 
     function updateResults() {
-        const docs = mergeOptimistic(queriedDocs);
+        const docs = mergePendingCreatedDocs(queriedDocs);
         if (state.group === 'day') {
             const key = dateKey(state.anchorDate);
             lanes = docsToLanes(docs.filter((doc) => dailyNoteDateKey(doc) === key && (state.notebookScope === 'all' || doc.box === state.anchorNotebookId)));
@@ -106,6 +108,10 @@
         });
     }
 
+    function selectCalendarMonth(event: CustomEvent<{ date: Date }>) {
+        setState({ ...state, span: 'month', anchorDate: event.detail.date });
+    }
+
     function selectCalendarDate(event: CustomEvent<{ date: Date; notebookId?: NotebookId; docId?: DocumentId }>) {
         setState({
             ...state,
@@ -118,7 +124,7 @@
     }
 
     function handleCreated(event: CustomEvent<{ doc: DailyNoteDocument; date: Date; notebookId: NotebookId }>) {
-        optimisticDocs = [...optimisticDocs.filter((doc) => doc.id !== event.detail.doc.id), event.detail.doc];
+        pendingCreatedDocs = [...pendingCreatedDocs.filter((doc) => doc.id !== event.detail.doc.id), event.detail.doc];
         createOpen = false;
         queryKey = '';
         setState({
@@ -135,7 +141,7 @@
 
     $: notebook = findNotebook(state.anchorNotebookId);
     $: if (state.form === 'content' && state.group && state.anchorDate) refreshDocuments();
-    $: if (queriedDocs || optimisticDocs || state.anchorDate || state.sequenceCount || state.notebookScope) updateResults();
+    $: if (queriedDocs || pendingCreatedDocs || state.anchorDate || state.sequenceCount || state.notebookScope) updateResults();
 </script>
 
 <div class="dnt-view fn__flex-1 fn__flex-column">
@@ -144,7 +150,7 @@
     {#if state.form === 'content'}
         <ContentLanes {app} {state} {lanes} {loading} on:selectDocument={selectDocument} on:create={() => createOpen = true} />
     {:else}
-        <CalendarGrid span={state.span} anchorDate={state.anchorDate} notebookScope={state.notebookScope} notebookId={state.anchorNotebookId} on:selectDate={selectCalendarDate} />
+        <CalendarGrid span={state.span} anchorDate={state.anchorDate} notebookScope={state.notebookScope} notebookId={state.anchorNotebookId} on:selectDate={selectCalendarDate} on:selectMonth={selectCalendarMonth} />
     {/if}
 
     <button class:dnt-view__context-fab--on={contextOpen} class="dnt-view__context-fab" aria-label={i18n.DailyNoteView.MoreControls} on:click={() => contextOpen = !contextOpen}>⋯</button>

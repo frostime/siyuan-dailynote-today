@@ -73,18 +73,31 @@ DailyNoteView:
   Missing: Missing
   MissingHint: Browsing does not create a document; only this button writes
   Month: Month
+  MoreControls: Context controls
+  NoDocuments: No Daily Notes match the current selection
+  NoMoreControls: No additional controls for this view
   Notebook: Notebook
   NotebookAxis: By Notebook
   Notebooks: Notebooks
+  OpenDocument: Open note
   OpenDuplicateDocs: Open duplicate docs
   OpenView: Open Daily Note View
   Scope: Scope
   ScopeAll: All
   ScopeSingle: Single
-  Span: Span
+  SameDay: Same day
+  SameDayHint: Existing Daily Notes on the selected date
+  SelectNotebook: Select one notebook for sequential dates
+  SelectNotebookHint: Choose a notebook from the Notebook Menu. Missing notes do not create empty lanes.
+  Sequence: Sequential dates
+  SequenceHint: Existing Daily Notes ordered by date within one notebook
+  Single: Single
+  Span: Calendar scale
   TimeAxis: By Date
   Today: Today
   Week: Week
+  Year: Year
+  YearHint: Click a month to open the month view
   exists: Exists
   title: Daily Note View
 DockReserve:

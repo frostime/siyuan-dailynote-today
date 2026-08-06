@@ -71,7 +71,7 @@
         <button class="b3-button b3-button--outline" on:click={() => dispatch('create')}>+ {i18n.DailyNoteView.CreateForDate}</button>
     </header>
 
-    {#if loading}
+    {#if loading && lanes.length === 0}
         <div class="dnt-view__empty">Loading...</div>
     {:else if state.group === 'sequence' && state.notebookScope === 'all'}
         <div class="dnt-view__empty">

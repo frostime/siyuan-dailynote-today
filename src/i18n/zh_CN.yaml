@@ -62,18 +62,31 @@ DailyNoteView:
   Missing: 未创建
   MissingHint: 浏览不会创建文档；只有点击按钮才写入
   Month: 月
+  MoreControls: 当前视图的次级控制
+  NoDocuments: 当前条件没有日记文档
+  NoMoreControls: 当前视图没有额外参数
   Notebook: 笔记本
   NotebookAxis: 笔记本轴
   Notebooks: 笔记本
+  OpenDocument: 打开日记
   OpenDuplicateDocs: 打开重复文档
   OpenView: 打开日记视图
   Scope: 范围
   ScopeAll: 全部
   ScopeSingle: 单个
-  Span: 跨度
+  SameDay: 同日
+  SameDayHint: 同一日期下实际存在的日记文档
+  SelectNotebook: 连续日期需要选择一个笔记本
+  SelectNotebookHint: 从顶部 Notebook Menu 选择笔记本；不会为不存在的日记生成空栏。
+  Sequence: 连续日期
+  SequenceHint: 同一笔记本中按日期顺序排列的已有日记
+  Single: 单篇
+  Span: 日历粒度
   TimeAxis: 时间轴
   Today: 今日
   Week: 周
+  Year: 年
+  YearHint: 点击月份进入月视图
   exists: 已创建
   title: 日记视图
 DockReserve:
