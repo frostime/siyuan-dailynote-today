@@ -422,8 +422,69 @@ button.dnt-view__calendar-cell {
     cursor: pointer;
 }
 
-.dnt-view__calendar-grid--week .dnt-view__calendar-cell {
-    min-height: 10rem;
+.dnt-view__calendar-grid--week {
+    grid-template-columns: repeat(7, minmax(11rem, 1fr));
+    gap: 10px;
+    padding: 10px;
+    background: var(--b3-theme-surface);
+}
+
+.dnt-view__week-card {
+    min-height: 12rem;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--b3-theme-surface-lighter);
+    border-radius: 10px;
+    background: var(--b3-theme-background);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dnt-view__week-card:hover {
+    border-color: var(--b3-theme-primary-light);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dnt-view__week-card.dnt-view__calendar-cell--today {
+    border-color: var(--b3-theme-primary-light);
+}
+
+.dnt-view__week-card-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--b3-theme-surface-lighter);
+}
+
+.dnt-view__week-card-dow {
+    color: var(--b3-theme-on-surface-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.dnt-view__week-card-date {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.dnt-view__week-card-today {
+    margin-left: auto;
+    padding: 1px 5px;
+    border-radius: 999px;
+    background: var(--b3-theme-primary);
+    color: var(--b3-theme-on-primary, #fff);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.dnt-view__week-card .dnt-view__calendar-notebook-list {
+    flex: 1 1 auto;
+    margin-top: 10px;
+}
+
+.dnt-view__week-card .dnt-view__calendar-notebook-label {
+    padding: 4px 7px;
 }
 
 .dnt-view__calendar-year {

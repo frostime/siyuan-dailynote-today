@@ -9,6 +9,8 @@
     type CalendarNotebookEntry = { notebook: Notebook; count: number };
     type CalendarCell = { date: Date; entries: CalendarNotebookEntry[] };
 
+    const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
     export let span: DailyNoteViewSpan;
     export let anchorDate: Date;
 
@@ -26,6 +28,8 @@
     let dialogDate: Date | null = null;
     let creatingNotebookId: NotebookId | null = null;
 
+    // Keep these dependencies explicit: Svelte does not track docsByDate when it is
+    // only read inside a template helper, so async query results would not repaint cells.
     $: calendarCells = buildCalendarCells(cells, notebooks, docsByDate);
     $: dialogEntries = buildDialogEntries(dialogDate, notebooks, docsByDate);
 
@@ -168,20 +172,33 @@
         </div>
     {:else}
         <div class="dnt-view__calendar-grid dnt-view__calendar-grid--{span}">
-            {#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as day}
-                <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{day}</div>
-            {/each}
-            {#each calendarCells as cell (dateKey(cell.date))}
+            {#if span === 'month'}
+                {#each WEEKDAYS as day}
+                    <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{day}</div>
+                {/each}
+            {/if}
+            {#each calendarCells as cell, index (dateKey(cell.date))}
                 <div
                     class:dnt-view__calendar-cell--today={isToday(cell.date)}
                     class:dnt-view__calendar-cell--dim={span === 'month' && !isCurrentMonth(cell.date)}
+                    class:dnt-view__week-card={span === 'week'}
                     class="dnt-view__calendar-cell dnt-view__calendar-day"
                     role="button"
                     tabindex="0"
                     on:click={() => dialogDate = cell.date}
                     on:keydown={(event) => event.key === 'Enter' && (dialogDate = cell.date)}
                 >
-                    <span class="dnt-view__calendar-date">{span === 'week' ? shortDate(cell.date) : cell.date.getDate()}</span>
+                    {#if span === 'week'}
+                        <header class="dnt-view__week-card-head">
+                            <span class="dnt-view__week-card-dow">{WEEKDAYS[index]}</span>
+                            <span class="dnt-view__week-card-date">{shortDate(cell.date)}</span>
+                            {#if isToday(cell.date)}
+                                <span class="dnt-view__week-card-today">{i18n.DailyNoteView.Today}</span>
+                            {/if}
+                        </header>
+                    {:else}
+                        <span class="dnt-view__calendar-date">{cell.date.getDate()}</span>
+                    {/if}
                     <div class="dnt-view__calendar-notebook-list">
                         {#each cell.entries.slice(0, 4) as entry}
                             <button
