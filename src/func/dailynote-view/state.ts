@@ -49,7 +49,6 @@ export function defaultDailyNoteViewState(): DailyNoteViewState {
         group: 'day',
         layout: 'single',
         columnCount: 3,
-        sequenceCount: 3,
         span: 'month',
     };
 }

@@ -10,7 +10,6 @@
     export let app: any;
 
     const COLUMN_COUNTS: DailyNoteViewCount[] = [2, 3, 4, 5];
-    const SEQUENCE_COUNTS: DailyNoteViewCount[] = [1, 2, 3, 5];
 
     let state: DailyNoteViewState = defaultDailyNoteViewState();
     let queriedDocs: DailyNoteDocument[] = [];
@@ -94,8 +93,12 @@
             index = dates.findIndex((date) => date.getTime() >= state.anchorDate.getTime());
             if (index < 0) index = dates.length - 1;
         }
-        const start = Math.max(0, Math.min(index - Math.floor((state.sequenceCount - 1) / 2), dates.length - state.sequenceCount));
-        const visibleDateKeys = new Set(dates.slice(start, start + state.sequenceCount).map(dateKey));
+        if (state.layout === 'cards') {
+            lanes = docsToLanes(notebookDocs);
+            return;
+        }
+        const visibleCount = state.layout === 'single' ? 1 : state.columnCount;
+        const visibleDateKeys = new Set(dates.slice(index, index + visibleCount).map(dateKey));
         lanes = docsToLanes(notebookDocs.filter((doc) => visibleDateKeys.has(dailyNoteDateKey(doc))));
     }
 
@@ -141,7 +144,7 @@
 
     $: notebook = findNotebook(state.anchorNotebookId);
     $: if (state.form === 'content' && state.group && state.anchorDate) refreshDocuments();
-    $: if (queriedDocs || pendingCreatedDocs || state.anchorDate || state.sequenceCount || state.notebookScope) updateResults();
+    $: if (queriedDocs || pendingCreatedDocs || state.anchorDate || state.layout || state.columnCount || state.notebookScope) updateResults();
 </script>
 
 <div class="dnt-view fn__flex-1 fn__flex-column">
@@ -162,13 +165,6 @@
                     <button class:dnt-view__seg-item--on={state.span === 'week'} on:click={() => setState({ ...state, span: 'week' })}>{i18n.DailyNoteView.Week}</button>
                     <button class:dnt-view__seg-item--on={state.span === 'month'} on:click={() => setState({ ...state, span: 'month' })}>{i18n.DailyNoteView.Month}</button>
                     <button class:dnt-view__seg-item--on={state.span === 'year'} on:click={() => setState({ ...state, span: 'year' })}>{i18n.DailyNoteView.Year}</button>
-                </div>
-            {:else if state.group === 'sequence'}
-                <span>{i18n.DailyNoteView.Days}</span>
-                <div class="dnt-view__seg">
-                    {#each SEQUENCE_COUNTS as count}
-                        <button class:dnt-view__seg-item--on={state.sequenceCount === count} on:click={() => setState({ ...state, sequenceCount: count })}>{count}</button>
-                    {/each}
                 </div>
             {:else if state.layout === 'columns'}
                 <span>{i18n.DailyNoteView.ColumnCount}</span>

@@ -110,7 +110,6 @@ type DailyNoteViewState = {
     group: DailyNoteViewGroup;
     layout: DailyNoteViewLayout;
     columnCount: DailyNoteViewCount;
-    sequenceCount: DailyNoteViewCount;
     span: DailyNoteViewSpan;
     selectedDocId?: DocumentId;
 }

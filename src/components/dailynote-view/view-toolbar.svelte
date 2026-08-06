@@ -44,8 +44,7 @@
         }
 
         if (state.group === 'sequence') {
-            const index = sequenceDates.findIndex((date) => dateKey(date) === dateKey(state.anchorDate));
-            const target = sequenceDates[index + offset];
+            const target = sequenceDates[currentSequenceIndex() + offset];
             if (target) patch({ anchorDate: target });
             return;
         }
@@ -79,11 +78,22 @@
             const start = startOfWeek(state.anchorDate);
             return `${dateKey(start)} ~ ${dateKey(addDays(start, 6))}`;
         }
+        if (state.group === 'sequence' && sequenceDates.length > 0) {
+            const startIndex = currentSequenceIndex();
+            if (state.layout === 'cards') {
+                return `${dateKey(sequenceDates[0])} ~ ${dateKey(sequenceDates[sequenceDates.length - 1])}`;
+            }
+            const visibleCount = state.layout === 'single' ? 1 : state.columnCount;
+            const start = sequenceDates[startIndex];
+            const end = sequenceDates[Math.min(startIndex + visibleCount - 1, sequenceDates.length - 1)];
+            return dateKey(start) === dateKey(end) ? dateKey(start) : `${dateKey(start)} ~ ${dateKey(end)}`;
+        }
         return dateKey(state.anchorDate);
     })();
     $: sequenceIndex = currentSequenceIndex();
-    $: canShiftBack = state.form !== 'content' || state.group !== 'sequence' || sequenceIndex > 0;
-    $: canShiftForward = state.form !== 'content' || state.group !== 'sequence' || (sequenceIndex >= 0 && sequenceIndex < sequenceDates.length - 1);
+    $: isSequence = state.form === 'content' && state.group === 'sequence';
+    $: canShiftBack = !isSequence || (state.layout !== 'cards' && sequenceIndex > 0);
+    $: canShiftForward = !isSequence || (state.layout !== 'cards' && sequenceIndex >= 0 && sequenceIndex < sequenceDates.length - 1);
 </script>
 
 <header class="dnt-view__toolbar">
@@ -115,9 +125,13 @@
     </div>
 
     <div class="dnt-view__datenav">
-        <button class="dnt-view__iconbtn" aria-label="prev" disabled={!canShiftBack} on:click={() => shiftDate(-1)}>‹</button>
+        {#if !isSequence || state.layout !== 'cards'}
+            <button class="dnt-view__iconbtn" aria-label="prev" disabled={!canShiftBack} on:click={() => shiftDate(-1)}>‹</button>
+        {/if}
         <span class="dnt-view__datenav-label">{periodLabel}</span>
-        <button class="dnt-view__iconbtn" aria-label="next" disabled={!canShiftForward} on:click={() => shiftDate(1)}>›</button>
+        {#if !isSequence || state.layout !== 'cards'}
+            <button class="dnt-view__iconbtn" aria-label="next" disabled={!canShiftForward} on:click={() => shiftDate(1)}>›</button>
+        {/if}
     </div>
 
     {#if state.form === 'content'}

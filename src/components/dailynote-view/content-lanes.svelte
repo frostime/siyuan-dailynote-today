@@ -89,7 +89,7 @@
             {#if selectedLane}<DailyNoteLane {app} lane={selectedLane} />{/if}
         </div>
     {:else if state.layout === 'columns'}
-        <div class="dnt-view__lanes" style="--dnt-view-lane-count: {Math.min(lanes.length, state.group === 'day' ? state.columnCount : state.sequenceCount)}; --dnt-view-lane-min-width: {laneMinWidth};">
+        <div class="dnt-view__lanes" style="--dnt-view-lane-count: {Math.min(lanes.length, state.columnCount)}; --dnt-view-lane-min-width: {laneMinWidth};">
             {#each lanes as lane (lane.key)}
                 <DailyNoteLane {app} {lane} />
             {/each}
