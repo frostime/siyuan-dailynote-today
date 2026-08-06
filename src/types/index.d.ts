@@ -96,22 +96,21 @@ type DocBlock = Block & {
 }
 
 type DailyNoteViewForm = 'content' | 'calendar';
-type DailyNoteViewGroup = 'day' | 'sequence';
-type DailyNoteViewLayout = 'single' | 'columns' | 'cards';
-type DailyNoteViewCount = 1 | 2 | 3 | 4 | 5;
+type DailyNoteViewAxis = 'time' | 'notebook';
+type DailyNoteViewTimeCount = 1 | 2 | 3 | 5;
 type DailyNoteViewNotebookScope = 'single' | 'all';
-type DailyNoteViewSpan = 'week' | 'month' | 'year';
+type DailyNoteViewSpan = 'week' | 'month';
 
 type DailyNoteViewState = {
     form: DailyNoteViewForm;
     anchorDate: Date;
     anchorNotebookId: NotebookId;
+    // content-form sub-config (retained across form switches)
+    axis: DailyNoteViewAxis;
+    timeCount: DailyNoteViewTimeCount;
     notebookScope: DailyNoteViewNotebookScope;
-    group: DailyNoteViewGroup;
-    layout: DailyNoteViewLayout;
-    columnCount: DailyNoteViewCount;
+    // calendar-form sub-config
     span: DailyNoteViewSpan;
-    selectedDocId?: DocumentId;
 }
 
 type DailyNoteCell =
@@ -120,15 +119,11 @@ type DailyNoteCell =
     | { status: 'single'; doc: DocBlock; hpath: string }
     | { status: 'duplicate'; primary: DocBlock; docs: DocBlock[]; hpath: string };
 
-type DailyNoteDocument = DocBlock & {
-    value?: string;
-}
-
 type DailyNoteLane = {
     key: string;
     date: Date;
     notebook: Notebook;
-    cell: Extract<DailyNoteCell, { status: 'single' | 'duplicate' }>;
+    cell?: DailyNoteCell;
 }
 
 type doOperation = {

@@ -1,189 +1,82 @@
 <script lang="ts">
     import { listDailynote } from "@frostime/siyuan-plugin-kits";
-    import { dateKey, dailyNoteDate, dailyNoteDateKey, defaultDailyNoteViewState, docsToLanes, findNotebook, normalizeDate, visibleNotebooks } from "@/func/dailynote-view/state";
-    import { i18n } from "@/utils";
+    import { buildLaneSeeds, clampToToday, dateKey, defaultDailyNoteViewState, findNotebook } from "@/func/dailynote-view/state";
+    import type { LaneSeed } from "@/func/dailynote-view/state";
     import ViewToolbar from "./view-toolbar.svelte";
     import ContentLanes from "./content-lanes.svelte";
     import CalendarGrid from "./calendar-grid.svelte";
-    import CreateDailyNoteDialog from "./create-daily-note-dialog.svelte";
 
     export let app: any;
 
-    const COLUMN_COUNTS: DailyNoteViewCount[] = [2, 3, 4, 5];
-
     let state: DailyNoteViewState = defaultDailyNoteViewState();
-    let queriedDocs: DailyNoteDocument[] = [];
-    let pendingCreatedDocs: DailyNoteDocument[] = [];
-    let lanes: DailyNoteLane[] = [];
-    let sequenceDates: Date[] = [];
-    let loading = false;
-    let queryKey = '';
-    let createOpen = false;
-    let contextOpen = false;
-
-    function setState(next: DailyNoteViewState) {
-        state = { ...next, anchorDate: normalizeDate(next.anchorDate) };
-    }
-
-    function mergePendingCreatedDocs(docs: DailyNoteDocument[]): DailyNoteDocument[] {
-        const byId = new Map(pendingCreatedDocs.map((doc) => [doc.id, doc]));
-        docs.forEach((doc) => byId.set(doc.id, doc));
-        return Array.from(byId.values());
-    }
-
-    function queryIdentity(): string {
-        const scope = `${state.notebookScope}:${state.anchorNotebookId}`;
-        return state.group === 'day'
-            ? `day:${dateKey(state.anchorDate)}:${scope}`
-            : `sequence:${scope}`;
-    }
-
-    async function refreshDocuments() {
-        if (state.form !== 'content') return;
-        if (state.group === 'sequence' && state.notebookScope === 'all') {
-            queriedDocs = [];
-            loading = false;
-            return;
-        }
-
-        const key = queryIdentity();
-        if (key === queryKey) return;
-        queryKey = key;
-        loading = true;
-        const options = state.group === 'day'
-            ? {
-                after: state.anchorDate,
-                before: state.anchorDate,
-                boxId: state.notebookScope === 'single' ? state.anchorNotebookId : undefined,
-                limit: 2048,
-            }
-            : { boxId: state.anchorNotebookId, limit: 4096 };
-        const docs = await listDailynote(options) as DailyNoteDocument[];
-        if (key !== queryKey) return;
-        const visibleIds = new Set(visibleNotebooks().map((notebook) => notebook.id));
-        queriedDocs = docs.filter((doc) => visibleIds.has(doc.box));
-        const queriedIds = new Set(queriedDocs.map((doc) => doc.id));
-        pendingCreatedDocs = pendingCreatedDocs.filter((doc) => !queriedIds.has(doc.id));
-        loading = false;
-    }
-
-    function updateResults() {
-        const docs = mergePendingCreatedDocs(queriedDocs);
-        if (state.group === 'day') {
-            const key = dateKey(state.anchorDate);
-            lanes = docsToLanes(docs.filter((doc) => dailyNoteDateKey(doc) === key && (state.notebookScope === 'all' || doc.box === state.anchorNotebookId)));
-            sequenceDates = [];
-            return;
-        }
-
-        const notebookDocs = docs.filter((doc) => doc.box === state.anchorNotebookId && dailyNoteDate(doc));
-        const dates = Array.from(new Set(notebookDocs.map(dailyNoteDateKey).filter(Boolean) as string[]))
-            .sort()
-            .map((key) => {
-                const [year, month, day] = key.split('-').map(Number);
-                return new Date(year, month - 1, day);
-            });
-        sequenceDates = dates;
-        if (dates.length === 0) {
-            lanes = [];
-            return;
-        }
-        let index = dates.findIndex((date) => dateKey(date) === dateKey(state.anchorDate));
-        if (index < 0) {
-            index = dates.findIndex((date) => date.getTime() >= state.anchorDate.getTime());
-            if (index < 0) index = dates.length - 1;
-        }
-        if (state.layout === 'cards') {
-            lanes = docsToLanes(notebookDocs);
-            return;
-        }
-        const visibleCount = state.layout === 'single' ? 1 : state.columnCount;
-        const visibleDateKeys = new Set(dates.slice(index, index + visibleCount).map(dateKey));
-        lanes = docsToLanes(notebookDocs.filter((doc) => visibleDateKeys.has(dailyNoteDateKey(doc))));
-    }
-
-    function selectDocument(event: CustomEvent<{ docId: DocumentId; date: Date; notebookId: NotebookId }>) {
-        setState({
-            ...state,
-            anchorDate: event.detail.date,
-            selectedDocId: event.detail.docId,
-            layout: 'single',
-        });
-    }
-
-    function selectCalendarMonth(event: CustomEvent<{ date: Date }>) {
-        setState({ ...state, span: 'month', anchorDate: event.detail.date });
-    }
-
-    function selectCalendarDate(event: CustomEvent<{ date: Date; notebookId?: NotebookId; docId?: DocumentId }>) {
-        setState({
-            ...state,
-            form: 'content',
-            group: 'day',
-            layout: 'single',
-            anchorDate: event.detail.date,
-            selectedDocId: event.detail.docId,
-        });
-    }
-
-    function handleCreated(event: CustomEvent<{ doc: DailyNoteDocument; date: Date; notebookId: NotebookId }>) {
-        pendingCreatedDocs = [...pendingCreatedDocs.filter((doc) => doc.id !== event.detail.doc.id), event.detail.doc];
-        createOpen = false;
-        queryKey = '';
-        setState({
-            ...state,
-            form: 'content',
-            group: 'day',
-            layout: 'single',
-            notebookScope: 'single',
-            anchorNotebookId: event.detail.notebookId,
-            anchorDate: event.detail.date,
-            selectedDocId: event.detail.doc.id,
-        });
-    }
+    let lanes: LaneSeed[] = [];
+    let notebookPriorityKey = '';
 
     $: notebook = findNotebook(state.anchorNotebookId);
-    $: if (state.form === 'content' && state.group && state.anchorDate) refreshDocuments();
-    $: if (queriedDocs || pendingCreatedDocs || state.anchorDate || state.layout || state.columnCount || state.notebookScope) updateResults();
+    $: baseLanes = buildLaneSeeds(state);
+    $: updateLanes(state, baseLanes);
+
+    function setState(next: DailyNoteViewState) {
+        state = {
+            ...next,
+            anchorDate: clampToToday(next.anchorDate),
+        };
+    }
+
+    function sortNotebookLanesByExisting(lanes: LaneSeed[], existingNotebookIds: Set<NotebookId>): LaneSeed[] {
+        return lanes
+            .map((lane, index) => ({ lane, index }))
+            .sort((a, b) => {
+                const aExists = existingNotebookIds.has(a.lane.notebook.id) ? 1 : 0;
+                const bExists = existingNotebookIds.has(b.lane.notebook.id) ? 1 : 0;
+                return bExists - aExists || a.index - b.index;
+            })
+            .map((item) => item.lane);
+    }
+
+    async function dailyNoteNotebookIds(date: Date): Promise<Set<NotebookId>> {
+        const docs = await listDailynote({ after: date, before: date, limit: 2048 });
+        return new Set(docs.map((doc: any) => doc.box));
+    }
+
+    async function updateLanes(nextState: DailyNoteViewState, nextLanes: LaneSeed[]) {
+        if (nextState.form !== 'content' || nextState.axis !== 'notebook') {
+            notebookPriorityKey = '';
+            lanes = nextLanes;
+            return;
+        }
+
+        const key = `${dateKey(nextState.anchorDate)}:${nextLanes.map((lane) => lane.notebook.id).join(',')}`;
+        if (key === notebookPriorityKey) {
+            return;
+        }
+        notebookPriorityKey = key;
+        lanes = nextLanes;
+
+        const existingNotebookIds = await dailyNoteNotebookIds(nextState.anchorDate);
+        if (key !== notebookPriorityKey) {
+            return;
+        }
+        lanes = sortNotebookLanesByExisting(nextLanes, existingNotebookIds);
+    }
+
+    function selectCalendarDate(event: CustomEvent<{ date: Date; notebookId: NotebookId }>) {
+        setState({
+            ...state,
+            form: 'content',
+            anchorDate: event.detail.date,
+            anchorNotebookId: event.detail.notebookId,
+            axis: 'time',
+            timeCount: 1,
+        });
+    }
 </script>
 
 <div class="dnt-view fn__flex-1 fn__flex-column">
-    <ViewToolbar {state} {sequenceDates} on:state={(event) => setState(event.detail)} on:create={() => createOpen = true} />
-
+    <ViewToolbar {state} on:state={(event) => setState(event.detail)} />
     {#if state.form === 'content'}
-        <ContentLanes {app} {state} {lanes} {loading} on:selectDocument={selectDocument} on:create={() => createOpen = true} />
+        <ContentLanes {app} {lanes} />
     {:else}
-        <CalendarGrid span={state.span} anchorDate={state.anchorDate} notebookScope={state.notebookScope} notebookId={state.anchorNotebookId} on:selectDate={selectCalendarDate} on:selectMonth={selectCalendarMonth} />
+        <CalendarGrid span={state.span} anchorDate={state.anchorDate} {notebook} on:selectDate={selectCalendarDate} />
     {/if}
-
-    <button class:dnt-view__context-fab--on={contextOpen} class="dnt-view__context-fab" aria-label={i18n.DailyNoteView.MoreControls} on:click={() => contextOpen = !contextOpen}>⋯</button>
-    {#if contextOpen}
-        <div class="dnt-view__context-menu">
-            {#if state.form === 'calendar'}
-                <span>{i18n.DailyNoteView.Span}</span>
-                <div class="dnt-view__seg">
-                    <button class:dnt-view__seg-item--on={state.span === 'week'} on:click={() => setState({ ...state, span: 'week' })}>{i18n.DailyNoteView.Week}</button>
-                    <button class:dnt-view__seg-item--on={state.span === 'month'} on:click={() => setState({ ...state, span: 'month' })}>{i18n.DailyNoteView.Month}</button>
-                    <button class:dnt-view__seg-item--on={state.span === 'year'} on:click={() => setState({ ...state, span: 'year' })}>{i18n.DailyNoteView.Year}</button>
-                </div>
-            {:else if state.layout === 'columns'}
-                <span>{i18n.DailyNoteView.ColumnCount}</span>
-                <div class="dnt-view__seg">
-                    {#each COLUMN_COUNTS as count}
-                        <button class:dnt-view__seg-item--on={state.columnCount === count} on:click={() => setState({ ...state, columnCount: count })}>{count}</button>
-                    {/each}
-                </div>
-            {:else}
-                <span>{i18n.DailyNoteView.NoMoreControls}</span>
-            {/if}
-        </div>
-    {/if}
-
-    <CreateDailyNoteDialog
-        open={createOpen}
-        initialDate={state.anchorDate}
-        initialNotebookId={state.anchorNotebookId || notebook?.id}
-        on:close={() => createOpen = false}
-        on:created={handleCreated}
-    />
 </div>
