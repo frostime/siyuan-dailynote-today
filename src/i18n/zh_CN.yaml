@@ -42,9 +42,19 @@ DeReserveMenu:
   name: 取消预约
 DailyNoteView:
   Calendar: 日历
+  CalendarHint: 点击日期进入内容；点击日记标签直接打开
+  Cancel: 取消
+  Cards: 卡片
+  ColumnCount: 分栏数量
+  Columns: 分栏
   Content: 内容
+  CreateAndShow: 创建并显示
   CreateDailyNote: 创建 Daily Note
-  Days: 天数
+  CreateForDate: 为此日期创建
+  CreateHint: 浏览不会创建文档；可明确选择日期和笔记本，包括未来日期。
+  Date: 日期
+  Days: 显示日期数
+  Documents: 篇文档
   Duplicate: 重复
   DuplicateHint: 这个日期和笔记本有多个 Daily Note，默认显示最早创建的文档
   Future: 未来日期

@@ -48,9 +48,3 @@ export async function createDailyNoteCell(notebook: Notebook, date: Date): Promi
     return await serverApi.getBlockByID(docId) as DocBlock;
 }
 
-export async function resolveDailyNoteLane(seed: Omit<DailyNoteLane, 'cell'>): Promise<DailyNoteLane> {
-    return {
-        ...seed,
-        cell: await resolveDailyNoteCell(seed.notebook, seed.date),
-    };
-}

@@ -53,9 +53,19 @@ DeReserveMenu:
   name: Cancel Reservation
 DailyNoteView:
   Calendar: Calendar
+  CalendarHint: Click a date to open content; click a note label to open it directly
+  Cancel: Cancel
+  Cards: Cards
+  ColumnCount: Columns
+  Columns: Columns
   Content: Content
+  CreateAndShow: Create and show
   CreateDailyNote: Create Daily Note
-  Days: Days
+  CreateForDate: Create for this date
+  CreateHint: Browsing never creates documents. Choose a date and notebook explicitly, including future dates.
+  Date: Date
+  Days: Visible dates
+  Documents: documents
   Duplicate: Duplicate
   DuplicateHint: This date and notebook have multiple Daily Notes. The earliest-created document is shown by default
   Future: Future date

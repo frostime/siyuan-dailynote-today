@@ -33,9 +33,19 @@ interface I18n {
     };
     DailyNoteView: {
         Calendar: string;
+        CalendarHint: string;
+        Cancel: string;
+        Cards: string;
+        ColumnCount: string;
+        Columns: string;
         Content: string;
+        CreateAndShow: string;
         CreateDailyNote: string;
+        CreateForDate: string;
+        CreateHint: string;
+        Date: string;
         Days: string;
+        Documents: string;
         Duplicate: string;
         DuplicateHint: string;
         Future: string;
