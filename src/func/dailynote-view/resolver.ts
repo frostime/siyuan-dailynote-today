@@ -11,8 +11,6 @@ export type ExistingTimelineWindow = {
     nextStart: Date | null;
 }
 
-export type DailyNoteIndexEntry = DocBlock & { value: string };
-
 function sortDocsByCreated(docs: DocBlock[]): DocBlock[] {
     return docs.slice().sort((a, b) => a.created.localeCompare(b.created));
 }
@@ -32,19 +30,6 @@ function dateFromDailyNoteValue(value: string): Date {
 
 function sqlString(value: string): string {
     return value.replaceAll("'", "''");
-}
-
-export async function listDailyNotesBetween(after: Date, before: Date): Promise<DailyNoteIndexEntry[]> {
-    return await serverApi.sql(`
-        SELECT B.*, A.value
-        FROM blocks AS B
-        JOIN attributes AS A ON B.id = A.block_id
-        WHERE B.type = 'd'
-          AND A.name LIKE 'custom-dailynote-%'
-          AND A.value >= '${dailyNoteValue(after)}'
-          AND A.value <= '${dailyNoteValue(before)}'
-        ORDER BY A.value ASC, B.created ASC
-    `) || [];
 }
 
 async function queryDateValues(notebookId: NotebookId, condition: string, direction: 'ASC' | 'DESC', limit: number): Promise<string[]> {

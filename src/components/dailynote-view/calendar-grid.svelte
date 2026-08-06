@@ -1,10 +1,13 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import { createDailyNoteCell, listDailyNotesBetween } from "@/func/dailynote-view/resolver";
+    import { listDailynote } from "@frostime/siyuan-plugin-kits";
+    import { createDailyNoteCell } from "@/func/dailynote-view/resolver";
     import { dateKey, normalizeDate, todayDate, visibleNotebooks } from "@/func/dailynote-view/state";
     import { i18n } from "@/utils";
 
-    type CalendarDocs = Map<string, Map<NotebookId, DocBlock[]>>;
+    type CalendarDocs = Map<string, Map<NotebookId, number>>;
+    type CalendarNotebookEntry = { notebook: Notebook; count: number };
+    type CalendarCell = { date: Date; entries: CalendarNotebookEntry[] };
 
     export let span: DailyNoteViewSpan;
     export let anchorDate: Date;
@@ -22,6 +25,9 @@
     let loading = false;
     let dialogDate: Date | null = null;
     let creatingNotebookId: NotebookId | null = null;
+
+    $: calendarCells = buildCalendarCells(cells, notebooks, docsByDate);
+    $: dialogEntries = buildDialogEntries(dialogDate, notebooks, docsByDate);
 
     function startOfWeek(date: Date): Date {
         const start = normalizeDate(date);
@@ -68,10 +74,7 @@
             const key = `${doc.value.slice(0, 4)}-${doc.value.slice(4, 6)}-${doc.value.slice(6, 8)}`;
             if (!result.has(key)) result.set(key, new Map());
             const byNotebook = result.get(key);
-            const notebookDocs = byNotebook.get(doc.box) || [];
-            notebookDocs.push(doc as DocBlock);
-            notebookDocs.sort((a, b) => a.created.localeCompare(b.created));
-            byNotebook.set(doc.box, notebookDocs);
+            byNotebook.set(doc.box, (byNotebook.get(doc.box) || 0) + 1);
         });
         return result;
     }
@@ -96,7 +99,11 @@
 
         loading = true;
         try {
-            const docs = await listDailyNotesBetween(requestCells[0], requestCells[requestCells.length - 1]);
+            const docs = await listDailynote({
+                after: requestCells[0],
+                before: requestCells[requestCells.length - 1],
+                limit: 2048,
+            });
             if (generation !== refreshGeneration) return;
             docsByDate = groupDocs(docs, requestNotebooks);
         } catch (error) {
@@ -107,16 +114,25 @@
         }
     }
 
-    function dateNotebooks(date: Date): Array<{ notebook: Notebook; docs: DocBlock[] }> {
-        const byNotebook = docsByDate.get(dateKey(date));
-        if (!byNotebook) return [];
-        return notebooks
-            .filter((notebook) => byNotebook.has(notebook.id))
-            .map((notebook) => ({ notebook, docs: byNotebook.get(notebook.id) }));
+    function buildCalendarCells(dates: Date[], visibleNotebooks: Notebook[], docs: CalendarDocs): CalendarCell[] {
+        return dates.map((date) => {
+            const byNotebook = docs.get(dateKey(date));
+            const entries = byNotebook
+                ? visibleNotebooks
+                    .filter((notebook) => byNotebook.has(notebook.id))
+                    .map((notebook) => ({ notebook, count: byNotebook.get(notebook.id) || 0 }))
+                : [];
+            return { date, entries };
+        });
     }
 
-    function notebookDocs(date: Date, notebookId: NotebookId): DocBlock[] {
-        return docsByDate.get(dateKey(date))?.get(notebookId) || [];
+    function buildDialogEntries(date: Date | null, visibleNotebooks: Notebook[], docs: CalendarDocs): CalendarNotebookEntry[] {
+        if (!date) return [];
+        const byNotebook = docs.get(dateKey(date));
+        return visibleNotebooks.map((notebook) => ({
+            notebook,
+            count: byNotebook?.get(notebook.id) || 0,
+        }));
     }
 
     function openDate(date: Date, notebookId: NotebookId) {
@@ -155,30 +171,29 @@
             {#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as day}
                 <div class="dnt-view__calendar-cell dnt-view__calendar-dow">{day}</div>
             {/each}
-            {#each cells as date}
-                {@const entries = dateNotebooks(date)}
+            {#each calendarCells as cell (dateKey(cell.date))}
                 <div
-                    class:dnt-view__calendar-cell--today={isToday(date)}
-                    class:dnt-view__calendar-cell--dim={span === 'month' && !isCurrentMonth(date)}
+                    class:dnt-view__calendar-cell--today={isToday(cell.date)}
+                    class:dnt-view__calendar-cell--dim={span === 'month' && !isCurrentMonth(cell.date)}
                     class="dnt-view__calendar-cell dnt-view__calendar-day"
                     role="button"
                     tabindex="0"
-                    on:click={() => dialogDate = date}
-                    on:keydown={(event) => event.key === 'Enter' && (dialogDate = date)}
+                    on:click={() => dialogDate = cell.date}
+                    on:keydown={(event) => event.key === 'Enter' && (dialogDate = cell.date)}
                 >
-                    <span class="dnt-view__calendar-date">{span === 'week' ? shortDate(date) : date.getDate()}</span>
+                    <span class="dnt-view__calendar-date">{span === 'week' ? shortDate(cell.date) : cell.date.getDate()}</span>
                     <div class="dnt-view__calendar-notebook-list">
-                        {#each entries.slice(0, 4) as entry}
+                        {#each cell.entries.slice(0, 4) as entry}
                             <button
-                                class:dnt-view__calendar-notebook-label--duplicate={entry.docs.length > 1}
+                                class:dnt-view__calendar-notebook-label--duplicate={entry.count > 1}
                                 class="dnt-view__calendar-notebook-label"
-                                on:click|stopPropagation={() => openDate(date, entry.notebook.id)}
+                                on:click|stopPropagation={() => openDate(cell.date, entry.notebook.id)}
                             >
-                                {entry.docs.length > 1 ? '⚠ ' : ''}{entry.notebook.name}
+                                {entry.count > 1 ? '⚠ ' : ''}{entry.notebook.name}
                             </button>
                         {/each}
-                        {#if entries.length > 4}
-                            <span class="dnt-view__calendar-more">+{entries.length - 4}</span>
+                        {#if cell.entries.length > 4}
+                            <span class="dnt-view__calendar-more">+{cell.entries.length - 4}</span>
                         {/if}
                     </div>
                 </div>
@@ -195,16 +210,15 @@
                     <button class="dnt-view__iconbtn" on:click={() => dialogDate = null}>×</button>
                 </header>
                 <div class="dnt-view__dialog-list">
-                    {#each notebooks as notebook}
-                        {@const docs = notebookDocs(dialogDate, notebook.id)}
+                    {#each dialogEntries as entry}
                         <div class="dnt-view__dialog-row">
-                            <span>{notebook.name}</span>
-                            <small>{docs.length > 1 ? `${i18n.DailyNoteView.Duplicate} ${docs.length}` : docs.length === 1 ? i18n.DailyNoteView.exists : i18n.DailyNoteView.Missing}</small>
-                            {#if docs.length > 0}
-                                <button class="b3-button b3-button--outline" on:click={() => openDate(dialogDate, notebook.id)}>{i18n.DailyNoteView.Open}</button>
+                            <span>{entry.notebook.name}</span>
+                            <small>{entry.count > 1 ? `${i18n.DailyNoteView.Duplicate} ${entry.count}` : entry.count === 1 ? i18n.DailyNoteView.exists : i18n.DailyNoteView.Missing}</small>
+                            {#if entry.count > 0}
+                                <button class="b3-button b3-button--outline" on:click={() => openDate(dialogDate, entry.notebook.id)}>{i18n.DailyNoteView.Open}</button>
                             {:else}
-                                <button class="b3-button b3-button--outline" disabled={creatingNotebookId !== null} on:click={() => createDate(notebook)}>
-                                    {creatingNotebookId === notebook.id ? i18n.DailyNoteView.Creating : i18n.DailyNoteView.CreateDailyNote}
+                                <button class="b3-button b3-button--outline" disabled={creatingNotebookId !== null} on:click={() => createDate(entry.notebook)}>
+                                    {creatingNotebookId === entry.notebook.id ? i18n.DailyNoteView.Creating : i18n.DailyNoteView.CreateDailyNote}
                                 </button>
                             {/if}
                         </div>

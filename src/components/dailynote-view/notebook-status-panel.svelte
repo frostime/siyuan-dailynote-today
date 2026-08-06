@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import { listDailyNotesBetween } from "@/func/dailynote-view/resolver";
+    import { listDailynote } from "@frostime/siyuan-plugin-kits";
     import { dateKey, findNotebook, visibleNotebooks } from "@/func/dailynote-view/state";
     import { i18n } from "@/utils";
 
@@ -46,7 +46,7 @@
         statusCounts = new Map();
         loading = true;
         try {
-            const docs = await listDailyNotesBetween(date, date);
+            const docs = await listDailynote({ after: date, before: date, limit: 2048 });
             if (key !== statusKey) return;
             const next = new Map<NotebookId, number>();
             docs.forEach((doc: any) => next.set(doc.box, (next.get(doc.box) || 0) + 1));
