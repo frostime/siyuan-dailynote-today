@@ -1,0 +1,6 @@
+# By default, only active requests/changes/asks are tracked
+requests/archive
+changes/archive
+asks/archive
+# Temporary workspace drafts
+tmp/**
