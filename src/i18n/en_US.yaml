@@ -58,6 +58,7 @@ DailyNoteView:
   Cancel: Cancel
   Content: Content
   CreateDailyNote: Create Daily Note
+  CreateFailed: Failed to create Daily Note. Please try again.
   Creating: Creating…
   Daily: Daily
   DailyHint: Keep dates without a Daily Note

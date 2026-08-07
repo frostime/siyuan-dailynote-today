@@ -38,6 +38,7 @@ interface I18n {
         Cancel: string;
         Content: string;
         CreateDailyNote: string;
+        CreateFailed: string;
         Creating: string;
         Daily: string;
         DailyHint: string;

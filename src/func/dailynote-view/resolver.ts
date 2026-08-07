@@ -11,13 +11,45 @@ export type ExistingTimelineWindow = {
     nextStart: Date | null;
 }
 
-function sortDocsByCreated(docs: DocBlock[]): DocBlock[] {
-    return docs.slice().sort((a, b) => a.created.localeCompare(b.created));
+export type DailyNoteIndexEntry = KitBlock & {
+    value?: string;
 }
 
-function normalizeDailyNoteDocs(result: KitBlock | KitBlock[] | null | undefined): DocBlock[] {
-    const blocks = Array.isArray(result) ? result : result ? [result] : [];
-    return blocks.filter((block) => block.type === 'd') as unknown as DocBlock[];
+type DateOperator = '>=' | '<' | '>';
+type DateDirection = 'ASC' | 'DESC';
+
+// ── Existing-only timeline date index ────────────────────────────────────────
+
+export async function resolveExistingTimelineWindow(
+    notebookId: NotebookId,
+    anchorDate: Date,
+    count: DailyNoteViewTimelineCount,
+): Promise<ExistingTimelineWindow> {
+    const anchor = dailyNoteValue(anchorDate);
+    let values = await queryExistingDailyNoteDates(notebookId, '>=', anchor, 'ASC', count);
+
+    if (values.length < count) {
+        const boundary = values[0] || anchor;
+        const earlier = await queryExistingDailyNoteDates(notebookId, '<', boundary, 'DESC', count - values.length);
+        values = [...earlier.reverse(), ...values];
+    }
+
+    if (values.length === 0) {
+        return { dates: [], previousStart: null, nextStart: null };
+    }
+
+    const previous = await queryExistingDailyNoteDates(notebookId, '<', values[0], 'DESC', 1);
+    const afterLast = await queryExistingDailyNoteDates(notebookId, '>', values[values.length - 1], 'ASC', 1);
+    const dates = values.map(dateFromDailyNoteValue);
+    const nextStart = afterLast.length === 0
+        ? null
+        : dates.length > 1 ? dates[1] : dateFromDailyNoteValue(afterLast[0]);
+
+    return {
+        dates,
+        previousStart: previous[0] ? dateFromDailyNoteValue(previous[0]) : null,
+        nextStart,
+    };
 }
 
 function dailyNoteValue(date: Date): string {
@@ -32,7 +64,17 @@ function sqlString(value: string): string {
     return value.replaceAll("'", "''");
 }
 
-async function queryDateValues(notebookId: NotebookId, condition: string, direction: 'ASC' | 'DESC', limit: number): Promise<string[]> {
+// listDailynote() returns document rows in descending order and does not provide
+// distinct date values or ascending traversal. Existing-only navigation needs
+// the nearest distinct dates in either direction, so this remains a narrow SQL
+// index query rather than a second document-listing mechanism.
+async function queryExistingDailyNoteDates(
+    notebookId: NotebookId,
+    operator: DateOperator,
+    value: string,
+    direction: DateDirection,
+    limit: number,
+): Promise<string[]> {
     const rows = await serverApi.sql(`
         SELECT A.value
         FROM attributes AS A
@@ -40,7 +82,7 @@ async function queryDateValues(notebookId: NotebookId, condition: string, direct
         WHERE B.type = 'd'
           AND B.box = '${sqlString(notebookId)}'
           AND A.name LIKE 'custom-dailynote-%'
-          AND ${condition}
+          AND A.value ${operator} '${sqlString(value)}'
         GROUP BY A.value
         ORDER BY A.value ${direction}
         LIMIT ${limit}
@@ -48,37 +90,7 @@ async function queryDateValues(notebookId: NotebookId, condition: string, direct
     return rows.map((row: { value: string }) => row.value).filter(Boolean);
 }
 
-export async function resolveExistingTimelineWindow(
-    notebookId: NotebookId,
-    anchorDate: Date,
-    count: DailyNoteViewTimelineCount,
-): Promise<ExistingTimelineWindow> {
-    const anchor = dailyNoteValue(anchorDate);
-    let values = await queryDateValues(notebookId, `A.value >= '${anchor}'`, 'ASC', count);
-
-    if (values.length < count) {
-        const boundary = values[0] || anchor;
-        const earlier = await queryDateValues(notebookId, `A.value < '${boundary}'`, 'DESC', count - values.length);
-        values = [...earlier.reverse(), ...values];
-    }
-
-    if (values.length === 0) {
-        return { dates: [], previousStart: null, nextStart: null };
-    }
-
-    const previous = await queryDateValues(notebookId, `A.value < '${values[0]}'`, 'DESC', 1);
-    const afterLast = await queryDateValues(notebookId, `A.value > '${values[values.length - 1]}'`, 'ASC', 1);
-    const dates = values.map(dateFromDailyNoteValue);
-    const nextStart = afterLast.length === 0
-        ? null
-        : dates.length > 1 ? dates[1] : dateFromDailyNoteValue(afterLast[0]);
-
-    return {
-        dates,
-        previousStart: previous[0] ? dateFromDailyNoteValue(previous[0]) : null,
-        nextStart,
-    };
-}
+// ── Daily Note cell resolution ───────────────────────────────────────────────
 
 export async function resolveDailyNoteCell(notebook: Notebook, date: Date): Promise<DailyNoteCell> {
     const [hpath, result] = await Promise.all([
@@ -104,6 +116,17 @@ export async function resolveDailyNoteCell(notebook: Notebook, date: Date): Prom
     };
 }
 
+function sortDocsByCreated(docs: DocBlock[]): DocBlock[] {
+    return docs.slice().sort((a, b) => a.created.localeCompare(b.created));
+}
+
+function normalizeDailyNoteDocs(result: KitBlock | KitBlock[] | null | undefined): DocBlock[] {
+    const blocks = Array.isArray(result) ? result : result ? [result] : [];
+    return blocks.filter((block) => block.type === 'd') as unknown as DocBlock[];
+}
+
+// ── Daily Note creation ──────────────────────────────────────────────────────
+
 export async function createDailyNoteCell(notebook: Notebook, date: Date): Promise<DailyNoteCell | null> {
     const docId = await createDailynote(notebook.id, date, { appId: app.appId });
     if (!docId) return null;
@@ -127,12 +150,5 @@ export async function createDailyNoteCell(notebook: Notebook, date: Date): Promi
         status: 'single',
         doc: (doc || { id: docId, hpath }) as DocBlock,
         hpath,
-    };
-}
-
-export async function resolveDailyNoteLane(seed: Omit<DailyNoteLane, 'cell'>): Promise<DailyNoteLane> {
-    return {
-        ...seed,
-        cell: await resolveDailyNoteCell(seed.notebook, seed.date),
     };
 }

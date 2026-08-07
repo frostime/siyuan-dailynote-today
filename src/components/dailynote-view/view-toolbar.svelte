@@ -8,7 +8,7 @@
     export let visibleDates: Date[] = [];
     export let canNavigatePrevious = true;
     export let canNavigateNext = true;
-    export let contentRevision = 0;
+    export let statusRevision = 0;
 
     const dispatch = createEventDispatcher<{
         state: DailyNoteViewState;
@@ -96,6 +96,6 @@
     <div class="dnt-view__spacer"></div>
 
     {#if state.form === 'content'}
-        <NotebookStatusPanel {state} {contentRevision} on:state={(event) => dispatch('state', event.detail)} />
+        <NotebookStatusPanel {state} {statusRevision} on:state={(event) => dispatch('state', event.detail)} />
     {/if}
 </header>

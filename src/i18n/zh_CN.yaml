@@ -47,6 +47,7 @@ DailyNoteView:
   Cancel: 取消
   Content: 内容
   CreateDailyNote: 创建 Daily Note
+  CreateFailed: 创建 Daily Note 失败，请重试
   Creating: 创建中…
   Daily: 逐日
   DailyHint: 保留没有日记的日期

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
+    import { showMessage } from "siyuan";
     import { createDailyNoteCell, resolveDailyNoteCell } from "@/func/dailynote-view";
     import { dateKey } from "@/func/dailynote-view/state";
     import { i18n } from "@/utils";
@@ -44,15 +45,24 @@
         }
     }
 
+    function reportCreateFailure(error?: unknown) {
+        if (error) console.error(error);
+        showMessage(i18n.DailyNoteView.CreateFailed, 5000, 'error');
+    }
+
     async function createDailyNote() {
         if (creating) return;
         creating = true;
         try {
             const createdCell = await createDailyNoteCell(lane.notebook, lane.date);
-            if (createdCell) {
-                cell = createdCell;
-                dispatch('created');
+            if (!createdCell) {
+                reportCreateFailure();
+                return;
             }
+            cell = createdCell;
+            dispatch('created');
+        } catch (error) {
+            reportCreateFailure(error);
         } finally {
             creating = false;
         }

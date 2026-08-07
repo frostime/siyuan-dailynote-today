@@ -4,6 +4,8 @@
     }
 }
 
+// ── Daily Note View shell and toolbar ────────────────────────────────────────
+
 .dnt-view-tab,
 .dnt-view {
     height: 100%;
@@ -118,6 +120,8 @@
     color: var(--b3-theme-on-primary, #fff) !important;
 }
 
+// ── Content lanes ────────────────────────────────────────────────────────────
+
 .dnt-view__lanes {
     --dnt-view-lane-min-width: 30rem;
     flex: 1 1 auto;
@@ -226,6 +230,8 @@
     border-top: 1px solid var(--b3-theme-surface-lighter);
 }
 
+// ── Calendar ──────────────────────────────────────────────────────────────────
+
 .dnt-view__calendar {
     position: relative;
     flex: 1 1 auto;
@@ -309,6 +315,8 @@ button.dnt-view__calendar-cell {
     color: var(--b3-theme-on-surface-light);
 }
 
+// ── Notebook status picker ───────────────────────────────────────────────────
+
 .dnt-view__notebook-picker {
     position: relative;
     flex: 0 0 auto;
@@ -383,6 +391,8 @@ button.dnt-view__calendar-cell {
     border-top: 1px solid var(--b3-theme-surface-lighter);
 }
 
+// ── Secondary controls ───────────────────────────────────────────────────────
+
 .dnt-view__floating-control {
     position: absolute;
     z-index: 12;
@@ -421,6 +431,8 @@ button.dnt-view__calendar-cell {
 .dnt-view__calendar-day {
     cursor: pointer;
 }
+
+// ── Calendar variant layouts ─────────────────────────────────────────────────
 
 .dnt-view__calendar-grid--week {
     grid-template-columns: repeat(7, minmax(11rem, 1fr));
@@ -517,6 +529,8 @@ button.dnt-view__calendar-cell {
     color: var(--b3-theme-on-surface-light);
 }
 
+// ── Calendar dialog ──────────────────────────────────────────────────────────
+
 .dnt-view__dialog-backdrop {
     position: absolute;
     z-index: 18;
@@ -563,6 +577,8 @@ button.dnt-view__calendar-cell {
 .dnt-view__dialog-row > small {
     color: var(--b3-theme-on-surface-light);
 }
+
+// ── Responsive layout ────────────────────────────────────────────────────────
 
 @media (max-width: 900px) {
     .dnt-view__toolbar {

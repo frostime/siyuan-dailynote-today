@@ -1,8 +1,10 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { listDailynote } from "@frostime/siyuan-plugin-kits";
+    import type { DailyNoteIndexEntry } from "@/func/dailynote-view/resolver";
     import { createDailyNoteCell } from "@/func/dailynote-view/resolver";
     import { dateKey, normalizeDate, todayDate, visibleNotebooks } from "@/func/dailynote-view/state";
+    import { showMessage } from "siyuan";
     import { i18n } from "@/utils";
 
     type CalendarDocs = Map<string, Map<NotebookId, number>>;
@@ -32,6 +34,8 @@
     // only read inside a template helper, so async query results would not repaint cells.
     $: calendarCells = buildCalendarCells(cells, notebooks, docsByDate);
     $: dialogEntries = buildDialogEntries(dialogDate, notebooks, docsByDate);
+
+    // ── Calendar geometry ────────────────────────────────────────────────────
 
     function startOfWeek(date: Date): Date {
         const start = normalizeDate(date);
@@ -71,10 +75,12 @@
         });
     }
 
-    function groupDocs(docs: any[], visibleNotebooks: Notebook[]): CalendarDocs {
+    // ── Calendar query and projections ────────────────────────────────────────
+
+    function groupDocs(docs: DailyNoteIndexEntry[], notebooksForView: Notebook[]): CalendarDocs {
         const result: CalendarDocs = new Map();
         docs.forEach((doc) => {
-            if (!doc.value || !visibleNotebooks.some((notebook) => notebook.id === doc.box)) return;
+            if (!doc.value || !notebooksForView.some((notebook) => notebook.id === doc.box)) return;
             const key = `${doc.value.slice(0, 4)}-${doc.value.slice(4, 6)}-${doc.value.slice(6, 8)}`;
             if (!result.has(key)) result.set(key, new Map());
             const byNotebook = result.get(key);
@@ -103,7 +109,7 @@
 
         loading = true;
         try {
-            const docs = await listDailynote({
+            const docs: DailyNoteIndexEntry[] = await listDailynote({
                 after: requestCells[0],
                 before: requestCells[requestCells.length - 1],
                 limit: 2048,
@@ -118,11 +124,11 @@
         }
     }
 
-    function buildCalendarCells(dates: Date[], visibleNotebooks: Notebook[], docs: CalendarDocs): CalendarCell[] {
+    function buildCalendarCells(dates: Date[], notebooksForView: Notebook[], docs: CalendarDocs): CalendarCell[] {
         return dates.map((date) => {
             const byNotebook = docs.get(dateKey(date));
             const entries = byNotebook
-                ? visibleNotebooks
+                ? notebooksForView
                     .filter((notebook) => byNotebook.has(notebook.id))
                     .map((notebook) => ({ notebook, count: byNotebook.get(notebook.id) || 0 }))
                 : [];
@@ -130,17 +136,24 @@
         });
     }
 
-    function buildDialogEntries(date: Date | null, visibleNotebooks: Notebook[], docs: CalendarDocs): CalendarNotebookEntry[] {
+    function buildDialogEntries(date: Date | null, notebooksForView: Notebook[], docs: CalendarDocs): CalendarNotebookEntry[] {
         if (!date) return [];
         const byNotebook = docs.get(dateKey(date));
-        return visibleNotebooks.map((notebook) => ({
+        return notebooksForView.map((notebook) => ({
             notebook,
             count: byNotebook?.get(notebook.id) || 0,
         }));
     }
 
+    // ── User actions ──────────────────────────────────────────────────────────
+
     function openDate(date: Date, notebookId: NotebookId) {
         dispatch('selectDate', { date, notebookId });
+    }
+
+    function reportCreateFailure(error?: unknown) {
+        if (error) console.error(error);
+        showMessage(i18n.DailyNoteView.CreateFailed, 5000, 'error');
     }
 
     async function createDate(notebook: Notebook) {
@@ -149,7 +162,13 @@
         creatingNotebookId = notebook.id;
         try {
             const cell = await createDailyNoteCell(notebook, targetDate);
-            if (cell) dispatch('selectDate', { date: targetDate, notebookId: notebook.id, cell });
+            if (!cell) {
+                reportCreateFailure();
+                return;
+            }
+            dispatch('selectDate', { date: targetDate, notebookId: notebook.id, cell });
+        } catch (error) {
+            reportCreateFailure(error);
         } finally {
             creatingNotebookId = null;
         }

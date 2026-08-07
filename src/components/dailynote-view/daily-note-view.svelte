@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import { eventBus } from "@/event-bus";
     import { addDays, buildLaneSeeds, dateKey, defaultDailyNoteViewState, normalizeDate, visibleNotebooks } from "@/func/dailynote-view/state";
     import { resolveExistingTimelineWindow } from "@/func/dailynote-view/resolver";
     import type { ExistingTimelineWindow } from "@/func/dailynote-view/resolver";
@@ -10,15 +8,51 @@
     import ContentLanes from "./content-lanes.svelte";
     import CalendarGrid from "./calendar-grid.svelte";
 
+    type PendingCell = {
+        key: string;
+        cell: DailyNoteCell;
+    };
+
+    // The calendar has already resolved this cell. Keep one pending result for
+    // the first lane render instead of immediately querying the same target again.
+    function createPendingCellBuffer() {
+        let pending: PendingCell | null = null;
+
+        return {
+            remember(key: string, cell: DailyNoteCell) {
+                pending = { key, cell };
+            },
+            apply(seeds: DailyNoteLane[]): DailyNoteLane[] {
+                if (!pending) return seeds;
+
+                const index = seeds.findIndex((seed) => seed.key === pending.key);
+                if (index < 0) {
+                    pending = null;
+                    return seeds;
+                }
+
+                const next = seeds.slice();
+                next[index] = { ...next[index], cell: pending.cell };
+                pending = null;
+                return next;
+            },
+            clear() {
+                pending = null;
+            },
+        };
+    }
+
     export let app: any;
 
     let state: DailyNoteViewState = defaultDailyNoteViewState();
     let lanes: DailyNoteLane[] = [];
-    const initialCells = new Map<string, DailyNoteCell>();
+    const pendingCells = createPendingCellBuffer();
     let loadingTimeline = false;
-    let contentRevision = 0;
+    let statusRevision = 0;
     let contentRequestKey = '';
     let timelineWindow: ExistingTimelineWindow = { dates: [], previousStart: null, nextStart: null };
+
+    // ── Derived view state ────────────────────────────────────────────────────
 
     $: refreshContent(state);
     $: visibleDates = lanes.map((lane) => lane.date);
@@ -31,6 +65,8 @@
         || state.timelineFilter !== 'existing'
         || timelineWindow.nextStart !== null;
 
+    // ── State transitions ─────────────────────────────────────────────────────
+
     function setState(next: DailyNoteViewState) {
         const available = visibleNotebooks();
         const availableIds = new Set(available.map((notebook) => notebook.id));
@@ -42,69 +78,6 @@
             timelineNotebookId: availableIds.has(next.timelineNotebookId) ? next.timelineNotebookId : fallbackId,
             dayNotebookIds: dayNotebookIds.length > 0 ? dayNotebookIds : fallbackId ? [fallbackId] : [],
         };
-    }
-
-    function onSettingChanged(data: { key: SettingKey }) {
-        if (data.key === 'NotebookBlacklist') setState(state);
-    }
-
-    async function refreshContent(nextState: DailyNoteViewState) {
-        const key = [
-            nextState.form,
-            nextState.contentMode,
-            nextState.timelineFilter,
-            nextState.timelineNotebookId,
-            nextState.timelineCount,
-            dateKey(nextState.anchorDate),
-            nextState.dayNotebookIds.join(','),
-        ].join(':');
-        if (key === contentRequestKey) return;
-        contentRequestKey = key;
-
-        if (nextState.form === 'content' && nextState.contentMode === 'timeline' && !nextState.timelineNotebookId) {
-            loadingTimeline = false;
-            timelineWindow = { dates: [], previousStart: null, nextStart: null };
-            lanes = [];
-            return;
-        }
-
-        if (nextState.form !== 'content' || nextState.contentMode !== 'timeline' || nextState.timelineFilter !== 'existing') {
-            loadingTimeline = false;
-            timelineWindow = { dates: [], previousStart: null, nextStart: null };
-            lanes = attachInitialCells(buildLaneSeeds(nextState));
-            return;
-        }
-
-        loadingTimeline = true;
-        timelineWindow = { dates: [], previousStart: null, nextStart: null };
-        lanes = [];
-        try {
-            const resolved = await resolveExistingTimelineWindow(
-                nextState.timelineNotebookId,
-                nextState.anchorDate,
-                nextState.timelineCount,
-            );
-            if (key !== contentRequestKey) return;
-            timelineWindow = resolved;
-            lanes = attachInitialCells(buildLaneSeeds(nextState, resolved.dates));
-        } catch (error) {
-            if (key === contentRequestKey) {
-                timelineWindow = { dates: [], previousStart: null, nextStart: null };
-                lanes = [];
-            }
-            console.error(error);
-        } finally {
-            if (key === contentRequestKey) loadingTimeline = false;
-        }
-    }
-
-    function attachInitialCells(seeds: DailyNoteLane[]): DailyNoteLane[] {
-        return seeds.map((seed) => {
-            const cell = initialCells.get(seed.key);
-            if (!cell) return seed;
-            initialCells.delete(seed.key);
-            return { ...seed, cell };
-        });
     }
 
     function navigate(offset: number) {
@@ -127,7 +100,7 @@
 
     function selectCalendarDate(event: CustomEvent<{ date: Date; notebookId: NotebookId; cell?: DailyNoteCell }>) {
         if (event.detail.cell) {
-            initialCells.set(`${dateKey(event.detail.date)}:${event.detail.notebookId}`, event.detail.cell);
+            pendingCells.remember(`${dateKey(event.detail.date)}:${event.detail.notebookId}`, event.detail.cell);
         }
         setState({
             ...state,
@@ -143,8 +116,59 @@
         setState({ ...state, span: 'month', anchorDate: event.detail });
     }
 
-    onMount(() => eventBus.subscribe(eventBus.EventSetting, onSettingChanged));
-    onDestroy(() => eventBus.unSubscribe(eventBus.EventSetting, onSettingChanged));
+    // ── Content loading ───────────────────────────────────────────────────────
+
+    async function refreshContent(nextState: DailyNoteViewState) {
+        const key = [
+            nextState.form,
+            nextState.contentMode,
+            nextState.timelineFilter,
+            nextState.timelineNotebookId,
+            nextState.timelineCount,
+            dateKey(nextState.anchorDate),
+            nextState.dayNotebookIds.join(','),
+        ].join(':');
+        if (key === contentRequestKey) return;
+        contentRequestKey = key;
+
+        if (nextState.form === 'content' && nextState.contentMode === 'timeline' && !nextState.timelineNotebookId) {
+            loadingTimeline = false;
+            timelineWindow = { dates: [], previousStart: null, nextStart: null };
+            pendingCells.clear();
+            lanes = [];
+            return;
+        }
+
+        if (nextState.form !== 'content' || nextState.contentMode !== 'timeline' || nextState.timelineFilter !== 'existing') {
+            loadingTimeline = false;
+            timelineWindow = { dates: [], previousStart: null, nextStart: null };
+            lanes = pendingCells.apply(buildLaneSeeds(nextState));
+            return;
+        }
+
+        loadingTimeline = true;
+        timelineWindow = { dates: [], previousStart: null, nextStart: null };
+        lanes = [];
+        try {
+            const resolved = await resolveExistingTimelineWindow(
+                nextState.timelineNotebookId,
+                nextState.anchorDate,
+                nextState.timelineCount,
+            );
+            if (key !== contentRequestKey) return;
+            timelineWindow = resolved;
+            lanes = pendingCells.apply(buildLaneSeeds(nextState, resolved.dates));
+        } catch (error) {
+            if (key === contentRequestKey) {
+                timelineWindow = { dates: [], previousStart: null, nextStart: null };
+                lanes = [];
+            }
+            console.error(error);
+        } finally {
+            if (key === contentRequestKey) loadingTimeline = false;
+        }
+    }
+
 </script>
 
 <div class="dnt-view fn__flex-1 fn__flex-column">
@@ -153,7 +177,7 @@
         {visibleDates}
         {canNavigatePrevious}
         {canNavigateNext}
-        {contentRevision}
+        {statusRevision}
         on:state={(event) => setState(event.detail)}
         on:navigate={(event) => navigate(event.detail)}
         on:today={() => setState({ ...state, anchorDate: new Date() })}
@@ -165,7 +189,7 @@
         {:else if state.contentMode === 'timeline' && state.timelineFilter === 'existing' && lanes.length === 0}
             <div class="dnt-view__empty"><strong>{i18n.DailyNoteView.NoExistingNotes}</strong><span>{i18n.DailyNoteView.SwitchToDaily}</span></div>
         {:else}
-            <ContentLanes {app} {lanes} on:created={() => contentRevision += 1} />
+            <ContentLanes {app} {lanes} on:created={() => statusRevision += 1} />
         {/if}
     {:else}
         <CalendarGrid

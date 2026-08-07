@@ -1,11 +1,12 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { listDailynote } from "@frostime/siyuan-plugin-kits";
-    import { dateKey, findNotebook, visibleNotebooks } from "@/func/dailynote-view/state";
+    import type { DailyNoteIndexEntry } from "@/func/dailynote-view/resolver";
+    import { dateKey, visibleNotebooks } from "@/func/dailynote-view/state";
     import { i18n } from "@/utils";
 
     export let state: DailyNoteViewState;
-    export let contentRevision = 0;
+    export let statusRevision = 0;
 
     const dispatch = createEventDispatcher<{ state: DailyNoteViewState }>();
 
@@ -17,17 +18,17 @@
     let draftMode: DailyNoteViewNotebookSelection = 'single';
     let draftNotebookIds: NotebookId[] = [];
 
-    $: notebooks = (state, visibleNotebooks());
+    const notebooks = visibleNotebooks();
     $: selectedNotebook = state.contentMode === 'timeline'
-        ? findNotebook(state.timelineNotebookId)
-        : findNotebook(state.dayNotebookIds[0]);
+        ? notebooks.find((notebook) => notebook.id === state.timelineNotebookId) || notebooks[0]
+        : notebooks.find((notebook) => notebook.id === state.dayNotebookIds[0]) || notebooks[0];
     $: selectedExisting = state.dayNotebookIds.filter((id) => (statusCounts.get(id) || 0) > 0).length;
     $: selectedStatus = statusText(selectedNotebook?.id, statusCounts);
     $: summary = state.contentMode === 'timeline' || state.daySelection === 'single'
         ? `${selectedNotebook?.name || ''} · ${selectedStatus}`
         : `${state.dayNotebookIds.length} ${i18n.DailyNoteView.Selected} · ${selectedExisting} ${i18n.DailyNoteView.HasContent}`;
     $: filteredNotebooks = notebooks.filter((notebook) => notebook.name.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()));
-    $: refreshStatuses(state.anchorDate, contentRevision);
+    $: refreshStatuses(state.anchorDate, statusRevision);
 
     function patch(partial: Partial<DailyNoteViewState>) {
         dispatch('state', { ...state, ...partial });
@@ -39,6 +40,8 @@
         return count === 1 ? i18n.DailyNoteView.exists : i18n.DailyNoteView.Missing;
     }
 
+    // ── Notebook status query ─────────────────────────────────────────────────
+
     async function refreshStatuses(date: Date, revision: number) {
         const key = `${dateKey(date)}:${revision}`;
         if (key === statusKey) return;
@@ -46,10 +49,10 @@
         statusCounts = new Map();
         loading = true;
         try {
-            const docs = await listDailynote({ after: date, before: date, limit: 2048 });
+            const docs: DailyNoteIndexEntry[] = await listDailynote({ after: date, before: date, limit: 2048 });
             if (key !== statusKey) return;
             const next = new Map<NotebookId, number>();
-            docs.forEach((doc: any) => next.set(doc.box, (next.get(doc.box) || 0) + 1));
+            docs.forEach((doc) => next.set(doc.box, (next.get(doc.box) || 0) + 1));
             statusCounts = next;
         } catch (error) {
             if (key === statusKey) statusCounts = new Map();
@@ -58,6 +61,8 @@
             if (key === statusKey) loading = false;
         }
     }
+
+    // ── Notebook selection ────────────────────────────────────────────────────
 
     function togglePanel() {
         open = !open;
