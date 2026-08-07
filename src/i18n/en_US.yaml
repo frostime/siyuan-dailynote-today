@@ -52,29 +52,43 @@ DeReserveMenu:
   Success: Cancel reservation success!
   name: Cancel Reservation
 DailyNoteView:
+  AllNotebooks: All notebooks
+  Apply: Apply
   Calendar: Calendar
+  Cancel: Cancel
   Content: Content
   CreateDailyNote: Create Daily Note
-  Days: Days
+  CreateFailed: Failed to create Daily Note. Please try again.
+  Creating: Creating…
+  Daily: Daily
+  DailyHint: Keep dates without a Daily Note
   Duplicate: Duplicate
   DuplicateHint: This date and notebook have multiple Daily Notes. The earliest-created document is shown by default
-  Future: Future date
-  FutureHint: Future dates do not auto-create Daily Notes
+  ExistingOnly: Existing only
+  ExistingOnlyHint: Skip dates without a Daily Note
+  HasContent: with notes
   Missing: Missing
   MissingHint: Browsing does not create a document; only this button writes
   Month: Month
-  Notebook: Notebook
-  NotebookAxis: By Notebook
-  Notebooks: Notebooks
+  NotebookStatus: Note status
+  Open: Open
   OpenDuplicateDocs: Open duplicate docs
   OpenView: Open Daily Note View
-  Scope: Scope
-  ScopeAll: All
-  ScopeSingle: Single
-  Span: Span
-  TimeAxis: By Date
+  SearchNotebooks: Search notebooks…
+  SelectMonth: Select a month
+  Selected: selected
+  Single: Single
+  SingleDay: Day
+  SingleDayHint: Keep one date and view selected notebooks
+  Timeline: Timeline
+  TimelineHint: Keep one notebook and browse dates
   Today: Today
+  Multi: Multiple
+  NoExistingNotes: This notebook has no Daily Notes
+  Retry: Retry
+  SwitchToDaily: Switch to Daily to choose a date and create one
   Week: Week
+  Year: Year
   exists: Exists
   title: Daily Note View
 DockReserve:

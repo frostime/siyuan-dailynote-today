@@ -8,17 +8,21 @@
     let target: HTMLDivElement;
     let protyle: Protyle;
     let loadedDocId: DocumentId;
+    let generation = 0;
 
     async function load() {
         if (!target || loadedDocId === docId) {
             return;
         }
-        unload();
+        const requestedDocId = docId;
+        const requestedGeneration = ++generation;
+        unload(false);
         await tick();
+        if (!target || requestedGeneration !== generation || requestedDocId !== docId) return;
         protyle = new Protyle(app, target, {
             mode: "wysiwyg",
             action: ["cb-get-all"],
-            blockId: docId,
+            blockId: requestedDocId,
             render: {
                 background: false,
                 title: true,
@@ -28,10 +32,11 @@
                 breadcrumbDocName: false,
             },
         });
-        loadedDocId = docId;
+        loadedDocId = requestedDocId;
     }
 
-    function unload() {
+    function unload(invalidate = true) {
+        if (invalidate) generation += 1;
         protyle?.destroy();
         protyle = null;
         loadedDocId = null;

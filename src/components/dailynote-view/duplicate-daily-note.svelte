@@ -13,7 +13,7 @@
     </div>
     <ProtyleHost {app} docId={cell.primary.id} />
     <div class="dnt-view__duplicate-actions">
-        {#each cell.docs as doc}
+        {#each cell.docs.filter((doc) => doc.id !== cell.primary.id) as doc}
             <button class="b3-button b3-button--outline" on:click={() => openBlock(doc.id)}>
                 {i18n.DailyNoteView.OpenDuplicateDocs}: {doc.hpath || doc.id}
             </button>

@@ -41,29 +41,43 @@ DeReserveMenu:
   Success: 成功取消预约!
   name: 取消预约
 DailyNoteView:
+  AllNotebooks: 全部笔记本
+  Apply: 应用
   Calendar: 日历
+  Cancel: 取消
   Content: 内容
   CreateDailyNote: 创建 Daily Note
-  Days: 天数
+  CreateFailed: 创建 Daily Note 失败，请重试
+  Creating: 创建中…
+  Daily: 逐日
+  DailyHint: 保留没有日记的日期
   Duplicate: 重复
   DuplicateHint: 这个日期和笔记本有多个 Daily Note，默认显示最早创建的文档
-  Future: 未来日期
-  FutureHint: 未来日期不会自动创建 Daily Note
+  ExistingOnly: 仅已有
+  ExistingOnlyHint: 跳过没有日记的日期
+  HasContent: 有内容
   Missing: 未创建
   MissingHint: 浏览不会创建文档；只有点击按钮才写入
   Month: 月
-  Notebook: 笔记本
-  NotebookAxis: 笔记本轴
-  Notebooks: 笔记本
+  NotebookStatus: 笔记状态
+  Open: 打开
   OpenDuplicateDocs: 打开重复文档
   OpenView: 打开日记视图
-  Scope: 范围
-  ScopeAll: 全部
-  ScopeSingle: 单个
-  Span: 跨度
-  TimeAxis: 时间轴
+  SearchNotebooks: 搜索笔记本…
+  SelectMonth: 选择月份
+  Selected: 已选
+  Single: 单选
+  SingleDay: 单日
+  SingleDayHint: 固定日期，查看所选笔记本
+  Timeline: 时间轴
+  TimelineHint: 固定笔记本，前后浏览日期
   Today: 今日
+  Multi: 多选
+  NoExistingNotes: 这个笔记本还没有日记
+  Retry: 重试
+  SwitchToDaily: 切换到“逐日”后可选择日期并创建
   Week: 周
+  Year: 年
   exists: 已创建
   title: 日记视图
 DockReserve:

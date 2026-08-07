@@ -24,15 +24,6 @@ export function todayDate(): Date {
     return normalizeDate(new Date());
 }
 
-export function isFutureDate(date: Date): boolean {
-    return normalizeDate(date).getTime() > todayDate().getTime();
-}
-
-export function clampToToday(date: Date): Date {
-    const normalized = normalizeDate(date);
-    return isFutureDate(normalized) ? todayDate() : normalized;
-}
-
 export function addDays(date: Date, days: number): Date {
     const next = normalizeDate(date);
     next.setDate(next.getDate() + days);
@@ -40,14 +31,18 @@ export function addDays(date: Date, days: number): Date {
 }
 
 export function defaultDailyNoteViewState(): DailyNoteViewState {
-    const notebook = notebooks.default || notebooks.get(0);
+    const available = visibleNotebooks();
+    const notebook = available.find((item) => item.id === notebooks.default?.id) || available[0];
+    const notebookId = notebook?.id;
     return {
         form: 'content',
         anchorDate: todayDate(),
-        anchorNotebookId: notebook?.id,
-        axis: 'time',
-        timeCount: 1,
-        notebookScope: 'all',
+        contentMode: 'timeline',
+        daySelection: 'single',
+        dayNotebookIds: notebookId ? [notebookId] : [],
+        timelineNotebookId: notebookId,
+        timelineCount: 1,
+        timelineFilter: 'daily',
         span: 'week',
     };
 }
@@ -57,52 +52,42 @@ export function visibleNotebooks(): Notebook[] {
     return notebooks.notebooks.filter((notebook) => blacklist?.[notebook.id] !== true);
 }
 
-export function findNotebook(notebookId: NotebookId): Notebook {
-    return notebooks.find(notebookId) || notebooks.default || notebooks.get(0);
+export function findNotebook(notebookId: NotebookId): Notebook | undefined {
+    const available = visibleNotebooks();
+    return available.find((notebook) => notebook.id === notebookId) || available[0];
 }
 
-export function shiftNotebook(notebookId: NotebookId, offset: number): NotebookId {
-    const list = visibleNotebooks();
-    if (list.length === 0) {
-        return notebookId;
-    }
-    const current = list.findIndex((notebook) => notebook.id === notebookId);
-    const index = current < 0 ? 0 : current;
-    const next = (index + offset + list.length) % list.length;
-    return list[next].id;
+function dayNotebooks(state: DailyNoteViewState): Notebook[] {
+    const available = new Map(visibleNotebooks().map((notebook) => [notebook.id, notebook]));
+    return state.dayNotebookIds
+        .map((notebookId) => available.get(notebookId))
+        .filter((notebook): notebook is Notebook => Boolean(notebook));
 }
 
-export function buildLaneSeeds(state: DailyNoteViewState): LaneSeed[] {
+export function buildLaneSeeds(state: DailyNoteViewState, timelineDates: Date[] = []): LaneSeed[] {
     if (state.form !== 'content') {
         return [];
     }
 
-    if (state.axis === 'time') {
-        const notebook = findNotebook(state.anchorNotebookId);
-        if (!notebook) {
-            return [];
-        }
-        const count = state.timeCount;
-        const startOffset = -Math.floor((count - 1) / 2);
-        return Array.from({ length: count }, (_, index) => {
-            const date = addDays(state.anchorDate, startOffset + index);
-            return {
-                key: `${dateKey(date)}:${notebook.id}`,
-                date,
-                notebook,
-            };
-        });
+    if (state.contentMode === 'day') {
+        return dayNotebooks(state).map((notebook) => ({
+            key: `${dateKey(state.anchorDate)}:${notebook.id}`,
+            date: normalizeDate(state.anchorDate),
+            notebook,
+        }));
     }
 
-    const list = visibleNotebooks();
-    const selected = list.find((notebook) => notebook.id === state.anchorNotebookId) ?? list[0];
-    const lanes = state.notebookScope === 'single'
-        ? selected ? [selected] : []
-        : list;
+    const notebook = findNotebook(state.timelineNotebookId);
+    if (!notebook) {
+        return [];
+    }
+    const dates = state.timelineFilter === 'existing'
+        ? timelineDates
+        : Array.from({ length: state.timelineCount }, (_, index) => addDays(state.anchorDate, index));
 
-    return lanes.map((notebook) => ({
-        key: `${dateKey(state.anchorDate)}:${notebook.id}`,
-        date: normalizeDate(state.anchorDate),
+    return dates.map((date) => ({
+        key: `${dateKey(date)}:${notebook.id}`,
+        date,
         notebook,
     }));
 }
