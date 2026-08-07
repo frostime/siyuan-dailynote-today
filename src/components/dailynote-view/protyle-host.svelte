@@ -21,6 +21,7 @@
         if (!target || requestedGeneration !== generation || requestedDocId !== docId) return;
         protyle = new Protyle(app, target, {
             mode: "wysiwyg",
+            typewriterMode: true,
             action: ["cb-get-all"],
             blockId: requestedDocId,
             render: {

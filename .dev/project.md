@@ -48,4 +48,5 @@ Examples: "snake_case for Python, camelCase for JS", "All API routes: /api/v1/*"
 - [Glossary](docs/glossary.md) — Chinese-English terminology map for project-specific daily-note, notebook, reservation, duplicate-handling, and build terms.
 - [Daily-note lifecycle and duplicate handling](docs/daily-note-lifecycle-and-duplicate-handling.md) — Daily-note startup/open/status flows, notebook state, custom attributes, sync duplicate detection, and duplicate handling methods.
 - [Reservation subsystem](docs/reservation-subsystem.md) — Reservation block contracts, date parsing, retrieval insertion, settings, and Dock behavior.
+- [Protyle integration and parameter behavior](docs/protyle-integration.md) — Read when changing the embedded Daily Note editor or its scrolling. Covers the selected Protyle options, typewriter-mode bottom space, DOM scroll ownership, and upstream compatibility checks.
 
