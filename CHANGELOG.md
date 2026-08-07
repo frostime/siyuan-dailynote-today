@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2026-08-07] v1.9.2
+
 ### Changed
 
 - 重构 Daily Note View，以真实 Daily Note 文档为中心，支持单日、多笔记本、时间轴和日历浏览
@@ -322,5 +324,6 @@ Setting 面板中加入了「更新笔记本状态」，用于替代 Ctrl+Alt+U�
 3. 下拉选项框为各个笔记本提供「是否已经创建了今天的日记」的标识
 4. 当笔记本有更新（打开/关闭创建笔记本）的时候，请按快捷键「ctrl+alt+u」更新状态
 
-[Unreleased]: https://github.com/frostime/siyuan-dailynote-today/compare/v1.9.0...HEAD
+[Unreleased]: https://github.com/frostime/siyuan-dailynote-today/compare/v1.9.2...HEAD
+[1.9.2]: https://github.com/frostime/siyuan-dailynote-today/compare/v1.9.1...v1.9.2
 [1.9.0]: https://github.com/frostime/siyuan-dailynote-today/releases/tag/v1.9.0
