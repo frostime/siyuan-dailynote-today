@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2026-08-07] v1.9.3
+
+### Changed
+
+- 最低支持的思源版本提升至 3.7.0
+
+### Fixed
+
+- 修复社区集市包清单和图标大小校验问题
+
 ## [2026-08-07] v1.9.2
 
 ### Changed
