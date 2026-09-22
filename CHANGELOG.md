@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- 新增「自动识别预约日期」设置；关闭后强制打开预约确认窗口并手动选择日期，避免文本中的歧义日期导致预约失败。
+
 ## [2026-08-07] v1.9.3
 
 ### Changed

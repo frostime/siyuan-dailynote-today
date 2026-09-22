@@ -198,39 +198,41 @@ export async function reserveBlock(blockId) {
     let matchedText: MatchedText = undefined;
     let resDate: Date = null;
     let resIndex: number = Infinity;
-    //匹配日期正则表达式
-    for (let rule of DatePatternRules) {
-        //find
-        let match = kramdown.match(rule.pattern);
-        // console.log(rule.pattern, match);
-        if (match && match.index < resIndex) {
-            let [year, month, day] = rule.parse(match);
-            //防止出现匹配到的日期是无效的情况
-            let date = new Date(`${year}-${month}-${day}`);
-            if (date.toString() !== 'Invalid Date') {
-                resIndex = match.index;
-                resDate = date;
-                resMatch = match;
+    if (settings.get('AutoMatchReservationDate')) {
+        //匹配日期正则表达式
+        for (let rule of DatePatternRules) {
+            //find
+            let match = kramdown.match(rule.pattern);
+            // console.log(rule.pattern, match);
+            if (match && match.index < resIndex) {
+                let [year, month, day] = rule.parse(match);
+                //防止出现匹配到的日期是无效的情况
+                let date = new Date(`${year}-${month}-${day}`);
+                if (date.toString() !== 'Invalid Date') {
+                    resIndex = match.index;
+                    resDate = date;
+                    resMatch = match;
+                }
             }
         }
-    }
 
-    if (!resDate) {
-        // resDate = parseDate(kramdown);
-        let result = parse(kramdown, null, { forwardDate: true });
-        if (result.length > 0) {
-            let parseResult: ParsedResult = result[0];
-            resDate = parseResult.start.date();
-            resDate.setHours(0, 0, 0, 0);
-            matchedText = {
-                text: parseResult.text,
-                index: parseResult.index
+        if (!resDate) {
+            // resDate = parseDate(kramdown);
+            let result = parse(kramdown, null, { forwardDate: true });
+            if (result.length > 0) {
+                let parseResult: ParsedResult = result[0];
+                resDate = parseResult.start.date();
+                resDate.setHours(0, 0, 0, 0);
+                matchedText = {
+                    text: parseResult.text,
+                    index: parseResult.index
+                }
             }
-        }
-    } else {
-        matchedText = {
-            text: resMatch[0],
-            index: resMatch.index
+        } else {
+            matchedText = {
+                text: resMatch[0],
+                index: resMatch.index
+            }
         }
     }
 
@@ -243,7 +245,9 @@ export async function reserveBlock(blockId) {
             resDate = date;
         });
         confirmDialog({
-            title: i18n.reserve_ts.no_matched_date,
+            title: settings.get('AutoMatchReservationDate')
+                ? i18n.reserve_ts.no_matched_date
+                : i18n.reserve_ts.manual_select_date,
             content: fragment,
             confirm: () => {
                 if (!resDate) {

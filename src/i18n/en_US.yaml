@@ -224,6 +224,9 @@ Setting:
   OpenOnStart:
     text: Open Today's daily note automatically when the plugin is loaded
     title: Auto-open Daily Note
+  AutoMatchReservationDate:
+    text: When disabled, skip date recognition in the block and force the reservation confirmation window so you can select a date manually.
+    title: Automatically recognize reservation dates
   PopupReserveDialog:
     text: Automatically displays a confirmation window when reserving a block to ensure
       the date is correct.
@@ -277,6 +280,7 @@ global_notebooks_ts:
     the notebook where the block is located {2}
 reserve_ts:
   block_reservation: Reserve the block to
+  manual_select_date: Automatic date recognition is disabled; select a reservation date
   no_matched_date: No matching date, you can select manually
 toolbar_menu_ts:
   err_get_user_notebook: 'Error: Unable to obtain the notebook of the user''s open

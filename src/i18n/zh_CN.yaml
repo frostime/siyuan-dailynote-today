@@ -195,6 +195,9 @@ Setting:
   OpenOnStart:
     text: 插件启动后自动打开当日的 Daily Note
     title: 自动打开 Daily Note
+  AutoMatchReservationDate:
+    text: 关闭后跳过块文本中的日期识别，并强制打开预约确认窗口以手动选择日期
+    title: 自动识别预约日期
   PopupReserveDialog:
     text: 预约块的时候自动弹出确认窗口, 确保日期无误
     title: 预约块时弹出确认窗口
@@ -242,6 +245,7 @@ global_notebooks_ts:
     {2}
 reserve_ts:
   block_reservation: 将块预约到
+  manual_select_date: 已关闭自动识别，请选择预约日期
   no_matched_date: 没有匹配到日期, 可以手动选择
 toolbar_menu_ts:
   err_get_user_notebook: '错误: 无法获取用户打开日记的笔记本, 请至少保留一个!'
