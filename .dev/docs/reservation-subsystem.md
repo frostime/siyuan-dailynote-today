@@ -1,7 +1,7 @@
 ---
 name: Reservation subsystem
 description: Reservation block contracts, date parsing, retrieval insertion, settings, and Dock behavior.
-updated: 2026-06-04
+updated: 2026-10-03
 scope:
   - /src/index.ts
   - /src/func/index.ts
@@ -61,7 +61,7 @@ Primary implementation:
 
 ## Date Parsing Specification
 
-`reserveBlock(blockId)` reads block kramdown through `/api/block/getBlockKramdown`, strips inline attribute suffixes, then resolves a reservation date.
+`reserveBlock(blockId)` reads block kramdown through `/api/block/getBlockKramdown`, strips inline attribute suffixes, then resolves a reservation date. `AutoMatchReservationDate` defaults to enabled; when it is disabled, date matching is skipped and the user must select a date in the confirmation dialog.
 
 Resolution order:
 
@@ -81,6 +81,8 @@ Resolution order:
 ```
 
 When multiple custom rules match, the earliest match index in the block text wins. Chrono is only used when no custom rule produced a date.
+
+Both reservation dialogs disable confirmation while the date input is empty or invalid. Input and change events update the selected local date and button state; clearing a previously selected or automatically matched date disables confirmation again. Past dates remain subject to the existing rejection on confirmation.
 
 ## Retrieval Insertion Flow
 
@@ -148,6 +150,7 @@ Dock quirks:
 | `EnableReserve` | Enables reserve/cancel menu and hotkey behavior. | `/src/index.ts`, `/src/components/gutter-menu.ts` |
 | `EnableResvDock` | Adds reservation Dock tab after settings load. | `/src/index.ts` |
 | `PopupReserveDialog` | Shows confirmation/date-picker dialog before setting attrs. | `/src/func/reserve/reserve.ts` |
+| `AutoMatchReservationDate` | Enables parsing dates from block text. When disabled, forces `PopupReserveDialog` on and requires a manually selected date. | `/src/global-status.ts`, `/src/func/reserve/reserve.ts` |
 | `ResvEmbedAt` | Controls top/bottom insertion of retrieval block. | `/src/func/reserve/index.ts`, `/src/func/reserve/retrieve.ts` |
 | `RetvType` | Chooses embed/link/ref retrieval format. | `/src/func/reserve/index.ts`, `/src/func/reserve/retrieve.ts` |
 | `HighlightResv` | Highlights Dock icon when today's reservations exist. | `/src/func/index.ts` |

@@ -36,6 +36,7 @@ class SettingManager {
         EnableReserve: true as boolean,
         EnableResvDock: true as boolean,
         ExpandGutterMenu: true as boolean, //是否将菜单项目展开
+        AutoMatchReservationDate: true as boolean, //自动识别预约日期
         PopupReserveDialog: true as boolean, //是否弹出预约对话框
         ResvEmbedAt: 'top' as RetvPosition, //Retrieved 块嵌入位置
         RetvType: 'embed' as RetvType, //Retrieved 块的类型
@@ -73,6 +74,14 @@ class SettingManager {
         }
 
         this.settings[key] = value;
+
+        // 手动选择日期依赖确认窗口；关闭自动识别时，不允许绕过该窗口直接预约。
+        if (key === 'AutoMatchReservationDate' && value === false) {
+            this.settings.PopupReserveDialog = true;
+        }
+        if (key === 'PopupReserveDialog' && value === false && this.settings.AutoMatchReservationDate === false) {
+            this.settings.PopupReserveDialog = true;
+        }
 
         if (key === 'DefaultNotebook') {
             notebooks.updateDefault();

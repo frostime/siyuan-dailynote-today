@@ -148,6 +148,7 @@ type SettingKey =
     // UI settings
     | 'IconPosition'
     | 'ExpandGutterMenu'
+    | 'AutoMatchReservationDate'
     | 'PopupReserveDialog'
     | 'HighlightResv'
     | 'DailyNoteViewLaneMinWidth'

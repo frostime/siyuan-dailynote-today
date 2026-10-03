@@ -135,6 +135,10 @@ interface I18n {
             text: string;
             title: string;
         };
+        AutoMatchReservationDate: {
+            text: string;
+            title: string;
+        };
         AutoOpenAfterSync: {
             text: string;
             title: string;
@@ -251,6 +255,7 @@ interface I18n {
     };
     reserve_ts: {
         block_reservation: string;
+        manual_select_date: string;
         no_matched_date: string;
     };
     toolbar_menu_ts: {

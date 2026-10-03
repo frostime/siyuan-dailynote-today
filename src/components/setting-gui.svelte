@@ -148,7 +148,14 @@
         },
     ];
 
-    const reservationItems: ISettingItem[] = [
+    let reservationItems: ISettingItem[] = [
+        {
+            type: "checkbox",
+            title: I18n.AutoMatchReservationDate.title,
+            description: I18n.AutoMatchReservationDate.text,
+            key: "AutoMatchReservationDate",
+            value: settings.get("AutoMatchReservationDate"),
+        },
         {
             type: "checkbox",
             title: I18n.PopupReserveDialog.title,
@@ -221,6 +228,14 @@
         }
     }
 
+    function resetReservationSettingItemValue(key: string, value: any) {
+        const item = reservationItems.find((item) => item.key === key);
+        if (item) {
+            item.value = value;
+            reservationItems = reservationItems;
+        }
+    }
+
     function onChanged({ detail }) {
         // console.log(detail);
         if (detail.key) {
@@ -237,6 +252,12 @@
             }
 
             settings.set(detail.key, detail.value);
+            if (detail.key === "AutoMatchReservationDate" && detail.value === false) {
+                resetReservationSettingItemValue("PopupReserveDialog", true);
+            }
+            if (detail.key === "PopupReserveDialog" && settings.get("AutoMatchReservationDate") === false) {
+                resetReservationSettingItemValue("PopupReserveDialog", true);
+            }
             if (detail.key === "DefaultNotebook") {
                 if (detail.value !== '' && !notebooks.checkNotebookId(detail.value)) {
                     confirm(
