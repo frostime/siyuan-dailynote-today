@@ -280,7 +280,7 @@ global_notebooks_ts:
     the notebook where the block is located {2}
 reserve_ts:
   block_reservation: Reserve the block to
-  manual_select_date: Automatic date recognition is disabled; select a reservation date
+  manual_select_date: Please select a reservation date manually; you can enable automatic date recognition in settings.
   no_matched_date: No matching date, you can select manually
 toolbar_menu_ts:
   err_get_user_notebook: 'Error: Unable to obtain the notebook of the user''s open

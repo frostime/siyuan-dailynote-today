@@ -132,7 +132,7 @@ export const DatePatternRules = [
 ]
 
 
-function createConfirmDialog(initialDate: Date | null, kramdown: string, matchText: MatchedText | null, datePicked: (date: Date) => void): HTMLElement {
+function createConfirmDialog(initialDate: Date | null, kramdown: string, matchText: MatchedText | null): HTMLElement {
     function hightLightStr(text: string, beg: number, len: number) {
         let before = text.substring(0, beg);
         let middle = text.substring(beg, beg + len);
@@ -174,14 +174,27 @@ function createConfirmDialog(initialDate: Date | null, kramdown: string, matchTe
         const day = String(initialDate.getDate()).padStart(2, '0');
         datePicker.value = `${year}-${month}-${day}`;
     }
-    datePicker.addEventListener('change', () => {
-        // Create date in local timezone
-        let [year, month, day] = datePicker.value.split('-').map(Number);
-        let date = new Date(year, month - 1, day);
-        datePicked(date);
-    });
-
     return ele;
+}
+
+function bindReservationDatePicker(fragment: HTMLElement, dialogElement: HTMLElement, datePicked: (date: Date | null) => void) {
+    const datePicker = fragment.querySelector<HTMLInputElement>('#datepicker');
+    const confirmButton = dialogElement.querySelector<HTMLButtonElement>('#confirmDialogConfirmBtn');
+    const updateDate = () => {
+        const valid = datePicker.value !== '' && datePicker.validity.valid && !Number.isNaN(datePicker.valueAsNumber);
+        confirmButton.disabled = !valid;
+        if (!valid) {
+            datePicked(null);
+            return;
+        }
+        // Create date in local timezone
+        const [year, month, day] = datePicker.value.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        datePicked(date);
+    };
+    datePicker.addEventListener('input', updateDate);
+    datePicker.addEventListener('change', updateDate);
+    updateDate();
 }
 
 
@@ -241,10 +254,8 @@ export async function reserveBlock(blockId) {
     today.setHours(0, 0, 0, 0); //为了方便测试，今天也是可以预约的
 
     if (!resDate) {
-        let fragment = createConfirmDialog(null, kramdown, null, (date: Date) => {
-            resDate = date;
-        });
-        confirmDialog({
+        let fragment = createConfirmDialog(null, kramdown, null);
+        const { dialog } = confirmDialog({
             title: settings.get('AutoMatchReservationDate')
                 ? i18n.reserve_ts.no_matched_date
                 : i18n.reserve_ts.manual_select_date,
@@ -261,7 +272,10 @@ export async function reserveBlock(blockId) {
             },
             width: isMobile() ? "92vw" : "520px",
             maxHeight: "85%",
-        })
+        });
+        bindReservationDatePicker(fragment, dialog.element, (date) => {
+            resDate = date;
+        });
         return;
     }
     let [year, month, day] = [resDate.getFullYear(), resDate.getMonth() + 1, resDate.getDate()]
@@ -271,13 +285,14 @@ export async function reserveBlock(blockId) {
     }
 
     if (settings.get('PopupReserveDialog')) {
-        let fragment = createConfirmDialog(resDate, kramdown, matchedText, (date: Date) => {
-            resDate = date;
-        });
-        confirmDialog({
+        let fragment = createConfirmDialog(resDate, kramdown, matchedText);
+        const { dialog } = confirmDialog({
             title: `${i18n.ReserveMenu.Title}: ${resDate.toLocaleDateString()}?`,
             content: fragment,
             confirm: () => {
+                if (!resDate) {
+                    return;
+                }
                 if (resDate < today) {
                     confirm('Error', `${resDate.toLocaleDateString()}: ${i18n.ReserveMenu.DatePast}`);
                     return;
@@ -285,7 +300,10 @@ export async function reserveBlock(blockId) {
                 doReserveBlock(blockId, resDate)
             },
             width: isMobile() ? "92vw" : "520px",
-        })
+        });
+        bindReservationDatePicker(fragment, dialog.element, (date) => {
+            resDate = date;
+        });
     } else {
         doReserveBlock(blockId, resDate);
     }

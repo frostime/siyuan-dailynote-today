@@ -1,7 +1,7 @@
 ---
 name: Reservation subsystem
 description: Reservation block contracts, date parsing, retrieval insertion, settings, and Dock behavior.
-updated: 2026-09-22
+updated: 2026-10-03
 scope:
   - /src/index.ts
   - /src/func/index.ts
@@ -81,6 +81,8 @@ Resolution order:
 ```
 
 When multiple custom rules match, the earliest match index in the block text wins. Chrono is only used when no custom rule produced a date.
+
+Both reservation dialogs disable confirmation while the date input is empty or invalid. Input and change events update the selected local date and button state; clearing a previously selected or automatically matched date disables confirmation again. Past dates remain subject to the existing rejection on confirmation.
 
 ## Retrieval Insertion Flow
 
