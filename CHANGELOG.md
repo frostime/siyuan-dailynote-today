@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-10-03
+
 ### Added
 
 - 新增「自动识别预约日期」设置；关闭后强制打开预约确认窗口并手动选择日期，避免文本中的歧义日期导致预约失败。
@@ -13,10 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - 预约日期为空或无效时禁用「确定」按钮，选择有效日期后启用，清空日期后再次禁用，避免未写入预约就关闭弹窗。
-
-### Changed
-
-- 手动预约日期提示调整为「请手动选择预约日期；可在设置中开启自动识别。」，并同步更新英文文案。
 
 ## [2026-08-07] v1.9.3
 
@@ -346,6 +344,7 @@ Setting 面板中加入了「更新笔记本状态」，用于替代 Ctrl+Alt+U�
 3. 下拉选项框为各个笔记本提供「是否已经创建了今天的日记」的标识
 4. 当笔记本有更新（打开/关闭创建笔记本）的时候，请按快捷键「ctrl+alt+u」更新状态
 
-[Unreleased]: https://github.com/frostime/siyuan-dailynote-today/compare/v1.9.2...HEAD
+[Unreleased]: https://github.com/frostime/siyuan-dailynote-today/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/frostime/siyuan-dailynote-today/compare/v1.9.3...v1.10.0
 [1.9.2]: https://github.com/frostime/siyuan-dailynote-today/compare/v1.9.1...v1.9.2
 [1.9.0]: https://github.com/frostime/siyuan-dailynote-today/releases/tag/v1.9.0
